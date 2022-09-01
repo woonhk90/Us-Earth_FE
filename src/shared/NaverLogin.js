@@ -1,14 +1,27 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import { setCookie } from "./cookie";
+import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
+  const navigate = useNavigate();
   const code = new URL(window.location.href).searchParams.get("code");
   const state = new URL(window.location.href).searchParams.get("state");
-  const getKakaoToken = async () => {
+  const getNaverToken = async () => {
     try {
-      // const data = await axios.get(`${process.env.NAVER_REACT_APP_SERVER_API}?code=${code}`);
-      const data = await axios.get(`http://13.209.97.209/user/naver/callback?code=${code}&state=${state}`);
+      const data = await axios.get(`${process.env.REACT_APP_SERVER_API_NAVER}?code=${code}&state=${state}`);
       console.log('로그인리턴=>', data);
-      // navigator('/');
+
+      (await data.headers.authorization) && setCookie("mycookie", data.headers.authorization);
+
+      await Swal.fire({
+        title: '환영합니다.!',
+        icon: 'success',
+        confirmButtonText: '확인',
+      })
+
+      navigate('/Community');
     } catch (error) {
       window.alert("오류났어요");
       console.log(error);
@@ -16,7 +29,7 @@ const Login = () => {
   }
 
   useEffect(() => {
-    getKakaoToken();
+    getNaverToken();
   }, [])
   return (
     <>
