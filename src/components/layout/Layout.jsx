@@ -5,13 +5,9 @@ import styled from 'styled-components';
 const Layout = (props) => {
   return (
     <LayoutWrap>
-      <HeaderBox>
-        <Header />
-      </HeaderBox>
+      <Header />
       {props.children}
-      <FooterBox>
-        <Footer />
-      </FooterBox>
+      <Footer />
     </LayoutWrap>
   )
 }
@@ -19,16 +15,6 @@ export default Layout;
 
 const LayoutWrap = styled.div`
   width:100vw;
-  height:100vh;
+  height:calc(100vh - 48px * 2);
   position:relative;
-`;
-const HeaderBox = styled.div`
-  position:fixed;
-  top:0;
-  left:0;
-`;
-const FooterBox = styled.div`
-  position:fixed;
-  bottom:0;
-  left:0;
 `;
