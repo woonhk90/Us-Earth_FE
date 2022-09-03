@@ -16,6 +16,7 @@ root.render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
+
   </>
   // </QueryClientProvider>
 );
