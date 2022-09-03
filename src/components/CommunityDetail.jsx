@@ -86,14 +86,14 @@ const CommunityDetail = () => {
       <UserInfoFirstWrap>
         <button
           onClick={() => {
-            navigate(`/community/article/${parseInt(param.id) - 1}`);
+            // navigate(`/community/article/${parseInt(param.id) - 1}`);
           }}
         >
           이전글
         </button>
         <button
           onClick={() => {
-            navigate(`/community/article/${parseInt(param.id) + 1}`);
+            // navigate(`/community/article/${parseInt(param.id) + 1}`);
           }}
         >
           다음글

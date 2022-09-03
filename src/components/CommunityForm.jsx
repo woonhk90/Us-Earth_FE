@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDropzone } from "react-dropzone";
-import useInputs from "./useInputs";
+import useInputs from "../hooks/useInputs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { postCommunityFormData } from "../hooks/Query";
