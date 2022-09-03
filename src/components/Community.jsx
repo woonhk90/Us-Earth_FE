@@ -3,8 +3,28 @@ import styled from 'styled-components';
 import { ReactComponent as Lock } from "../assets/Lock.svg";
 import SampleImg01 from '../assets/poster01.jpg';
 import SampleImg02 from '../assets/poster02.jpg';
+import axios from 'axios';
+import { useQuery } from 'react-query';
 
+const getCommunity = async () => {
+  const data = await axios.get(`http://13.209.97.209/api/articles?page=1&size=10`);
+  console.log('data=>',data);
+  return data;
+}
 const Community = () => {
+  const getData = useQuery("getCommunity", getCommunity(), {
+    onSuccess: (data) => {
+      console.log('성공=>', data);
+    },
+    onError: (data) => {
+      console.log("실패=>", data);
+    }
+  });
+
+  // if (getToken.isLoading) {
+  //   return null;
+  // }
+  console.log("getData=>",getData);
   return (
     <>
       <CommunityWrap>
@@ -54,7 +74,7 @@ const Community = () => {
           </NewGroup>
 
           <CommunityGroup>
-          <CommunityGroupTop><CommunityGroupTitle>전체 그룹</CommunityGroupTitle></CommunityGroupTop>
+            <CommunityGroupTop><CommunityGroupTitle>전체 그룹</CommunityGroupTitle></CommunityGroupTop>
             <CommunityBox>
               <CommunityItem>
                 <ItemImg bgImg={SampleImg01}>
@@ -107,8 +127,7 @@ const Container = styled.div``;
 const Banner = styled.div`
   width:100%;
   height:204px;
-  border:1px solid red;
-  box-sizing:border-box;
+  background-color:rgba(0,0,0,0.2);
 `;
 
 
@@ -118,14 +137,14 @@ const Banner = styled.div`
 const PopularGroup = styled.div`
   width:100vw;
   overflow:hidden;
-  padding:0 4.5px;
   box-sizing:border-box;
 `;
-const PopularGroupTop = styled.div``;
+const PopularGroupTop = styled.div`padding:0 15px;`;
 const PopularGroupTitle = styled.span`
   font:bold 26px/50px 'Arial','sans-serif';
 `;
 const PopularGroupBox = styled.div`
+  padding:0 4.5px;
   display:flex;
   overflow-x:scroll;
   &::-webkit-scrollbar {
@@ -138,7 +157,7 @@ const PopularGroupItem = styled.div`
 const PopularGroupItemImg = styled.div`
   width:143px;
   height:175px;
-  border-radius:14px;
+  border-radius:6px;
   position:relative;
 
   background-image: linear-gradient(to top, rgba(0,0,0,0.5) 25%, transparent 50%), url(${(props) => props.bgImg});
@@ -170,14 +189,14 @@ const PopularGroupItemTitle = styled.div`
 const NewGroup = styled.div`
   width:100vw;
   overflow:hidden;
-  padding:0 4.5px;
   box-sizing:border-box;
 `;
-const NewGroupTop = styled.div``;
+const NewGroupTop = styled.div`padding:0 15px;`;
 const NewGroupTitle = styled.span`
   font:bold 26px/50px 'Arial','sans-serif';
 `;
 const NewGroupBox = styled.div`
+  padding:0 4.5px;
   display:flex;
   overflow-x:scroll;
   &::-webkit-scrollbar {
@@ -192,7 +211,7 @@ const NewGroupItemImg = styled.div`
   height:175px;
   border:1px solid black;
   box-sizing:border-box;
-  border-radius:14px;
+  border-radius:6px;
 
   background: linear-gradient(to top, rgba(0,0,0,0.5) 25%, transparent 50%);
 `;
@@ -205,10 +224,9 @@ const NewGroupItemTitle = styled.div`
 
 
 const CommunityGroup = styled.div`
-  padding:0 4.5px;
   box-sizing:border-box;
 `;
-const CommunityGroupTop = styled.div``;
+const CommunityGroupTop = styled.div`padding:0 15px;`;
 const CommunityGroupTitle = styled.span`
   font:bold 26px/50px 'Arial','sans-serif';
 `;
@@ -229,7 +247,7 @@ width:176px;
 height:215px;
 border:1px solid black;
 box-sizing:border-box;
-border-radius:14px;
+border-radius:6px;
 
 position:relative;
 `;

@@ -1,13 +1,9 @@
 import React from 'react';
-import Header from '../Header';
-import Footer from '../Footer';
 import styled from 'styled-components';
 const Layout = (props) => {
   return (
     <LayoutWrap>
-      <Header />
       {props.children}
-      <Footer />
     </LayoutWrap>
   )
 }
