@@ -16,7 +16,7 @@ const Router = () => {
       <Route path="/login" element={<EarthLogin />} />
       <Route path="/community/form" element={<EarthCommunityForm />} />
       <Route path="/community" element={<EarthCommunity />} />
-      <Route path="/community/detail" element={<EarthCommunityDetail />} />
+      <Route path="/community/detail/:id" element={<EarthCommunityDetail />} />
       <Route path="/community/certify" element={<EarthCommunityCertify />} />
       <Route path="/community/certify/form" element={<EarthCommunityCertifyForm />} />
       <Route path="/user/kakao/callback" element={<KakaoLogin />} />
