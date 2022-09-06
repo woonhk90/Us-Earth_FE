@@ -1,35 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Lock } from "../assets/Lock.svg";
 import SampleImg01 from '../assets/poster01.jpg';
 import SampleImg02 from '../assets/poster02.jpg';
-import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useDispatch, useSelector } from "react-redux";
+import { __getCommunity } from '../redux/modules/communitySlice';
+import { useInView } from "react-intersection-observer";
+import SampleImg03 from '../assets/banner.jpg';
+import { useNavigate } from "react-router-dom";
 
-const getCommunity = async () => {
-  const data = await axios.get(`http://13.209.97.209/api/articles?page=1&size=10`);
-  console.log('data=>',data);
-  return data;
-}
 const Community = () => {
-  const getData = useQuery("getCommunity", getCommunity(), {
-    onSuccess: (data) => {
-      console.log('성공=>', data);
-    },
-    onError: (data) => {
-      console.log("실패=>", data);
-    }
-  });
+  const dispatch = useDispatch();
+  const { community } = useSelector((state) => state.community);
+  const searchVal = useSelector((state) => state);
+  console.log('community=>', community);
+  console.log('검색단어=>', searchVal.community.search);
 
-  // if (getToken.isLoading) {
-  //   return null;
-  // }
-  console.log("getData=>",getData);
+  /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(0);
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  })
+
+  /* ----------------------------- 커뮤니티 전체목록 가져오기 ----------------------------- */
+  useEffect(() => {
+    console.log("커뮤니티 호출")
+
+    dispatch(__getCommunity({ page, search }));
+  }, [page]);
+
+  useEffect(() => {
+    if (inView) {
+      setPage((page) => page + 1);
+      // setSearch(searchVal.community.search);
+    }
+  }, [inView]);
+
+  console.log('inView=>', inView);
+
+  /* -------------------------------- 상세페이지로 이동 ------------------------------- */
+  const navigate = useNavigate();
+  const onDetailHandler = (id) => {
+    navigate(`/community/detail/${id}`);
+  }
+
   return (
     <>
       <CommunityWrap>
         <Container>
-          <Banner>메인배너</Banner>
+          <Banner bgImg={SampleImg03}>메인배너</Banner>
 
           <PopularGroup>
             <PopularGroupTop><PopularGroupTitle>인기 그룹</PopularGroupTitle></PopularGroupTop>
@@ -76,23 +96,17 @@ const Community = () => {
           <CommunityGroup>
             <CommunityGroupTop><CommunityGroupTitle>전체 그룹</CommunityGroupTitle></CommunityGroupTop>
             <CommunityBox>
-              <CommunityItem>
-                <ItemImg bgImg={SampleImg01}>
-                  {/* <div> */}
-                  <ItemCount>40%</ItemCount>
-                  <ItemProgress><IP value='40' max='100'></IP></ItemProgress>
-                  {/* </div> */}
-                </ItemImg>
-                <ItemTitle>재활용 합시다</ItemTitle>
-              </CommunityItem>
-              <CommunityItem>
-                <ItemImg><img src='' alt='' /></ItemImg>
-                <ItemTitle>재활용 합시다</ItemTitle>
-              </CommunityItem>
-              <CommunityItem>
-                <ItemImg bgImg={SampleImg02}></ItemImg>
-                <ItemTitle>재활용 합시다</ItemTitle>
-              </CommunityItem>
+              {community?.map((v) =>
+                <CommunityItem key={v.communityId} onClick={() => { onDetailHandler(v.communityId) }}>
+                  {/* <CommunityItem key={v.communityId}> */}
+                  <ItemImg bgImg={v.imgList[0].imgUrl}>
+                    <ItemCount>{v.communityId}%</ItemCount>
+                    <ItemProgress><IP value={v.communityId} max='100'></IP></ItemProgress>
+                  </ItemImg>
+                  <ItemTitle>{v.title}</ItemTitle>
+                </CommunityItem>
+              )}
+              <div ref={ref}></div>
             </CommunityBox>
           </CommunityGroup>
 
@@ -127,7 +141,8 @@ const Container = styled.div``;
 const Banner = styled.div`
   width:100%;
   height:204px;
-  background-color:rgba(0,0,0,0.2);
+  background:url(${(props) => props.bgImg}) no-repeat 50% 50%;
+  background-size:cover;
 `;
 
 
@@ -250,6 +265,9 @@ box-sizing:border-box;
 border-radius:6px;
 
 position:relative;
+background:linear-gradient(to top, rgba(0,0,0,0.5) 25%, transparent 50%), url(${(props) => props.bgImg}) no-repeat center center;
+background-size:cover;
+color:#fff;
 `;
 const ItemCount = styled.div`
   position:absolute;

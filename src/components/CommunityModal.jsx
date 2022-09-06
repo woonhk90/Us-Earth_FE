@@ -1,19 +1,36 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as LeftArrow } from "../assets/LeftArrow.svg";
+import { ReactComponent as Cancel } from "../assets/Cancel.svg";
+import { __getCommunity } from '../redux/modules/communitySlice';
+import { useDispatch } from "react-redux";
+import { ingVal } from '../redux/modules/communitySlice';
 
 const CommunityModal = (props) => {
+  /* ---------------------------------- 모달 닫기 --------------------------------- */
   const closeModal = () => {
     props.closeModal();
+  }
+
+  /* -------------------------------- input 검색 -------------------------------- */
+  const [search, setSearch] = React.useState('');
+  const [page, setPage] = React.useState(0);
+  const onChangeHandler = (e) => {
+    setSearch(e.target.value);
+  }
+  const dispatch = useDispatch();
+  const onSearchHandler = async () => {
+    dispatch(__getCommunity({ page, search }));
+    dispatch(ingVal());
+    closeModal();
   }
   return (
     <>
       <ModalWrap onClick={closeModal}>
         <ModalBody onClick={(e) => { e.stopPropagation() }}>
           <SearchBox>
-            <SearchIcon onClick={closeModal}><LeftArrow /></SearchIcon>
-            <SearchInput type="text" placeholder='검색어를 입력해주세요.' />
-            <SearchBtn>검색</SearchBtn>
+            <SearchIcon onClick={closeModal}><Cancel /></SearchIcon>
+            <SearchInput type="text" onChange={onChangeHandler} placeholder='검색어를 입력해주세요.' />
+            <SearchBtn onClick={onSearchHandler}>검색</SearchBtn>
           </SearchBox>
           <SuggestWrap>
             <SuggestTitle>추천검색어</SuggestTitle>
