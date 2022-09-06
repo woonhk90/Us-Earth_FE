@@ -4,48 +4,28 @@ import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { postFormData } from "../../hooks/Query";
 
 const Form = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const [isSecret, setIsSecret] = useState(false);
   const [files, setFiles] = useState([]);
-  const [inputData, inputOnChangeHandler, inputReset] = useInputs({
+  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmits] = useInputs({
     limitScore: "",
     limitParticipants: "",
     title: "",
     content: "",
   });
+  let b = Object.values(isForm);
+  console.log(b);
+  const result = b.filter((word) => word !== true);
+  console.log(result.length === 0);
   const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
 
   const { limitScore, limitParticipants, title, content } = inputData;
-  console.log(files);
-
-  //query
-  const queryClient = useQueryClient();
-  const { mutate: addMutateData } = useMutation((data) => postFormData(data), {
-    onSuccess: (data) => {
-      console.log(data);
-      // queryClient.setQueryData("sleep_list", (sleep_times) => {
-      //   return [...sleep_times, data];
-      // });
-
-      //방법1
-      // key를 넣지 않을 경우 모든 쿼리가 무효화됩니다.
-      // mutation을 성공하면 수면 데이터 목록을 불러오는 useQuery를 무효화 시켜줍니다!
-      // post후 바로 fetch해주기 위해! usequery를 무효화 시켜서 수면 데이터 목록을 다시 불러오기~
-      // queryClient.invalidateQueries("sleep_list");
-      // day_input.current.value = "";
-      // time_input.current.value = "";
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  // console.log(files);
 
   useEffect(() => {
     return () => {
@@ -71,8 +51,8 @@ const Form = () => {
       setPreviewImg([previewImgUrl]);
     };
   };
-  console.log(previewImg);
-  console.log(imageFile);
+  // console.log(previewImg);
+  // console.log(imageFile);
 
   // X버튼 클릭 시 이미지 삭제
   const deleteImageFile = () => {
@@ -82,6 +62,7 @@ const Form = () => {
   };
 
   /* ---------------------------------- submit ---------------------------------- */
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
@@ -107,6 +88,15 @@ const Form = () => {
     }
   }, [isSecret]);
 
+  // if (title === "") {
+  // } else if (content === "") {
+  // } else if (limitScore === "") {
+  // } else if (limitParticipants === "") {
+  // } else if (isSecret !== isPassword) {
+  //   console.log(isSecret, "isPassword", isPassword);
+  // } else {
+  //   setIsSubmit(true);
+  // }
   const submitHandler = () => {
     let formData = new FormData();
     if (title === "") {
@@ -223,7 +213,11 @@ const Form = () => {
       <div>내용*</div>
       <textarea name="content" value={content} onChange={inputOnChangeHandler}></textarea>
       <div>카테고리</div>
-      <button onClick={submitHandler}>등록</button>
+      <FooterWrap>
+        <FooterMenus onClick={submitHandler} bgColor={"rgba(0,0,0,0.2)"}>
+          커뮤니티
+        </FooterMenus>
+      </FooterWrap>
     </>
   );
 };
@@ -412,4 +406,21 @@ const BittonTextDiv = styled.div`
   z-index: 99;
   background: linear-gradient(to bottom, transparent 82%, #b1b0b0 18%);
   background-size: 100%;
+`;
+
+//bottom
+const FooterWrap = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  display: flex;
+  text-align: center;
+`;
+
+const FooterMenus = styled.div`
+  width: 100%;
+  line-height: 48px;
+  background-color: ${(props) => props.bgColor};
 `;

@@ -39,24 +39,6 @@ const CommunityCertify = () => {
 
   return (
     <>
-      <UserInfoFirstWrap>
-        <UserInfoWrap>
-          <UserInfoImg />
-          <UerInpo>
-            <Username>닉네임</Username>
-            <CreatAt>작성일자</CreatAt>
-          </UerInpo>
-        </UserInfoWrap>
-        <ModalButton onClick={openModal}>아이콘</ModalButton>
-        <EditModal open={modalOpen} close={closeModal}>
-          <main>
-            <ButtonInModalWrap>
-              <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
-              <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal>
-            </ButtonInModalWrap>
-          </main>
-        </EditModal>
-      </UserInfoFirstWrap>
       <FirstWrap>
         <Swiper modules={[Navigation, Pagination, Scrollbar]} spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
           <SwiperSlide>
@@ -81,9 +63,29 @@ const CommunityCertify = () => {
           </SwiperSlide>
         </Swiper>
       </FirstWrap>
-      <ContentTitle>제목</ContentTitle>
-      <ContentContent>내용</ContentContent>
       <UserInfoFirstWrap>
+        <UserInfoWrap>
+          <UserInfoImg />
+          <UerInpo>
+            <Username>닉네임</Username>
+            <CreatAt>작성일자</CreatAt>
+          </UerInpo>
+        </UserInfoWrap>
+        <ModalButton onClick={openModal}>아이콘</ModalButton>
+        <EditModal open={modalOpen} close={closeModal}>
+          <main>
+            <ButtonInModalWrap>
+              <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
+              <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal>
+            </ButtonInModalWrap>
+          </main>
+        </EditModal>
+      </UserInfoFirstWrap>
+      <TextContainer>
+        <ContentTitle>제목</ContentTitle>
+        <ContentContent>내용</ContentContent>
+      </TextContainer>
+      {/* <UserInfoFirstWrap>
         <button
           onClick={() => {
             navigate(`/community/article/${parseInt(param.id) - 1}`);
@@ -98,7 +100,9 @@ const CommunityCertify = () => {
         >
           다음글
         </button>
-      </UserInfoFirstWrap>
+      </UserInfoFirstWrap> */}
+      <div>좋아요</div>
+      <div>댓글</div>
     </>
   );
 };
@@ -152,6 +156,10 @@ const Username = styled.div`
 `;
 
 //내용
+const TextContainer = styled.div`
+  padding: 10px;
+  border-bottom: 1px solid #e9ecef;
+`;
 const ContentTitle = styled.h1`
   font-size: 20px;
   font-weight: 700;
@@ -163,7 +171,7 @@ const ContentContent = styled.div`
   font-size: 17px;
   line-height: 1.6;
   letter-spacing: -0.6px;
-  margin: 16px 0;
+  margin: 10px 0;
   word-break: break-all;
   white-space: pre-line;
 `;
@@ -171,38 +179,39 @@ const ContentContent = styled.div`
 //스와이퍼
 
 const FirstWrap = styled.div`
-  height: 470px;
+  /* height: 470px; */
   width: 100%;
-  max-width: 800px;
+  /* max-width: 800px; */
+  aspect-ratio: 1 / 1;
   margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  @media screen and (max-width: 556px) {
-    height: 300px;
-  }
-  @media (min-width: 556px) and (max-width: 800px) {
-    height: 400px;
-  }
   .swiper {
     height: 100%;
     width: 100%;
-    @media screen and (max-width: 556px) {
-      height: 300px;
-    }
-    @media (min-width: 556px) and (max-width: 800px) {
-      height: 400px;
-    }
   }
-  .swiper-button-next::after {
-    font-size: 20px !important ;
-    color: #696969;
+
+  .swiper-button-next {
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    background-color: gray;
   }
+
+  .swiper-button-prev {
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    background-color: gray;
+  }
+
+  .swiper-button-next::after,
   .swiper-button-prev::after {
-    font-size: 20px !important ;
-    color: #696969;
+    display: none;
   }
+
   .swiper-pagination-bullet-active {
     background-color: #8f8f8f;
   }
@@ -210,15 +219,15 @@ const FirstWrap = styled.div`
 
 const ItemImg = styled.div`
   background-image: url("https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-0443429487fdc2277fc8f9dd1eca6fb8b678862f593e21222ba9f6592b99ad14.png");
-
+  padding-bottom: 10%;
   background-size: cover;
   object-fit: cover;
   background-position: center;
   background-repeat: no-repeat;
   display: inline-block;
-  width: 85%;
+  width: 100%;
   height: 100%;
-  border-radius: 10px;
+  /* border-radius: 10px; */
 `;
 
 const StDiv = styled.div`

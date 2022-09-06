@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import CommunityForm from "../components/community/CommunityForm";
-import CommunityBottom from "../components/CommunityBottom";
 import CommunityFormTop from "../components/community/CommunityFormTop";
-import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Layout from "../components/layout/Layout";
 
@@ -17,9 +15,6 @@ const EarthCommunityForm = () => {
         <CommunityBox>
           <CommunityForm />
         </CommunityBox>
-        <Footer>
-          <CommunityBottom />
-        </Footer>
       </Layout>
     </>
   );

@@ -2,9 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
-import { ReactComponent as UserPlus } from "../../assets/UserPlus.svg";
 
-const CommunityFormTop = () => {
+const CommunityCertifyTop = () => {
   const navigate = useNavigate();
   return (
     <>
@@ -14,17 +13,16 @@ const CommunityFormTop = () => {
             navigate("/community");
           }}
         />
+        <PTag>그룹 투두 제목</PTag>
+        <LeftArrow />
       </HeaderWrap>
-      <HeaderFlex>
-        <p>그룹 만들기</p>
-      </HeaderFlex>
     </>
   );
 };
-export default CommunityFormTop;
+export default CommunityCertifyTop;
 
 const HeaderWrap = styled.div`
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   width: 100vw;
@@ -35,9 +33,10 @@ const HeaderWrap = styled.div`
   box-sizing: border-box;
   z-index: 1;
 `;
-const HeaderFlex = styled.div`
-  width: 100%;
-  padding-top: 10px;
-  margin: auto;
-  text-align: center;
+
+const PTag = styled.p`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
