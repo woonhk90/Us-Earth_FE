@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+
   const navigate = useNavigate();
   const code = new URL(window.location.href).searchParams.get("code");
   const getKakaoToken = async () => {
@@ -15,12 +16,16 @@ const Login = () => {
       (await data.headers.authorization) && setCookie("mycookie", data.headers.authorization);
 
       await Swal.fire({
-        title: '환영합니다.!',
+        title: '환영합니다',
         icon: 'success',
         confirmButtonText: '확인',
       })
 
-      navigate('/Community');
+      /* ----------------------- 어디에서 로그인을 했는지 그 위치로 다시 이동함 ----------------------- */
+      const pathname = localStorage.getItem('pathname');
+      localStorage.removeItem('pathname');
+      pathname ? navigate(pathname) : navigate('/login');
+      // navigate('/Community');
     } catch (error) {
       window.alert("오류났어요");
       console.log(error);

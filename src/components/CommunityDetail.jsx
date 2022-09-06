@@ -27,7 +27,7 @@ const CommunityDetail = () => {
             <ContentItem font={"700 26px/35px 'Arial','sans-serif'"} marginBottom={'9px'}>{communityDetail.title}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</ContentItem>
             <ContentItem font={"22px/30px 'Arial','sans-serif'"} marginBottom={'35px'}>{communityDetail.content}내용 추가내용 즐겁게 화티잉 합시다</ContentItem>
             {/* <ContentItem></ContentItem> */}
-            <ContentItem marginBottom={'35px'} height={'500px'} imgUrl={communityDetail.imgList[0].imgUrl}></ContentItem>
+            {/* <ContentItem marginBottom={'35px'} height={'500px'} imgUrl={communityDetail.imgList[0].imgUrl}></ContentItem> */}
           </Content>
           <StateBox>
             {communityDetail.dateStatus === 'before' ?
