@@ -48,29 +48,52 @@ const CommentInput = () => {
 
   return (
     <>
-      <form encType="multipart/form-data">
-        <StLabel htmlFor="file">
-          <StIcon>○</StIcon>
-        </StLabel>
-        <StImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
-        {/* <input type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} /> */}
-      </form>
-      <div>
-        {previewImg.length > 0 && (
-          <Container>
-            <button onClick={deleteImageFile}>버튼</button>
-            <Thumb src={previewImg} alt="img" />
-          </Container>
-        )}
-      </div>
-      <input value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요"></input>
-      <button onClick={commentOnClick}>등록</button>
+      <CommentInputWrap>
+        <form encType="multipart/form-data">
+          <StLabel htmlFor="file">
+            <StIcon>○</StIcon>
+          </StLabel>
+          <StImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
+          {/* <input type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} /> */}
+        </form>
+        <InputWrap>
+          <div>
+            {previewImg.length > 0 && (
+              <Container>
+                <DeleteButton onClick={deleteImageFile}>x</DeleteButton>
+                <Thumb src={previewImg} alt="img" />
+              </Container>
+            )}
+          </div>
+          <textarea value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요"></textarea>
+        </InputWrap>
+        <SubmitButton onClick={commentOnClick}>등록</SubmitButton>
+      </CommentInputWrap>
     </>
   );
 };
 
 export default CommentInput;
 
+const CommentInputWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  padding: 5px 10px 15px 10px;
+`;
+
+const InputWrap = styled.div`
+  width: 100%;
+  border: 1px solid grey;
+  margin: 0 8px;
+  border-radius: 6px;
+`;
+
+const SubmitButton = styled.button`
+  width: 60px;
+  height: 40px;
+`;
 //사진
 
 const StImageInput = styled.input`
@@ -102,15 +125,26 @@ const StIcon = styled.div`
 const Thumb = styled.img`
   /* display: inline-flex; */
   background-size: 100px;
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   padding: 4px;
   box-sizing: border-box;
+  border-radius: 6px;
+`;
+
+const DeleteButton = styled.button`
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 80px;
 `;
 
 const Container = styled.section`
+  position: relative;
   align-items: center;
   display: flex;
   flex-direction: row;
-  margin-bottom: 25px;
+  margin: 10px;
 `;

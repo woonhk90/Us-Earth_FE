@@ -115,7 +115,7 @@ const Stsection = styled.section`
   position: absolute;
   border-radius: 30px 30px 0 0;
   width: 100%;
-  height: 75%;
+  height: auto;
   bottom: 0px;
   transition: transform 0.3s ease-out;
   animation: ${(props) => (props.open ? slideShow : slideHide)} 0.3s ease-out;
