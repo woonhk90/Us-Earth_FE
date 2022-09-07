@@ -2,8 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
+import { useDispatch } from "react-redux";
+import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
 
 const CommunityCertifyForm = () => {
+  const dispatch = useDispatch();
   const [inputData, inputOnChangeHandler, inputReset] = useInputs({
     title: "",
     content: "",
@@ -28,7 +31,7 @@ const CommunityCertifyForm = () => {
   const addImageFile = (e) => {
     if (e.target.files.length + files.length < 6) {
       for (let i = 0; i < e.target.files.length; i++) {
-        if (e.target.files[i].size < 2000000) {
+        if (e.target.files[i].size < 20000000) {
           // 20메가
           console.log(e.target.files[i].size);
           const reader = new FileReader();
@@ -78,7 +81,6 @@ const CommunityCertifyForm = () => {
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       console.log(dataSet);
-      // addMutateData(formData);
     }
   };
 

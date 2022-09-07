@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import CommunityForm from "../components/community/CommunityForm";
+import CommunityFormEdit from "../components/community/CommunityFormEdit";
 import CommunityFormTop from "../components/community/CommunityFormTop";
 import Header from "../components/Header";
 import Layout from "../components/layout/Layout";
 
-const EarthCommunityForm = () => {
+const EarthCommunityFormEdit = () => {
   return (
     <>
       <Layout>
@@ -13,14 +13,14 @@ const EarthCommunityForm = () => {
           <CommunityFormTop />
         </Header>
         <CommunityBox>
-          <CommunityForm />
+          <CommunityFormEdit />
         </CommunityBox>
       </Layout>
     </>
   );
 };
 
-export default EarthCommunityForm;
+export default EarthCommunityFormEdit;
 
 const CommunityBox = styled.div`
   height: 100%;
