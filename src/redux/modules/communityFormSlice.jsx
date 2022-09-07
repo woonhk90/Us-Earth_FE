@@ -1,9 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 const API_URL = process.env.REACT_APP_API_URL;
 
 const initialState = {
-  communityform: [],
+  detail: {},
   dates: {},
   dateLists: [],
   isLoading: false,
@@ -13,12 +16,13 @@ const initialState = {
 /* --------------------- post community detail (Create) --------------------- */
 export const postCommunityDetail = createAsyncThunk("community/postform", async (formData, thunkAPI) => {
   try {
-    const token = localStorage.getItem("token");
-    const { data } = await axios.patch(`${API_URL}/community/{communityId}/proof`, formData, {
+    // const token = localStorage.getItem("token");
+    const authorization_token = cookies.get("mycookie");
+    const { data } = await axios.post(`${API_URL}/community`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
-        Authorization: token,
+        Authorization: authorization_token,
       },
     });
     console.log(data);
@@ -29,13 +33,13 @@ export const postCommunityDetail = createAsyncThunk("community/postform", async 
 });
 
 /* ----------------------- get community detail (Read) ---------------------- */
-export const getCommunityDetail = createAsyncThunk("comment/get", async (payload, thunkAPI) => {
+export const getCommunityDetail = createAsyncThunk("comment/get", async (communityId, thunkAPI) => {
   try {
-    const token = localStorage.getItem("token");
-    const data = await axios.get(`${API_URL}/proof/{proofId}`, {
-      Authorization: token,
+    const authorization_token = cookies.get("mycookie");
+    const { data } = await axios.get(`${API_URL}/community/${communityId}`, {
+      Authorization: authorization_token,
     });
-    return thunkAPI.fulfillWithValue(data.data);
+    return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejected(error);
   }
@@ -44,12 +48,12 @@ export const getCommunityDetail = createAsyncThunk("comment/get", async (payload
 /* --------------------- patch community detail (Update) -------------------- */
 export const patchCommunityDetail = createAsyncThunk("comment/patch", async (formData, thunkAPI) => {
   try {
-    const token = localStorage.getItem("token");
+    const authorization_token = cookies.get("mycookie");
     const { data } = await axios.patch(`${API_URL}/proof/{proofId}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
-        Authorization: token,
+        Authorization: authorization_token,
       },
     });
     console.log(data);
@@ -62,10 +66,10 @@ export const patchCommunityDetail = createAsyncThunk("comment/patch", async (for
 /* -------------------- delete community detail (Delete) -------------------- */
 export const deleteCommunityDetail = createAsyncThunk("comment/delete", async (payload, thunkAPI) => {
   try {
-    const token = localStorage.getItem("token");
+    const authorization_token = cookies.get("mycookie");
     await axios.delete(`${API_URL}/proof/{proofId}`, {
       headers: {
-        Authorization: token,
+        Authorization: authorization_token,
       },
     });
     return thunkAPI.fulfillWithValue(payload);
@@ -97,7 +101,7 @@ export const communityFormSlice = createSlice({
     },
     [postCommunityDetail.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.communityform = action.payload;
+      // state.communityform = action.payload;
     },
     [postCommunityDetail.rejected]: (state, action) => {
       state.isLoading = false;

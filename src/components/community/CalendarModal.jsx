@@ -52,7 +52,8 @@ const CalendarModal = (props) => {
     dispatch(addDates(date));
     props.closeModal();
   };
-
+  // const datesss = date.start === date.end
+  console.log(date.start === date.end);
   return (
     <ModalWrap onClick={closeModal}>
       <ModalBody
@@ -62,6 +63,7 @@ const CalendarModal = (props) => {
       >
         <StInput>
           <DatePicker
+            isdate={date.start === date.end}
             formatMonthDay="YYYY.MM"
             formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)}
             renderCustomHeader={({ monthDate, customHeaderCount, decreaseMonth, increaseMonth }) => {
@@ -164,6 +166,7 @@ const StInput = styled.div`
     :hover {
       border-radius: 50%;
     }
+    border: none;
   }
   .react-datepicker__day-names,
   .react-datepicker__month {
@@ -182,6 +185,7 @@ const StInput = styled.div`
     width: 100%;
     aspect-ratio: 1/1;
     margin: 3px 0;
+    border: none;
   }
   .react-datepicker {
     justify-content: start;
@@ -242,7 +246,7 @@ const StInput = styled.div`
     ::after {
       content: "";
       z-index: -1;
-      background-color: #cecece;
+      background-color: ${(props) => (props.children.props.isdate ? "transparent" : "#cecece")};
       width: 50%;
       border-radius: 0;
       height: 100%;

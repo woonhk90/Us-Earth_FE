@@ -2,8 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
+import { useDispatch } from "react-redux";
+import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
 
 const CommunityCertifyForm = () => {
+  const dispatch = useDispatch();
   const [inputData, inputOnChangeHandler, inputReset] = useInputs({
     title: "",
     content: "",
@@ -78,7 +81,6 @@ const CommunityCertifyForm = () => {
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       console.log(dataSet);
-      // addMutateData(formData);
     }
   };
 
