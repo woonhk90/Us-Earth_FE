@@ -1,6 +1,4 @@
-// import axios from "axios";
-
-// export const postFormData = async (formData) => {
+// export const postCommentFormData = async (formData) => {
 //   try {
 //     const token = localStorage.getItem("token");
 //     const { data } = await axios.patch(`${process.env.REACT_APP_API_URL}/articles`, formData, {
