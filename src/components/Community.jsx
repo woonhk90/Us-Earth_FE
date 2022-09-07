@@ -98,8 +98,7 @@ const Community = () => {
             <CommunityBox>
               {community?.map((v) =>
                 <CommunityItem key={v.communityId} onClick={() => { onDetailHandler(v.communityId) }}>
-                  {/* <CommunityItem key={v.communityId}> */}
-                  <ItemImg bgImg={v.imgList[0].imgUrl}>
+                  <ItemImg bgImg={v.imgList.length>=1?v.imgList[0].imgUrl:'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg'}>
                     <ItemCount>{v.communityId}%</ItemCount>
                     <ItemProgress><IP value={v.communityId} max='100'></IP></ItemProgress>
                   </ItemImg>
