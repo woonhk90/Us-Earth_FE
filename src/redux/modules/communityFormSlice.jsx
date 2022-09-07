@@ -10,10 +10,11 @@ const initialState = {
   error: null,
 };
 
-export const postCommunityForm = createAsyncThunk("community/postform", async (formData, thunkAPI) => {
+/* --------------------- post community detail (Create) --------------------- */
+export const postCommunityDetail = createAsyncThunk("community/postform", async (formData, thunkAPI) => {
   try {
     const token = localStorage.getItem("token");
-    const { data } = await axios.patch(`${process.env.REACT_APP_API_URL}/articles`, formData, {
+    const { data } = await axios.patch(`${API_URL}/community/{communityId}/proof`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
@@ -24,6 +25,52 @@ export const postCommunityForm = createAsyncThunk("community/postform", async (f
     return data;
   } catch (err) {
     console.log(err);
+  }
+});
+
+/* ----------------------- get community detail (Read) ---------------------- */
+export const getCommunityDetail = createAsyncThunk("comment/get", async (payload, thunkAPI) => {
+  try {
+    const token = localStorage.getItem("token");
+    const data = await axios.get(`${API_URL}/proof/{proofId}`, {
+      Authorization: token,
+    });
+    return thunkAPI.fulfillWithValue(data.data);
+  } catch (error) {
+    return thunkAPI.rejected(error);
+  }
+});
+
+/* --------------------- patch community detail (Update) -------------------- */
+export const patchCommunityDetail = createAsyncThunk("comment/patch", async (formData, thunkAPI) => {
+  try {
+    const token = localStorage.getItem("token");
+    const { data } = await axios.patch(`${API_URL}/proof/{proofId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        responseType: "blob",
+        Authorization: token,
+      },
+    });
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+/* -------------------- delete community detail (Delete) -------------------- */
+export const deleteCommunityDetail = createAsyncThunk("comment/delete", async (payload, thunkAPI) => {
+  try {
+    const token = localStorage.getItem("token");
+    await axios.delete(`${API_URL}/proof/{proofId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return thunkAPI.fulfillWithValue(payload);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
 });
 
@@ -44,14 +91,50 @@ export const communityFormSlice = createSlice({
     },
   },
   extraReducers: {
-    [postCommunityForm.pending]: (state) => {
+    /* --------------------- post community detail (Create) --------------------- */
+    [postCommunityDetail.pending]: (state) => {
       state.isLoading = true;
     },
-    [postCommunityForm.fulfilled]: (state, action) => {
+    [postCommunityDetail.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.communityform = action.payload;
     },
-    [postCommunityForm.rejected]: (state, action) => {
+    [postCommunityDetail.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    /* ----------------------- get community detail (Read) ---------------------- */
+    [getCommunityDetail.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getCommunityDetail.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.detail = action.payload;
+    },
+    [getCommunityDetail.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    /* --------------------- patch community detail (Update) -------------------- */
+    [patchCommunityDetail.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [patchCommunityDetail.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.communityform = action.payload;
+    },
+    [patchCommunityDetail.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    /* -------------------- delete community detail (Delete) -------------------- */
+    [deleteCommunityDetail.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [deleteCommunityDetail.fulfilled]: (state, action) => {
+      state.isLoading = false;
+    },
+    [deleteCommunityDetail.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

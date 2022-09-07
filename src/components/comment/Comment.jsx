@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Navigation, Pagination, Scrollbar } from "swiper";
 import CustomSelect from "./CustomSelect";
-import { flexColumn, flexRow, flexBetween, FlexRow, Text } from "../../styles/test";
-import { postCommentFormData } from "../../hooks/Query";
+import { flexColumn, flexRow, flexBetween, FlexRow, Text } from "../../styles/Flex";
 
 const Comment = () => {
   const navigate = useNavigate();

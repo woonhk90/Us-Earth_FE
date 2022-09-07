@@ -5,12 +5,10 @@ import { useDropzone } from "react-dropzone";
 
 const CommentInput = () => {
   const [content, commentOnChange, commentReset] = useInput("");
-  console.log(content);
 
   /* ---------------------------------- 사진 업로드 ---------------------------------- */
 
   const [imageFile, setImageFile] = useState([]);
-  // 미리보기 이미지
   const [previewImg, setPreviewImg] = useState([]);
   const addImageFile = (e) => {
     let reader = new FileReader();
@@ -35,7 +33,7 @@ const CommentInput = () => {
   };
 
   /* ---------------------------------- submit ---------------------------------- */
-  const commentOnClick = () => {
+  const onClickSubmit = () => {
     let formData = new FormData();
     if (content === "") {
       alert("내용을 입력해 주세요");
@@ -67,7 +65,7 @@ const CommentInput = () => {
           </div>
           <textarea value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요"></textarea>
         </InputWrap>
-        <SubmitButton onClick={commentOnClick}>등록</SubmitButton>
+        <SubmitButton onClick={onClickSubmit}>등록</SubmitButton>
       </CommentInputWrap>
     </>
   );

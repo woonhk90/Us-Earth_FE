@@ -4,6 +4,7 @@ import Layout from "../components/layout/Layout";
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import CommentBox from "../components/comment/CommentBox";
 import CommunityBottom from "../components/CommunityBottom";
 import CommunityCertifyTop from "../components/community/CommunityCertifyTop";
 
@@ -15,6 +16,7 @@ const EarthCommunityCertify = () => {
       </Header>
       <CommunityBox>
         <CommunityCertify />
+        <CommentBox />
       </CommunityBox>
       <Footer>
         <CommunityBottom />
