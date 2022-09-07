@@ -7,9 +7,13 @@ import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
 import { flexBetween } from "../../styles/Flex";
-import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { getCommunityDetail, postCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { useParams } from "react-router-dom";
 
-const CommunityForm = () => {
+const CommunityFormEdit = () => {
+  const { detail } = useSelector((state) => state.communityForm);
+  const param = useParams();
+  console.log(detail);
   const dispatch = useDispatch();
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
@@ -17,19 +21,20 @@ const CommunityForm = () => {
   const [isSecret, setIsSecret] = useState(false);
   const [files, setFiles] = useState([]);
   const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmits] = useInputs({
-    limitScore: "",
-    limitParticipants: "",
-    title: "",
-    content: "",
+    limitScore: detail?.limitScore,
+    limitParticipants: detail?.limitParticipants,
+    title: detail?.title,
+    content: detail?.content,
   });
   const inputValid = Object.values(isForm);
   const result = inputValid.filter((word) => word !== true);
   const [password, setPassword] = useState("");
-  const [isPassword, setIsPassword] = useState(false);
+  const [isPassword, setIsPassword] = useState(detail.secret);
   const [passwordMessage, setPasswordMessage] = useState("");
   const { limitScore, limitParticipants, title, content } = inputData;
 
   useEffect(() => {
+    dispatch(getCommunityDetail(param.id));
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
@@ -182,7 +187,7 @@ const CommunityForm = () => {
   );
 };
 
-export default CommunityForm;
+export default CommunityFormEdit;
 
 const CommunityFormWrap = styled.div`
   margin: 53px 16px 16px 16px;
