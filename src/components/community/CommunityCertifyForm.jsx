@@ -28,7 +28,7 @@ const CommunityCertifyForm = () => {
   const addImageFile = (e) => {
     if (e.target.files.length + files.length < 6) {
       for (let i = 0; i < e.target.files.length; i++) {
-        if (e.target.files[i].size < 2000000) {
+        if (e.target.files[i].size < 20000000) {
           // 20메가
           console.log(e.target.files[i].size);
           const reader = new FileReader();
