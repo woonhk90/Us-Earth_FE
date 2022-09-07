@@ -118,6 +118,7 @@ const Community = () => {
               <CommunityGroupTitle>전체 그룹</CommunityGroupTitle>
             </CommunityGroupTop>
             <CommunityBox>
+
               {community?.map((v) => (
                 <CommunityItem
                   key={v.communityId}
