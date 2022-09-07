@@ -1,13 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
-import DatePicker from "react-datepicker";
-import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
+import Input from "../elements/Input";
+import Textarea from "../elements/Textarea";
+import CalendarModal from "./CalendarModal";
+import { useSelector } from "react-redux";
+import { flexBetween } from "../../styles/Flex";
 
-const Form = () => {
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+const CommunityForm = () => {
+  const { dates } = useSelector((state) => state.communityForm);
+  const { start, end } = dates;
+  const [modal, setModal] = useState(false);
   const [isSecret, setIsSecret] = useState(false);
   const [files, setFiles] = useState([]);
   const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmits] = useInputs({
@@ -16,16 +20,12 @@ const Form = () => {
     title: "",
     content: "",
   });
-  let b = Object.values(isForm);
-  console.log(b);
-  const result = b.filter((word) => word !== true);
-  console.log(result.length === 0);
+  const inputValid = Object.values(isForm);
+  const result = inputValid.filter((word) => word !== true);
   const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
-
   const { limitScore, limitParticipants, title, content } = inputData;
-  // console.log(files);
 
   useEffect(() => {
     return () => {
@@ -34,36 +34,21 @@ const Form = () => {
     };
   }, []);
 
-  /* ---------------------------------- 사진 업로드 ---------------------------------- */
-
+  /* ------------------------------ photo upload ------------------------------ */
   const [imageFile, setImageFile] = useState([]);
-  // 미리보기 이미지
   const [previewImg, setPreviewImg] = useState([]);
+
   const addImageFile = (e) => {
     let reader = new FileReader();
-
     reader.readAsDataURL(e.target.files[0]);
     setImageFile(e.target.files[0]);
-
     reader.onloadend = () => {
       const previewImgUrl = reader.result;
-
       setPreviewImg([previewImgUrl]);
     };
   };
-  // console.log(previewImg);
-  // console.log(imageFile);
 
-  // X버튼 클릭 시 이미지 삭제
-  const deleteImageFile = () => {
-    setImageFile([]);
-    setPreviewImg([]);
-    // imageUrlLists.push(currentImageUrl);
-  };
-
-  /* ---------------------------------- submit ---------------------------------- */
-  const [isSubmit, setIsSubmit] = useState(false);
-
+  /* --------------- password validation & secret switch button --------------- */
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
     const passwordCurrent = e.target.value;
@@ -77,7 +62,7 @@ const Form = () => {
     }
   };
 
-  const secretToggleHandler = useCallback(() => {
+  const secretSwitchButtonHandler = useCallback(() => {
     if (isSecret === false) {
       setPassword("");
       setIsPassword(false);
@@ -88,226 +73,129 @@ const Form = () => {
     }
   }, [isSecret]);
 
-  // if (title === "") {
-  // } else if (content === "") {
-  // } else if (limitScore === "") {
-  // } else if (limitParticipants === "") {
-  // } else if (isSecret !== isPassword) {
-  //   console.log(isSecret, "isPassword", isPassword);
-  // } else {
-  //   setIsSubmit(true);
-  // }
+  /* ---------------------------------- submit ---------------------------------- */
   const submitHandler = () => {
+    console.log(/^\d{1,10}$/.test(limitParticipants));
     let formData = new FormData();
-    if (title === "") {
-      alert("제목을 입력해 주세요");
-    } else if (content === "") {
-      alert("내용을 입력해 주세요");
-    } else if (limitScore === "") {
-      alert("목표수을 입력해 주세요");
-    } else if (limitParticipants === "") {
-      alert("모집인원을 선택해 주세요");
-    } else if (isSecret !== isPassword) {
-      console.log(isSecret, "isPassword", isPassword);
-      alert("패스워드를 알맞게 입력해주세요");
-    } else {
-      const dataSet = {
-        ...inputData,
-        password: password,
-        isSecret: isSecret,
-        startDate: "",
-        endDate: "",
-      };
-      for (let i = 0; i < 2; i++) {
-        const year = dateRange[i].getFullYear();
-        const month = ("0" + (dateRange[i].getMonth() + 1)).slice(-2);
-        const days = ("0" + dateRange[i].getDate()).slice(-2);
-        const dateString = year + "-" + month + "-" + days;
-        if (i === 0 ? (dataSet.startDate = dateString) : (dataSet.endDate = dateString));
-      }
-      formData.append("multipartFile", imageFile);
-      formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-      console.log(dataSet);
-      // addMutateData(formData);
-    }
+    const dataSet = {
+      ...inputData,
+      password: password,
+      isSecret: isSecret,
+      startDate: start,
+      endDate: end,
+    };
+    formData.append("multipartFile", imageFile);
+    formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
+    console.log(dataSet);
+    console.log(imageFile);
+    // addMutateData(formData);
   };
 
   return (
     <>
-      <div>게시글 작성</div>
-      <div>이미지</div>
-      <form encType="multipart/form-data">
-        <StLabel htmlFor="file">
-          <StIcon>
-            <ImageBoxWrap>
-              <BittonTextDiv />
-              {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <div>아이콘</div>}
-              <BottomText>대표이미지</BottomText>
-            </ImageBoxWrap>
-          </StIcon>
-        </StLabel>
-        <StImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
-        {/* <input type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} /> */}
-      </form>
-      <div>모집기간: 작성일자~진행기간</div>
-      <div>진행기간*</div>
-      <StInput>
-        <DatePicker
-          renderCustomHeader={({ monthDate, customHeaderCount, decreaseMonth, increaseMonth }) => (
-            <div>
-              <button
-                className={"react-datepicker__navigation react-datepicker__navigation--previous"}
-                style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
-                onClick={decreaseMonth}
-              >
-                <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--previous"}>{"<"}</span>
-              </button>
-              <span className="react-datepicker__current-month">
-                {monthDate.toLocaleString("KO", {
-                  month: "short",
-                  year: "numeric",
-                })}
-              </span>
-              <button
-                className={"react-datepicker__navigation react-datepicker__navigation--next"}
-                style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
-                onClick={increaseMonth}
-              >
-                <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--next"}>{">"}</span>
-              </button>
-            </div>
-          )}
-          shouldCloseOnSelect={false}
-          selectsRange={true}
-          startDate={startDate}
-          endDate={endDate}
-          minDate={new Date()}
-          locale={ko}
-          // monthFormat="yy월 MM"
-          dateFormat="yyyy-MM-dd"
-          onChange={(update) => {
-            setDateRange(update);
+      <CommunityFormWrap>
+        <ImageBoxWrap>
+          <ImageForm encType="multipart/form-data">
+            <label htmlFor="file">
+              <ImageIcon>
+                {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <div>아이콘</div>}
+                <BottonTextWrap>
+                  <BottomText>대표이미지</BottomText>
+                </BottonTextWrap>
+              </ImageIcon>
+            </label>
+            <ImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
+          </ImageForm>
+        </ImageBoxWrap>
+        <RightText>비공개</RightText>
+        <TopTextWrap>
+          <P>그룹명*</P>
+          <CheckBoxWrapper>
+            <CheckBox onClick={secretSwitchButtonHandler} id="checkbox" type="checkbox" />
+            <CheckBoxLabel htmlFor="checkbox" />
+          </CheckBoxWrapper>
+        </TopTextWrap>
+        <Input size="22px" placeholder="그룹명을 입력해주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
+        {isSecret ? (
+          <>
+            <P>비밀번호</P>
+            <Input placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
+            {password.length > 0 && <span>{passwordMessage}</span>}
+          </>
+        ) : null}
+        <DateSpan
+          onClick={() => {
+            setModal(!modal);
           }}
-          withPortal
-          disabledKeyboardNavigation
-        />
-      </StInput>
-      <div>참여인원*</div>
-      <input type="number" name="limitParticipants" value={limitParticipants} onChange={inputOnChangeHandler}></input>
-      <div>목표글수*</div>
-      <input type="number" name="limitScore" value={limitScore} onChange={inputOnChangeHandler}></input>
-      <div>비밀방 여부</div>
-      <CheckBoxWrapper>
-        <CheckBox onClick={secretToggleHandler} id="checkbox" type="checkbox" />
-        <CheckBoxLabel htmlFor="checkbox" />
-      </CheckBoxWrapper>
-      {isSecret ? (
-        <>
-          <div>비밀번호</div>
-          <input placeholder="숫자 4자리를 입력해주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></input>
-          {password.length > 0 && <span>{passwordMessage}</span>}
-        </>
-      ) : null}
-      <div>그룹제목*</div>
-      <input name="title" value={title} onChange={inputOnChangeHandler}></input>
-      <div>내용*</div>
-      <textarea name="content" value={content} onChange={inputOnChangeHandler}></textarea>
-      <div>카테고리</div>
+        >
+          {dates.start?.length > 0 && dates.end?.length > 0 ? (
+            <StartEndDate>
+              {dates.start}-{dates.end}
+            </StartEndDate>
+          ) : (
+            <StartEndDate color={"#6c6c6ceb"}>날짜를 선택해 주세요.*</StartEndDate>
+          )}
+        </DateSpan>
+        {modal && <CalendarModal closeModal={() => setModal(!modal)}></CalendarModal>}
+        <P>참여인원*</P>
+        <Input
+          placeholder="인원을 입력해주세요(최대 10명)"
+          type="number"
+          name="limitParticipants"
+          value={limitParticipants}
+          onChange={inputOnChangeHandler}
+        ></Input>
+        <P>목표달성갯수*</P>
+        <Input type="number" name="limitScore" value={limitScore} onChange={inputOnChangeHandler}></Input>
+        <P>그룹소개*</P>
+        <Textarea
+          placeholder="소개글을 입력해주세요"
+          height="150px"
+          cols="50"
+          rows="8"
+          size="18px"
+          maxLength="200"
+          name="content"
+          value={content}
+          onChange={inputOnChangeHandler}
+        ></Textarea>
+      </CommunityFormWrap>
       <FooterWrap>
-        <FooterMenus onClick={submitHandler} bgColor={"rgba(0,0,0,0.2)"}>
-          커뮤니티
-        </FooterMenus>
+        {/^[1-9]*$/.test(limitParticipants) &&
+        /^[1-9]*$/.test(limitScore) &&
+        result.length === 0 &&
+        dates.start?.length > 0 &&
+        dates.end?.length > 0 &&
+        isSecret === isPassword ? (
+          <FooterMenus color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
+            그룹 등록
+          </FooterMenus>
+        ) : (
+          <FooterMenus color={"#ccccccec"} bgColor={"#979797eb"}>
+            그룹등록불가
+          </FooterMenus>
+        )}
       </FooterWrap>
     </>
   );
 };
-export default Form;
 
-const StInput = styled.div`
-  > div > div > input {
-    width: 200px;
-  }
-  .react-datepicker {
-    border: none;
-  }
-  .react-datepicker__header {
-    background-color: #e4ffe4;
-    border: none;
-  }
-  .react-datepicker__current-month {
-    font-size: 16px;
-  }
-  .react-datepicker__day--in-range {
-    border-radius: 0;
-    background-color: #21a549;
-  }
-  .react-datepicker__day {
-    margin: 5px 0 0 0;
-  }
-  .react-datepicker__day--range-end {
-    border-radius: 0px 50% 50% 0px;
-  }
-  .react-datepicker__day:hover {
-    /* border-radius: 50%; */
-  }
-  .react-datepicker__day--in-selecting-range {
-    border-radius: 50%;
-    background-color: rgba(33, 165, 33, 0.5);
-  }
-  .react-datepicker__day--keyboard-selected {
-    background-color: transparent;
-    color: black;
-  }
-  .react-datepicker__day--range-start {
-    border-radius: 50% 0 0 50%;
-    background-color: #21a549;
-    color: white;
-  }
-  & .SingleDatePicker,
-  .SingleDatePickerInput {
-    .DateInput {
-      width: 100%;
-      height: 40px;
-      display: flex;
+export default CommunityForm;
 
-      .DateInput_input {
-        font-size: 1rem;
-        border-bottom: 0;
-        padding: 12px 16px 14px;
-      }
-    }
-
-    .SingleDatePickerInput__withBorder {
-      border-radius: 4px;
-      overflow: hidden;
-
-      :hover,
-      .DateInput_input__focused {
-        border: 1px solid red;
-      }
-
-      .CalendarDay__selected {
-        background: blue;
-        border: blueviolet;
-      }
-    }
-
-    .SingleDatePicker_picker.SingleDatePicker_picker {
-      top: 43px;
-      left: 2px;
-      /* top: 43px !important;
-      left: 2px !important; */
-    }
-  }
+const CommunityFormWrap = styled.div`
+  margin: 53px 16px 16px 16px;
 `;
 
+/* ------------------------------ switch button ----------------------------- */
 const CheckBoxWrapper = styled.div`
   position: relative;
 `;
+
 const CheckBoxLabel = styled.label`
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 43px;
   height: 24px;
   border-radius: 15px;
@@ -325,6 +213,12 @@ const CheckBoxLabel = styled.label`
     transition: 0.2s;
   }
 `;
+
+const StartEndDate = styled.div`
+  font-size: 22px;
+  color: ${(props) => props.color};
+`;
+
 const CheckBox = styled.input`
   opacity: 0;
   z-index: 1;
@@ -344,22 +238,32 @@ const CheckBox = styled.input`
     }
   }
 `;
-//사진
 
-const StImageInput = styled.input`
+/* ----------------------------------- image ---------------------------------- */
+const ImageBoxWrap = styled.div`
+  justify-content: center;
+  align-items: center;
+  display: flex;
+`;
+
+const ImageForm = styled.form`
+  width: 206px;
+  height: 206px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-bottom: 36px;
+`;
+
+const ImageInput = styled.input`
   position: absolute;
   width: 0;
   height: 0;
   overflow: hidden;
-`;
-const StLabel = styled.label`
-  display: inline-block;
-  font-size: inherit;
-  line-height: normal;
-  vertical-align: middle;
   cursor: pointer;
 `;
-const StIcon = styled.div`
+
+const ImageIcon = styled.div`
   cursor: pointer;
   :hover {
     border: 1px solid #999999;
@@ -380,35 +284,29 @@ const Thumb = styled.img`
   border-radius: 14px;
 `;
 
-const ImageBoxWrap = styled.div`
-  width: 206px;
-  height: 206px;
-  border-radius: 14px;
-  position: relative;
-`;
-
-const BottomText = styled.p`
+const BottonTextWrap = styled.div`
   position: absolute;
-  bottom: 0;
-  left: 50%;
-  z-index: 99;
-  transform: translate(-50%, -50%);
-`;
-
-const BittonTextDiv = styled.div`
-  position: absolute;
-  /* box-sizing: border-box; */
+  align-items: center;
+  box-sizing: border-box;
+  padding: 11px 53px;
+  margin: 0;
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 100%;
-  border-radius: 14px;
+  height: 39px;
+  border-radius: 0 0 14px 14px;
   z-index: 99;
-  background: linear-gradient(to bottom, transparent 82%, #b1b0b0 18%);
+  background: #b1b0b0;
   background-size: 100%;
+  display: flex;
 `;
 
-//bottom
+const BottomText = styled.p`
+  font-size: 20px;
+  font-weight: 500;
+`;
+
+/* ------------------------------ bottom button ----------------------------- */
 const FooterWrap = styled.div`
   position: fixed;
   bottom: 0;
@@ -422,5 +320,26 @@ const FooterWrap = styled.div`
 const FooterMenus = styled.div`
   width: 100%;
   line-height: 48px;
+  color: ${(props) => props.color};
   background-color: ${(props) => props.bgColor};
+`;
+
+/* ---------------------------------- font ---------------------------------- */
+const DateSpan = styled.div`
+  border-bottom: 1px solid rgb(238, 238, 238);
+  margin: 30px 0;
+`;
+
+const P = styled.p`
+  font-size: 20px;
+  font-weight: 500;
+`;
+
+const RightText = styled.p`
+  font-size: 18px;
+  text-align: right;
+`;
+
+const TopTextWrap = styled.div`
+  ${flexBetween}
 `;

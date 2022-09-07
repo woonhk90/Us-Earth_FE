@@ -1,18 +1,24 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../assets/LeftArrow.svg";
 
 const CommunityModal = (props) => {
   const closeModal = () => {
     props.closeModal();
-  }
+  };
   return (
     <>
       <ModalWrap onClick={closeModal}>
-        <ModalBody onClick={(e) => { e.stopPropagation() }}>
+        <ModalBody
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <SearchBox>
-            <SearchIcon onClick={closeModal}><LeftArrow /></SearchIcon>
-            <SearchInput type="text" placeholder='검색어를 입력해주세요.' />
+            <SearchIcon onClick={closeModal}>
+              <LeftArrow />
+            </SearchIcon>
+            <SearchInput type="text" placeholder="검색어를 입력해주세요." />
             <SearchBtn>검색</SearchBtn>
           </SearchBox>
           <SuggestWrap>
@@ -29,8 +35,8 @@ const CommunityModal = (props) => {
         </ModalBody>
       </ModalWrap>
     </>
-  )
-}
+  );
+};
 export default CommunityModal;
 
 const ModalWrap = styled.div`
@@ -38,85 +44,77 @@ const ModalWrap = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height:calc(100% - 48px);
+  height: calc(100% - 48px);
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index:10;
-  `;
+  z-index: 10;
+`;
 const ModalBody = styled.div`
   position: absolute;
-  top:0;left:0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 60%;
-  
+
   background-color: #fff;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 `;
 
-
-
-
-
 const SearchBox = styled.div`
-  display:flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom:1px solid rgba(0,0,0,0.14);
-  margin-bottom:37px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  margin-bottom: 37px;
 `;
 const SearchIcon = styled.span`
-  display:inline-block;
-  margin-left:18px;
-  font-size:16px;
+  display: inline-block;
+  margin-left: 18px;
+  font-size: 16px;
 `;
 const SearchInput = styled.input`
-  outline:none;
-  border:none;
-  width:50%;
+  outline: none;
+  border: none;
+  width: 50%;
 `;
 const SearchBtn = styled.button`
-  background-color:#424242;
-  color:#fff;
-  font-size:18px;
-  border:0;
-  padding:8px 13px;
-  box-sizing:border-box;
+  background-color: #424242;
+  color: #fff;
+  font-size: 18px;
+  border: 0;
+  padding: 8px 13px;
+  box-sizing: border-box;
 `;
-
-
-
-
 
 const SuggestWrap = styled.div`
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:content;
-  padding:0 27px;
-  box-sizing:border-box;
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: content;
+  padding: 0 27px;
+  box-sizing: border-box;
 `;
 const SuggestTitle = styled.div`
-  font:bold 22px/1 'Arial','sans-serif';
-  margin-bottom:13px;
+  font: bold 22px/1 "Arial", "sans-serif";
+  margin-bottom: 13px;
 `;
 const SuggestBox = styled.div`
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  align-items:content;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: content;
 `;
 const SuggestItem = styled.span`
-  display:inline-block;
-  font:18px/1 'Arial','sans-serif';
-  border:1px solid #000;
-  padding:10px 20px;
-  margin:6px 4px;
-  border-top-left-radius:50px;
-  border-bottom-left-radius:50px;
-  border-top-right-radius:50px;
-  border-bottom-right-radius:50px;
+  display: inline-block;
+  font: 18px/1 "Arial", "sans-serif";
+  border: 1px solid #000;
+  padding: 10px 20px;
+  margin: 6px 4px;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
 `;
