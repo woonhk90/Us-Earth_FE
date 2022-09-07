@@ -7,34 +7,66 @@ import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
 import { flexBetween } from "../../styles/Flex";
-import { getCommunityDetail, postCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { addDates, getCommunityDetail, patchCommunityDetail, postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import Cookies from "universal-cookie";
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const CommunityFormEdit = () => {
-  const { detail } = useSelector((state) => state.communityForm);
-  const param = useParams();
-  console.log(detail);
   const dispatch = useDispatch();
+  const getCommunityDetail = async (communityId) => {
+    try {
+      const authorization_token = cookies.get("mycookie");
+      const { data } = await axios.get(`${API_URL}/community/${communityId}`, {
+        Authorization: authorization_token,
+      });
+      console.log(data);
+      setSecret(data.secret);
+      setPassword(data.password);
+      setForm({
+        limitScore: data.limitScore,
+        limitParticipants: data.limitParticipants,
+        title: data.title,
+        content: data.content,
+      });
+      dispatch(
+        addDates({
+          start: data.startDate,
+          end: data.endDate,
+        })
+      );
+      setPreviewImg(data.imgList[0].imgUrl);
+      setIsPassword(data.secret);
+    } catch (error) {
+      return error;
+    }
+  };
+  const cookies = new Cookies();
+  const param = useParams();
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
+  console.log(dates);
   const [modal, setModal] = useState(false);
-  const [isSecret, setIsSecret] = useState(false);
+  const [secret, setSecret] = useState(false);
   const [files, setFiles] = useState([]);
-  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmits] = useInputs({
-    limitScore: detail?.limitScore,
-    limitParticipants: detail?.limitParticipants,
-    title: detail?.title,
-    content: detail?.content,
+  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmit, setForm] = useInputs({
+    limitScore: "",
+    limitParticipants: "",
+    title: "",
+    content: "",
   });
   const inputValid = Object.values(isForm);
-  const result = inputValid.filter((word) => word !== true);
+  console.log(inputValid);
+  const result = inputValid.find((word) => word === false);
   const [password, setPassword] = useState("");
-  const [isPassword, setIsPassword] = useState(detail.secret);
+  const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
   const { limitScore, limitParticipants, title, content } = inputData;
 
   useEffect(() => {
-    dispatch(getCommunityDetail(param.id));
+    getCommunityDetail(param.id);
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
@@ -43,6 +75,7 @@ const CommunityFormEdit = () => {
 
   /* ------------------------------ photo upload ------------------------------ */
   const [imageFile, setImageFile] = useState([]);
+  console.log(imageFile);
   const [previewImg, setPreviewImg] = useState([]);
 
   const addImageFile = (e) => {
@@ -70,15 +103,15 @@ const CommunityFormEdit = () => {
   };
 
   const secretSwitchButtonHandler = useCallback(() => {
-    if (isSecret === false) {
+    if (secret === false) {
       setPassword("");
       setIsPassword(false);
-      setIsSecret(true);
+      setSecret(true);
     } else {
-      setIsSecret(false);
+      setSecret(false);
       setIsPassword(false);
     }
-  }, [isSecret]);
+  }, [secret]);
 
   /* ---------------------------------- submit ---------------------------------- */
   const submitHandler = () => {
@@ -86,8 +119,9 @@ const CommunityFormEdit = () => {
     let formData = new FormData();
     const dataSet = {
       ...inputData,
+
       password: password,
-      secret: isSecret,
+      secret: secret,
       startDate: start,
       endDate: end,
     };
@@ -95,8 +129,21 @@ const CommunityFormEdit = () => {
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     console.log(dataSet);
     console.log(imageFile);
-    dispatch(postCommunityDetail(formData));
+    dispatch(patchCommunityDetail({ communityId: param.id, formData }));
   };
+
+  console.log(Boolean(/^[0-9]*$/.test(limitParticipants)));
+  console.log(limitScore, limitParticipants);
+  console.log(Boolean(/^[0-9]*$/.test(limitScore)));
+  console.log(password);
+  console.log(result);
+  console.log(Boolean(result === undefined));
+  console.log(Boolean(dates.start?.length));
+  console.log(Boolean(dates.start?.length > 0));
+  console.log(Boolean(dates.end?.length > 0));
+  console.log(Boolean(secret === isPassword));
+  console.log(secret);
+  console.log(isPassword);
 
   return (
     <>
@@ -118,12 +165,12 @@ const CommunityFormEdit = () => {
         <TopTextWrap>
           <P>그룹명*</P>
           <CheckBoxWrapper>
-            <CheckBox onClick={secretSwitchButtonHandler} id="checkbox" type="checkbox" />
-            <CheckBoxLabel htmlFor="checkbox" />
+            <CheckBox secret={secret} onClick={secretSwitchButtonHandler} id="checkbox" type="checkbox" />
+            <CheckBoxLabel secret={secret} htmlFor="checkbox" />
           </CheckBoxWrapper>
         </TopTextWrap>
         <Input size="22px" placeholder="그룹명을 입력해주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
-        {isSecret ? (
+        {secret ? (
           <>
             <P>비밀번호</P>
             <Input placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
@@ -168,12 +215,15 @@ const CommunityFormEdit = () => {
         ></Textarea>
       </CommunityFormWrap>
       <FooterWrap>
-        {/^[1-9]*$/.test(limitParticipants) &&
-        /^[1-9]*$/.test(limitScore) &&
-        result.length === 0 &&
-        dates.start?.length > 0 &&
-        dates.end?.length > 0 &&
-        isSecret === isPassword ? (
+        {/* <FooterMenus color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
+          그룹 등록
+        </FooterMenus> */}
+        {/^[0-9]*$/.test(limitParticipants) &&
+        /^[0-9]*$/.test(limitScore) &&
+        result === undefined &&
+        dates.start?.length &&
+        dates.end?.length &&
+        secret === isPassword ? (
           <FooterMenus color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
             그룹 등록
           </FooterMenus>
@@ -206,19 +256,39 @@ const CheckBoxLabel = styled.label`
   width: 43px;
   height: 24px;
   border-radius: 15px;
-  background: #bebebe;
+  ${(props) =>
+    !props.secret &&
+    css`
+      background: #bebebe;
+    `}
+
   cursor: pointer;
   &::after {
-    content: "";
-    display: block;
-    border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    margin: 1px;
-    background: #ffffff;
-    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
-    transition: 0.2s;
+    ${(props) =>
+      !props.secret
+        ? css`
+            content: "";
+            display: block;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            margin: 1px;
+            background: #ffffff;
+            box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+            transition: 0.2s;
+          `
+        : css`
+            content: "";
+            background-color: white;
+            display: block;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            margin: 1px 0 0 20px;
+            transition: 0.2s;
+          `}
   }
+  background: ${(props) => (props.secret ? `#35bd47` : null)};
 `;
 
 const StartEndDate = styled.div`
@@ -232,17 +302,22 @@ const CheckBox = styled.input`
   border-radius: 15px;
   width: 42px;
   height: 26px;
-  &:checked + ${CheckBoxLabel} {
-    background: #35bd47;
-    &::after {
-      background-color: white;
-      display: block;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      margin: 1px 0 0 20px;
-      transition: 0.2s;
-    }
+  &:checked {
+    ${(props) =>
+      props.secret &&
+      css`
+        background: #35bd47;
+        &::after {
+          content: "";
+          background-color: white;
+          display: block;
+          border-radius: 50%;
+          width: 22px;
+          height: 22px;
+          margin: 1px 0 0 20px;
+          transition: 0.2s;
+        }
+      `}
   }
 `;
 
