@@ -24,6 +24,7 @@ export default EarthCommunityForm;
 
 const CommunityBox = styled.div`
   height: 100%;
+  width: 100%;
   overflow: auto;
   position: absolute;
   top: 48px;
