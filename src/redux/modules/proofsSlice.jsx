@@ -6,7 +6,7 @@ const cookies = new Cookies();
 const API_URL = process.env.REACT_APP_API_URL;
 
 const initialState = {
-  proof: [],
+  proofs: [],
   isLoading: false,
   error: null,
 };
@@ -30,13 +30,13 @@ export const postProof = createAsyncThunk("proof/post", async (payload, thunkAPI
 });
 
 /* --------------------------- get proof (Read) --------------------------- */
-export const getProofs = createAsyncThunk("proof/get", async (payload, thunkAPI) => {
+export const getProofs = createAsyncThunk("proof/get", async (proofId, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.get(`${API_URL}/replay/{replayId}`, {
+    const { data } = await axios.get(`${API_URL}/proof/${proofId}`, {
       Authorization: authorization_token,
     });
-    return thunkAPI.fulfillWithValue(data.data);
+    return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejected(error);
   }
@@ -114,7 +114,7 @@ export const proofsSlice = createSlice({
     },
     [getProofs.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.detail = action.payload;
+      state.proofs = action.payload;
     },
     [getProofs.rejected]: (state, action) => {
       state.isLoading = false;

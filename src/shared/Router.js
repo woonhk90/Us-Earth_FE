@@ -10,6 +10,8 @@ import EarthCommunityDetail from "../pages/EarthCommunityDetail";
 import EarthCommunityProof from "../pages/EarthCommunityProof";
 import EarthCommunityProofForm from "../pages/EarthCommunityProofForm";
 import EarthMyPage from "../pages/EarthMyPage";
+import EarthCommunityProofEdit from "../pages/EarthCommunityProofEdit";
+import CommunityProofPost from "../components/proof/CommunityProofEdit";
 
 const Router = () => {
   return (
@@ -22,6 +24,7 @@ const Router = () => {
       <Route path="/community/detail/:id" element={<EarthCommunityDetail />} />
       <Route path="/community/:communityId/proof/:proofId" element={<EarthCommunityProof />} />
       <Route path="/community/:communityId/proof/form" element={<EarthCommunityProofForm />} />
+      <Route path="/community/:communityId/proof/edit/:proofId" element={<EarthCommunityProofEdit />} />
       <Route path="/mypage" element={<EarthMyPage />} />
       <Route path="/user/kakao/callback" element={<KakaoLogin />} />
       <Route path="/user/google/callback" element={<GoogleLogin />} />
