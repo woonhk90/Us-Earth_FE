@@ -7,34 +7,68 @@ import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
 import { flexBetween } from "../../styles/Flex";
-import { getCommunityDetail, postCommunityDetail } from "../../redux/modules/communityFormSlice";
-import { useParams } from "react-router-dom";
+import { addDates, getCommunityDetail, patchCommunityDetail, postCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import Cookies from "universal-cookie";
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const CommunityFormEdit = () => {
-  const { detail } = useSelector((state) => state.communityForm);
-  const param = useParams();
-  console.log(detail);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cookies = new Cookies();
+  const param = useParams();
+
+  /* -------------------------------- axios get ------------------------------- */
+  const getCommunityDetail = async (communityId) => {
+    try {
+      const authorization_token = cookies.get("mycookie");
+      const { data } = await axios.get(`${API_URL}/community/${communityId}`, {
+        Authorization: authorization_token,
+      });
+      console.log(data);
+      setSecret(data.secret);
+      setPassword(data.password);
+      setForm({
+        limitScore: data.limitScore,
+        limitParticipants: data.limitParticipants,
+        title: data.title,
+        content: data.content,
+      });
+      dispatch(
+        addDates({
+          start: data.startDate,
+          end: data.endDate,
+        })
+      );
+      setPreviewImg([data.img.imgUrl]);
+      setIsPassword(data.secret);
+    } catch (error) {
+      return error;
+    }
+  };
+
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
-  const [isSecret, setIsSecret] = useState(false);
+  const [secret, setSecret] = useState(false);
   const [files, setFiles] = useState([]);
-  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmits] = useInputs({
-    limitScore: detail?.limitScore,
-    limitParticipants: detail?.limitParticipants,
-    title: detail?.title,
-    content: detail?.content,
+  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmit, setForm] = useInputs({
+    limitScore: "",
+    limitParticipants: "",
+    title: "",
+    content: "",
   });
-  const inputValid = Object.values(isForm);
-  const result = inputValid.filter((word) => word !== true);
   const [password, setPassword] = useState("");
-  const [isPassword, setIsPassword] = useState(detail.secret);
+  const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
   const { limitScore, limitParticipants, title, content } = inputData;
+  const inputValid = Object.values(isForm);
+  const result = inputValid.find((word) => word === false);
 
   useEffect(() => {
-    dispatch(getCommunityDetail(param.id));
+    getCommunityDetail(param.id);
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
@@ -47,15 +81,23 @@ const CommunityFormEdit = () => {
 
   const addImageFile = (e) => {
     let reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    setImageFile(e.target.files[0]);
-    reader.onloadend = () => {
-      const previewImgUrl = reader.result;
-      setPreviewImg([previewImgUrl]);
-    };
+    if (e.target.files.length > 0) {
+      reader.readAsDataURL(e.target.files[0]);
+      setImageFile(e.target.files[0]);
+      reader.onloadend = () => {
+        const previewImgUrl = reader.result;
+        setPreviewImg([previewImgUrl]);
+      };
+    }
   };
 
-  /* --------------- password validation & secret switch button --------------- */
+  const deleteImage = (e) => {
+    // e.preventDefault();
+    // setPreviewImg([]);
+    // setImageFile([]);
+  };
+
+  /* --------------------------- password validation -------------------------- */
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
     const passwordCurrent = e.target.value;
@@ -69,33 +111,33 @@ const CommunityFormEdit = () => {
     }
   };
 
-  const secretSwitchButtonHandler = useCallback(() => {
-    if (isSecret === false) {
+  /* -------------------------- secret switch button -------------------------- */
+  const secretSwitchButtonHandler = () => {
+    if (secret === false) {
       setPassword("");
       setIsPassword(false);
-      setIsSecret(true);
+      setSecret(true);
     } else {
-      setIsSecret(false);
+      setSecret(false);
       setIsPassword(false);
+      setPassword("");
     }
-  }, [isSecret]);
+  };
 
   /* ---------------------------------- submit ---------------------------------- */
   const submitHandler = () => {
-    console.log(/^\d{1,10}$/.test(limitParticipants));
     let formData = new FormData();
     const dataSet = {
       ...inputData,
       password: password,
-      secret: isSecret,
+      secret: secret,
       startDate: start,
       endDate: end,
     };
     formData.append("multipartFile", imageFile);
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-    console.log(dataSet);
-    console.log(imageFile);
-    dispatch(postCommunityDetail(formData));
+    dispatch(patchCommunityDetail({ communityId: param.id, formData }));
+    navigate(`/community/detail/${param.id}`);
   };
 
   return (
@@ -109,6 +151,7 @@ const CommunityFormEdit = () => {
                 <BottonTextWrap>
                   <BottomText>대표이미지</BottomText>
                 </BottonTextWrap>
+                <button onClick={deleteImage}>삭제</button>
               </ImageIcon>
             </label>
             <ImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
@@ -118,12 +161,12 @@ const CommunityFormEdit = () => {
         <TopTextWrap>
           <P>그룹명*</P>
           <CheckBoxWrapper>
-            <CheckBox onClick={secretSwitchButtonHandler} id="checkbox" type="checkbox" />
-            <CheckBoxLabel htmlFor="checkbox" />
+            <CheckBox secret={secret} onClick={secretSwitchButtonHandler} id="checkbox" type="checkbox" />
+            <CheckBoxLabel secret={secret} htmlFor="checkbox" />
           </CheckBoxWrapper>
         </TopTextWrap>
         <Input size="22px" placeholder="그룹명을 입력해주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
-        {isSecret ? (
+        {secret ? (
           <>
             <P>비밀번호</P>
             <Input placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
@@ -161,20 +204,20 @@ const CommunityFormEdit = () => {
           cols="50"
           rows="8"
           size="18px"
-          maxLength="200"
+          maxLength="500"
           name="content"
           value={content}
           onChange={inputOnChangeHandler}
         ></Textarea>
       </CommunityFormWrap>
       <FooterWrap>
-        {/^[1-9]*$/.test(limitParticipants) &&
-        /^[1-9]*$/.test(limitScore) &&
-        result.length === 0 &&
-        dates.start?.length > 0 &&
-        dates.end?.length > 0 &&
-        isSecret === isPassword ? (
-          <FooterMenus color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
+        {/^([1-9]|10)$/.test(limitParticipants) &&
+        /^[1-9][0-9]?$|^100/.test(limitScore) &&
+        result === undefined &&
+        dates.start?.length &&
+        dates.end?.length &&
+        secret === isPassword ? (
+          <FooterMenus valid={true} color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
             그룹 등록
           </FooterMenus>
         ) : (
@@ -206,19 +249,33 @@ const CheckBoxLabel = styled.label`
   width: 43px;
   height: 24px;
   border-radius: 15px;
-  background: #bebebe;
+  ${(props) =>
+    !props.secret &&
+    css`
+      background: #bebebe;
+    `}
+
   cursor: pointer;
   &::after {
     content: "";
+    background-color: white;
     display: block;
     border-radius: 50%;
     width: 22px;
     height: 22px;
-    margin: 1px;
-    background: #ffffff;
-    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
     transition: 0.2s;
+    ${(props) =>
+      !props.secret
+        ? css`
+            margin: 1px;
+            box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+            transition: 0.2s;
+          `
+        : css`
+            margin: 1px 0 0 20px;
+          `}
   }
+  background: ${(props) => (props.secret ? `#35bd47` : null)};
 `;
 
 const StartEndDate = styled.div`
@@ -232,17 +289,22 @@ const CheckBox = styled.input`
   border-radius: 15px;
   width: 42px;
   height: 26px;
-  &:checked + ${CheckBoxLabel} {
-    background: #35bd47;
-    &::after {
-      background-color: white;
-      display: block;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      margin: 1px 0 0 20px;
-      transition: 0.2s;
-    }
+  &:checked {
+    ${(props) =>
+      props.secret &&
+      css`
+        background: #35bd47;
+        &::after {
+          content: "";
+          background-color: white;
+          display: block;
+          border-radius: 50%;
+          width: 22px;
+          height: 22px;
+          margin: 1px 0 0 20px;
+          transition: 0.2s;
+        }
+      `}
   }
 `;
 
@@ -325,13 +387,18 @@ const FooterWrap = styled.div`
 `;
 
 const FooterMenus = styled.div`
+  ${(props) =>
+    props.valid &&
+    css`
+      cursor: pointer;
+    `}
   width: 100%;
   line-height: 48px;
   color: ${(props) => props.color};
   background-color: ${(props) => props.bgColor};
 `;
 
-/* ---------------------------------- font ---------------------------------- */
+/* -------------------------------- font & div -------------------------------- */
 const DateSpan = styled.div`
   border-bottom: 1px solid rgb(238, 238, 238);
   margin: 30px 0;

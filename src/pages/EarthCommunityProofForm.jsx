@@ -1,22 +1,20 @@
 import React from "react";
-import CommunityCertify from "../components/community/CommunityCertify";
 import Layout from "../components/layout/Layout";
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import CommentBox from "../components/comment/CommentBox";
 import CommunityBottom from "../components/CommunityBottom";
-import CommunityCertifyTop from "../components/community/CommunityCertifyTop";
+import CommunityProofForm from "../components/proof/CommunityProofForm";
+import CommunityProofFormTop from "../components/proof/CommunityProofFormTop";
 
-const EarthCommunityCertify = () => {
+const EarthCommunityProofForm = () => {
   return (
     <Layout>
       <Header>
-        <CommunityCertifyTop />
+        <CommunityProofFormTop />
       </Header>
       <CommunityBox>
-        <CommunityCertify />
-        <CommentBox />
+        <CommunityProofForm />
       </CommunityBox>
       <Footer>
         <CommunityBottom />
@@ -24,12 +22,12 @@ const EarthCommunityCertify = () => {
     </Layout>
   );
 };
-export default EarthCommunityCertify;
+
+export default EarthCommunityProofForm;
 
 const CommunityBox = styled.div`
   height: 100%;
-  width: 100%;
-  /* overflow: auto; */
+  overflow: auto;
   position: absolute;
   top: 48px;
   left: 0;

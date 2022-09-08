@@ -4,17 +4,17 @@ import styled from "styled-components";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import CommunityBottom from "../components/CommunityBottom";
-import CommunityCertifyForm from "../components/community/CommunityCertifyForm";
-import CommunityCertifyFormTop from "../components/community/CommunityCertifyFormTop";
+import CommunityProofEdit from "../components/proof/CommunityProofEdit";
+import CommunityProofFormTop from "../components/proof/CommunityProofFormTop";
 
-const EarthCommunityCertifyForm = () => {
+const EarthCommunityProofEdit = () => {
   return (
     <Layout>
       <Header>
-        <CommunityCertifyFormTop />
+        <CommunityProofFormTop />
       </Header>
       <CommunityBox>
-        <CommunityCertifyForm />
+        <CommunityProofEdit />
       </CommunityBox>
       <Footer>
         <CommunityBottom />
@@ -23,11 +23,11 @@ const EarthCommunityCertifyForm = () => {
   );
 };
 
-export default EarthCommunityCertifyForm;
+export default EarthCommunityProofEdit;
 
 const CommunityBox = styled.div`
   height: 100%;
-  /* overflow: auto; */
+  overflow: auto;
   position: absolute;
   top: 48px;
   left: 0;

@@ -9,12 +9,20 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { deleteProof, getProofs } from "../../redux/modules/proofsSlice";
 
-const CommunityCertify = () => {
+const CommunityProof = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   // const dispatch = useDispatch();
   const param = useParams();
   const [modalOpen, setModalOpen] = useState(false);
+  const { proofs } = useSelector((state) => state.proofs);
+  console.log(proofs);
+
+  useEffect(() => {
+    dispatch(getProofs(param.proofId));
+  }, []);
 
   const openModal = () => {
     setModalOpen(true);
@@ -26,64 +34,56 @@ const CommunityCertify = () => {
 
   const onClickDelete = () => {
     if (window.confirm("삭제하시겠습니까?")) {
-      // dispatch(__deleteDetail(param.id));
-      // navigate("/");
+      dispatch(deleteProof(param.proofId));
+      navigate("/community");
     } else {
       return;
     }
   };
 
   const onClickEdit = () => {
-    // navigate(`/edit/${param.id}`);
+    navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`);
   };
 
   return (
     <>
       <FirstWrap>
         <Swiper modules={[Navigation, Pagination, Scrollbar]} spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
-          <SwiperSlide>
-            <StDiv>
-              <ItemImg></ItemImg>
-            </StDiv>
-          </SwiperSlide>
-          <SwiperSlide>
-            <StDiv>
-              <ItemImg></ItemImg>
-            </StDiv>
-          </SwiperSlide>
-          <SwiperSlide>
-            <StDiv>
-              <ItemImg></ItemImg>
-            </StDiv>
-          </SwiperSlide>
-          <SwiperSlide>
-            <StDiv>
-              <ItemImg></ItemImg>
-            </StDiv>
-          </SwiperSlide>
+          {proofs.img?.map((img) => {
+            console.log(img.imgUrl);
+            return (
+              <SwiperSlide key={img.id}>
+                <StDiv>
+                  <ItemImg imgUrl={img.imgUrl}></ItemImg>
+                </StDiv>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </FirstWrap>
       <UserInfoFirstWrap>
         <UserInfoWrap>
           <UserInfoImg />
           <UerInpo>
-            <Username>닉네임</Username>
-            <CreatAt>작성일자</CreatAt>
+            <Username>{proofs.nickname}</Username>
+            <CreatAt>{proofs.creatAt}</CreatAt>
           </UerInpo>
         </UserInfoWrap>
         <ModalButton onClick={openModal}>아이콘</ModalButton>
         <EditModal open={modalOpen} close={closeModal}>
-          <main>
-            <ButtonInModalWrap>
-              <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
-              <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal>
-            </ButtonInModalWrap>
-          </main>
+          {/* <main> */}
+          {/* <ButtonInModalWrap> */}
+          <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal>
+          <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
+          {/* <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
+          <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal> */}
+          {/* </ButtonInModalWrap> */}
+          {/* </main> */}
         </EditModal>
       </UserInfoFirstWrap>
       <TextContainer>
-        <ContentTitle>제목</ContentTitle>
-        <ContentContent>내용</ContentContent>
+        <ContentTitle>{proofs.title}</ContentTitle>
+        <ContentContent>{proofs.content}</ContentContent>
       </TextContainer>
       {/* <UserInfoFirstWrap>
         <button
@@ -107,7 +107,7 @@ const CommunityCertify = () => {
   );
 };
 
-export default CommunityCertify;
+export default CommunityProof;
 
 const UserInfoFirstWrap = styled.div`
   display: flex;
@@ -218,7 +218,7 @@ const FirstWrap = styled.div`
 `;
 
 const ItemImg = styled.div`
-  background-image: url("https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-0443429487fdc2277fc8f9dd1eca6fb8b678862f593e21222ba9f6592b99ad14.png");
+  background: url(${(props) => props.imgUrl});
   padding-bottom: 10%;
   background-size: cover;
   object-fit: cover;
