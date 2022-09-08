@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
 
-const CommunityCertifyFormTop = () => {
+const CommunityProofFormTop = () => {
   const navigate = useNavigate();
   return (
     <>
@@ -18,7 +18,7 @@ const CommunityCertifyFormTop = () => {
     </>
   );
 };
-export default CommunityCertifyFormTop;
+export default CommunityProofFormTop;
 
 const HeaderWrap = styled.div`
   position: fixed;

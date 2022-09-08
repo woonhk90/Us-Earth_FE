@@ -112,8 +112,7 @@ const CommunityFormEdit = () => {
   };
 
   /* -------------------------- secret switch button -------------------------- */
-  const secretSwitchButtonHandler = useCallback(() => {
-    console.log(password);
+  const secretSwitchButtonHandler = () => {
     if (secret === false) {
       setPassword("");
       setIsPassword(false);
@@ -123,7 +122,7 @@ const CommunityFormEdit = () => {
       setIsPassword(false);
       setPassword("");
     }
-  }, [secret]);
+  };
 
   /* ---------------------------------- submit ---------------------------------- */
   const submitHandler = () => {

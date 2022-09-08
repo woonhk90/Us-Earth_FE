@@ -14,7 +14,7 @@ const CommunityForm = () => {
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
-  const [isSecret, setIsSecret] = useState(false);
+  const [secret, setSecret] = useState(false);
   const [files, setFiles] = useState([]);
   const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmits] = useInputs({
     limitScore: "",
@@ -70,16 +70,17 @@ const CommunityForm = () => {
     }
   };
 
-  const secretSwitchButtonHandler = useCallback(() => {
-    if (isSecret === false) {
+  const secretSwitchButtonHandler = () => {
+    if (secret === false) {
       setPassword("");
       setIsPassword(false);
-      setIsSecret(true);
+      setSecret(true);
     } else {
-      setIsSecret(false);
+      setSecret(false);
       setIsPassword(false);
+      setPassword("");
     }
-  }, [isSecret]);
+  };
 
   /* ---------------------------------- submit ---------------------------------- */
   const submitHandler = () => {
@@ -88,7 +89,7 @@ const CommunityForm = () => {
     const dataSet = {
       ...inputData,
       password: password,
-      secret: isSecret,
+      secret: secret,
       startDate: start,
       endDate: end,
     };
@@ -125,7 +126,7 @@ const CommunityForm = () => {
           </CheckBoxWrapper>
         </TopTextWrap>
         <Input size="22px" placeholder="그룹명을 입력해주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
-        {isSecret ? (
+        {secret ? (
           <>
             <P>비밀번호</P>
             <Input placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
@@ -170,12 +171,12 @@ const CommunityForm = () => {
         ></Textarea>
       </CommunityFormWrap>
       <FooterWrap>
-        {/^[1-9]*$/.test(limitParticipants) &&
-        /^[1-9]*$/.test(limitScore) &&
+        {/^([1-9]|10)$/.test(limitParticipants) &&
+        /^[1-9][0-9]?$|^100/.test(limitScore) &&
         result.length === 0 &&
         dates.start?.length > 0 &&
         dates.end?.length > 0 &&
-        isSecret === isPassword ? (
+        secret === isPassword ? (
           <FooterMenus color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
             그룹 등록
           </FooterMenus>
