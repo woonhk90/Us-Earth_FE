@@ -32,7 +32,7 @@ const CommunityProofForm = () => {
   const addImageFile = (e) => {
     let arry = [];
     setIsPhotoMessage("");
-    if (e.target.files.length + files.length < 6) {
+    if (e.target.files.length + previewImg.length < 6) {
       for (let i = 0; i < e.target.files.length; i++) {
         if (e.target.files[i].size < 2000000) {
           // 20메가

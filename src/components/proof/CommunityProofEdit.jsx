@@ -25,17 +25,23 @@ const CommunityProofEdit = () => {
       const { data } = await axios.get(`${API_URL}/proof/${proofId}`, {
         Authorization: authorization_token,
       });
-      console.log(data);
       const { img, title, content } = data;
-      img.map((imgdata) =>
+      img.map((imgdata) => {
         setPreviewImg((previewImg) => [
           ...previewImg,
           {
             imgId: imgdata.id,
             imgUrl: imgdata.imgUrl,
           },
-        ])
-      );
+        ]);
+        setFiles((files) => [
+          ...files,
+          {
+            imgId: imgdata.id,
+            imgUrl: imgdata.imgUrl,
+          },
+        ]);
+      });
       setUseInputs({
         title: title,
         content: content,
@@ -67,9 +73,10 @@ const CommunityProofEdit = () => {
   console.log(files);
   console.log(previewImg);
   const addImageFile = (e) => {
+    console.log("업로드!", e.target.files);
     let arry = [];
     setIsPhotoMessage("");
-    if (e.target.files.length + files.length < 6) {
+    if (e.target.files.length + previewImg.length < 6) {
       for (let i = 0; i < e.target.files.length; i++) {
         if (e.target.files[i].size < 2000000) {
           // 20메가
@@ -96,11 +103,14 @@ const CommunityProofEdit = () => {
 
   // X버튼 클릭 시 이미지 삭제
   const deleteImageFile = (img, index) => {
-    console.log(img, index);
+    console.log("삭제!", img, index);
     setIsPhotoMessage("");
     setPreviewImg(previewImg.filter((file, id) => id !== index));
     setFiles(files.filter((file, id) => id !== index));
-    setDeleteImgId((deleteImgId) => [...deleteImgId, img.imgId]);
+
+    // setFiles(files.filter((file, id) => 0id !== 2index - 2previewImg.length));
+    console.log(previewImg.length);
+    if (img.imgId !== undefined) setDeleteImgId((deleteImgId) => [...deleteImgId, img.imgId]);
   };
   console.log(deleteImgId);
 
@@ -116,9 +126,18 @@ const CommunityProofEdit = () => {
         ...inputData,
         imgIdList: deleteImgId,
       };
+      console.log(files.length);
       if (files.length > 0) {
         console.log(files);
-        files.map((file) => formData.append("multipartFile", file));
+        let imgLists = [];
+        for (let i = 0; i < files.length; i++) {
+          console.log(files[i].imgId);
+          if (files[i].imgId === undefined) {
+            imgLists.push(files[i]);
+          }
+        }
+        console.log(imgLists);
+        imgLists.map((file) => formData.append("multipartFile", file));
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       console.log(dataSet);

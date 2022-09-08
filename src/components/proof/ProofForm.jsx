@@ -25,18 +25,16 @@ const ProofForm = ({ ProofFormData }) => {
             <Container>
               <label htmlFor="file">
                 <StIcon>○</StIcon>
-                <ImageLength>({files.length}/5)</ImageLength>
+                <ImageLength>({previewImg.length}/5)</ImageLength>
               </label>
               <StImageInput multiple type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
             </Container>
           </Stform>
           {previewImg?.map((image, index) => {
             return (
-              <ImageContainer>
-                <Container key={index}>
-                  <StButton key={index} onClick={() => deleteImageFile(image, index)}>
-                    버튼
-                  </StButton>
+              <ImageContainer key={index}>
+                <Container>
+                  <StButton onClick={() => deleteImageFile(image, index)}>버튼</StButton>
                   <Thumb src={image.imgUrl} alt="img" />
                 </Container>
               </ImageContainer>
