@@ -1,13 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+
 const CommunityBottom = () => {
+  const navigate = useNavigate();
+  const onClickHandler = (flag) => {
+    navigate(`/${flag}`);
+  }
   return (
     <>
       <FooterWrap>
-        <FooterMenus bgColor={'rgba(0,0,0,0.2)'}>커뮤니티</FooterMenus>
+        <FooterMenus bgColor={'rgba(0,0,0,0.2)'} onClick={() => { onClickHandler('community') }}>커뮤니티</FooterMenus>
         <FooterMenus bgColor={'rgba(0,0,0,0.4)'}>정보제공</FooterMenus>
         <FooterMenus bgColor={'rgba(0,0,0,0.2)'}>채팅</FooterMenus>
-        <FooterMenus bgColor={'rgba(0,0,0,0.4)'}>내정보</FooterMenus>
+        <FooterMenus bgColor={'rgba(0,0,0,0.4)'} onClick={() => { onClickHandler('mypage') }}>내정보</FooterMenus>
       </FooterWrap>
     </>
   )
