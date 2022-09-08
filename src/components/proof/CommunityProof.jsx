@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { getProofs } from "../../redux/modules/proofsSlice";
+import { deleteProof, getProofs } from "../../redux/modules/proofsSlice";
 
 const CommunityProof = () => {
   const navigate = useNavigate();
@@ -34,15 +34,15 @@ const CommunityProof = () => {
 
   const onClickDelete = () => {
     if (window.confirm("삭제하시겠습니까?")) {
-      // dispatch(__deleteDetail(param.id));
-      // navigate("/");
+      dispatch(deleteProof(param.proofId));
+      navigate("/community");
     } else {
       return;
     }
   };
 
   const onClickEdit = () => {
-    // navigate(`/edit/${param.id}`);
+    navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`);
   };
 
   return (
@@ -71,12 +71,14 @@ const CommunityProof = () => {
         </UserInfoWrap>
         <ModalButton onClick={openModal}>아이콘</ModalButton>
         <EditModal open={modalOpen} close={closeModal}>
-          <main>
-            <ButtonInModalWrap>
-              <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
-              <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal>
-            </ButtonInModalWrap>
-          </main>
+          {/* <main> */}
+          {/* <ButtonInModalWrap> */}
+          <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal>
+          <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
+          {/* <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
+          <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal> */}
+          {/* </ButtonInModalWrap> */}
+          {/* </main> */}
         </EditModal>
       </UserInfoFirstWrap>
       <TextContainer>

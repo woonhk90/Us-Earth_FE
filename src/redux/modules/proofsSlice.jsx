@@ -43,10 +43,10 @@ export const getProofs = createAsyncThunk("proof/get", async (proofId, thunkAPI)
 });
 
 /* ------------------------- patch proof (Update) ------------------------- */
-export const patchProof = createAsyncThunk("proof/patch", async (formData, thunkAPI) => {
+export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const { data } = await axios.patch(`${API_URL}/proofs/{replayId}`, formData, {
+    const { data } = await axios.patch(`${API_URL}/proof/${payload.proofId}`, payload.formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
@@ -61,15 +61,15 @@ export const patchProof = createAsyncThunk("proof/patch", async (formData, thunk
 });
 
 /* ------------------------- delete proof (Delete) ------------------------ */
-export const deleteProofs = createAsyncThunk("proof/delete", async (payload, thunkAPI) => {
+export const deleteProof = createAsyncThunk("proof/delete", async (proofId, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    await axios.delete(`${API_URL}/proof/{proofId}`, {
+    const { data } = await axios.delete(`${API_URL}/proof/${proofId}`, {
       headers: {
         Authorization: authorization_token,
       },
     });
-    return thunkAPI.fulfillWithValue(payload);
+    console.log(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -133,13 +133,13 @@ export const proofsSlice = createSlice({
       state.error = action.payload;
     },
     /* ------------------------- delete proof (Delete) ------------------------ */
-    [deleteProofs.pending]: (state) => {
+    [deleteProof.pending]: (state) => {
       state.isLoading = true;
     },
-    [deleteProofs.fulfilled]: (state, action) => {
+    [deleteProof.fulfilled]: (state, action) => {
       state.isLoading = false;
     },
-    [deleteProofs.rejected]: (state, action) => {
+    [deleteProof.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

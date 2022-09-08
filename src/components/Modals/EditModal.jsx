@@ -36,7 +36,8 @@ const EditModal = (props) => {
         }}
       >
         <StHeader></StHeader>
-        <StMain>{props.children}</StMain>
+        <ButtonInModalWrap>{props.children}</ButtonInModalWrap>
+        <Footer>취소</Footer>
       </Stsection>
     </StModal>
   );
@@ -114,6 +115,7 @@ const Stsection = styled.section`
   position: absolute;
   width: 100%;
   bottom: 0px;
+  border-radius: 20px 20px 0 0;
   transition: transform 0.3s ease-out;
   animation: ${(props) => (props.open ? slideShow : slideHide)} 0.3s ease-out;
   ${(props) =>
@@ -130,4 +132,28 @@ const Stsection = styled.section`
 
 const StHeader = styled.header``;
 
-const StMain = styled.main``;
+const Footer = styled.p`
+  text-align: center;
+  padding: 17.5px 0;
+  font-size: 18px;
+  font-weight: 600;
+  border-top: 2px solid #d9d9d9;
+`;
+
+const ButtonInModalWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 21px 31px 14px 31px;
+`;
+
+const ButtonInModal = styled.button`
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: transparent;
+  :hover {
+    font-weight: bolder;
+    padding: 1px solid transparent;
+  }
+`;

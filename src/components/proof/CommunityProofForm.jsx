@@ -32,7 +32,7 @@ const CommunityProofForm = () => {
   const addImageFile = (e) => {
     let arry = [];
     setIsPhotoMessage("");
-    if (e.target.files.length + files.length < 6) {
+    if (e.target.files.length + previewImg.length < 6) {
       for (let i = 0; i < e.target.files.length; i++) {
         if (e.target.files[i].size < 2000000) {
           // 20메가
@@ -40,7 +40,7 @@ const CommunityProofForm = () => {
           reader.readAsDataURL(e.target.files[i]);
           reader.onload = () => {
             const previewImgUrl = reader.result;
-            setPreviewImg((previewImg) => [...previewImg, previewImgUrl]);
+            setPreviewImg((previewImg) => [...previewImg, { imgUrl: previewImgUrl }]);
           };
           const currentFiles = e.target.files[i];
           setFiles((files) => [...files, currentFiles]);
@@ -58,7 +58,7 @@ const CommunityProofForm = () => {
   };
 
   // X버튼 클릭 시 이미지 삭제
-  const deleteImageFile = (index) => {
+  const deleteImageFile = (img, index) => {
     setIsPhotoMessage("");
     setPreviewImg(previewImg.filter((file, id) => id !== index));
     setFiles(files.filter((file, id) => id !== index));
