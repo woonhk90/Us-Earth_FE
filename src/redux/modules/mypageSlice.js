@@ -25,6 +25,48 @@ export const __getMyInfo = createAsyncThunk("todos/__getMyInfo", async (payload,
   }
 });
 
+export const __updateMyInfoStatus = createAsyncThunk("todos/__updateMyInfoStatus", async (payload, thunkAPI) => {
+  try {
+    console.log('__updateMyInfoStatus=>', payload);
+    const authorization_token = cookies.get("mycookie");
+    await axios.patch(`http://13.209.97.209/api/mypage/status`, payload, {
+      headers: {
+        Authorization: authorization_token
+      },
+    });
+
+    // return thunkAPI.fulfillWithValue(data.data);
+    thunkAPI.dispatch(__getMyInfo());
+  } catch (error) {
+    window.alert("정보를 불러올 수 없습니다.");
+    console.log(error);
+    console.log(error.response.data.errorMessage);
+    return;
+  }
+});
+
+export const __postNickNameOverlap = createAsyncThunk("todos/__postNickNameOverlap", async (payload, thunkAPI) => {
+  try {
+    console.log('__postNickNameOverlap=>', payload);
+    const authorization_token = cookies.get("mycookie");
+    const data = await axios.post(`http://13.209.97.209//api/mypage/nickname`, payload, {
+      headers: {
+        Authorization: authorization_token
+      },
+    });
+    console.log("DATA=>",data);
+    return thunkAPI.fulfillWithValue(data.data);
+    // thunkAPI.dispatch(__getMyInfo());
+  } catch (error) {
+    window.alert("정보를 불러올 수 없습니다.");
+    console.log(error);
+    console.log(error.response.data.errorMessage);
+    return;
+  }
+});
+
+
+// });
 // export const __updateCommunityJoin = createAsyncThunk("todos/__updateCommunityJoin", async (payload, thunkAPI) => {
 //   try {
 //     console.log('__updateCommunityJoin=>', payload);
@@ -45,7 +87,8 @@ export const __getMyInfo = createAsyncThunk("todos/__getMyInfo", async (payload,
 // });
 
 const initialState = {
-  userInfo: []
+  userInfo: [],
+  overlap: false
 }
 
 export const mypageSlice = createSlice({

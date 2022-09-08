@@ -1,12 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { getCookie } from '../shared/cookie';
 
 const CommunityBottom = () => {
   const navigate = useNavigate();
+  const usercookie = getCookie('mycookie');
+  const { pathname } = useLocation();
+
   const onClickHandler = (flag) => {
-    navigate(`/${flag}`);
+    /* --------------------- 로그인 되어있는지 우선 확인(안되어있으면 로그인페이지) --------------------- */
+    if (usercookie === undefined) {
+      localStorage.setItem('pathname', pathname);
+      navigate('/login');
+    } else {
+      navigate(`/${flag}`);
+    }
   }
+
+
+
   return (
     <>
       <FooterWrap>

@@ -128,8 +128,8 @@ const Community = () => {
                 >
                   <ItemImg
                     bgImg={
-                      v.imgList.length >= 1
-                        ? v.imgList[0].imgUrl
+                      v.img !== null
+                        ? v.img.imgUrl
                         : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"
                     }
                   >

@@ -10,11 +10,12 @@ import EarthCommunityDetail from "../pages/EarthCommunityDetail";
 import EarthCommunityCertify from "../pages/EarthCommunityCertify";
 import EarthCommunityCertifyForm from "../pages/EarthCommunityCertifyForm";
 import EarthMyPage from "../pages/EarthMyPage";
+import EarthMyPageSetting from "../pages/EarthMyPageSetting";
 
 const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<EarthLogin />} />
+      <Route path="/" element={<EarthCommunity />} />
       <Route path="/login" element={<EarthLogin />} />
       <Route path="/community/form" element={<EarthCommunityForm />} />
       <Route path="/community/edit/:id" element={<EarthCommunityFormEdit />} />
@@ -23,6 +24,7 @@ const Router = () => {
       <Route path="/community/certify" element={<EarthCommunityCertify />} />
       <Route path="/community/certify/form" element={<EarthCommunityCertifyForm />} />
       <Route path="/mypage" element={<EarthMyPage />} />
+      <Route path="/mypage/setting" element={<EarthMyPageSetting />} />
       <Route path="/user/kakao/callback" element={<KakaoLogin />} />
       <Route path="/user/google/callback" element={<GoogleLogin />} />
       <Route path="/user/naver/callback" element={<NaverLogin />} />

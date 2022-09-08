@@ -19,10 +19,10 @@ const MyPage = () => {
         <Container>
           <MyPageInfo>
             <MyPageInfoBox>
-              <div>{userInfo.nickname}</div>
-              <div>LV.{userInfo.level}</div>
+              <div>{userInfo?.nickname}</div>
+              <div>LV.{userInfo?.level}</div>
             </MyPageInfoBox>
-            <MyPageProFile><img src={userInfo.profileImage} alt='profileImage' /></MyPageProFile>
+            <MyPageProFile><img src={userInfo?.profileImage} alt='profileImage' /></MyPageProFile>
           </MyPageInfo>
 
           <MyPageMission>
