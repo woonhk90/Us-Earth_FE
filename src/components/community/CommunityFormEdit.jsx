@@ -8,14 +8,19 @@ import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
 import { flexBetween } from "../../styles/Flex";
 import { addDates, getCommunityDetail, patchCommunityDetail, postCommunityDetail } from "../../redux/modules/communityFormSlice";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 const CommunityFormEdit = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cookies = new Cookies();
+  const param = useParams();
+
+  /* -------------------------------- axios get ------------------------------- */
   const getCommunityDetail = async (communityId) => {
     try {
       const authorization_token = cookies.get("mycookie");
@@ -37,17 +42,15 @@ const CommunityFormEdit = () => {
           end: data.endDate,
         })
       );
-      setPreviewImg(data.imgList[0].imgUrl);
+      setPreviewImg([data.img.imgUrl]);
       setIsPassword(data.secret);
     } catch (error) {
       return error;
     }
   };
-  const cookies = new Cookies();
-  const param = useParams();
+
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
-  console.log(dates);
   const [modal, setModal] = useState(false);
   const [secret, setSecret] = useState(false);
   const [files, setFiles] = useState([]);
@@ -57,13 +60,12 @@ const CommunityFormEdit = () => {
     title: "",
     content: "",
   });
-  const inputValid = Object.values(isForm);
-  console.log(inputValid);
-  const result = inputValid.find((word) => word === false);
   const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
   const { limitScore, limitParticipants, title, content } = inputData;
+  const inputValid = Object.values(isForm);
+  const result = inputValid.find((word) => word === false);
 
   useEffect(() => {
     getCommunityDetail(param.id);
@@ -75,20 +77,27 @@ const CommunityFormEdit = () => {
 
   /* ------------------------------ photo upload ------------------------------ */
   const [imageFile, setImageFile] = useState([]);
-  console.log(imageFile);
   const [previewImg, setPreviewImg] = useState([]);
 
   const addImageFile = (e) => {
     let reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    setImageFile(e.target.files[0]);
-    reader.onloadend = () => {
-      const previewImgUrl = reader.result;
-      setPreviewImg([previewImgUrl]);
-    };
+    if (e.target.files.length > 0) {
+      reader.readAsDataURL(e.target.files[0]);
+      setImageFile(e.target.files[0]);
+      reader.onloadend = () => {
+        const previewImgUrl = reader.result;
+        setPreviewImg([previewImgUrl]);
+      };
+    }
   };
 
-  /* --------------- password validation & secret switch button --------------- */
+  const deleteImage = (e) => {
+    // e.preventDefault();
+    // setPreviewImg([]);
+    // setImageFile([]);
+  };
+
+  /* --------------------------- password validation -------------------------- */
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
     const passwordCurrent = e.target.value;
@@ -102,7 +111,9 @@ const CommunityFormEdit = () => {
     }
   };
 
+  /* -------------------------- secret switch button -------------------------- */
   const secretSwitchButtonHandler = useCallback(() => {
+    console.log(password);
     if (secret === false) {
       setPassword("");
       setIsPassword(false);
@@ -110,16 +121,15 @@ const CommunityFormEdit = () => {
     } else {
       setSecret(false);
       setIsPassword(false);
+      setPassword("");
     }
   }, [secret]);
 
   /* ---------------------------------- submit ---------------------------------- */
   const submitHandler = () => {
-    console.log(/^\d{1,10}$/.test(limitParticipants));
     let formData = new FormData();
     const dataSet = {
       ...inputData,
-
       password: password,
       secret: secret,
       startDate: start,
@@ -127,23 +137,9 @@ const CommunityFormEdit = () => {
     };
     formData.append("multipartFile", imageFile);
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-    console.log(dataSet);
-    console.log(imageFile);
     dispatch(patchCommunityDetail({ communityId: param.id, formData }));
+    navigate(`/community/detail/${param.id}`);
   };
-
-  console.log(Boolean(/^[0-9]*$/.test(limitParticipants)));
-  console.log(limitScore, limitParticipants);
-  console.log(Boolean(/^[0-9]*$/.test(limitScore)));
-  console.log(password);
-  console.log(result);
-  console.log(Boolean(result === undefined));
-  console.log(Boolean(dates.start?.length));
-  console.log(Boolean(dates.start?.length > 0));
-  console.log(Boolean(dates.end?.length > 0));
-  console.log(Boolean(secret === isPassword));
-  console.log(secret);
-  console.log(isPassword);
 
   return (
     <>
@@ -156,6 +152,7 @@ const CommunityFormEdit = () => {
                 <BottonTextWrap>
                   <BottomText>대표이미지</BottomText>
                 </BottonTextWrap>
+                <button onClick={deleteImage}>삭제</button>
               </ImageIcon>
             </label>
             <ImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
@@ -208,23 +205,20 @@ const CommunityFormEdit = () => {
           cols="50"
           rows="8"
           size="18px"
-          maxLength="200"
+          maxLength="500"
           name="content"
           value={content}
           onChange={inputOnChangeHandler}
         ></Textarea>
       </CommunityFormWrap>
       <FooterWrap>
-        {/* <FooterMenus color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
-          그룹 등록
-        </FooterMenus> */}
-        {/^[0-9]*$/.test(limitParticipants) &&
-        /^[0-9]*$/.test(limitScore) &&
+        {/^([1-9]|10)$/.test(limitParticipants) &&
+        /^[1-9][0-9]?$|^100/.test(limitScore) &&
         result === undefined &&
         dates.start?.length &&
         dates.end?.length &&
         secret === isPassword ? (
-          <FooterMenus color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
+          <FooterMenus valid={true} color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
             그룹 등록
           </FooterMenus>
         ) : (
@@ -264,28 +258,22 @@ const CheckBoxLabel = styled.label`
 
   cursor: pointer;
   &::after {
+    content: "";
+    background-color: white;
+    display: block;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    transition: 0.2s;
     ${(props) =>
       !props.secret
         ? css`
-            content: "";
-            display: block;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
             margin: 1px;
-            background: #ffffff;
             box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
             transition: 0.2s;
           `
         : css`
-            content: "";
-            background-color: white;
-            display: block;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
             margin: 1px 0 0 20px;
-            transition: 0.2s;
           `}
   }
   background: ${(props) => (props.secret ? `#35bd47` : null)};
@@ -400,13 +388,18 @@ const FooterWrap = styled.div`
 `;
 
 const FooterMenus = styled.div`
+  ${(props) =>
+    props.valid &&
+    css`
+      cursor: pointer;
+    `}
   width: 100%;
   line-height: 48px;
   color: ${(props) => props.color};
   background-color: ${(props) => props.bgColor};
 `;
 
-/* ---------------------------------- font ---------------------------------- */
+/* -------------------------------- font & div -------------------------------- */
 const DateSpan = styled.div`
   border-bottom: 1px solid rgb(238, 238, 238);
   margin: 30px 0;
