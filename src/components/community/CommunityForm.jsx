@@ -50,6 +50,12 @@ const CommunityForm = () => {
     };
   };
 
+  const deleteImage = (e) => {
+    e.preventDefault();
+    setPreviewImg([]);
+    setImageFile([]);
+  };
+
   /* --------------- password validation & secret switch button --------------- */
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
@@ -105,6 +111,7 @@ const CommunityForm = () => {
                   <BottomText>대표이미지</BottomText>
                 </BottonTextWrap>
               </ImageIcon>
+              <button onClick={deleteImage}>삭제</button>
             </label>
             <ImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
           </ImageForm>

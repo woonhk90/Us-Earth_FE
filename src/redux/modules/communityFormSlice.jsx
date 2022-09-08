@@ -33,23 +33,23 @@ export const postCommunityDetail = createAsyncThunk("community/postform", async 
 });
 
 /* ----------------------- get community detail (Read) ---------------------- */
-export const getCommunityDetail = createAsyncThunk("comment/get", async (communityId, thunkAPI) => {
-  try {
-    const authorization_token = cookies.get("mycookie");
-    const { data } = await axios.get(`${API_URL}/community/${communityId}`, {
-      Authorization: authorization_token,
-    });
-    return thunkAPI.fulfillWithValue(data);
-  } catch (error) {
-    return thunkAPI.rejected(error);
-  }
-});
+// export const getCommunityDetail = createAsyncThunk("comment/get", async (communityId, thunkAPI) => {
+//   try {
+//     const authorization_token = cookies.get("mycookie");
+//     const { data } = await axios.get(`${API_URL}/community/${communityId}`, {
+//       Authorization: authorization_token,
+//     });
+//     return thunkAPI.fulfillWithValue(data);
+//   } catch (error) {
+//     return thunkAPI.rejected(error);
+//   }
+// });
 
 /* --------------------- patch community detail (Update) -------------------- */
-export const patchCommunityDetail = createAsyncThunk("comment/patch", async (formData, thunkAPI) => {
+export const patchCommunityDetail = createAsyncThunk("comment/patch", async (payload, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const { data } = await axios.patch(`${API_URL}/proof/{proofId}`, formData, {
+    const { data } = await axios.patch(`${API_URL}/community/${payload.communityId}`, payload.formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
@@ -108,17 +108,17 @@ export const communityFormSlice = createSlice({
       state.error = action.payload;
     },
     /* ----------------------- get community detail (Read) ---------------------- */
-    [getCommunityDetail.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [getCommunityDetail.fulfilled]: (state, action) => {
-      state.isLoading = false;
-      state.detail = action.payload;
-    },
-    [getCommunityDetail.rejected]: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
+    // [getCommunityDetail.pending]: (state) => {
+    //   state.isLoading = true;
+    // },
+    // [getCommunityDetail.fulfilled]: (state, action) => {
+    //   state.isLoading = false;
+    //   state.detail = action.payload;
+    // },
+    // [getCommunityDetail.rejected]: (state, action) => {
+    //   state.isLoading = false;
+    //   state.error = action.payload;
+    // },
     /* --------------------- patch community detail (Update) -------------------- */
     [patchCommunityDetail.pending]: (state) => {
       state.isLoading = true;

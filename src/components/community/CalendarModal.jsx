@@ -10,9 +10,11 @@ const CalendarModal = (props) => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const { dates } = useSelector((state) => state.communityForm);
+  console.log(dates);
+  console.log(props.beforDate);
 
   useEffect(() => {
-    if (dates) {
+    if (Object.values(dates).length) {
       console.log(dates);
       const list = Object.values(dates).map((val) => new Date(val));
       console.log(list);
