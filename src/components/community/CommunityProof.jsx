@@ -10,10 +10,11 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
-const CommunityCertify = () => {
+const CommunityProof = () => {
   const navigate = useNavigate();
   // const dispatch = useDispatch();
   const param = useParams();
+  console.log(param);
   const [modalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
@@ -107,7 +108,7 @@ const CommunityCertify = () => {
   );
 };
 
-export default CommunityCertify;
+export default CommunityProof;
 
 const UserInfoFirstWrap = styled.div`
   display: flex;
