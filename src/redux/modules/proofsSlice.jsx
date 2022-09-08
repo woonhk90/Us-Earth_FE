@@ -43,10 +43,10 @@ export const getProofs = createAsyncThunk("proof/get", async (proofId, thunkAPI)
 });
 
 /* ------------------------- patch proof (Update) ------------------------- */
-export const patchProof = createAsyncThunk("proof/patch", async (formData, thunkAPI) => {
+export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const { data } = await axios.patch(`${API_URL}/proofs/{replayId}`, formData, {
+    const { data } = await axios.patch(`${API_URL}/proof/${payload.proofId}`, payload.formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",

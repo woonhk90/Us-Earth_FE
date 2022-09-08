@@ -4,33 +4,68 @@ import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
 import { useDispatch } from "react-redux";
 import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
-import { postProof } from "../../redux/modules/proofsSlice";
-import { useParams } from "react-router-dom";
+import { patchProof, postProof } from "../../redux/modules/proofsSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
+import axios from "axios";
+import Cookies from "universal-cookie";
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const CommunityProofEdit = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cookies = new Cookies();
   const param = useParams();
-  console.log(param);
-  const [inputData, inputOnChangeHandler, inputReset] = useInputs({
+
+  /* -------------------------------- axios get ------------------------------- */
+  const getProofs = async (proofId) => {
+    try {
+      const authorization_token = cookies.get("mycookie");
+      const { data } = await axios.get(`${API_URL}/proof/${proofId}`, {
+        Authorization: authorization_token,
+      });
+      console.log(data);
+      const { img, title, content } = data;
+      img.map((imgdata) =>
+        setPreviewImg((previewImg) => [
+          ...previewImg,
+          {
+            imgId: imgdata.id,
+            imgUrl: imgdata.imgUrl,
+          },
+        ])
+      );
+      setUseInputs({
+        title: title,
+        content: content,
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmit, setUseInputs] = useInputs({
     title: "",
     content: "",
   });
 
   const { title, content } = inputData;
   useEffect(() => {
+    getProofs(param.proofId);
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
     };
   }, []);
-
   /* ---------------------------------- 사진 업로드 ---------------------------------- */
   const [files, setFiles] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
   const [isPhoto, setIsPhoto] = useState(true);
+  const [deleteImgId, setDeleteImgId] = useState([]);
 
+  console.log(files);
+  console.log(previewImg);
   const addImageFile = (e) => {
     let arry = [];
     setIsPhotoMessage("");
@@ -42,7 +77,7 @@ const CommunityProofEdit = () => {
           reader.readAsDataURL(e.target.files[i]);
           reader.onload = () => {
             const previewImgUrl = reader.result;
-            setPreviewImg((previewImg) => [...previewImg, previewImgUrl]);
+            setPreviewImg((previewImg) => [...previewImg, { imgUrl: previewImgUrl }]);
           };
           const currentFiles = e.target.files[i];
           setFiles((files) => [...files, currentFiles]);
@@ -60,22 +95,26 @@ const CommunityProofEdit = () => {
   };
 
   // X버튼 클릭 시 이미지 삭제
-  const deleteImageFile = (index) => {
+  const deleteImageFile = (img, index) => {
+    console.log(img, index);
     setIsPhotoMessage("");
     setPreviewImg(previewImg.filter((file, id) => id !== index));
     setFiles(files.filter((file, id) => id !== index));
+    setDeleteImgId((deleteImgId) => [...deleteImgId, img.imgId]);
   };
+  console.log(deleteImgId);
 
   const submitHandler = () => {
     let formData = new FormData();
     if (title === "") {
     } else if (content === "") {
       alert("내용을 입력해 주세요");
-    } else if (files.length === 0) {
+    } else if (previewImg.length === 0) {
       alert("사진을 추가해 주세요");
     } else {
       const dataSet = {
         ...inputData,
+        imgIdList: deleteImgId,
       };
       if (files.length > 0) {
         console.log(files);
@@ -83,8 +122,8 @@ const CommunityProofEdit = () => {
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       console.log(dataSet);
+      dispatch(patchProof({ proofId: param.proofId, formData: formData }));
     }
-    dispatch(postProof({ communityId: param.communityId, formData: formData }));
   };
 
   const ProofFormData = {
