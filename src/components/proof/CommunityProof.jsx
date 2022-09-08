@@ -9,13 +9,20 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { getProofs } from "../../redux/modules/proofsSlice";
 
 const CommunityProof = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   // const dispatch = useDispatch();
   const param = useParams();
-  console.log(param);
   const [modalOpen, setModalOpen] = useState(false);
+  const { proofs } = useSelector((state) => state.proofs);
+  console.log(proofs);
+
+  useEffect(() => {
+    dispatch(getProofs(param.proofId));
+  }, []);
 
   const openModal = () => {
     setModalOpen(true);
@@ -42,34 +49,24 @@ const CommunityProof = () => {
     <>
       <FirstWrap>
         <Swiper modules={[Navigation, Pagination, Scrollbar]} spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
-          <SwiperSlide>
-            <StDiv>
-              <ItemImg></ItemImg>
-            </StDiv>
-          </SwiperSlide>
-          <SwiperSlide>
-            <StDiv>
-              <ItemImg></ItemImg>
-            </StDiv>
-          </SwiperSlide>
-          <SwiperSlide>
-            <StDiv>
-              <ItemImg></ItemImg>
-            </StDiv>
-          </SwiperSlide>
-          <SwiperSlide>
-            <StDiv>
-              <ItemImg></ItemImg>
-            </StDiv>
-          </SwiperSlide>
+          {proofs.img?.map((img) => {
+            console.log(img.imgUrl);
+            return (
+              <SwiperSlide key={img.id}>
+                <StDiv>
+                  <ItemImg imgUrl={img.imgUrl}></ItemImg>
+                </StDiv>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </FirstWrap>
       <UserInfoFirstWrap>
         <UserInfoWrap>
           <UserInfoImg />
           <UerInpo>
-            <Username>닉네임</Username>
-            <CreatAt>작성일자</CreatAt>
+            <Username>{proofs.nickname}</Username>
+            <CreatAt>{proofs.creatAt}</CreatAt>
           </UerInpo>
         </UserInfoWrap>
         <ModalButton onClick={openModal}>아이콘</ModalButton>
@@ -83,8 +80,8 @@ const CommunityProof = () => {
         </EditModal>
       </UserInfoFirstWrap>
       <TextContainer>
-        <ContentTitle>제목</ContentTitle>
-        <ContentContent>내용</ContentContent>
+        <ContentTitle>{proofs.title}</ContentTitle>
+        <ContentContent>{proofs.content}</ContentContent>
       </TextContainer>
       {/* <UserInfoFirstWrap>
         <button
@@ -219,7 +216,7 @@ const FirstWrap = styled.div`
 `;
 
 const ItemImg = styled.div`
-  background-image: url("https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-0443429487fdc2277fc8f9dd1eca6fb8b678862f593e21222ba9f6592b99ad14.png");
+  background: url(${(props) => props.imgUrl});
   padding-bottom: 10%;
   background-size: cover;
   object-fit: cover;
