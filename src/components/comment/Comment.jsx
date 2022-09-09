@@ -5,12 +5,14 @@ import { Navigation, Pagination, Scrollbar } from "swiper";
 import CustomSelect from "./CustomSelect";
 import { flexColumn, flexRow, flexBetween, FlexRow, Text, flexColumnLeft } from "../../styles/Flex";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteComments, getComments } from "../../redux/modules/commentsSlice";
+import { commentEdit, deleteComments, getComments, patchComment } from "../../redux/modules/commentsSlice";
+import Textarea from "../elements/Textarea";
 
 const Comment = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { comments, commentSelectBoxId } = useSelector((state) => state.comments);
+  const [selectValue, setSelectValue] = useState("");
   // const dispatch = useDispatch();
   console.log(comments);
   console.log(commentSelectBoxId);
@@ -30,42 +32,56 @@ const Comment = () => {
     setModalOpen(false);
   };
 
-  // const onClickDelete = (contentId) => {
+  const onClickselectValue = (e) => {
+    setSelectValue(e.target.innerText);
+  };
+
+  const clickDispatch = (payload) => {
+    if (payload.selectName === "수정하기") {
+      const commentList = comments.commentResponseDtoList.find((comment) => comment.commentId === payload.contentId);
+      dispatch(
+        commentEdit({
+          editMode: true,
+          comment: commentList.content,
+          commentImg: commentList.img?.imgUrl,
+          commentId: payload.contentId,
+        })
+      );
+    } else if (payload.selectName === "삭제하기") {
+      dispatch(
+        deleteComments({
+          commentId: payload.contentId,
+          proofId: param.proofId,
+        })
+      );
+    }
+  };
+
+  // const onClickDelete = (payload) => {
   //   if (window.confirm("삭제하시겠습니까?")) {
-  //     dispatch(deleteComments(contentId));
-  //     navigate(`/community/${param.communityId}`);
+  //     dispatch(deleteComments(payload));
+  //     // navigate(`/community/detail/${param.communityId}`);
   //   } else {
   //     return;
   //   }
   // };
-  const onClickDelete = (payload) => {
-    if (window.confirm("삭제하시겠습니까?")) {
-      dispatch(deleteComments(payload));
-      // navigate(`/community/detail/${param.communityId}`);
-    } else {
-      return;
-    }
-  };
 
   const onClickEdit = () => {
     // navigate(`/edit/${param.id}`);
   };
 
-  const selectBoxData = [
-    { id: 1, buttonName: "수정하기" },
-    { id: 2, buttonName: "삭제하기" },
-    { id: 3, buttonName: "신고하기" },
-  ];
+  const onClickDelete = (payload) => {};
 
-  const selectOnClickHandler = {
-    onClickDelete,
-    onClickEdit,
-  };
+  const selectBoxData = [
+    { id: 1, selectName: "수정하기" },
+    { id: 2, selectName: "삭제하기" },
+    { id: 3, selectName: "신고하기" },
+  ];
 
   return (
     <>
       <CommunityBox>
-        {comments?.map((comment) => (
+        {comments.commentResponseDtoList?.map((comment) => (
           <CommentContainer key={comment.commentId}>
             <CommentWrap>
               <CommentTop>
@@ -74,26 +90,19 @@ const Comment = () => {
                   <CreatAt>{comment.creatAt}</CreatAt>
                 </CommentText>
                 {/* <CustomSelect onClickDelete={()=>onClickDelete(contentId)}  contentId={comment.commentId} selectBoxData={selectBoxData} /> */}
-                <CustomSelect selectOnClickHandler={selectOnClickHandler} contentId={comment.commentId} selectBoxData={selectBoxData} />
+                <CustomSelect
+                  clickDispatch={clickDispatch}
+                  contentId={comment.commentId}
+                  onClickselectValue={onClickselectValue}
+                  selectBoxData={selectBoxData}
+                />
               </CommentTop>
               {comment.img !== null ? <CommentImg src={comment.img.imgUrl} alt="img" /> : null}
             </CommentWrap>
             <StSpan>{comment.content}</StSpan>
+            {/* <Textarea value={comment.content} placeholder="댓글을 입력해주세요" /> */}
           </CommentContainer>
         ))}
-        <CommentContainer>
-          <CommentWrap>
-            <CommentTop>
-              <CommentText>
-                <Nickname>닉네임</Nickname>
-                <CreatAt>시간</CreatAt>
-              </CommentText>
-              <CustomSelect selectBoxData={selectBoxData} />
-            </CommentTop>
-            <CommentImg alt="img" />
-          </CommentWrap>
-          <StSpan>내용~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</StSpan>
-        </CommentContainer>
       </CommunityBox>
     </>
   );
@@ -126,6 +135,7 @@ const StSpan = styled.div`
   align-items: flex-start;
   margin: 10px 0;
   word-break: break-all;
+  white-space: pre-line;
 `;
 const CommentTop = styled.div`
   ${flexBetween};

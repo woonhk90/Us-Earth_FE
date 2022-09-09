@@ -5,10 +5,11 @@ import { ReactComponent as Edit } from "../../assets/Edit.svg";
 import { commentSelectBox } from "../../redux/modules/commentsSlice";
 // import "./Modal.css";
 
-const CustomSelect = ({ selectBoxData, contentId, selectOnClickHandler }) => {
-  console.log(contentId);
+const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
   const modalRef = useRef();
   const dispatch = useDispatch();
+
+  const [selectValue, setSelectValue] = useState("");
   console.log(selectBoxData);
   useEffect(() => {
     window.addEventListener("mousedown", clickModalOutside);
@@ -18,46 +19,31 @@ const CustomSelect = ({ selectBoxData, contentId, selectOnClickHandler }) => {
     };
   });
 
+  console.log(contentId);
   const clickModalOutside = (event) => {
     if (showOptions && !modalRef.current.contains(event.target)) {
       setShowOptions(!showOptions);
     }
   };
 
-  const [currentValue, setCurrentValue] = useState("");
-  const [showOptions, setShowOptions] = useState(false);
-
-  console.log(showOptions);
-  const handleOnChangeSelectValue = (e) => {
-    console.log(e.target);
-    console.log("버튼누름", e.target, "컨텐트아이디", contentId);
-    const { innerText } = e.target;
-    setCurrentValue(innerText);
-    if (e.target.innerText === "삭제하기") {
-      selectOnClickHandler.onClickDelete(contentId);
-    }
-    dispatch(
-      commentSelectBox({
-        contentId: contentId,
-        innerText: innerText,
-      })
-      // commentSelectBox({
-      //   contentId: contentId,
-      //   innerText: innerText,
-      // })
-    );
-    console.log(contentId);
+  const onClickselectValue = (e) => {
+    setSelectValue(e.target.innerText);
+    clickDispatch({
+      contentId: contentId,
+      selectName: e.target.innerText,
+    });
   };
 
-  console.log(currentValue);
+  const [showOptions, setShowOptions] = useState(false);
+
   return (
     <>
       <SelectBox ref={modalRef} onClick={() => setShowOptions(!showOptions)}>
         {/* <Label>{currentValue}</Label> */}
         <SelectOptions show={showOptions}>
           {selectBoxData.map((button) => (
-            <Option key={button.id} onClick={handleOnChangeSelectValue}>
-              {button.buttonName}
+            <Option key={button.id} onClick={onClickselectValue}>
+              {button.selectName}
             </Option>
           ))}
         </SelectOptions>

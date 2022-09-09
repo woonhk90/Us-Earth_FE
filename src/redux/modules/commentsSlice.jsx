@@ -8,6 +8,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 const initialState = {
   comments: [],
   commentSelectBoxId: {},
+  commentEdit: {},
   isLoading: false,
   error: null,
 };
@@ -46,10 +47,10 @@ export const getComments = createAsyncThunk("comment/get", async (proofId, thunk
 });
 
 /* ------------------------- patch comment (Update) ------------------------- */
-export const patchComment = createAsyncThunk("comment/patch", async (formData, thunkAPI) => {
+export const patchComment = createAsyncThunk("comment/patch", async (payload, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const { data } = await axios.patch(`${API_URL}/comments/{replayId}`, formData, {
+    const { data } = await axios.patch(`${API_URL}/comments/${payload.commentId}`, payload.formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
@@ -57,6 +58,7 @@ export const patchComment = createAsyncThunk("comment/patch", async (formData, t
       },
     });
     console.log(data);
+    thunkAPI.dispatch(getComments(payload.proofId));
     return data;
   } catch (err) {
     console.log(err);
@@ -67,11 +69,12 @@ export const patchComment = createAsyncThunk("comment/patch", async (formData, t
 export const deleteComments = createAsyncThunk("comment/delete", async (payload, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.delete(`${API_URL}/comments/${payload}`, {
+    const data = await axios.delete(`${API_URL}/comments/${payload.commentId}`, {
       headers: {
         Authorization: authorization_token,
       },
     });
+    thunkAPI.dispatch(getComments(payload.proofId));
     console.log(data);
     return thunkAPI.fulfillWithValue(payload);
   } catch (error) {
@@ -103,6 +106,12 @@ export const commentsSlice = createSlice({
       console.log(action.payload);
       // adNumber이라는 명령(?)
       state.commentSelectBoxId = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
+      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
+    },
+    commentEdit: (state, action) => {
+      console.log(action.payload);
+      // adNumber이라는 명령(?)
+      state.commentEdit = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
       // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
     },
   },
@@ -157,5 +166,5 @@ export const commentsSlice = createSlice({
   },
 });
 
-export const { commentSelectBox } = commentsSlice.actions;
+export const { commentSelectBox, commentEdit } = commentsSlice.actions;
 export default commentsSlice.reducer;

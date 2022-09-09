@@ -3,16 +3,19 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { Navigation, Pagination, Scrollbar } from "swiper";
 import CommentModal from "./CommentModal";
+import { useDispatch, useSelector } from "react-redux";
 import { flexColumn, flexRow, flexBetween, FlexRow, Text } from "../../styles/Flex";
 import Comment from "./Comment";
 import useInput from "../../hooks/useInput";
 import CommentInput from "./CommentInput";
+import CommentInputEdit from "./CommentInputEdit";
 
 const CommentBox = () => {
   const navigate = useNavigate();
   const param = useParams();
   const [modalOpen, setModalOpen] = useState(false);
-
+  const { editMode } = useSelector((state) => state.comments.commentEdit);
+  console.log(editMode);
   const openModal = () => {
     setModalOpen(true);
   };
@@ -43,7 +46,7 @@ const CommentBox = () => {
           <CommentContainer>
             <Comment />
           </CommentContainer>
-          <CommentInput />
+          {editMode ? <CommentInputEdit /> : <CommentInput />}
         </ButtonInModalWrap>
       </CommentModal>
     </>
