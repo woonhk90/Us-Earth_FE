@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import Seed from "../../assets/Seed.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { __getMyInfo} from '../../redux/modules/mypageSlice';
+import { __getMyInfo } from '../../redux/modules/mypageSlice';
+import MyPageTodayMission from './MyPageTodayMission';
 const MyPage = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.mypage);
@@ -11,8 +12,7 @@ const MyPage = () => {
     dispatch(__getMyInfo());
   }, [dispatch])
 
-  /* --------------------------- 나무 성장모습 & 미션 리스트 토글 -------------------------- */
-  const [missionFlag, setMissionFlag] = React.useState(false);
+
   return (
     <>
       <MyPageWrap>
@@ -25,34 +25,9 @@ const MyPage = () => {
             <MyPageProFile><img src={userInfo?.profileImage} alt='profileImage' /></MyPageProFile>
           </MyPageInfo>
 
-          <MyPageMission>
 
-            {
-              missionFlag ?
-                (<TodayMission>
-                  <TodayMissionBox>
-                    <p>오늘의 미션</p>
-                    <p onClick={() => setMissionFlag(!missionFlag)}>미션 닫기(0/5)</p>
-                  </TodayMissionBox>
-                  <MissionBox>
-                    <span>텀블러 사용하기</span>
-                    <span>분리수거해서 버리기</span>
-                    <span>분리수거 방법 검색</span>
-                    <span>양치할 때 물컴 쓰기</span>
-                    <span>음식 남기지 않기</span>
-                  </MissionBox>
-                </TodayMission>)
-                : (<>
-                  <MissionTop>
-                    <p>오늘의 미션</p>
-                    <p onClick={() => setMissionFlag(!missionFlag)}>미션 보기(0/5)</p>
-                  </MissionTop>
-                  <MissionBottom>
-                    <div><img src={Seed} alt='seed-icon' /></div>
-                    <progress value='1' max="7" />
-                  </MissionBottom></>)
-            }
-          </MyPageMission>
+          <MyPageTodayMission />
+
 
           <MyPageMissionList>
             <MyPageMissionListBox>

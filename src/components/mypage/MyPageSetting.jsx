@@ -1,34 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from "react-redux";
-import { __postNickNameOverlap, __updateMyInfoStatus } from '../../redux/modules/mypageSlice';
+import { __postNickNameOverlap, __updateMyInfoStatus, __postNickNameSubmit } from '../../redux/modules/mypageSlice';
 import { removeCookie } from '../../shared/cookie';
 import { ReactComponent as Pen } from "../../assets/Pen.svg";
 import Input from '../elements/Input';
+import { __getMyInfo } from '../../redux/modules/mypageSlice';
 
 
 const MyPage = () => {
-  const { userInfo } = useSelector((state) => state.mypage);
-  console.log(userInfo);
-
   const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.mypage);//유저정보가져옴
+  console.log(userInfo);
+  const { overlap } = useSelector((state) => state.mypage);//닉네임 입력하면 중복인지 여부 알려줌
+  const [nickFlag, setNickFlag] = useState(false);//닉네임 변경 하겠냐(true/false)
+  const [overlapFlag, setOverlapFlag] = useState(false);// 중복여부 상태값(true/false)
+  const [changeNicName, setChangeNickName] = useState('');
 
+
+  /* -------------------------- 내정보 페이지 공개 비공개 선택 가능 -------------------------- */
   const onSecretHandler = (flag) => {
     dispatch(__updateMyInfoStatus(flag));
   }
-  const [nickFlag, setNickFlag] = React.useState(false);
 
+  /* -------------------------- 닉네임 실시간으로 상태값 받을 수 있음 ------------------------- */
   const onNickChangeHandler = (e) => {
     console.log(e.target.value);
+    if(e.target.value.length>0){
+      setOverlapFlag(true);
+    }else{
+      setOverlapFlag(false);
+    }
+    setChangeNickName(e.target.value);
     let timer = null;
     if (timer) //이전에 이벤트가 발생했다면
       clearTimeout(timer); //이전 이벤트를 지운다.
     if (e.target.value) {
       timer = setTimeout(() => {
-        dispatch(__postNickNameOverlap(e.target.value));
-      }, 200);
+        dispatch(__postNickNameOverlap({ nickname: e.target.value }));
+      }, 1000);
     }
   }
+  useEffect(() => {
+    dispatch(__getMyInfo());
+    setOverlapFlag(overlap);
+  }, [overlap, dispatch])
+
+  const onNickNameSubmit = async () => {
+    if (changeNicName.length > 0) {
+      await dispatch(__postNickNameSubmit({ nickname: changeNicName }));
+      setNickFlag(!nickFlag);
+    }else{
+      window.alert("변경할 닉네임을 입력해주세요.");
+      return false;
+    }
+  }
+
   return (
     <>
       <MyPageWrap>
@@ -44,12 +71,13 @@ const MyPage = () => {
                 <NickInfoContent>{userInfo.nickname}</NickInfoContent>
               </>) :
               (<>
-                <NickInfoTitle><span>닉네임 변경</span> <span onClick={() => { setNickFlag(!nickFlag) }}><Pen /></span></NickInfoTitle>
-                <Input type="text" placeholder={userInfo.nickname} onChange={onNickChangeHandler} />
+                <NickInfoTitle><span>닉네임 변경</span> <span onClick={() => { onNickNameSubmit() }}><Pen /></span></NickInfoTitle>
+                <Input type="text" placeholder={userInfo.nickname} onChange={onNickChangeHandler} maxLength='20'/>
+                <OverlapFlagBox><OverlapFlagContent color={overlapFlag ? 'black' : 'red'}>사용{overlapFlag ? '가능한' : '불가능한'} 닉네임 입니다.</OverlapFlagContent></OverlapFlagBox>
               </>)}
           </NickInfo>
           <MyPageFlag>
-            <MyPageFlagTitle>마이페이지 비공개</MyPageFlagTitle>
+            <MyPageFlagTitle>내정보 페이지 비공개</MyPageFlagTitle>
             <CheckBoxWrapper>
               <CheckBox secret={userInfo.secret} onClick={() => onSecretHandler(!userInfo.secret)} id="checkbox" type="checkbox" />
               <CheckBoxLabel secret={userInfo.secret} htmlFor="checkbox" />
@@ -110,6 +138,13 @@ const NickInfoContent = styled.p`
   font:700 22px/1 'Noto sans','Arial','sans-serif';
   padding:20px 0 28px;
   box-sizing:border-box;
+`;
+const OverlapFlagBox = styled.div`
+  text-align:right;
+`;
+const OverlapFlagContent = styled.span`
+  font-size:10px;
+  color:${(props)=>props.color}
 `;
 
 
