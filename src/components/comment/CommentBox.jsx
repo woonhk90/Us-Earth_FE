@@ -40,7 +40,9 @@ const CommentBox = () => {
       <CommentModal open={modalOpen} close={closeModal}>
         <ButtonInModalWrap>
           <StHeader>댓글 갯수</StHeader>
-          <Comment />
+          <CommentContainer>
+            <Comment />
+          </CommentContainer>
           <CommentInput />
         </ButtonInModalWrap>
       </CommentModal>
@@ -65,3 +67,14 @@ const StHeader = styled.header`
   padding: 20px 0 10px 20px;
   font-weight: 800;
 `;
+
+const CommentContainer = styled.div`
+  width: 100%;
+`;
+
+// height: 100%;
+// width: 100%;
+
+// position: absolute;
+// top: 48px;
+// left: 0;

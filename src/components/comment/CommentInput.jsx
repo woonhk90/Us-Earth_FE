@@ -2,28 +2,43 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
 import { useDropzone } from "react-dropzone";
+import Textarea from "../elements/Textarea";
+import { useDispatch } from "react-redux";
+import { postComment } from "../../redux/modules/commentsSlice";
+import { useParams } from "react-router-dom";
 
 const CommentInput = () => {
+  const dispatch = useDispatch();
+  const param = useParams();
   const [content, commentOnChange, commentReset] = useInput("");
+  const [inputOn, setInputOn] = useState(false);
 
+  const onInputHandler = () => {
+    setInputOn(!inputOn);
+  };
+
+  useEffect(() => {
+    return () => {
+      // imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
+      commentReset();
+    };
+  }, []);
   /* ---------------------------------- 사진 업로드 ---------------------------------- */
 
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
+
   const addImageFile = (e) => {
     let reader = new FileReader();
-
-    reader.readAsDataURL(e.target.files[0]);
-    setImageFile(e.target.files[0]);
-
-    reader.onloadend = () => {
-      const previewImgUrl = reader.result;
-
-      setPreviewImg([previewImgUrl]);
-    };
+    if (e.target.files.length > 0) {
+      reader.readAsDataURL(e.target.files[0]);
+      setImageFile(e.target.files[0]);
+      reader.onloadend = () => {
+        const previewImgUrl = reader.result;
+        setPreviewImg([previewImgUrl]);
+      };
+    }
   };
-  console.log(previewImg);
-  console.log(imageFile);
 
   // X버튼 클릭 시 이미지 삭제
   const deleteImageFile = () => {
@@ -40,30 +55,35 @@ const CommentInput = () => {
     } else {
       formData.append("multipartFile", imageFile);
       formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
-      //  addCommentMutateData(formData);
+      dispatch(postComment({ proofId: param.proofId, formData: formData }));
+      setInputOn(false);
     }
   };
 
   return (
     <>
       <CommentInputWrap>
-        <form encType="multipart/form-data">
+        <form onClick={() => setInputOn(true)} encType="multipart/form-data">
           <StLabel htmlFor="file">
             <StIcon>○</StIcon>
           </StLabel>
           <StImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
           {/* <input type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} /> */}
         </form>
-        <InputWrap>
-          <div>
-            {previewImg.length > 0 && (
-              <Container>
-                <DeleteButton onClick={deleteImageFile}>x</DeleteButton>
-                <Thumb src={previewImg} alt="img" />
-              </Container>
-            )}
-          </div>
-          <textarea value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요"></textarea>
+        <InputWrap inputOn={inputOn}>
+          {inputOn ? (
+            <>
+              {previewImg.length > 0 && (
+                <Container>
+                  <DeleteButton onClick={deleteImageFile}>x</DeleteButton>
+                  <Thumb src={previewImg} alt="img" />
+                </Container>
+              )}
+              <Textarea value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요" />
+            </>
+          ) : (
+            <div onClick={onInputHandler}>댓글을 입력해주세요.</div>
+          )}
         </InputWrap>
         <SubmitButton onClick={onClickSubmit}>등록</SubmitButton>
       </CommentInputWrap>
@@ -79,13 +99,16 @@ const CommentInputWrap = styled.div`
   flex-direction: row;
   box-sizing: border-box;
   padding: 5px 10px 15px 10px;
+  /* border-top: 1px solid gray; */
+  background-color: #f9f9f9;
+  /* background-color: #a0a0a0; */
 `;
 
 const InputWrap = styled.div`
   width: 100%;
-  border: 1px solid grey;
   margin: 0 8px;
   border-radius: 6px;
+  background-color: ${(props) => (!props.onCommentInput ? "white" : "#f9f9f9")};
 `;
 
 const SubmitButton = styled.button`
