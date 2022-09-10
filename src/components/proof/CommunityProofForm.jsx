@@ -3,10 +3,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
 import { useDispatch } from "react-redux";
 import { postProof } from "../../redux/modules/proofsSlice";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ProofForm from "./ProofForm";
+import { certifyReset } from "../../redux/modules/communitySlice";
 
 const CommunityProofForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
   console.log(param);
@@ -64,7 +66,7 @@ const CommunityProofForm = () => {
     setFiles(files.filter((file, id) => id !== index));
   };
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     let formData = new FormData();
     if (title === "") {
     } else if (content === "") {
@@ -81,8 +83,10 @@ const CommunityProofForm = () => {
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       console.log(dataSet);
+      await dispatch(postProof({ communityId: param.communityId, formData: formData }));
+      dispatch(certifyReset());
+      navigate(`/community/detail/${param.communityId}`);
     }
-    dispatch(postProof({ communityId: param.communityId, formData: formData }));
   };
 
   const ProofFormData = {

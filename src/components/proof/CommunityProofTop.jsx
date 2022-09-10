@@ -1,16 +1,22 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
+import { useDispatch } from "react-redux";
+import { certifyReset } from "../../redux/modules/communitySlice";
+
 
 const CommunityProofTop = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const param = useParams();
   return (
     <>
       <HeaderWrap>
         <LeftArrow
           onClick={() => {
-            navigate("/community");
+            dispatch(certifyReset());
+            navigate(`/community/detail/${param.communityId}`);
           }}
         />
         <PTag>그룹 투두 제목</PTag>

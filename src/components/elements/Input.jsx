@@ -28,17 +28,15 @@ const InputWrap = styled.div``;
 const StInput = styled.input`
   width: 100%;
   height: ${(props) => props.height};
+  margin: ${(props) => props.margin};
+  font-size: ${(props) => props.size};
+  border-bottom: 1px solid rgb(238, 238, 238);
   word-wrap: break-word;
   box-sizing: border-box;
   border: none;
-  border-bottom: 1px solid rgb(238, 238, 238);
-  margin: ${(props) => props.margin};
-  justify-content: center;
-  align-items: center;
   display: flex;
   height: 46px;
   padding: 12px;
-  font-size: ${(props) => props.size};
   outline: none;
   :hover {
   }

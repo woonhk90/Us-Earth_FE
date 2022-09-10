@@ -1,33 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Modal from "./CommunityDetailModal";
 import { ReactComponent as Edit } from "../assets/Edit.svg";
 import forest from "../assets/Forest.jpg";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __getCommunityDetail } from '../redux/modules/communitySlice';
+import { __getCommunityDetail, __getCommunityCertify } from '../redux/modules/communitySlice';
+import { useInView } from "react-intersection-observer";
 
 
 const CommunityDetail = () => {
+  const navigate = useNavigate();
   const [modal, setModal] = React.useState(false);
   const param = useParams();
   const dispatch = useDispatch();
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(__getCommunityDetail({ communityId: param.id }));
-  }, [])
+
+  }, [dispatch, param.id])
   const { communityDetail } = useSelector((state) => state.community);
   console.log(communityDetail);
+
+  /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
+  const { certify } = useSelector((state) => state.community);
+  console.log(certify);
+  const [page, setPage] = useState(0);
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    dispatch(__getCommunityCertify({ page, communityId: param.id }));/*인증글전체조회하려고*/
+  }, [page, dispatch, param]);
+  useEffect(() => {
+    if (inView) {
+      setPage((page) => page + 1);
+    }
+  }, [inView]);
+  console.log("inView=>", inView);
+
   return (
     <>
       <CommunityDetailWrap>
         <Container>
           <Forest imgUrl={forest}></Forest>
           <Content>
-            <ContentItem font={"16px/22px 'Arial','sans-serif'"} marginBottom={'10px'}>{communityDetail.startDate} - {communityDetail.endDate}</ContentItem>
-            <ContentItem font={"700 26px/35px 'Arial','sans-serif'"} marginBottom={'9px'}>{communityDetail.title}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</ContentItem>
-            <ContentItem font={"22px/30px 'Arial','sans-serif'"} marginBottom={'35px'}>{communityDetail.content}내용 추가내용 즐겁게 화티잉 합시다</ContentItem>
-            {/* <ContentItem></ContentItem> */}
-            {/* <ContentItem marginBottom={'35px'} height={'500px'} imgUrl={communityDetail.imgList[0].imgUrl}></ContentItem> */}
+            <ContentItem font={"16px/22px 'Noto sans','Arial','sans-serif'"} marginBottom={'10px'}>{communityDetail.startDate} - {communityDetail.endDate}</ContentItem>
+            <ContentItem font={"700 26px/35px 'Noto sans','Arial','sans-serif'"} marginBottom={'9px'}>{communityDetail.title}</ContentItem>
+            <ContentItem font={"22px/30px 'Noto sans','Arial','sans-serif'"} marginBottom={'35px'}>{communityDetail.content}</ContentItem>
+            <ContentItem marginBottom={'35px'} height={'500px'} imgUrl={communityDetail?.img !== null ? communityDetail?.img?.imgUrl : 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg'}></ContentItem>
           </Content>
           <StateBox>
             {communityDetail.dateStatus === 'before' ?
@@ -66,20 +87,11 @@ const CommunityDetail = () => {
           </StateBox>
           <CertifyContentBox>
             <CertifyContent>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
-              <CertifyItem></CertifyItem>
+              {certify.map((v)=><CertifyItem key={v.proofId} onClick={()=>navigate(`/community/${param.id}/proof/${v.proofId}`)}>{v.title}</CertifyItem>)}
             </CertifyContent>
-            <CertifyContentIcon><Edit /></CertifyContentIcon>
+            <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`)}><Edit /></CertifyContentIcon>
           </CertifyContentBox>
+          <div ref={ref}></div>
         </Container>
       </CommunityDetailWrap>
     </>

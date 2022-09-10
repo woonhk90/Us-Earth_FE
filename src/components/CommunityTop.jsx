@@ -3,14 +3,16 @@ import styled from 'styled-components';
 import { ReactComponent as Plus } from "../assets/Plus.svg";
 import { ReactComponent as Search } from "../assets/Search.svg";
 import Modal from "./CommunityModal";
+import { useNavigate } from "react-router-dom";
 
 const CommunityTop = () => {
+  const navigate = useNavigate();
   const [modal, setModal] = React.useState(false);
   return (
     <>
       <HeaderWrap>
         <div onClick={() => { setModal(!modal) }}><Search /></div>
-        <div><Plus /></div>
+        <div onClick={() => { navigate('/community/form') }}><Plus /></div>
         {modal && (<Modal closeModal={() => setModal(!modal)}></Modal>)}
       </HeaderWrap>
     </>

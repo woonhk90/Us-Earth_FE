@@ -13,7 +13,7 @@ const CommunityTop = () => {
       <HeaderWrap>
         <div><LeftArrow onClick={() => onClickHandler()} /></div>
         <p>설정</p>
-        <div></div>
+        <p></p>
       </HeaderWrap>
     </>
   )

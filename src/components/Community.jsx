@@ -4,7 +4,7 @@ import { ReactComponent as Lock } from "../assets/Lock.svg";
 import SampleImg01 from "../assets/poster01.jpg";
 import SampleImg02 from "../assets/poster02.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { __getCommunity } from "../redux/modules/communitySlice";
+import { __getCommunity, certifyReset } from "../redux/modules/communitySlice";
 import { useInView } from "react-intersection-observer";
 import SampleImg03 from "../assets/banner.jpg";
 import { useNavigate } from "react-router-dom";
@@ -42,6 +42,7 @@ const Community = () => {
   /* -------------------------------- 상세페이지로 이동 ------------------------------- */
   const navigate = useNavigate();
   const onDetailHandler = (id) => {
+    dispatch(certifyReset());
     navigate(`/community/detail/${id}`);
   };
 
@@ -128,8 +129,8 @@ const Community = () => {
                 >
                   <ItemImg
                     bgImg={
-                      v.imgList.length >= 1
-                        ? v.imgList[0].imgUrl
+                      v.img !== null
+                        ? v.img.imgUrl
                         : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"
                     }
                   >

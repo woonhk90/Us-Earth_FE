@@ -9,7 +9,7 @@ import { clearVal } from '../../redux/modules/communitySlice';
 const CommunityTop = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   React.useEffect(() => {
     return () => {
       dispatch(clearVal());
@@ -21,9 +21,9 @@ const CommunityTop = () => {
   return (
     <>
       <HeaderWrap>
-        <div><LeftArrow onClick={() => onClickHandler()} /></div>
+        <div onClick={() => onClickHandler()}><LeftArrow /></div>
         <p>내정보</p>
-        <div><Setting /></div>
+        <div onClick={() => { navigate('/mypage/setting') }}><Setting /></div>
       </HeaderWrap>
     </>
   )

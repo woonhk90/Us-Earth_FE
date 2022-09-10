@@ -1,66 +1,91 @@
-import React from 'react';
-import styled from 'styled-components';
-import Seed from "../../assets/Seed.svg";
+import React, { useState, useEffect } from 'react';
+import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from "react-redux";
-import { __getMyInfo} from '../../redux/modules/mypageSlice';
+import { __postNickNameOverlap, __updateMyInfoStatus, __postNickNameSubmit } from '../../redux/modules/mypageSlice';
+import { removeCookie } from '../../shared/cookie';
+import { ReactComponent as Pen } from "../../assets/Pen.svg";
+import Input from '../elements/Input';
+import { __getMyInfo } from '../../redux/modules/mypageSlice';
+
+
 const MyPage = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.mypage);
-  console.log('userInfo=>', userInfo);
-  React.useEffect(() => {
-    dispatch(__getMyInfo());
-  }, [dispatch])
+  const { userInfo } = useSelector((state) => state.mypage);//유저정보가져옴
+  console.log(userInfo);
+  const { overlap } = useSelector((state) => state.mypage);//닉네임 입력하면 중복인지 여부 알려줌
+  const [nickFlag, setNickFlag] = useState(false);//닉네임 변경 하겠냐(true/false)
+  const [overlapFlag, setOverlapFlag] = useState(false);// 중복여부 상태값(true/false)
+  const [changeNicName, setChangeNickName] = useState('');
 
-  /* --------------------------- 나무 성장모습 & 미션 리스트 토글 -------------------------- */
-  const [missionFlag, setMissionFlag] = React.useState(false);
+
+  /* -------------------------- 내정보 페이지 공개 비공개 선택 가능 -------------------------- */
+  const onSecretHandler = (flag) => {
+    dispatch(__updateMyInfoStatus(flag));
+  }
+
+  /* -------------------------- 닉네임 실시간으로 상태값 받을 수 있음 ------------------------- */
+  const onNickChangeHandler = (e) => {
+    console.log(e.target.value);
+    if(e.target.value.length>0){
+      setOverlapFlag(true);
+    }else{
+      setOverlapFlag(false);
+    }
+    setChangeNickName(e.target.value);
+    let timer = null;
+    if (timer) //이전에 이벤트가 발생했다면
+      clearTimeout(timer); //이전 이벤트를 지운다.
+    if (e.target.value) {
+      timer = setTimeout(() => {
+        dispatch(__postNickNameOverlap({ nickname: e.target.value }));
+      }, 1000);
+    }
+  }
+  useEffect(() => {
+    dispatch(__getMyInfo());
+    setOverlapFlag(overlap);
+  }, [overlap, dispatch])
+
+  const onNickNameSubmit = async () => {
+    if (changeNicName.length > 0) {
+      await dispatch(__postNickNameSubmit({ nickname: changeNicName }));
+      setNickFlag(!nickFlag);
+    }else{
+      window.alert("변경할 닉네임을 입력해주세요.");
+      return false;
+    }
+  }
+
   return (
     <>
       <MyPageWrap>
         <Container>
-          <MyPageInfo>
-            <MyPageInfoBox>
-              <div>{userInfo.nickname}</div>
-              <div>LV.{userInfo.level}</div>
-            </MyPageInfoBox>
-            <MyPageProFile><img src={userInfo.profileImage} alt='profileImage' /></MyPageProFile>
-          </MyPageInfo>
-
-          <MyPageMission>
-
-            {
-              missionFlag ?
-                (<TodayMission>
-                  <TodayMissionBox>
-                    <p>오늘의 미션</p>
-                    <p onClick={() => setMissionFlag(!missionFlag)}>미션 닫기(0/5)</p>
-                  </TodayMissionBox>
-                  <MissionBox>
-                    <span>텀블러 사용하기</span>
-                    <span>분리수거해서 버리기</span>
-                    <span>분리수거 방법 검색</span>
-                    <span>양치할 때 물컴 쓰기</span>
-                    <span>음식 남기지 않기</span>
-                  </MissionBox>
-                </TodayMission>)
-                : (<>
-                  <MissionTop>
-                    <p>오늘의 미션</p>
-                    <p onClick={() => setMissionFlag(!missionFlag)}>미션 보기(0/5)</p>
-                  </MissionTop>
-                  <MissionBottom>
-                    <div><img src={Seed} alt='seed-icon' /></div>
-                    <progress value='1' max="7" />
-                  </MissionBottom></>)
-            }
-          </MyPageMission>
-
-          <MyPageMissionList>
-            <MyPageMissionListBox>
-              <div>나의 미션 목록</div>
-              <div>개인 미션 통계</div>
-              <div>그룹 미션</div>
-            </MyPageMissionListBox>
-          </MyPageMissionList>
+          <LoginInfo>
+            <LoginInfoTitle>로그인 정보</LoginInfoTitle>
+            <LoginInfoContent>{userInfo.username}</LoginInfoContent>
+          </LoginInfo>
+          <NickInfo>
+            {!nickFlag ?
+              (<>
+                <NickInfoTitle><span>닉네임 변경</span> <span onClick={() => { setNickFlag(!nickFlag) }}><Pen /></span></NickInfoTitle>
+                <NickInfoContent>{userInfo.nickname}</NickInfoContent>
+              </>) :
+              (<>
+                <NickInfoTitle><span>닉네임 변경</span> <span onClick={() => { onNickNameSubmit() }}><Pen /></span></NickInfoTitle>
+                <Input type="text" placeholder={userInfo.nickname} onChange={onNickChangeHandler} maxLength='20'/>
+                <OverlapFlagBox><OverlapFlagContent color={overlapFlag ? 'black' : 'red'}>사용{overlapFlag ? '가능한' : '불가능한'} 닉네임 입니다.</OverlapFlagContent></OverlapFlagBox>
+              </>)}
+          </NickInfo>
+          <MyPageFlag>
+            <MyPageFlagTitle>내정보 페이지 비공개</MyPageFlagTitle>
+            <CheckBoxWrapper>
+              <CheckBox secret={userInfo.secret} onClick={() => onSecretHandler(!userInfo.secret)} id="checkbox" type="checkbox" />
+              <CheckBoxLabel secret={userInfo.secret} htmlFor="checkbox" />
+            </CheckBoxWrapper>
+          </MyPageFlag>
+          <div>
+            <LogoutBtn onClick={() => removeCookie('mycookie')}>로그아웃</LogoutBtn>
+          </div>
         </Container>
       </MyPageWrap>
     </>
@@ -68,145 +93,152 @@ const MyPage = () => {
 }
 export default MyPage;
 
-const MyPageWrap = styled.div`width:100%;height:100%;`;
+const MyPageWrap = styled.div`
+  width:100%;
+  height:100%;
+`;
 const Container = styled.div`
   width:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-content:center;
-  background-color:rgb(245,245,245);
-`;
-const MyPageInfo = styled.div`
-  background-color:#fff;
-  width:100%;
-  padding:0 25px;
-  box-sizing:border-box;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-`;
-const MyPageInfoBox = styled.div`
-  display:flex;
-  flex-direction:column;
-  div:nth-child(1){
-    font:600 24px/32px 'Noto Sans','Arial','sans-serif';
-  }
-  div:nth-child(2){
-    font:500 20px/28px 'Noto Sans','Arial','sans-serif';
-    color:#9B9B9B;
-  }
-`;
-const MyPageProFile = styled.div`
-  width:74px;height:74px;
-  padding:27px 0;
-  border-radius:50%;
-  img{
-    border-radius:50%;
-    width:100%;
-    height:100%;
-  }
-`;
-
-
-
-
-
-const MyPageMission = styled.div`
-  width:100%;
-  height:50vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:space-between;
-  padding:20px 15px 0;
+  background: #fff;
+  padding:50px 26px 0;
   box-sizing:border-box;
 `;
-const MissionTop = styled.div`
-  width:100%;
-  background-color:#fff;
-  border-radius:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:25px 26px;
-  box-sizing:border-box;
-  p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
-  p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
-`;
-const MissionBottom = styled.div`
-  width:100%;
-  padding:0 35px 8px;
-  box-sizing:border-box;
-  div{
-    width:100%;
-    img{
-      display:block;
-      width:50%;
-      margin:0 auto;
-      /* background-image: url('${Seed}'); */
-    }
-  }
-  progress{
-    appearance: none;
-    width:100%;
-    height:15px;
-  }
-  progress::-webkit-progress-bar {
-    background:#e2e2e2;
-    border-radius:10px;
-  }
-  progress::-webkit-progress-value {
-    border-radius:10px;
-    background:#818181;
-  }
-`;
 
-const TodayMission = styled.div`
+const LoginInfo = styled.div`
   width:100%;
-  background-color:#fff;
-  border-radius:12px;
-  padding:25px 26px 15px;
-  box-sizing:border-box;
+  border-bottom:1px solid rgba(0,0,0,0.14);
+  margin-bottom:32px;
   `;
-const TodayMissionBox = styled.div`
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 0 20px 0;
-    box-sizing:border-box;
-    p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
-    p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
+const LoginInfoTitle = styled.h2`
+  font:500 18px/1 'Noto sans','Arial','sans-serif';
+  `;
+const LoginInfoContent = styled.p`
+  font:16px/1 'Noto sans','Arial','sans-serif';
+  color:#7b7b7b;
+  padding:20px 0 28px;
+  box-sizing:border-box;
 `;
-const MissionBox = styled.div`
+
+
+
+
+
+const NickInfo = styled.div`
+  width:100%;
+  border-bottom:1px solid rgba(0,0,0,0.14);
+  margin-bottom:32px;
+`;
+const NickInfoTitle = styled.div`
   display:flex;
-  flex-direction: column;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
-  gap:5px;
-  text-align:center;
-  span{
-    border-radius:50px;
-    display:inline-block;
-    width:100%;
-    font:500 20px/1 'Noto Sans','Arial','sans-serif';
-    color:#2c2c2c;
-    padding:18px 0;
-    box-sizing:border-box;
-    background-color:#e2e2e2;
-  }
+  font:500 18px/1 'Noto sans','Arial','sans-serif';
+`;
+const NickInfoContent = styled.p`
+  font:700 22px/1 'Noto sans','Arial','sans-serif';
+  padding:20px 0 28px;
+  box-sizing:border-box;
+`;
+const OverlapFlagBox = styled.div`
+  text-align:right;
+`;
+const OverlapFlagContent = styled.span`
+  font-size:10px;
+  color:${(props)=>props.color}
 `;
 
 
 
 
 
-const MyPageMissionList = styled.div`
-  background-color:#fff;
-  padding:25px 26px;
-`;
-const MyPageMissionListBox = styled.div`
+const MyPageFlag = styled.div`
+  width:100%;
   display:flex;
-  flex-direction:column;
-  gap:45px;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:60px;
+`;
+const MyPageFlagTitle = styled.h2`
+  font:500 18px/24px 'Noto Sans','Arial','sans-serif';
+`;
+const LogoutBtn = styled.button`
+  width:100%;
+  font:500 18px/60px 'Noto Sans','Arial','sans-serif';
+  background:transparent;
+  border:1px solid #b5b5b5;
+  color:#424242;
+`;
+
+
+
+
+
+/* ------------------------------ switch button ----------------------------- */
+const CheckBoxWrapper = styled.div`
+  position: relative;
+`;
+
+const CheckBoxLabel = styled.label`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 43px;
+  height: 24px;
+  border-radius: 15px;
+  background: #bebebe;
+  cursor: pointer;
+  ${(props) =>
+    !props.secret &&
+    css`
+      background: #bebebe;
+    `}
+
+  &::after {
+    content: "";
+    display: block;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    margin: 1px;
+    background: #ffffff;
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+    ${(props) =>
+    !props.secret
+      ? css`
+            margin: 1px;
+            box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+            transition: 0.2s;
+          `
+      : css`
+            margin: 1px 0 0 20px;
+          `}
+  }
+  background: ${(props) => (props.secret ? `#35bd47` : null)};
+`;
+
+const CheckBox = styled.input`
+  opacity: 0;
+  z-index: 1;
+  border-radius: 15px;
+  width: 42px;
+  height: 26px;
+  &:checked {
+    ${(props) =>
+    props.secret &&
+    css`
+        background: #35bd47;
+        &::after {
+          content: "";
+          background-color: white;
+          display: block;
+          border-radius: 50%;
+          width: 22px;
+          height: 22px;
+          margin: 1px 0 0 20px;
+          transition: 0.2s;
+        }
+      `}
+  }
 `;
