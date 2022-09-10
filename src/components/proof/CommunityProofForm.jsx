@@ -3,7 +3,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
 import { useDispatch } from "react-redux";
 import { postProof } from "../../redux/modules/proofsSlice";
-import { useParams, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
 import { certifyReset } from "../../redux/modules/communitySlice";
 
