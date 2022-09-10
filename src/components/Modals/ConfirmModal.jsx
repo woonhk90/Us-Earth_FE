@@ -1,30 +1,29 @@
 import React from "react";
 import { useNavigate, useLocation, Redirect, Routes, Route, Navigate } from "react-router-dom";
 import styled from "styled-components";
-import { getCookie } from "../shared/cookie";
+// import { getCookie } from "../shared/cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { __updateCommunityJoin } from "../redux/modules/communitySlice";
+// import { __updateCommunityJoin } from "../redux/modules/communitySlice";
 
-const CommunityModal = (props) => {
+const ConfirmModal = (props) => {
+  const { clickSubmit, closeModal } = props;
+  const { title, cancel, submit, submitReturn } = props.confirmModalData;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const closeModal = () => {
-    props.closeModal();
-  };
   const [viewFlag, setViewFlag] = React.useState(false);
-  const onViewFlagHandler = (id) => {
-    dispatch(__updateCommunityJoin({ communityId: props.communityId }));
-
+  console.log(viewFlag);
+  const submitonClick = (id) => {
+    clickSubmit();
     setViewFlag(!viewFlag);
   };
   /* --------------------- 로그인 되어있는지 우선 확인(안되어있으면 로그인페이지) --------------------- */
-  const usercookie = getCookie("mycookie");
-  const { pathname } = useLocation();
-  if (usercookie === undefined) {
-    localStorage.setItem("pathname", pathname);
-    navigate("/login");
-  }
+  // const usercookie = getCookie("mycookie");
+  // const { pathname } = useLocation();
+  // if (usercookie === undefined) {
+  //   localStorage.setItem("pathname", pathname);
+  //   navigate("/login");
+  // }
 
   return (
     <>
@@ -35,27 +34,18 @@ const CommunityModal = (props) => {
           }}
         >
           <ConfirmWrap viewFlag={viewFlag}>
-            <ConfirmTitle>
-              <ConfirmTitleSpan>드룹투두제목</ConfirmTitleSpan>에<br /> 가입하시겠습니까?
-            </ConfirmTitle>
+            <ConfirmTitle>{title}</ConfirmTitle>
             <ConfirmBox>
               <ConfirmItem borderRight={"1px solid #d9d9d9"} onClick={closeModal}>
-                취소
+                {cancel}
               </ConfirmItem>
-              <ConfirmItem
-                borderLeft={"1px solid #d9d9d9"}
-                onClick={() => {
-                  onViewFlagHandler(props.communityId);
-                }}
-              >
-                가입
+              <ConfirmItem borderLeft={"1px solid #d9d9d9"} onClick={submitonClick}>
+                {submit}
               </ConfirmItem>
             </ConfirmBox>
           </ConfirmWrap>
           <AttendWrap viewFlag={viewFlag}>
-            <AttendTitle>
-              <AttendTitleSpan>드룹투두제목</AttendTitleSpan>에<br /> 가입이 완료되었습니다
-            </AttendTitle>
+            <AttendTitle>{submitReturn}</AttendTitle>
             <AttendBox>
               <AttendItem onClick={closeModal}>확인</AttendItem>
             </AttendBox>
@@ -65,7 +55,7 @@ const CommunityModal = (props) => {
     </>
   );
 };
-export default CommunityModal;
+export default ConfirmModal;
 
 const ModalWrap = styled.div`
   position: fixed;
