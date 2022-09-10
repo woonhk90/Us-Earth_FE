@@ -3,11 +3,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
 import { useDispatch } from "react-redux";
 import { postProof } from "../../redux/modules/proofsSlice";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
 
 const CommunityProofForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const param = useParams();
   console.log(param);
   const [inputData, inputOnChangeHandler, inputReset] = useInputs({
@@ -83,6 +84,7 @@ const CommunityProofForm = () => {
       console.log(dataSet);
     }
     dispatch(postProof({ communityId: param.communityId, formData: formData }));
+    navigate("/community");
   };
 
   const ProofFormData = {

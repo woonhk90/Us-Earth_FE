@@ -6,13 +6,14 @@ import Textarea from "../elements/Textarea";
 import { useDispatch, useSelector } from "react-redux";
 import { patchComment, postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
+import { commentEditChange } from "../../redux/modules/commentsSlice";
 import axios from "axios";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 const API_URL = process.env.REACT_APP_API_URL;
 
-const CommentInput = () => {
+const CommentInputEdit = () => {
   const dispatch = useDispatch();
   const param = useParams();
   const { commentEdit } = useSelector((state) => state.comments);
@@ -27,14 +28,16 @@ const CommentInput = () => {
       const commentList = data.commentResponseDtoList.find((comment) => comment.commentId === payload.commentId);
       setInputOn(true);
       setContent(commentList.content);
-      setImageFile([commentList.img.imgUrl]);
-      setPreviewImg([commentList.img.imgUrl]);
-      console.log("수정 왜안돼", content);
+      if (commentList.img === null) {
+        setImageFile([]);
+        setPreviewImg([]);
+      } else {
+        setImageFile([commentList.img.imgUrl]);
+        setPreviewImg([commentList.img.imgUrl]);
+      }
     } catch (error) {}
   };
   const [content, commentOnChange, commentReset, setContent] = useInput("");
-  // const { commentEdit } = useSelector((state) => state.comments);
-  // const [editContent, setEditContent] = useState(commentEdit.commentId);
   const [inputOn, setInputOn] = useState(false);
   const onInputHandler = () => {
     setInputOn(!inputOn);
@@ -42,23 +45,26 @@ const CommentInput = () => {
 
   useEffect(() => {
     if (commentEdit.editMode) {
-      console.log("에딧모드?");
       getComments({
         proofId: param.proofId,
         commentId: commentEdit.commentId,
       });
     }
     return () => {
-      // imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
-      commentReset();
+      if (!commentEdit.editMode) {
+        imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
+        commentReset();
+        setImageFile([]);
+        setPreviewImg([]);
+        dispatch(commentEditChange({}));
+      }
     };
-  }, []);
+  }, [commentEdit.commentId]);
   /* ---------------------------------- 사진 업로드 ---------------------------------- */
 
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
 
-  console.log("수정 왜안돼", content, imageFile, previewImg);
   const addImageFile = (e) => {
     let reader = new FileReader();
     if (e.target.files.length > 0) {
@@ -75,7 +81,15 @@ const CommentInput = () => {
   const deleteImageFile = () => {
     setImageFile([]);
     setPreviewImg([]);
-    // imageUrlLists.push(currentImageUrl);
+  };
+  const ClickCancel = () => {
+    if (window.confirm("수정 모드를 취소하시겠습니까?")) {
+      console.log("?");
+      dispatch(commentEditChange({}));
+      setImageFile([]);
+      setPreviewImg([]);
+      commentReset();
+    } else return console.log("아래");
   };
 
   /* ---------------------------------- submit ---------------------------------- */
@@ -89,6 +103,10 @@ const CommentInput = () => {
       dispatch(patchComment({ commentId: commentEdit.commentId, proofId: param.proofId, formData: formData }));
       setInputOn(false);
     }
+    commentReset();
+    setImageFile([]);
+    setPreviewImg([]);
+    imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
   };
 
   return (
@@ -117,12 +135,13 @@ const CommentInput = () => {
           )}
         </InputWrap>
         <SubmitButton onClick={onClickSubmit}>수정</SubmitButton>
+        <SubmitButton onClick={ClickCancel}>수정취소</SubmitButton>
       </CommentInputWrap>
     </>
   );
 };
 
-export default CommentInput;
+export default CommentInputEdit;
 
 const CommentInputWrap = styled.div`
   width: 100%;

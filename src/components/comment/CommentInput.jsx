@@ -13,7 +13,6 @@ const CommentInput = () => {
   const [content, commentOnChange, commentReset] = useInput("");
   const { commentEdit } = useSelector((state) => state.comments);
   const [editContent, setEditContent] = useState(commentEdit.comment);
-  console.log(editContent);
   const [inputOn, setInputOn] = useState(false);
   const onInputHandler = () => {
     setInputOn(!inputOn);
@@ -86,15 +85,6 @@ const CommentInput = () => {
           ) : (
             <div onClick={onInputHandler}>댓글을 입력해주세요.</div>
           )}
-          {commentEdit.editMode ? (
-            <>
-              <Container>
-                <DeleteButton onClick={deleteImageFile}>x</DeleteButton>
-                <Thumb src={commentEdit.commentImg} alt="img" />
-              </Container>
-              <Textarea value={editContent} onChange={commentOnChange} placeholder="댓글을 입력해주세요" />
-            </>
-          ) : null}
         </InputWrap>
         <SubmitButton onClick={onClickSubmit}>등록</SubmitButton>
       </CommentInputWrap>

@@ -9,19 +9,35 @@ import Comment from "./Comment";
 import useInput from "../../hooks/useInput";
 import CommentInput from "./CommentInput";
 import CommentInputEdit from "./CommentInputEdit";
+import { commentEditChange } from "../../redux/modules/commentsSlice";
 
 const CommentBox = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const param = useParams();
   const [modalOpen, setModalOpen] = useState(false);
-  const { editMode } = useSelector((state) => state.comments.commentEdit);
-  console.log(editMode);
+  const { commentEdit } = useSelector((state) => state.comments);
+  console.log("커멘트에서 에딧모드", commentEdit);
+  const editMode = commentEdit.editMode;
   const openModal = () => {
     setModalOpen(true);
   };
 
+  useEffect(() => {
+    console.log("랜더링");
+
+    return console.log("커멘트박스 언마운트");
+  }, []);
+
   const closeModal = () => {
-    setModalOpen(false);
+    console.log("클로즈모달?");
+    if (editMode) {
+      if (window.confirm("삭제모드 취소 하시겠습니까")) {
+        setModalOpen(false);
+        dispatch(commentEditChange({}));
+        console.log("에딧모드 리셋");
+      } else return;
+    } else setModalOpen(false);
   };
 
   const onClickDelete = () => {
@@ -52,7 +68,7 @@ const CommentBox = () => {
     </>
   );
 };
-export default CommentBox;
+export default React.memo(CommentBox);
 
 const ModalButton = styled.div`
   background-color: transparent;
@@ -60,6 +76,7 @@ const ModalButton = styled.div`
 `;
 
 const ButtonInModalWrap = styled.div`
+  width: 100%;
   ${flexColumn};
 `;
 
