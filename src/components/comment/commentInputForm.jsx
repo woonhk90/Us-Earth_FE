@@ -6,65 +6,13 @@ import Textarea from "../elements/Textarea";
 import { useDispatch, useSelector } from "react-redux";
 import { postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
+const API_URL = process.env.REACT_APP_API_URL;
 
 const CommentInput = () => {
-  const dispatch = useDispatch();
-  const param = useParams();
-  const [content, commentOnChange, commentReset] = useInput("");
-  const { commentEdit } = useSelector((state) => state.comments);
-  const [editContent, setEditContent] = useState(commentEdit.comment);
-  const [inputOn, setInputOn] = useState(false);
-  const onInputHandler = () => {
-    setInputOn(!inputOn);
-  };
-
-  useEffect(() => {
-    return () => {
-      // imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
-      commentReset();
-    };
-  }, [editContent]);
-  /* ---------------------------------- 사진 업로드 ---------------------------------- */
-
-  const [imageFile, setImageFile] = useState([]);
-  const [previewImg, setPreviewImg] = useState([]);
-
-  const addImageFile = (e) => {
-    let reader = new FileReader();
-    if (e.target.files.length > 0) {
-      reader.readAsDataURL(e.target.files[0]);
-      setImageFile(e.target.files[0]);
-      reader.onloadend = () => {
-        const previewImgUrl = reader.result;
-        setPreviewImg([previewImgUrl]);
-      };
-    }
-  };
-
-  // X버튼 클릭 시 이미지 삭제
-  const deleteImageFile = () => {
-    setImageFile([]);
-    setPreviewImg([]);
-    // imageUrlLists.push(currentImageUrl);
-  };
-
-  /* ---------------------------------- submit ---------------------------------- */
-  const onClickSubmit = () => {
-    let formData = new FormData();
-    if (content === "") {
-      alert("내용을 입력해 주세요");
-    } else {
-      formData.append("multipartFile", imageFile);
-      formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
-      dispatch(postComment({ proofId: param.proofId, formData: formData }));
-      setInputOn(false);
-
-      // clear input
-      commentReset();
-      setImageFile([]);
-      setPreviewImg([]);
-    }
-  };
 
   return (
     <>
@@ -91,7 +39,7 @@ const CommentInput = () => {
             <div onClick={onInputHandler}>댓글을 입력해주세요.</div>
           )}
         </InputWrap>
-        <SubmitButton onClick={onClickSubmit}>등록</SubmitButton>
+        <SubmitButton onClick={onClickSubmit}>{buttonName}</SubmitButton>
       </CommentInputWrap>
     </>
   );

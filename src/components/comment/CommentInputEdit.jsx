@@ -1,34 +1,82 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
-import { useDropzone } from "react-dropzone";
 import Textarea from "../elements/Textarea";
 import { useDispatch, useSelector } from "react-redux";
-import { postComment } from "../../redux/modules/commentsSlice";
+import { patchComment, postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
+import { commentEditChange } from "../../redux/modules/commentsSlice";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import ConfirmModal from "../Modals//ConfirmModal";
 
-const CommentInput = () => {
-  const dispatch = useDispatch();
+const CommentInputEdit = () => {
   const param = useParams();
-  const [content, commentOnChange, commentReset] = useInput("");
+  const cookies = new Cookies();
+  const dispatch = useDispatch();
+  const API_URL = process.env.REACT_APP_API_URL;
+
+  // find commentId of edit(*)
   const { commentEdit } = useSelector((state) => state.comments);
-  const [editContent, setEditContent] = useState(commentEdit.comment);
+
+  // input onChange
+  const [content, commentOnChange, commentReset, setContent] = useInput("");
+
+  /* --------------------------------- on input -------------------------------- */
   const [inputOn, setInputOn] = useState(false);
+
   const onInputHandler = () => {
     setInputOn(!inputOn);
   };
 
-  useEffect(() => {
-    return () => {
-      // imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
-      commentReset();
-    };
-  }, [editContent]);
-  /* ---------------------------------- 사진 업로드 ---------------------------------- */
+  /* -------------------------------- axios get ------------------------------- */
 
+  const getComments = async (payload) => {
+    try {
+      const authorization_token = cookies.get("mycookie");
+      const { data } = await axios.get(`${API_URL}/comments/${payload.proofId}`, {
+        Authorization: authorization_token,
+      });
+
+      // find data & into input
+      const commentList = data.commentResponseDtoList.find((comment) => comment.commentId === payload.commentId);
+      setInputOn(true);
+      setContent(commentList.content);
+      if (commentList.img === null) {
+        setImageFile([]);
+        setPreviewImg([]);
+      } else {
+        setImageFile([commentList.img.imgUrl]);
+        setPreviewImg([commentList.img.imgUrl]);
+      }
+    } catch (error) {}
+  };
+
+  /* ----------------------------- edit useEffect(*) ---------------------------- */
+  useEffect(() => {
+    if (commentEdit.editMode) {
+      getComments({
+        proofId: param.proofId,
+        commentId: commentEdit.commentId,
+      });
+    }
+    return () => {
+      // unmount clean code
+      if (!commentEdit.editMode) {
+        imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
+        commentReset();
+        setImageFile([]);
+        setPreviewImg([]);
+        dispatch(commentEditChange({}));
+      }
+    };
+  }, [commentEdit.commentId]);
+
+  /* ---------------------------------- photo upload ---------------------------------- */
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
 
+  // add image
   const addImageFile = (e) => {
     let reader = new FileReader();
     if (e.target.files.length > 0) {
@@ -41,29 +89,56 @@ const CommentInput = () => {
     }
   };
 
-  // X버튼 클릭 시 이미지 삭제
+  // delete image
   const deleteImageFile = () => {
     setImageFile([]);
     setPreviewImg([]);
-    // imageUrlLists.push(currentImageUrl);
   };
 
-  /* ---------------------------------- submit ---------------------------------- */
+  /* ---------------------------------- submit(*) ---------------------------------- */
   const onClickSubmit = () => {
     let formData = new FormData();
+
+    // validation
     if (content === "") {
       alert("내용을 입력해 주세요");
     } else {
       formData.append("multipartFile", imageFile);
       formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
-      dispatch(postComment({ proofId: param.proofId, formData: formData }));
-      setInputOn(false);
 
-      // clear input
-      commentReset();
-      setImageFile([]);
-      setPreviewImg([]);
+      // dispatch formData
+      dispatch(patchComment({ commentId: commentEdit.commentId, proofId: param.proofId, formData: formData }));
+      setInputOn(false);
     }
+
+    // data reset function
+    commentReset();
+    setImageFile([]);
+    setPreviewImg([]);
+    imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
+  };
+
+  /* -------------------------------- edit modal ------------------------------- */
+  const [modal, setModal] = useState(false);
+
+  // modal text data
+  const confirmModalData = {
+    title: "수정을 취소하시겠습니까?",
+    cancel: "아니오",
+    submit: "예",
+    // submitReturn: "취소되었습니다.",
+  };
+
+  // editMode cancel function
+  const clickSubmit = () => {
+    setImageFile([]);
+    setPreviewImg([]);
+    commentReset();
+    dispatch(commentEditChange({}));
+  };
+
+  const modalOnOff = () => {
+    setModal(!modal);
   };
 
   return (
@@ -91,13 +166,15 @@ const CommentInput = () => {
             <div onClick={onInputHandler}>댓글을 입력해주세요.</div>
           )}
         </InputWrap>
-        <SubmitButton onClick={onClickSubmit}>등록</SubmitButton>
+        <SubmitButton onClick={onClickSubmit}>수정</SubmitButton>
+        <SubmitButton onClick={modalOnOff}>수정취소</SubmitButton>
+        {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={modalOnOff}></ConfirmModal>}
       </CommentInputWrap>
     </>
   );
 };
 
-export default CommentInput;
+export default CommentInputEdit;
 
 const CommentInputWrap = styled.div`
   width: 100%;

@@ -1,24 +1,35 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 const API_URL = process.env.REACT_APP_API_URL;
 
 const initialState = {
-  comment: [],
+  comments: [],
+  commentSelectBoxId: {},
+  commentEdit: {
+    editMode: false,
+    comment: "",
+    commentImg: "",
+    commentId: "",
+  },
   isLoading: false,
   error: null,
 };
 
 /* -------------------------- post comment (Create) ------------------------- */
-export const postComment = createAsyncThunk("comment/post", async (formData, thunkAPI) => {
+export const postComment = createAsyncThunk("comment/post", async (payload, thunkAPI) => {
   try {
-    const token = localStorage.getItem("token");
-    const { data } = await axios.post(`${API_URL}/comments/{replayId}`, formData, {
+    const authorization_token = cookies.get("mycookie");
+    const { data } = await axios.post(`${API_URL}/comments/${payload.proofId}`, payload.formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
-        Authorization: token,
+        Authorization: authorization_token,
       },
     });
+    thunkAPI.dispatch(getComments(payload.proofId));
     console.log(data);
     return data;
   } catch (err) {
@@ -27,30 +38,33 @@ export const postComment = createAsyncThunk("comment/post", async (formData, thu
 });
 
 /* --------------------------- get comment (Read) --------------------------- */
-export const getComments = createAsyncThunk("comment/get", async (payload, thunkAPI) => {
+export const getComments = createAsyncThunk("comment/get", async (proofId, thunkAPI) => {
   try {
-    const token = localStorage.getItem("token");
-    const data = await axios.get(`${API_URL}/replay/{replayId}`, {
-      Authorization: token,
+    const authorization_token = cookies.get("mycookie");
+    const { data } = await axios.get(`${API_URL}/comments/${proofId}`, {
+      Authorization: authorization_token,
     });
-    return thunkAPI.fulfillWithValue(data.data);
+    console.log(data);
+    return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejected(error);
   }
 });
 
 /* ------------------------- patch comment (Update) ------------------------- */
-export const patchComment = createAsyncThunk("comment/patch", async (formData, thunkAPI) => {
+export const patchComment = createAsyncThunk("comment/patch", async (payload, thunkAPI) => {
   try {
-    const token = localStorage.getItem("token");
-    const { data } = await axios.patch(`${API_URL}/comments/{replayId}`, formData, {
+    const authorization_token = cookies.get("mycookie");
+    const { data } = await axios.patch(`${API_URL}/comments/${payload.commentId}`, payload.formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
-        Authorization: token,
+        Authorization: authorization_token,
       },
     });
     console.log(data);
+    thunkAPI.dispatch(getComments(payload.proofId));
+    thunkAPI.dispatch(commentEditChange({}));
     return data;
   } catch (err) {
     console.log(err);
@@ -60,12 +74,14 @@ export const patchComment = createAsyncThunk("comment/patch", async (formData, t
 /* ------------------------- delete comment (Delete) ------------------------ */
 export const deleteComments = createAsyncThunk("comment/delete", async (payload, thunkAPI) => {
   try {
-    const token = localStorage.getItem("token");
-    await axios.delete(`${API_URL}/comment/{commentId}`, {
+    const authorization_token = cookies.get("mycookie");
+    const data = await axios.delete(`${API_URL}/comments/${payload.commentId}`, {
       headers: {
-        Authorization: token,
+        Authorization: authorization_token,
       },
     });
+    thunkAPI.dispatch(getComments(payload.proofId));
+    console.log(data);
     return thunkAPI.fulfillWithValue(payload);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -91,7 +107,20 @@ export const deleteComments = createAsyncThunk("comment/delete", async (payload,
 export const commentsSlice = createSlice({
   name: "comments",
   initialState,
-  reducers: {},
+  reducers: {
+    commentSelectBox: (state, action) => {
+      console.log("슬라이스에서 바뀜!",action.payload);
+      // adNumber이라는 명령(?)
+      state.commentSelectBoxId = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
+      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
+    },
+    commentEditChange: (state, action) => {
+      console.log(action.payload);
+      // adNumber이라는 명령(?)
+      state.commentEdit = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
+      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
+    },
+  },
   extraReducers: {
     /* -------------------------- post comment (Create) ------------------------- */
     [postComment.pending]: (state) => {
@@ -111,7 +140,7 @@ export const commentsSlice = createSlice({
     },
     [getComments.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.detail = action.payload;
+      state.comments = action.payload;
     },
     [getComments.rejected]: (state, action) => {
       state.isLoading = false;
@@ -143,5 +172,5 @@ export const commentsSlice = createSlice({
   },
 });
 
-export const {} = commentsSlice.actions;
+export const { commentSelectBox, commentEditChange } = commentsSlice.actions;
 export default commentsSlice.reducer;
