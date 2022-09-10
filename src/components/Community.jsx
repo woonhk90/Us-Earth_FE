@@ -4,7 +4,7 @@ import { ReactComponent as Lock } from "../assets/Lock.svg";
 import SampleImg01 from "../assets/poster01.jpg";
 import SampleImg02 from "../assets/poster02.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { __getCommunity } from "../redux/modules/communitySlice";
+import { __getCommunity, certifyReset } from "../redux/modules/communitySlice";
 import { useInView } from "react-intersection-observer";
 import SampleImg03 from "../assets/banner.jpg";
 import { useNavigate } from "react-router-dom";
@@ -42,6 +42,7 @@ const Community = () => {
   /* -------------------------------- 상세페이지로 이동 ------------------------------- */
   const navigate = useNavigate();
   const onDetailHandler = (id) => {
+    dispatch(certifyReset());
     navigate(`/community/detail/${id}`);
   };
 

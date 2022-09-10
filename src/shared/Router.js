@@ -19,9 +19,10 @@ const Router = () => {
     <Routes>
       <Route path="/" element={<EarthCommunity />} />
       <Route path="/login" element={<EarthLogin />} />
+      <Route path="/community" element={<EarthCommunity />} />
       <Route path="/community/form" element={<EarthCommunityForm />} />
       <Route path="/community/edit/:id" element={<EarthCommunityFormEdit />} />
-      <Route path="/community" element={<EarthCommunity />} />
+      {/* <Route path="/community" element={<EarthCommunity />} /> */}
       <Route path="/community/detail/:id" element={<EarthCommunityDetail />} />
       <Route path="/community/:communityId/proof/:proofId" element={<EarthCommunityProof />} />
       <Route path="/community/:communityId/proof/form" element={<EarthCommunityProofForm />} />

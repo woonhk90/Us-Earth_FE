@@ -62,10 +62,27 @@ export const __updateCommunityJoin = createAsyncThunk("todos/__updateCommunityJo
   }
 });
 
+/* ------------------------------ 인증 게시글 목록 출력 ------------------------------ */
+export const __getCommunityCertify = createAsyncThunk("todos/__getCommunityCertify", async (payload, thunkAPI) => {
+  try {
+    console.log('__getCommunityCertify=>', payload);
+    const data = await axios.get(`http://13.209.97.209/api/community/${payload.communityId}/proof?page=${payload.page}&size=3`);
+    console.log('인증게시글=>', data);
+
+    return thunkAPI.fulfillWithValue(data.data);
+  } catch (error) {
+    window.alert("정보를 불러올 수 없습니다.");
+    console.log(error);
+    console.log(error.response.data.errorMessage);
+    return;
+  }
+});
+
 const initialState = {
   community: [],
   search: '',
-  communityDetail: []
+  communityDetail: [],
+  certify: []
 }
 
 export const communitySlice = createSlice({
@@ -73,6 +90,7 @@ export const communitySlice = createSlice({
   initialState,
   reducers: {
     clearVal: (state) => { state.community = [] },
+    certifyReset: (state) => { state.certify = [] },
     ingVal: (state, action) => { console.log(action); console.log(action); console.log(action); console.log(action); console.log(action); /* state.community = []  */ }
   },
   extraReducers: {
@@ -102,9 +120,22 @@ export const communitySlice = createSlice({
     [__getCommunityDetail.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    [__getCommunityCertify.pending]: (state) => {
+      state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+    },
+    [__getCommunityCertify.fulfilled]: (state, action) => {
+      console.log('action=>', action);
+      console.log('action=>', ...action.payload);
+      state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+      state.certify = [...state.certify, ...action.payload];
+    },
+    [__getCommunityCertify.rejected]: (state, action) => {
+      state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
+      state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
     }
   },
 });
 
-export const { clearVal, ingVal } = communitySlice.actions;
+export const { clearVal, ingVal, certifyReset } = communitySlice.actions;
 export default communitySlice.reducer;
