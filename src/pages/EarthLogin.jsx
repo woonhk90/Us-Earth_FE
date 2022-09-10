@@ -11,7 +11,7 @@ const EarthLogin = () => {
     return (
         <Layout>
             <Header>
-                <LoginTop />
+                {/* <LoginTop /> */}
             </Header>
             <LoginBox>
                 <Login />
@@ -28,6 +28,7 @@ const LoginBox = styled.div`
   height:100%;
   overflow:auto;
   position:absolute;
-  top:48px;
+  /* top:48px; */
+  top:0;
   left:0;
 `;

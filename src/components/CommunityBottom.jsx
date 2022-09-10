@@ -2,12 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getCookie } from '../shared/cookie';
+import { useDispatch } from "react-redux";
+import { clearVal } from '../redux/modules/communitySlice';
 
 const CommunityBottom = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const usercookie = getCookie('mycookie');
   const { pathname } = useLocation();
-
+  console.log("쿠키확인", usercookie);
   const onClickHandler = (flag) => {
     /* --------------------- 로그인 되어있는지 우선 확인(안되어있으면 로그인페이지) --------------------- */
     if (usercookie === undefined) {
@@ -17,16 +20,30 @@ const CommunityBottom = () => {
       navigate(`/${flag}`);
     }
   }
+  const cookieCheck = (page) => {
+    if (page === '/') {
+      if(pathname!==page){
+        dispatch(clearVal());
+      }
+      navigate('/');
+    } else {
+      if (usercookie === undefined) {
+        navigate('/login');
+      } else {
+        navigate(page);
+      }
+    }
+  }
 
 
 
   return (
     <>
       <FooterWrap>
-        <FooterMenus bgColor={'rgba(0,0,0,0.2)'} onClick={() => { onClickHandler('community') }}>커뮤니티</FooterMenus>
+        <FooterMenus bgColor={'rgba(0,0,0,0.2)'} onClick={() => { cookieCheck('/') }}>커뮤니티</FooterMenus>
         <FooterMenus bgColor={'rgba(0,0,0,0.4)'}>정보제공</FooterMenus>
         <FooterMenus bgColor={'rgba(0,0,0,0.2)'}>채팅</FooterMenus>
-        <FooterMenus bgColor={'rgba(0,0,0,0.4)'} onClick={() => { onClickHandler('mypage') }}>내정보</FooterMenus>
+        <FooterMenus bgColor={'rgba(0,0,0,0.4)'} onClick={() => { cookieCheck('/mypage') }}>내정보</FooterMenus>
       </FooterWrap>
     </>
   )

@@ -48,7 +48,7 @@ const CommunityDetail = () => {
             <ContentItem font={"16px/22px 'Noto sans','Arial','sans-serif'"} marginBottom={'10px'}>{communityDetail.startDate} - {communityDetail.endDate}</ContentItem>
             <ContentItem font={"700 26px/35px 'Noto sans','Arial','sans-serif'"} marginBottom={'9px'}>{communityDetail.title}</ContentItem>
             <ContentItem font={"22px/30px 'Noto sans','Arial','sans-serif'"} marginBottom={'35px'}>{communityDetail.content}</ContentItem>
-            <ContentItem marginBottom={'35px'} height={'500px'} imgUrl={communityDetail?.img !== null ? communityDetail?.img?.imgUrl : 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg'}></ContentItem>
+            <ContentItem marginBottom={'35px'} height={'500px'} imgUrl={communityDetail?.img !== null ? communityDetail?.img : 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg'}></ContentItem>
           </Content>
           <StateBox>
             {communityDetail.dateStatus === 'before' ?
@@ -242,9 +242,7 @@ const ProgressBar = styled.progress`
 
 
 
-const CertifyContentBox = styled.div`
-  position:relative;
-`;
+const CertifyContentBox = styled.div``;
 const CertifyContent = styled.div`
   display:grid;
   justify-items:center;
@@ -252,8 +250,8 @@ const CertifyContent = styled.div`
   gap:1px;
 `;
 const CertifyContentIcon = styled.div`
-  position:absolute;
-  bottom:43px;right:17px;
+  position:fixed;
+  bottom:60px;right:17px;
   width:71px;
   height:71px;
   background-color:#515151;

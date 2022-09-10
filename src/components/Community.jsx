@@ -130,7 +130,7 @@ const Community = () => {
                   <ItemImg
                     bgImg={
                       v.img !== null
-                        ? v.img.imgUrl
+                        ? v.img
                         : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"
                     }
                   >

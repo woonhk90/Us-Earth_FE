@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
 /* -------------------------------- 커뮤니티 상세보기 ------------------------------- */
-export const __getMyInfo = createAsyncThunk("todos/__getMyInfo", async (payload, thunkAPI) => {
+export const __getMyInfo = createAsyncThunk("usearth/__getMyInfo", async (payload, thunkAPI) => {
   try {
     console.log('__getMyInfo=>', payload);
     const authorization_token = cookies.get("mycookie");
@@ -25,11 +25,11 @@ export const __getMyInfo = createAsyncThunk("todos/__getMyInfo", async (payload,
   }
 });
 
-export const __updateMyInfoStatus = createAsyncThunk("todos/__updateMyInfoStatus", async (payload, thunkAPI) => {
+export const __updateMyInfoStatus = createAsyncThunk("usearch/__updateMyInfoStatus", async (payload, thunkAPI) => {
   try {
     console.log('__updateMyInfoStatus=>', payload);
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.patch(`http://13.209.97.209/api/mypage/status`, payload, {
+    const data = await axios.patch(`http://13.209.97.209/api/mypage/secret`, payload, {
       headers: {
         Authorization: authorization_token
       },
@@ -45,7 +45,7 @@ export const __updateMyInfoStatus = createAsyncThunk("todos/__updateMyInfoStatus
   }
 });
 
-export const __postNickNameOverlap = createAsyncThunk("todos/__postNickNameOverlap", async (payload, thunkAPI) => {
+export const __postNickNameOverlap = createAsyncThunk("usearth/__postNickNameOverlap", async (payload, thunkAPI) => {
   try {
     console.log('__postNickNameOverlap=>', payload);
     const authorization_token = cookies.get("mycookie");
@@ -65,7 +65,7 @@ export const __postNickNameOverlap = createAsyncThunk("todos/__postNickNameOverl
   }
 });
 
-export const __postNickNameSubmit = createAsyncThunk("todos/__postNickNameSubmit", async (payload, thunkAPI) => {
+export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubmit", async (payload, thunkAPI) => {
   try {
     console.log('__postNickNameSubmit=>', payload);
     const authorization_token = cookies.get("mycookie");
@@ -86,7 +86,7 @@ export const __postNickNameSubmit = createAsyncThunk("todos/__postNickNameSubmit
 });
 
 /* ------------------------------ 오늘의 미션 가지고 오기 ----------------------------- */
-export const __getTodayMission = createAsyncThunk("todos/__getTodayMission", async (payload, thunkAPI) => {
+export const __getTodayMission = createAsyncThunk("usearth/__getTodayMission", async (payload, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
     const data = await axios.get(`http://13.209.97.209/api/missions`, {
@@ -105,7 +105,7 @@ export const __getTodayMission = createAsyncThunk("todos/__getTodayMission", asy
   }
 });
 
-export const __updateMissionFlag = createAsyncThunk("todos/__updateMissionFlag", async (payload, thunkAPI) => {
+export const __updateMissionFlag = createAsyncThunk("usearth/__updateMissionFlag", async (payload, thunkAPI) => {
   try {
     console.log('__updateMissionFlag=>', payload);
     const authorization_token = cookies.get("mycookie");
