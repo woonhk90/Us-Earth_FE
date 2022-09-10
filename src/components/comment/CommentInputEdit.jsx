@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
-import { useDropzone } from "react-dropzone";
 import Textarea from "../elements/Textarea";
 import { useDispatch, useSelector } from "react-redux";
 import { patchComment, postComment } from "../../redux/modules/commentsSlice";
@@ -9,22 +8,37 @@ import { useParams } from "react-router-dom";
 import { commentEditChange } from "../../redux/modules/commentsSlice";
 import axios from "axios";
 import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
-const API_URL = process.env.REACT_APP_API_URL;
+import ConfirmModal from "../Modals//ConfirmModal";
 
 const CommentInputEdit = () => {
-  const dispatch = useDispatch();
   const param = useParams();
+  const cookies = new Cookies();
+  const dispatch = useDispatch();
+  const API_URL = process.env.REACT_APP_API_URL;
+
+  // find commentId of edit(*)
   const { commentEdit } = useSelector((state) => state.comments);
 
+  // input onChange
+  const [content, commentOnChange, commentReset, setContent] = useInput("");
+
+  /* --------------------------------- on input -------------------------------- */
+  const [inputOn, setInputOn] = useState(false);
+
+  const onInputHandler = () => {
+    setInputOn(!inputOn);
+  };
+
   /* -------------------------------- axios get ------------------------------- */
+
   const getComments = async (payload) => {
     try {
       const authorization_token = cookies.get("mycookie");
       const { data } = await axios.get(`${API_URL}/comments/${payload.proofId}`, {
         Authorization: authorization_token,
       });
+
+      // find data & into input
       const commentList = data.commentResponseDtoList.find((comment) => comment.commentId === payload.commentId);
       setInputOn(true);
       setContent(commentList.content);
@@ -37,12 +51,8 @@ const CommentInputEdit = () => {
       }
     } catch (error) {}
   };
-  const [content, commentOnChange, commentReset, setContent] = useInput("");
-  const [inputOn, setInputOn] = useState(false);
-  const onInputHandler = () => {
-    setInputOn(!inputOn);
-  };
 
+  /* ----------------------------- edit useEffect(*) ---------------------------- */
   useEffect(() => {
     if (commentEdit.editMode) {
       getComments({
@@ -51,6 +61,7 @@ const CommentInputEdit = () => {
       });
     }
     return () => {
+      // unmount clean code
       if (!commentEdit.editMode) {
         imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
         commentReset();
@@ -60,11 +71,12 @@ const CommentInputEdit = () => {
       }
     };
   }, [commentEdit.commentId]);
-  /* ---------------------------------- 사진 업로드 ---------------------------------- */
 
+  /* ---------------------------------- photo upload ---------------------------------- */
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
 
+  // add image
   const addImageFile = (e) => {
     let reader = new FileReader();
     if (e.target.files.length > 0) {
@@ -77,36 +89,56 @@ const CommentInputEdit = () => {
     }
   };
 
-  // X버튼 클릭 시 이미지 삭제
+  // delete image
   const deleteImageFile = () => {
     setImageFile([]);
     setPreviewImg([]);
   };
-  const ClickCancel = () => {
-    if (window.confirm("수정 모드를 취소하시겠습니까?")) {
-      console.log("?");
-      dispatch(commentEditChange({}));
-      setImageFile([]);
-      setPreviewImg([]);
-      commentReset();
-    } else return console.log("아래");
-  };
 
-  /* ---------------------------------- submit ---------------------------------- */
+  /* ---------------------------------- submit(*) ---------------------------------- */
   const onClickSubmit = () => {
     let formData = new FormData();
+
+    // validation
     if (content === "") {
       alert("내용을 입력해 주세요");
     } else {
       formData.append("multipartFile", imageFile);
       formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
+
+      // dispatch formData
       dispatch(patchComment({ commentId: commentEdit.commentId, proofId: param.proofId, formData: formData }));
       setInputOn(false);
     }
+
+    // data reset function
     commentReset();
     setImageFile([]);
     setPreviewImg([]);
     imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
+  };
+
+  /* -------------------------------- edit modal ------------------------------- */
+  const [modal, setModal] = useState(false);
+
+  // modal text data
+  const confirmModalData = {
+    title: "수정을 취소하시겠습니까?",
+    cancel: "아니오",
+    submit: "예",
+    // submitReturn: "취소되었습니다.",
+  };
+
+  // editMode cancel function
+  const clickSubmit = () => {
+    setImageFile([]);
+    setPreviewImg([]);
+    commentReset();
+    dispatch(commentEditChange({}));
+  };
+
+  const modalOnOff = () => {
+    setModal(!modal);
   };
 
   return (
@@ -135,7 +167,8 @@ const CommentInputEdit = () => {
           )}
         </InputWrap>
         <SubmitButton onClick={onClickSubmit}>수정</SubmitButton>
-        <SubmitButton onClick={ClickCancel}>수정취소</SubmitButton>
+        <SubmitButton onClick={modalOnOff}>수정취소</SubmitButton>
+        {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={modalOnOff}></ConfirmModal>}
       </CommentInputWrap>
     </>
   );

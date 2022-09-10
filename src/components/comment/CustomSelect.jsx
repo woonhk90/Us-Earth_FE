@@ -1,15 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import styled, { css, keyframes } from "styled-components";
+import { ReactComponent as Edit } from "../../assets/Edit.svg";
+import { commentSelectBox } from "../../redux/modules/commentsSlice";
+// import "./Modal.css";
 
 const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
   const modalRef = useRef();
+  const dispatch = useDispatch();
 
+  const [selectValue, setSelectValue] = useState("");
+  console.log(selectBoxData);
   useEffect(() => {
     window.addEventListener("mousedown", clickModalOutside);
+
     return () => {
       window.removeEventListener("mousedown", clickModalOutside);
     };
-  },[]);
+  });
 
   console.log(contentId);
   const clickModalOutside = (event) => {
@@ -19,6 +27,7 @@ const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
   };
 
   const onClickselectValue = (e) => {
+    setSelectValue(e.target.innerText);
     clickDispatch({
       contentId: contentId,
       selectName: e.target.innerText,
@@ -42,7 +51,7 @@ const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
   );
 };
 
-export default React.memo(CustomSelect);
+export default CustomSelect;
 
 const SelectBox = styled.div`
   position: relative;

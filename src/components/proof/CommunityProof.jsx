@@ -10,6 +10,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { deleteProof, getProofs } from "../../redux/modules/proofsSlice";
+import ConfirmModal from "../Modals/ConfirmModal";
 
 const CommunityProof = () => {
   const navigate = useNavigate();
@@ -34,8 +35,6 @@ const CommunityProof = () => {
 
   const onClickDelete = () => {
     if (window.confirm("삭제하시겠습니까?")) {
-      dispatch(deleteProof(param.proofId));
-      navigate("/community");
     } else {
       return;
     }
@@ -43,6 +42,26 @@ const CommunityProof = () => {
 
   const onClickEdit = () => {
     navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`);
+  };
+  /* -------------------------------- edit modal ------------------------------- */
+  const [modal, setModal] = useState(false);
+
+  // modal text data
+  const confirmModalData = {
+    title: "삭제하시겠습니까?",
+    cancel: "아니오",
+    submit: "예",
+    // submitReturn: "취소되었습니다.",
+  };
+
+  // editMode cancel function
+  const clickSubmit = () => {
+    dispatch(deleteProof(param.proofId));
+    // navigate("/community");
+  };
+
+  const modalOnOff = () => {
+    setModal(!modal);
   };
 
   return (
@@ -74,7 +93,8 @@ const CommunityProof = () => {
           {/* <main> */}
           {/* <ButtonInModalWrap> */}
           <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal>
-          <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
+          <ButtonInModal onClick={modalOnOff}>삭제하기</ButtonInModal>
+          {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={modalOnOff}></ConfirmModal>}
           {/* <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
           <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal> */}
           {/* </ButtonInModalWrap> */}

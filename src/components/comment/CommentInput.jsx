@@ -58,6 +58,11 @@ const CommentInput = () => {
       formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
       dispatch(postComment({ proofId: param.proofId, formData: formData }));
       setInputOn(false);
+
+      // clear input
+      commentReset();
+      setImageFile([]);
+      setPreviewImg([]);
     }
   };
 

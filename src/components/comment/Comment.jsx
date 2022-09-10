@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { Navigation, Pagination, Scrollbar } from "swiper";
 import CustomSelect from "./CustomSelect";
 import { flexColumn, flexRow, flexBetween, FlexRow, Text, flexColumnLeft } from "../../styles/Flex";
 import { useDispatch, useSelector } from "react-redux";
 import { commentEditChange, deleteComments, getComments, patchComment } from "../../redux/modules/commentsSlice";
+import ConfirmModal from "../Modals/ConfirmModal";
 
 const Comment = () => {
   const dispatch = useDispatch();
@@ -13,23 +13,15 @@ const Comment = () => {
   const { commentResponseDtoList, commentEdit } = useSelector((state) => state.comments.comments);
 
   useEffect(() => {
-    console.log("코멘트 랜더링");
     dispatch(getComments(param.proofId));
-    return console.log("코멘트 언마운트");
   }, []);
 
   /* -------------------- Select Box function (Update & Delete) -------------------- */
   const clickDispatch = (payload) => {
-    console.log("코멘트에서 수정모드 확인", commentEdit);
     if (payload.selectName === "수정하기") {
-      if (commentEdit?.commentId !== payload.contentId) {
-        console.log("수정 다른거 하기 시작", payload.contentId, commentEdit?.commentId);
-      }
       if (commentEdit?.editMode !== true) {
         const commentList = commentResponseDtoList.find((comment) => comment.commentId === payload.contentId);
         dispatch(commentEditChange({}));
-        console.log("코멘트에서 디스페치 에딧모드온 ㅋ");
-        console.log("에딧모드 리셋 오른쪽이없으면 리셋될듯?", commentList.content);
         dispatch(
           commentEditChange({
             editMode: true,
@@ -38,14 +30,10 @@ const Comment = () => {
             commentId: payload.contentId,
           })
         );
-      } else console.log("수정중이었자나");
+      }
     } else if (payload.selectName === "삭제하기") {
-      dispatch(
-        deleteComments({
-          commentId: payload.contentId,
-          proofId: param.proofId,
-        })
-      );
+      setModal(!modal);
+      setDispaychPayload(payload);
     }
   };
 
@@ -55,6 +43,34 @@ const Comment = () => {
     { id: 2, selectName: "삭제하기" },
     { id: 3, selectName: "신고하기" },
   ];
+
+  /* -------------------------------- delete modal ------------------------------- */
+  const [modal, setModal] = useState(false);
+  const [dispaychPayload, setDispaychPayload] = useState({});
+
+  // modal text data
+  const confirmModalData = {
+    title: "댓글을 삭제하시겠습니까?",
+    cancel: "아니오",
+    submit: "예",
+    // submitReturn: "취소되었습니다.",
+  };
+
+  // editMode cancel function
+  const clickSubmit = () => {
+    setModal(!modal);
+    dispatch(
+      deleteComments({
+        commentId: dispaychPayload.contentId,
+        proofId: param.proofId,
+      })
+    );
+  };
+
+  // close Modal
+  const closeModal = () => {
+    setModal(!modal);
+  };
 
   return (
     <>
@@ -68,6 +84,7 @@ const Comment = () => {
                   <CreatAt>{comment.creatAt}</CreatAt>
                 </CommentText>
                 <CustomSelect clickDispatch={clickDispatch} contentId={comment.commentId} selectBoxData={selectBoxData} />
+                {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmModal>}
               </CommentTop>
               {comment.img !== null ? <CommentImg src={comment.img.imgUrl} alt="img" /> : null}
             </CommentWrap>
