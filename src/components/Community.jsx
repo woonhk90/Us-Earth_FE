@@ -304,4 +304,5 @@ const ItemProgress = styled.div`
 const IP = styled.progress``;
 const ItemTitle = styled.div`
   font: bold 20px/40px "Arial", "sans-serif";
+  /* color:black; */
 `;
