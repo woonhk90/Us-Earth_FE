@@ -81,6 +81,7 @@ const SelectOptions = styled.ul`
   text-align: center;
   /* background-color: #ffffff; */
   position: absolute;
+  z-index:999;
   list-style: none;
   top: 20px;
   right: 0;

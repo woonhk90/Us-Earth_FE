@@ -6,6 +6,7 @@ import Textarea from "../elements/Textarea";
 import { useDispatch, useSelector } from "react-redux";
 import { postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
+import { useRef } from "react";
 
 const CommentInput = () => {
   const dispatch = useDispatch();
@@ -85,11 +86,18 @@ const CommentInput = () => {
                   <Thumb src={previewImg} alt="img" />
                 </Container>
               )}
-              <Textarea value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요" />
+              <Textarea autoFocus="true" value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요" />
             </>
           ) : (
-            <div onClick={onInputHandler}>댓글을 입력해주세요.</div>
+            <div style={{ cursor: "pointer" }} onClick={onInputHandler}>
+              댓글을 입력해주세요.
+            </div>
           )}
+          {/* <>
+            <Textarea autoFocus="true" value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요" />
+            <Textarea autoFocus ref={searchElement} value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요" />
+            <div onClick={onInputHandler}>댓글을 입력해주세요.</div>
+          </> */}
         </InputWrap>
         <SubmitButton onClick={onClickSubmit}>등록</SubmitButton>
       </CommentInputWrap>

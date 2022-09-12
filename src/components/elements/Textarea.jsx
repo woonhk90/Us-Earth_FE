@@ -2,11 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 const Textarea = (props) => {
-  const { size, maxLength, title, id, name, value, onChange, placeholder, height } = props;
+  const { autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } = props;
 
   return (
     <TextareaWrap>
       <StTextarea
+        autoFocus={autoFocus}
         maxLength={maxLength}
         title={title}
         id={id}

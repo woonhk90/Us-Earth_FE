@@ -7,6 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const initialState = {
   proofs: [],
+  heartCommentCnt:{},
+  heartCnt:{},
   isLoading: false,
   error: null,
 };
@@ -70,6 +72,37 @@ export const deleteProof = createAsyncThunk("proof/delete", async (proofId, thun
       },
     });
     console.log(data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+/* ------------------------ get heartCnt & commentCnt ----------------------- */
+export const getHeartCommentCnt = createAsyncThunk("proof/delete", async (proofId, thunkAPI) => {
+  try {
+    const authorization_token = cookies.get("mycookie");
+    const { data } = await axios.get(`${API_URL}/proof/count/${proofId}`, {
+      headers: {
+        Authorization: authorization_token,
+      },
+    });
+    console.log(data);
+    return thunkAPI.fulfillWithValue(data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+/* ------------------------ get heartCnt & commentCnt ----------------------- */
+export const patchHeartCnt = createAsyncThunk("proof/delete", async (proofId, thunkAPI) => {
+  try {
+    const authorization_token = cookies.get("mycookie");
+    const { data } = await axios.patch(`${API_URL}/proof/heart/${proofId}`, {
+      headers: {
+        Authorization: authorization_token,
+      },
+    });
+    console.log(data);
+    return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -140,6 +173,30 @@ export const proofsSlice = createSlice({
       state.isLoading = false;
     },
     [deleteProof.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    /* ------------------------ get heartCnt & commentCnt ----------------------- */
+    [getHeartCommentCnt.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getHeartCommentCnt.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.heartCommentCnt = action.payload;
+    },
+    [getHeartCommentCnt.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    /* ------------------------ get heartCnt ----------------------- */
+    [patchHeartCnt.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [patchHeartCnt.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.heartCnt = action.payload;
+    },
+    [patchHeartCnt.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
