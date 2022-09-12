@@ -28,6 +28,7 @@ const CommunityBottom = () => {
       navigate('/');
     } else {
       if (usercookie === undefined) {
+        localStorage.setItem('pathname',page);
         navigate('/login');
       } else {
         navigate(page);
@@ -41,7 +42,7 @@ const CommunityBottom = () => {
     <>
       <FooterWrap>
         <FooterMenus bgColor={'rgba(0,0,0,0.2)'} onClick={() => { cookieCheck('/') }}>커뮤니티</FooterMenus>
-        <FooterMenus bgColor={'rgba(0,0,0,0.4)'}>정보제공</FooterMenus>
+        <FooterMenus bgColor={'rgba(0,0,0,0.4)'} onClick={() => { navigate('/info') }}>정보제공</FooterMenus>
         <FooterMenus bgColor={'rgba(0,0,0,0.2)'}>채팅</FooterMenus>
         <FooterMenus bgColor={'rgba(0,0,0,0.4)'} onClick={() => { cookieCheck('/mypage') }}>내정보</FooterMenus>
       </FooterWrap>

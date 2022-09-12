@@ -13,6 +13,7 @@ import EarthMyPage from "../pages/EarthMyPage";
 import EarthMyPageSetting from "../pages/EarthMyPageSetting";
 import EarthCommunityProofEdit from "../pages/EarthCommunityProofEdit";
 import CommunityProofPost from "../components/proof/CommunityProofEdit";
+import EarthInfo from "../pages/EarthInfo";
 
 const Router = () => {
   return (
@@ -33,6 +34,7 @@ const Router = () => {
       <Route path="/user/google/callback" element={<GoogleLogin />} />
       <Route path="/user/naver/callback" element={<NaverLogin />} />
       {/* <Route path='/view/:id' element={<InstarLogin />} /> */}
+      <Route path="/info" element={<EarthInfo />} />
     </Routes>
   );
 };
