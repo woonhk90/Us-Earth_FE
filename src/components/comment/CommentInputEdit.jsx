@@ -75,6 +75,7 @@ const CommentInputEdit = () => {
   /* ---------------------------------- photo upload ---------------------------------- */
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
+  const [deleteImg, setDeleteImg] = useState(false);
 
   // add image
   const addImageFile = (e) => {
@@ -93,6 +94,7 @@ const CommentInputEdit = () => {
   const deleteImageFile = () => {
     setImageFile([]);
     setPreviewImg([]);
+    setDeleteImg(true);
   };
 
   /* ---------------------------------- submit(*) ---------------------------------- */
@@ -104,7 +106,7 @@ const CommentInputEdit = () => {
       alert("내용을 입력해 주세요");
     } else {
       formData.append("multipartFile", imageFile);
-      formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
+      formData.append("dto", new Blob([JSON.stringify({ content: content, delete: deleteImg })], { type: "application/json" }));
 
       // dispatch formData
       dispatch(patchComment({ commentId: commentEdit.commentId, proofId: param.proofId, formData: formData }));
@@ -115,7 +117,7 @@ const CommentInputEdit = () => {
     commentReset();
     setImageFile([]);
     setPreviewImg([]);
-    imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
+    console.log(content, deleteImg, imageFile);
   };
 
   /* -------------------------------- edit modal ------------------------------- */

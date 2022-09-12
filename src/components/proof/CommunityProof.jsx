@@ -104,24 +104,6 @@ const CommunityProof = () => {
         <ContentTitle>{proofs.title}</ContentTitle>
         <ContentContent>{proofs.content}</ContentContent>
       </TextContainer>
-      {/* <UserInfoFirstWrap>
-        <button
-          onClick={() => {
-            navigate(`/community/article/${parseInt(param.id) - 1}`);
-          }}
-        >
-          이전글
-        </button>
-        <button
-          onClick={() => {
-            navigate(`/community/article/${parseInt(param.id) + 1}`);
-          }}
-        >
-          다음글
-        </button>
-      </UserInfoFirstWrap> */}
-      <div>좋아요</div>
-      <div>댓글</div>
     </>
   );
 };
