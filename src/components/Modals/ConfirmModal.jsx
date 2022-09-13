@@ -11,6 +11,7 @@ const ConfirmModal = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  /* ---------------------------------- 사용안함 ---------------------------------- */
   const [viewFlag, setViewFlag] = React.useState(false);
   console.log(viewFlag);
   const submitonClick = (id) => {
