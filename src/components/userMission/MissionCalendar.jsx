@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // css import
-import moment from "moment/moment";
+import dayjs from "dayjs";
 import { useState } from "react";
 import { flexRow } from "../../styles/Flex";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,43 +16,33 @@ import { useEffect } from "react";
 const MissionCalendar = () => {
   const dispatch = useDispatch();
   const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
-  console.log(dailyMissionData);
 
   useEffect(() => {
     dispatch(
       getPeriodMissionStats({
-        startDate: "2022-09-01",
-        endDate: "2022-09-30",
+        startDate: dayjs(value).startOf("month").startOf("week").format("YYYY-MM-DD"),
+        endDate: dayjs(value).endOf("month").endOf("week").format("YYYY-MM-DD"),
       })
     );
   }, []);
-
-  const datas = [
-    {
-      day: "2022-09-20",
-      cnt: 5,
-    },
-    {
-      day: "2022-09-02",
-      cnt: 2,
-    },
-    {
-      day: "2022-09-19",
-      cnt: 1,
-    },
-    {
-      day: "2022-09-15",
-      cnt: 3,
-    },
-  ];
 
   const [value, onChange] = useState(new Date());
   const [dates, setDates] = useState("");
 
   const onClickDay = (value, event) => {
-    setDates(moment(value).format("YYYY-MM-DD"));
-    dispatch(getDailyMissionStats(moment(value).format("YYYY-MM-DD")));
+    setDates(dayjs(value).format("YYYY-MM-DD"));
+    dispatch(getDailyMissionStats(dayjs(value).format("YYYY-MM-DD")));
   };
+
+  const onActiveStartDateChange = ({ action, activeStartDate, value, view }) => {
+    dispatch(
+      getPeriodMissionStats({
+        startDate: dayjs(activeStartDate).startOf("week").format("YYYY-MM-DD"),
+        endDate: dayjs(activeStartDate).endOf("month").endOf("week").format("YYYY-MM-DD"),
+      })
+    );
+  };
+
   return (
     <>
       <StCalender>
@@ -61,23 +51,24 @@ const MissionCalendar = () => {
           locale="en-US"
           onClickDay={onClickDay}
           formatMonthYear={(locale, date) => {
-            return moment(date).format("YYYY.MM");
+            return dayjs(date).format("YYYY.MM");
           }}
+          onActiveStartDateChange={onActiveStartDateChange}
           formatMonth={(locale, date) => {
-            return moment(date).format("MM");
+            return dayjs(date).format("MM");
           }}
           value={value}
           tileContent={({ date, view }) => {
             let html = [];
-            datas.map((item, index) => {
-              if (item.day === moment(date).format("YYYY-MM-DD")) {
-                [...Array(item.cnt)].map((e, i) => html.push(<div className="dot" key={i}></div>));
+            periodMissionData?.map((item, index) => {
+              if (item.createdAt === dayjs(date).format("YYYY-MM-DD")) {
+                [...Array(item.count)].map((e, i) => html.push(<div className="dot" key={i}></div>));
               }
             });
             return <MissionCnt>{html}</MissionCnt>;
           }}
         />
-        <div>{moment(value).format("YYYY년 MM월 DD일")}</div>
+        <div>{dayjs(value).format("YYYY년 MM월 DD일")}</div>
         <div>선택날짜 : {dailyMissionData.selectedDate}</div>
         <div>
           {dailyMissionData.clearMissionList?.map((data) => {
@@ -262,7 +253,7 @@ const StCalender = styled.div`
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background-color: #fafafa;
+        background-color: #eaeaea;
       }
     }
   }

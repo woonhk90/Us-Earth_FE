@@ -4,6 +4,9 @@ import Calendar from "react-calendar";
 import moment from "moment/moment";
 import { useState } from "react";
 import { flexColumn, flexRow } from "../../styles/Flex";
+import MyResponsiveRadialBar from "./MyResponsiveLine";
+import MyResponsiveBar from "./MyResponsiveBar";
+import MyResponsiveLine from "./MyResponsiveLine";
 
 const SubCalendar = () => {
   const format = "YYYY-MM-DD";
@@ -13,18 +16,15 @@ const SubCalendar = () => {
   const next_monday = moment().day(7).format(format);
   const next_sunday = moment().day(14).format(format);
 
-  const [startDate, setStartDate] = useState(this_sunday) ;
-  const [endDate, setEndDate] =  useState(this_saturday);
-const prevWeek = () =>{
-  setStartDate(moment(startDate).day(-7).format(format))
-  setEndDate(moment(endDate).day(-1).format(format))
-
-}
-const nextWeek = () =>{
-  setStartDate(moment().day(7).format(format))
-
-}
-
+  const [startDate, setStartDate] = useState(this_sunday);
+  const [endDate, setEndDate] = useState(this_saturday);
+  const prevWeek = () => {
+    setStartDate(moment(startDate).day(-7).format(format));
+    setEndDate(moment(endDate).day(-1).format(format));
+  };
+  const nextWeek = () => {
+    setStartDate(moment().day(7).format(format));
+  };
 
   return (
     <>
@@ -44,6 +44,10 @@ const nextWeek = () =>{
       </StCalender>
       <div>이번주 일요일----{this_sunday}</div>
       <div>이번주 토요일----{this_saturday}</div>
+      <BarWrap>
+      {/* <MyResponsiveBar /> */}
+      <MyResponsiveLine />
+      </BarWrap>
       {/* <div>다음주 일요일----{next_sunday}</div> */}
     </>
   );
@@ -66,3 +70,7 @@ const StCalender = styled.div`
 const Stdic = styled.div`
   ${flexColumn}
 `;
+
+const BarWrap =styled.div`
+  height: 300px;
+`

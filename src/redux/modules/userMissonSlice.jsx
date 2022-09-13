@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const initialState = {
   dailyMissionData: {},
-  periodMissionData: {},
+  periodMissionData: [],
   isLoading: false,
   error: null,
 };
@@ -16,14 +16,11 @@ const initialState = {
 export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (targetDay, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    console.log(targetDay);
-    console.log(authorization_token);
     const { data } = await axios.get(`${API_URL}/mypage/stats/day?targetDay=${targetDay}`, {
       headers: {
         Authorization: authorization_token,
       },
     });
-    console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
@@ -35,12 +32,12 @@ export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (
 export const getPeriodMissionStats = createAsyncThunk("periodMission/get", async (targetPeriod, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    console.log(targetPeriod);
-    console.log(authorization_token);
-    const { data } = await axios.get(`${API_URL}/mypage/stats`, targetPeriod, {
-      Authorization: authorization_token,
+    const { data } = await axios.get(`${API_URL}/mypage/stats`, {
+      params: targetPeriod,
+      headers: {
+        Authorization: authorization_token,
+      },
     });
-    console.log("getPeriodMissionStats", data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
