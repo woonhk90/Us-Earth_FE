@@ -86,7 +86,7 @@ const CommentInput = () => {
                   <Thumb src={previewImg} alt="img" />
                 </Container>
               )}
-              <Textarea autoFocus="true" value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요" />
+              <Textarea autoFocus={true} value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요" />
             </>
           ) : (
             <div style={{ cursor: "pointer" }} onClick={onInputHandler}>

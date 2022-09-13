@@ -7,8 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const initialState = {
   proofs: [],
-  heartCommentCnt:{},
-  heartCnt:{},
+  heartCommentCnt: {},
+  heartCnt: {},
   isLoading: false,
   error: null,
 };
@@ -86,17 +86,18 @@ export const getHeartCommentCnt = createAsyncThunk("proof/delete", async (proofI
         Authorization: authorization_token,
       },
     });
-    console.log(data);
+    console.log("하트댓글갯수", data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
 });
-/* ------------------------ get heartCnt & commentCnt ----------------------- */
+/* ------------------------ paych heart ----------------------- */
 export const patchHeartCnt = createAsyncThunk("proof/delete", async (proofId, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const { data } = await axios.patch(`${API_URL}/proof/heart/${proofId}`, {
+    console.log(authorization_token);
+    const { data } = await axios.patch(`${API_URL}/proof/heart/${proofId}`, "", {
       headers: {
         Authorization: authorization_token,
       },
@@ -182,6 +183,7 @@ export const proofsSlice = createSlice({
     },
     [getHeartCommentCnt.fulfilled]: (state, action) => {
       state.isLoading = false;
+      console.log(action.payload);
       state.heartCommentCnt = action.payload;
     },
     [getHeartCommentCnt.rejected]: (state, action) => {
