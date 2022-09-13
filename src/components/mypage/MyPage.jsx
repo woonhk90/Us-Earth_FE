@@ -4,6 +4,7 @@ import Seed from "../../assets/Seed.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { __getMyInfo } from '../../redux/modules/mypageSlice';
 import MyPageTodayMission from './MyPageTodayMission';
+
 const MyPage = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.mypage);
