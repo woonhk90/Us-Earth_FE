@@ -11,7 +11,7 @@ import CommentInput from "./CommentInput";
 import CommentInputEdit from "./CommentInputEdit";
 import { commentEditChange } from "../../redux/modules/commentsSlice";
 import ConfirmModal from "../Modals/ConfirmModal";
-import {  getHeartCommentCnt, patchHeartCnt } from "../../redux/modules/proofsSlice";
+import { getHeartCommentCnt, patchHeartCnt } from "../../redux/modules/proofsSlice";
 
 const CommentBox = () => {
   const navigate = useNavigate();
@@ -55,7 +55,6 @@ const CommentBox = () => {
 
   const onClickEdit = () => {
     // navigate(`/edit/${param.id}`);
-    
   };
 
   /* -------------------------------- delete modal ------------------------------- */
@@ -76,19 +75,17 @@ const CommentBox = () => {
     setModal(!modal);
   };
 
-  //빠른좋아요 구현
-const [heart, setHeart] = useState(false)
+  /* -------------------------------- 빠른좋아요 구현 -------------------------------- */
+  const [heart, setHeart] = useState(false);
   const onClickHeart = () => {
-    setHeart(!heart)
+    setHeart(!heart);
     dispatch(patchHeartCnt(param.proofId));
-  }
+  };
 
   return (
     <>
-      <div onClick={onClickHeart}>
-        
-        빠른좋아요버튼</div>
-        <div>{heart? "좋아":"싫어"}</div>
+      <div onClick={onClickHeart}>빠른좋아요버튼</div>
+      <div>{heart ? "좋아" : "싫어"}</div>
       <div>좋아요 {heartCommentCnt.heartCnt}</div>
       <div>댓글 {heartCommentCnt.commentCnt}</div>
       <ModalButton onClick={openModal}>아이콘</ModalButton>

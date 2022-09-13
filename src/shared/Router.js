@@ -12,6 +12,7 @@ import EarthCommunityProofForm from "../pages/EarthCommunityProofForm";
 import EarthMyPage from "../pages/EarthMyPage";
 import EarthMyPageSetting from "../pages/EarthMyPageSetting";
 import EarthCommunityProofEdit from "../pages/EarthCommunityProofEdit";
+import EarthMyPageMissonMonth from "../pages/EarthMyPageMissonMonth";
 import CommunityProofPost from "../components/proof/CommunityProofEdit";
 import EarthInfo from "../pages/EarthInfo";
 
@@ -30,6 +31,7 @@ const Router = () => {
       <Route path="/community/:communityId/proof/edit/:proofId" element={<EarthCommunityProofEdit />} />
       <Route path="/mypage" element={<EarthMyPage />} />
       <Route path="/mypage/setting" element={<EarthMyPageSetting />} />
+      <Route path="/mypage/mission/month" element={<EarthMyPageMissonMonth />} />
       <Route path="/user/kakao/callback" element={<KakaoLogin />} />
       <Route path="/user/google/callback" element={<GoogleLogin />} />
       <Route path="/user/naver/callback" element={<NaverLogin />} />
