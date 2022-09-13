@@ -11,15 +11,15 @@ const CommunityBottom = () => {
   const usercookie = getCookie('mycookie');
   const { pathname } = useLocation();
   console.log("쿠키확인", usercookie);
-  const onClickHandler = (flag) => {
-    /* --------------------- 로그인 되어있는지 우선 확인(안되어있으면 로그인페이지) --------------------- */
-    if (usercookie === undefined) {
-      localStorage.setItem('pathname', pathname);
-      navigate('/login');
-    } else {
-      navigate(`/${flag}`);
-    }
-  }
+  // const onClickHandler = (flag) => {
+  //   /* --------------------- 로그인 되어있는지 우선 확인(안되어있으면 로그인페이지) --------------------- */
+  //   if (usercookie === undefined) {
+  //     localStorage.setItem('pathname', pathname);
+  //     navigate('/login');
+  //   } else {
+  //     navigate(`/${flag}`);
+  //   }
+  // }
   const cookieCheck = (page) => {
     if (page === '/') {
       if(pathname!==page){

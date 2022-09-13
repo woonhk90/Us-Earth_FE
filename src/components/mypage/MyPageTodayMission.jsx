@@ -131,7 +131,7 @@ const MissionItem = styled.span`
   border-radius:50px;
   display:inline-block;
   width:100%;
-  font:500 20px/1 'Noto Sans','Arial','sans-serif';
+  font:500 18px/1 'Noto Sans','Arial','sans-serif';
   color:#2c2c2c;
   padding:18px 0;
   box-sizing:border-box;
@@ -139,5 +139,5 @@ const MissionItem = styled.span`
 `;
 const ItemTitle = styled.span`
   display:block;
-  text-decoration:${(props) => props.background?'line-through':'blue'};
+  text-decoration:${(props) => props.background ? 'line-through' : 'blue'};
 `;
