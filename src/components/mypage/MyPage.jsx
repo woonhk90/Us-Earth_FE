@@ -4,8 +4,12 @@ import Seed from "../../assets/Seed.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { __getMyInfo } from '../../redux/modules/mypageSlice';
 import MyPageTodayMission from './MyPageTodayMission';
+import { useNavigate } from "react-router-dom";
+import icons from '../../assets';
 
 const MyPage = () => {
+  const { Chart, Group, RightThinArrow } = icons;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.mypage);
   console.log('userInfo=>', userInfo);
@@ -33,8 +37,8 @@ const MyPage = () => {
           <MyPageMissionList>
             <MyPageMissionListBox>
               <div>나의 미션 목록</div>
-              <div>개인 미션 통계</div>
-              <div>그룹 미션</div>
+              <div onClick={() => navigate('/mypage/mission/week')}><span><Chart width='25' height='25' viewBox="0 0 167.65 171.63" /><span>개인 미션 통계</span></span><span><RightThinArrow width='25' height='25' /></span></div>
+              <div onClick={() => navigate('/mypage/mission/group')}><span><Group width='25' height='25' viewBox="0 0 194.07 177.63" /><span>그룹 미션</span></span><span><RightThinArrow width='25' height='25' /></span></div>
             </MyPageMissionListBox>
           </MyPageMissionList>
         </Container>
@@ -88,95 +92,6 @@ const MyPageProFile = styled.div`
 
 
 
-const MyPageMission = styled.div`
-  width:100%;
-  height:50vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:space-between;
-  padding:20px 15px 0;
-  box-sizing:border-box;
-`;
-const MissionTop = styled.div`
-  width:100%;
-  background-color:#fff;
-  border-radius:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:25px 26px;
-  box-sizing:border-box;
-  p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
-  p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
-`;
-const MissionBottom = styled.div`
-  width:100%;
-  padding:0 35px 8px;
-  box-sizing:border-box;
-  div{
-    width:100%;
-    img{
-      display:block;
-      width:50%;
-      margin:0 auto;
-      /* background-image: url('${Seed}'); */
-    }
-  }
-  progress{
-    appearance: none;
-    width:100%;
-    height:15px;
-  }
-  progress::-webkit-progress-bar {
-    background:#e2e2e2;
-    border-radius:10px;
-  }
-  progress::-webkit-progress-value {
-    border-radius:10px;
-    background:#818181;
-  }
-`;
-
-const TodayMission = styled.div`
-  width:100%;
-  background-color:#fff;
-  border-radius:12px;
-  padding:25px 26px 15px;
-  box-sizing:border-box;
-  `;
-const TodayMissionBox = styled.div`
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 0 20px 0;
-    box-sizing:border-box;
-    p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
-    p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
-`;
-const MissionBox = styled.div`
-  display:flex;
-  flex-direction: column;
-  justify-content:center;
-  align-items:center;
-  gap:5px;
-  text-align:center;
-  span{
-    border-radius:50px;
-    display:inline-block;
-    width:100%;
-    font:500 20px/1 'Noto Sans','Arial','sans-serif';
-    color:#2c2c2c;
-    padding:18px 0;
-    box-sizing:border-box;
-    background-color:#e2e2e2;
-  }
-`;
-
-
-
-
-
 const MyPageMissionList = styled.div`
   background-color:#fff;
   padding:25px 26px;
@@ -184,5 +99,19 @@ const MyPageMissionList = styled.div`
 const MyPageMissionListBox = styled.div`
   display:flex;
   flex-direction:column;
-  gap:45px;
+  gap:25px;
+  div:nth-child(1){
+    font:600 24px/35px 'Noto sans','Arial','sans-serif';
+  }
+  div:nth-child(2), div:nth-child(3){
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font:18px/25px 'Noto sans','Arial','sans-serif';
+    span > span{
+      display: inline-block;
+      padding:0 15px;
+    }
+  }
 `;

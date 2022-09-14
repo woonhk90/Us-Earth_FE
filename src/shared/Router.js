@@ -15,6 +15,7 @@ import EarthCommunityProofEdit from "../pages/EarthCommunityProofEdit";
 import EarthMyPageMissonMonth from "../pages/EarthMyPageMissonMonth";
 import CommunityProofPost from "../components/proof/CommunityProofEdit";
 import EarthInfo from "../pages/EarthInfo";
+import EarthMyPageMissionGroup from '../pages/EarthMyPageMissionGroup';
 
 const Router = () => {
   return (
@@ -37,6 +38,7 @@ const Router = () => {
       <Route path="/user/naver/callback" element={<NaverLogin />} />
       {/* <Route path='/view/:id' element={<InstarLogin />} /> */}
       <Route path="/info" element={<EarthInfo />} />
+      <Route path="/mypage/mission/group" element={<EarthMyPageMissionGroup />} />
     </Routes>
   );
 };

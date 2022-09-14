@@ -12,7 +12,7 @@ const CommunityTop = () => {
   
   const onClickHandler = () => {
     console.log("뒤로가자");
-    navigate('/community');
+    navigate(-1);
   }
   useEffect(() => {
     return () => {
