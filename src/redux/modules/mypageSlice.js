@@ -126,16 +126,41 @@ export const __updateMissionFlag = createAsyncThunk("usearth/__updateMissionFlag
 });
 
 
+/* ----------------------------- 마이페이지 내가 속한 그룹미션 가져오기 ---------------------------- */
+export const __getMyPageMissionGroup = createAsyncThunk("usearth/__getMyPageMissionGroup", async (payload, thunkAPI) => {
+  try {
+    const authorization_token = cookies.get("mycookie");
+    const data = await axios.get(`http://13.209.97.209/api/mypage/groupmission`, {
+      headers: {
+        Authorization: authorization_token
+      },
+    });
+    console.log("DATA=>", data);
+    return thunkAPI.fulfillWithValue(data.data);
+  } catch (error) {
+    window.alert("정보를 불러올 수 없습니다.");
+    console.log(error);
+    console.log(error.response.data.errorMessage);
+    return;
+  }
+});
+
+
 const initialState = {
   userInfo: [],
   overlap: false,
-  todayMission: []
+  todayMission: [],
+  myGroupList: [],
+  saveCagegoryFlag: 'onGoing'
 }
 
 export const mypageSlice = createSlice({
   name: "mypage",
   initialState,
   reducers: {
+    saveCagegory: (state, action) => {
+      state.saveCagegoryFlag = action.payload; // 선택한 카테고리 save
+    }
   },
   extraReducers: {
     [__getMyInfo.pending]: (state) => {
@@ -204,9 +229,21 @@ export const mypageSlice = createSlice({
     [__getTodayMission.rejected]: (state, action) => {
       state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+    },
+    [__getMyPageMissionGroup.pending]: (state) => {
+      state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+    },
+    [__getMyPageMissionGroup.fulfilled]: (state, action) => {
+      console.log('action=>', action);
+      state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+      state.myGroupList = action.payload;
+    },
+    [__getMyPageMissionGroup.rejected]: (state, action) => {
+      state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
+      state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
     }
   },
 });
 
-export const { } = mypageSlice.actions;
+export const { saveCagegory } = mypageSlice.actions;
 export default mypageSlice.reducer;

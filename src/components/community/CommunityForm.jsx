@@ -8,8 +8,10 @@ import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
 import { flexBetween } from "../../styles/Flex";
 import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { useNavigate } from "react-router-dom";
 
 const CommunityForm = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
@@ -98,6 +100,7 @@ const CommunityForm = () => {
     console.log(dataSet);
     console.log(imageFile);
     dispatch(postCommunityDetail(formData));
+    navigate('/community');
   };
 
   return (

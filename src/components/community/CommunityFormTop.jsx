@@ -3,9 +3,17 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
 import { ReactComponent as UserPlus } from "../../assets/UserPlus.svg";
+import { useDispatch } from "react-redux";
+import { clearVal } from "../../redux/modules/communitySlice";
 
 const CommunityFormTop = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    return () => {
+      dispatch(clearVal());
+    };
+  }, [])
   return (
     <>
       <HeaderWrap>
