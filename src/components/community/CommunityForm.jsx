@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
 import { clearVal } from '../../redux/modules/communitySlice';
 
+
+
 const CommunityForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
