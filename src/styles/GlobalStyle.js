@@ -6,6 +6,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     margin:0;
     padding:0;
+    font-family:'Noto Sans';
   }
   html,body{
     width:100vw;

@@ -8,6 +8,8 @@ import { ReactComponent as Chart } from "./chart.svg";
 import { ReactComponent as Group } from "./group.svg";
 import { ReactComponent as RightThinArrow } from "./RightThinArrow.svg";
 
+import Banner from './banner.png';
+
 const icons = {
   Kakao: Kakao,
   Google: Google,
@@ -18,6 +20,7 @@ const icons = {
   Chart: Chart,
   Group: Group,
   RightThinArrow: RightThinArrow,
+  Banner: Banner,
 };
 
 export default icons;

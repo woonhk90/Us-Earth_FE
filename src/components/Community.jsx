@@ -8,6 +8,7 @@ import { __getCommunity, certifyReset } from "../redux/modules/communitySlice";
 import { useInView } from "react-intersection-observer";
 import SampleImg03 from "../assets/banner.jpg";
 import { useNavigate } from "react-router-dom";
+import banner01 from '../assets/banner.png';
 
 const Community = () => {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const Community = () => {
     <>
       <CommunityWrap>
         <Container>
-          <Banner bgImg={SampleImg03}>메인배너</Banner>
+          <Banner><img src={banner01} alt='bannerImg' /></Banner>
 
           <PopularGroup>
             <PopularGroupTop>
@@ -152,26 +153,12 @@ const Community = () => {
 };
 export default Community;
 
-// transition: all ease 1s;
-// .jb {
-// width: 100px;
-// height: 100px;
-// margin: 60px auto;
-// background-color: orange;
-// transition: all ease 1s;
-// }
-// .jb:hover {
-// transform: rotate( 45deg );
-// }
-
 const CommunityWrap = styled.div``;
 const Container = styled.div``;
 
 const Banner = styled.div`
   width: 100%;
-  height: 204px;
-  background: url(${(props) => props.bgImg}) no-repeat 50% 50%;
-  background-size: cover;
+  height: 100%;
 `;
 
 const PopularGroup = styled.div`

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Seed from "../../assets/Seed.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { __getTodayMission, __updateMissionFlag } from '../../redux/modules/mypageSlice';
+import { colors } from '../../styles/color';
 
 
 const MyPageTodayMission = () => {
@@ -17,6 +18,9 @@ const MyPageTodayMission = () => {
     dispatch(__getTodayMission());
     setMissionFlag(!missionFlag);
   }
+  React.useEffect(() => {
+    dispatch(__getTodayMission());
+  }, [])
   const missionFlagChange = (key) => {
     dispatch(__updateMissionFlag({ missionName: key }));
   }
@@ -28,18 +32,18 @@ const MyPageTodayMission = () => {
             (<TodayMission>
               <TodayMissionBox>
                 <p>오늘의 미션</p>
-                <p onClick={() => setMissionFlag(!missionFlag)}>미션 닫기(0/5)</p>
+                <p onClick={() => setMissionFlag(!missionFlag)}>미션 닫기({todayMission.filter((v) => v.complete === true).length}/5)</p>
               </TodayMissionBox>
               <MissionBox>
                 {
-                  todayMission.map((v) => <MissionItem key={v.missionName} onClick={() => missionFlagChange(v.missionName)}><ItemTitle background={v.complete}>{v.missionName}</ItemTitle>{/* <span>`${v.complete}`</span> */}</MissionItem>)
+                  todayMission.map((v) => <MissionItem key={v.missionName} onClick={() => missionFlagChange(v.missionName)} background={v.complete}><ItemTitle background={v.complete}>{v.missionName}</ItemTitle></MissionItem>)
                 }
               </MissionBox>
             </TodayMission>)
             : (<>
               <MissionTop>
                 <p>오늘의 미션</p>
-                <p onClick={() => onClickTodayMission()}>미션 보기(0/5)</p>
+                <p onClick={() => onClickTodayMission()}>미션 보기({todayMission.filter((v) => v.complete === true).length}/5)</p>
               </MissionTop>
               <MissionBottom>
                 <div><img src={Seed} alt='seed-icon' /></div>
@@ -135,7 +139,9 @@ const MissionItem = styled.span`
   color:#2c2c2c;
   padding:18px 0;
   box-sizing:border-box;
-  background-color:#e2e2e2;
+  color:${(props) => props.background ? `${colors.grayCF}` : `${colors.white}`};
+  background-color:${(props) => props.background ? `${colors.grayF9}` : `${colors.green77}`};
+  background-color:${(props) => props.background ? `${colors.grayF9}` : `${colors.green77}`};
 `;
 const ItemTitle = styled.span`
   display:block;

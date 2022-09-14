@@ -5,11 +5,12 @@ import { ReactComponent as UserPlus } from "../assets/UserPlus.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearVal } from '../redux/modules/communitySlice';
+import { colors } from '../styles/color';
 
 const CommunityTop = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const onClickHandler = () => {
     console.log("뒤로가자");
     navigate(-1);
@@ -43,4 +44,5 @@ const HeaderWrap = styled.div`
   padding:10px;
   box-sizing:border-box;
   z-index:1;
+  color:${colors.black22}
 `;

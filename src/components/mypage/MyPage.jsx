@@ -38,7 +38,7 @@ const MyPage = () => {
             <MyPageMissionListBox>
               <div>나의 미션 목록</div>
               <div onClick={() => navigate('/mypage/mission/week')}><span><Chart width='25' height='25' viewBox="0 0 167.65 171.63" /><span>개인 미션 통계</span></span><span><RightThinArrow width='25' height='25' /></span></div>
-              <div onClick={() => navigate('/mypage/mission/group')}><span><Group width='25' height='25' viewBox="0 0 194.07 177.63" /><span>그룹 미션</span></span><span><RightThinArrow width='25' height='25' /></span></div>
+              <div onClick={() => navigate('/mypage/mission/group')}><span><Group width='25' height='25' /><span>그룹 미션</span></span><span><RightThinArrow width='25' height='25' /></span></div>
             </MyPageMissionListBox>
           </MyPageMissionList>
         </Container>

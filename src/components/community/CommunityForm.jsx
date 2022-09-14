@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { flexBetween } from "../../styles/Flex";
 import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate } from "react-router-dom";
+import { clearVal } from '../../redux/modules/communitySlice';
 
 const CommunityForm = () => {
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ const CommunityForm = () => {
     console.log(dataSet);
     console.log(imageFile);
     dispatch(postCommunityDetail(formData));
+    dispatch(clearVal());
     navigate('/community');
   };
 
