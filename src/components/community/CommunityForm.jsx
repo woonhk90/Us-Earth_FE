@@ -9,7 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { flexBetween } from "../../styles/Flex";
 import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import { clearVal } from '../../redux/modules/communitySlice';
+=======
+import cameraWh from "../../assets/cameraWh.svg";
+>>>>>>> a8a4d1a1cae12df9b7048135962640a2c0c2accb
 
 const CommunityForm = () => {
   const navigate = useNavigate();
@@ -65,7 +69,7 @@ const CommunityForm = () => {
     const passwordCurrent = e.target.value;
     setPassword(e.target.value);
     if (!passwordRegex.test(passwordCurrent)) {
-      setPasswordMessage("숫자 4자리를 입력해주세요!");
+      setPasswordMessage("숫자 4자리를 입력해 주세요!");
       setIsPassword(false);
     } else {
       setPasswordMessage("안전한 비밀번호입니다.");
@@ -112,12 +116,12 @@ const CommunityForm = () => {
           <ImageForm encType="multipart/form-data">
             <label htmlFor="file">
               <ImageIcon>
-                {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <div>아이콘</div>}
+                {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <CameraIcon />}
                 <BottonTextWrap>
                   <BottomText>대표이미지</BottomText>
                 </BottonTextWrap>
               </ImageIcon>
-              <button onClick={deleteImage}>삭제</button>
+              {/* <button onClick={deleteImage}>삭제</button> */}
             </label>
             <ImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
           </ImageForm>
@@ -130,11 +134,11 @@ const CommunityForm = () => {
             <CheckBoxLabel htmlFor="checkbox" />
           </CheckBoxWrapper>
         </TopTextWrap>
-        <Input size="22px" placeholder="그룹명을 입력해주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
+        <Input inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
         {secret ? (
           <>
             <P>비밀번호</P>
-            <Input placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
+            <Input inputype="basic" placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
             {password.length > 0 && <span>{passwordMessage}</span>}
           </>
         ) : null}
@@ -143,54 +147,62 @@ const CommunityForm = () => {
             setModal(!modal);
           }}
         >
+          <P>진행 기간*</P>
           {dates.start?.length > 0 && dates.end?.length > 0 ? (
-            <StartEndDate>
+            <DateP color={"#424242"}>
               {dates.start}-{dates.end}
-            </StartEndDate>
+            </DateP>
           ) : (
-            <StartEndDate color={"#6c6c6ceb"}>날짜를 선택해 주세요.*</StartEndDate>
+            <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
           )}
         </DateSpan>
         {modal && <CalendarModal closeModal={() => setModal(!modal)}></CalendarModal>}
         <P>참여인원*</P>
         <Input
-          placeholder="인원을 입력해주세요(최대 10명)"
+          inputype="basic"
+          placeholder="인원을 입력해 주세요(최대 10명)"
           type="number"
           name="limitParticipants"
           value={limitParticipants}
           onChange={inputOnChangeHandler}
         ></Input>
         <P>목표달성갯수*</P>
-        <Input type="number" name="limitScore" value={limitScore} onChange={inputOnChangeHandler}></Input>
+        <Input inputype="basic" type="number" name="limitScore" placeholder="최대 100개" value={limitScore} onChange={inputOnChangeHandler}></Input>
         <P>그룹소개*</P>
         <Textarea
-          placeholder="소개글을 입력해주세요"
-          height="150px"
+          placeholder="소개글을 입력해 주세요"
           cols="50"
           rows="8"
-          size="18px"
           maxLength="200"
           name="content"
+          textareaType="basic"
           value={content}
           onChange={inputOnChangeHandler}
         ></Textarea>
       </CommunityFormWrap>
-      <FooterWrap>
+      <BottomWrap>
         {/^([1-9]|10)$/.test(limitParticipants) &&
         /^[1-9][0-9]?$|^100/.test(limitScore) &&
         result.length === 0 &&
         dates.start?.length > 0 &&
         dates.end?.length > 0 &&
         secret === isPassword ? (
-          <FooterMenus color={"#000000eb"} onClick={submitHandler} bgColor={"#808080ec"}>
+          <BottomButton
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={submitHandler}
+            bgColor={"#353535"}
+            color={"white"}
+          >
             그룹 등록
-          </FooterMenus>
+          </BottomButton>
         ) : (
-          <FooterMenus color={"#ccccccec"} bgColor={"#979797eb"}>
-            그룹등록불가
-          </FooterMenus>
+          <BottomButton disabled={true} bgColor={"#EDEDED"} color={"#BEBEBE"}>
+            그룹 등록
+          </BottomButton>
         )}
-      </FooterWrap>
+      </BottomWrap>
     </>
   );
 };
@@ -211,44 +223,39 @@ const CheckBoxLabel = styled.label`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 43px;
-  height: 24px;
+  width: 54px;
+  height: 29px;
   border-radius: 15px;
-  background: #bebebe;
+  background: #cbcbcb;
   cursor: pointer;
   &::after {
     content: "";
     display: block;
     border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    margin: 1px;
+    width: 25px;
+    height: 25px;
+    margin: 2px 0px 0px 2px;
     background: #ffffff;
-    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2); */
     transition: 0.2s;
   }
-`;
-
-const StartEndDate = styled.div`
-  font-size: 22px;
-  color: ${(props) => props.color};
 `;
 
 const CheckBox = styled.input`
   opacity: 0;
   z-index: 1;
   border-radius: 15px;
-  width: 42px;
-  height: 26px;
+  width: 54px;
+  height: 29px;
   &:checked + ${CheckBoxLabel} {
-    background: #35bd47;
+    background: #353535;
     &::after {
       background-color: white;
       display: block;
       border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      margin: 1px 0 0 20px;
+      width: 25px;
+      height: 25px;
+      margin: 2px 0px 0px 27px;
       transition: 0.2s;
     }
   }
@@ -280,15 +287,26 @@ const ImageInput = styled.input`
 
 const ImageIcon = styled.div`
   cursor: pointer;
-  :hover {
-    border: 1px solid #999999;
-  }
   width: 206px;
   height: 206px;
+  border: none;
   background-color: #f1f1f1;
-  border: 1px solid #cccccc;
   border-radius: 14px;
   position: relative;
+`;
+
+const CameraIcon = styled.div`
+  width: 92px;
+  height: 74px;
+  background-image: url("${cameraWh}");
+  background-repeat: no-repeat;
+  background-size: 92px;
+  color: transparent;
+  background-position: center;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const Thumb = styled.img`
@@ -303,56 +321,76 @@ const BottonTextWrap = styled.div`
   position: absolute;
   align-items: center;
   box-sizing: border-box;
-  padding: 11px 53px;
+  padding: 11px 0;
+  text-align: center;
   margin: 0;
   left: 0;
   bottom: 0;
   width: 100%;
   height: 39px;
+  border: none;
   border-radius: 0 0 14px 14px;
   z-index: 99;
-  background: #b1b0b0;
+  background: #cbcbcb;
   background-size: 100%;
   display: flex;
 `;
 
 const BottomText = styled.p`
+  width: 100%;
   font-size: 20px;
   font-weight: 500;
+  letter-spacing: -0.03em;
 `;
 
 /* ------------------------------ bottom button ----------------------------- */
-const FooterWrap = styled.div`
+const BottomWrap = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
-
   width: 100%;
   display: flex;
   text-align: center;
 `;
 
-const FooterMenus = styled.div`
+const BottomButton = styled.button`
   width: 100%;
-  line-height: 48px;
+  border: none;
+  line-height: 56px;
+  font-weight: 600;
+  font-size: 20px;
   color: ${(props) => props.color};
   background-color: ${(props) => props.bgColor};
 `;
 
-/* ---------------------------------- font ---------------------------------- */
+/* ---------------------------------- form font ---------------------------------- */
 const DateSpan = styled.div`
-  border-bottom: 1px solid rgb(238, 238, 238);
   margin: 30px 0;
 `;
 
 const P = styled.p`
   font-size: 20px;
   font-weight: 500;
+  letter-spacing: -0.03em;
+  margin-top: 26px;
+`;
+
+const DateP = styled.p`
+  box-sizing: content-box;
+  height: 35px;
+  margin: 0;
+  font-size: 22px;
+  padding: 10px 0 26px 0;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  color: ${(props) => props.color};
 `;
 
 const RightText = styled.p`
   font-size: 18px;
   text-align: right;
+  font-weight: 500;
+  letter-spacing: -0.03em;
 `;
 
 const TopTextWrap = styled.div`
