@@ -40,7 +40,7 @@ const MyPageMissionGroup = () => {
                 <div>
                   <div>
                     <p>{v.title}</p>
-                    <p>22.09.01-22.10.01</p>
+                    <p>{v.startDate} - {v.endDate}</p>
                   </div>
                   <div><progress value='40' max='100'></progress><span>40%</span></div>
                 </div>
@@ -101,6 +101,7 @@ const ListBox = styled.div`
     height:100px;
     img{
       width:100%;
+      height:100%;
     }
   }
   div:nth-child(2){
