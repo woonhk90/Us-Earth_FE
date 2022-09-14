@@ -5,18 +5,18 @@ import styled from "styled-components";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import CommunityBottom from "../components/CommunityBottom";
-import UserMissionMonth from "../components/userMission/UserMissionMonth";
-import UserMissionMonthTop from "../components/userMission/UserMissionMonthTop";
+import UserMissionWeekTop from "../components/userMission/UserMissionWeekTop";
+import UserMissionWeek from "../components/userMission/UserMissionWeek";
 
-const EarthMyPageMissonMonth = () => {
+const EarthMyPageMissonWeek = () => {
   return (
     <>
       <Layout>
         <Header>
-          <UserMissionMonthTop />
+          <UserMissionWeekTop />
         </Header>
         <CommunityBox>
-          <UserMissionMonth/>
+          <UserMissionWeek />
         </CommunityBox>
         <Footer>
           <CommunityBottom />
@@ -25,7 +25,7 @@ const EarthMyPageMissonMonth = () => {
     </>
   );
 };
-export default EarthMyPageMissonMonth;
+export default EarthMyPageMissonWeek;
 
 const CommunityBox = styled.div`
   height: 100%;

@@ -8,6 +8,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 const initialState = {
   dailyMissionData: {},
   periodMissionData: [],
+  clickDate: "",
   isLoading: false,
   error: null,
 };
@@ -16,6 +17,7 @@ const initialState = {
 export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (targetDay, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
+    console.log(targetDay);
     const { data } = await axios.get(`${API_URL}/mypage/stats/day?targetDay=${targetDay}`, {
       headers: {
         Authorization: authorization_token,
@@ -32,12 +34,14 @@ export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (
 export const getPeriodMissionStats = createAsyncThunk("periodMission/get", async (targetPeriod, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
+    // console.log(targetPeriod);
     const { data } = await axios.get(`${API_URL}/mypage/stats`, {
       params: targetPeriod,
       headers: {
         Authorization: authorization_token,
       },
     });
+    // console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
@@ -49,12 +53,12 @@ export const userMissionSlice = createSlice({
   name: "userMission",
   initialState,
   reducers: {
-    // commentSelectBox: (state, action) => {
-    //   console.log("슬라이스에서 바뀜!",action.payload);
-    //   // adNumber이라는 명령(?)
-    //   state.commentSelectBoxId = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
-    //   // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
-    // },
+    getOnClickDate: (state, action) => {
+      console.log("슬라이스에서 바뀜!", action.payload);
+      // adNumber이라는 명령(?)
+      state.clickDate = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
+      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
+    },
     // commentEditChange: (state, action) => {
     //   console.log(action.payload);
     //   // adNumber이라는 명령(?)
@@ -89,5 +93,5 @@ export const userMissionSlice = createSlice({
   },
 });
 
-export const {} = userMissionSlice.actions;
+export const { getOnClickDate } = userMissionSlice.actions;
 export default userMissionSlice.reducer;

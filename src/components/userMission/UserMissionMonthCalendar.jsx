@@ -6,14 +6,14 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { flexRow } from "../../styles/Flex";
 import { useDispatch, useSelector } from "react-redux";
-import { getDailyMissionStats, getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
+import { getDailyMissionStats, getOnClickDate, getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
 import calendarRightDoubleArrow from "../../assets/calendarRightDoubleArrow.svg";
 import calendarLeftDoubleArrow from "../../assets/calendarLeftDoubleArrow.svg";
 import calendarRightArrow from "../../assets/calendarRightArrow.svg";
 import calendarLeftArrow from "../../assets/calendarLeftArrow.svg";
 import { useEffect } from "react";
 
-const MissionCalendar = () => {
+const UserMissionMonthCalendar = () => {
   const dispatch = useDispatch();
   const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
 
@@ -26,7 +26,7 @@ const MissionCalendar = () => {
     );
   }, []);
 
-  const [value, onChange] = useState(new Date());
+  const [value, setValue] = useState(new Date());
   const [dates, setDates] = useState("");
 
   const onClickDay = (value, event) => {
@@ -43,11 +43,16 @@ const MissionCalendar = () => {
     );
   };
 
+  const onChangeDate = (value, event) => {
+    setValue(value);
+    dispatch(getOnClickDate(dayjs(value).format("YYYY-MM-DD")));
+  };
+
   return (
     <>
       <StCalender>
         <Calendar
-          onChange={onChange}
+          onChange={onChangeDate}
           locale="en-US"
           onClickDay={onClickDay}
           formatMonthYear={(locale, date) => {
@@ -68,19 +73,12 @@ const MissionCalendar = () => {
             return <MissionCnt>{html}</MissionCnt>;
           }}
         />
-        <div>{dayjs(value).format("YYYY년 MM월 DD일")}</div>
-        <div>선택날짜 : {dailyMissionData.selectedDate}</div>
-        <div>
-          {dailyMissionData.clearMissionList?.map((data) => {
-            return <div key={data.id}>{data.content}</div>;
-          })}
-        </div>
       </StCalender>
     </>
   );
 };
 
-export default MissionCalendar;
+export default UserMissionMonthCalendar;
 
 const StCalender = styled.div`
   .dot {
@@ -96,9 +94,10 @@ const StCalender = styled.div`
   .react-calendar {
     width: 100%;
     background: white;
-
-    padding: 0 14px;
+    margin-top: 34px;
+    padding: 0 14px 15px 14px;
     border: none;
+    border-bottom: 1px solid #DBDBDB;
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.125em;
   }
@@ -229,9 +228,9 @@ const StCalender = styled.div`
   }
   .react-calendar__tile {
     max-width: 100%;
-    padding: 10px 6.6667px;
+    padding: 10px 10px;
     background: none;
-    text-align: center;
+    text-align: center; 
     line-height: 16px;
   }
   .react-calendar__tile:disabled {
