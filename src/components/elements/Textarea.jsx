@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const Textarea = (props) => {
-  const { autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } = props;
+  const { textareaType, margin, weight, autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } = props;
 
   return (
     <TextareaWrap>
@@ -18,6 +18,9 @@ const Textarea = (props) => {
         placeholder={placeholder}
         height={height}
         size={size}
+        weight={weight}
+        margin={margin}
+        textareaType={textareaType}
       />
     </TextareaWrap>
   );
@@ -35,14 +38,24 @@ const StTextarea = styled.textarea`
   white-space: pre-wrap;
   resize: none;
   box-sizing: border-box;
+  letter-spacing: -0.02em;
   border: none;
-  border-bottom: 1px solid rgb(238, 238, 238);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
   width: 100%;
-  height: ${({ height }) => `${height}`};
-  /* padding: 12px; */
-  /* border-radius: 8px; */
-  font-size: ${({ size }) => `${size}`};
   outline: none;
-  :hover {
+  color: #424242;
+  ::placeholder {
+    color: #cbcbcb;    
   }
+  ${(props) => {
+    return (
+      props.textareaType === "basic" &&
+      css`
+        margin: 17px 0 0 0;
+        font-weight: 500;
+        height: 150px;
+        font-size: 18px;
+      `
+    );
+  }}
 `;
