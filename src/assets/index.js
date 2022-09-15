@@ -7,6 +7,11 @@ import { ReactComponent as LeftArrow } from "./LeftArrow.svg";
 import { ReactComponent as Chart } from "./chart.svg";
 import { ReactComponent as Group } from "./group.svg";
 import { ReactComponent as RightThinArrow } from "./RightThinArrow.svg";
+import { ReactComponent as Edit } from "./Edit2.svg";
+import { ReactComponent as Delete } from "./delete.svg";
+import { ReactComponent as Report } from "./report.svg";
+import { ReactComponent as VerticalDot } from "./verticalDot.svg";
+import { ReactComponent as Write } from "./write.svg";
 
 const icons = {
   Kakao: Kakao,
@@ -18,6 +23,11 @@ const icons = {
   Chart: Chart,
   Group: Group,
   RightThinArrow: RightThinArrow,
+  Edit: Edit,
+  Delete: Delete,
+  Report: Report,
+  VerticalDot: VerticalDot,
+  Write: Write,
 };
 
 export default icons;

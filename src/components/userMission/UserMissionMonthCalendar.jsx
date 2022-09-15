@@ -94,7 +94,7 @@ const StCalender = styled.div`
   .react-calendar {
     width: 100%;
     background: white;
-    margin-top: 34px;
+    margin-top: 20px;
     padding: 0 14px 15px 14px;
     border: none;
     border-bottom: 1px solid #DBDBDB;

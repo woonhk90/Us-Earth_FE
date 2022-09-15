@@ -2,20 +2,21 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
-import { ReactComponent as Calendar } from "../../assets/calendar.svg";
+import { ReactComponent as Back } from "../../assets/back.svg";
 
-const UserMissionMonthTop = () => {
+const UserMissionTop = () => {
   const navigate = useNavigate();
 
   return (
     <>
       <HeaderWrap>
-        <LeftArrow
-          onClick={() => {
-            navigate("/mypage");
-          }}
-        />
-        <Calendar />
+        <IconDiv>
+          <Back
+            onClick={() => {
+              navigate("/mypage");
+            }}
+          />
+        </IconDiv>
       </HeaderWrap>
       <HeaderFlex>
         <HeaderP>개인 미션 통계</HeaderP>
@@ -23,8 +24,7 @@ const UserMissionMonthTop = () => {
     </>
   );
 };
-export default UserMissionMonthTop;
-
+export default UserMissionTop;
 const HeaderWrap = styled.div`
   position: fixed;
   top: 0;
@@ -33,7 +33,7 @@ const HeaderWrap = styled.div`
   height: 48px;
   display: flex;
   justify-content: space-between;
-  padding: 10px;
+  padding: 13px;
   box-sizing: border-box;
   z-index: 1;
   border-bottom: 1px solid #f5f5f5;
@@ -49,4 +49,11 @@ const HeaderP = styled.p`
   font-weight: 600;
   font-size: 20px;
   letter-spacing: -0.02em;
+  color: #222222;
+`;
+
+const IconDiv = styled.div`
+  cursor: pointer;
+  width: 12px;
+  height: 21px;
 `;

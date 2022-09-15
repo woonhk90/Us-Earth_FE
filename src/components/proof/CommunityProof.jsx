@@ -5,14 +5,18 @@ import { Navigation, Pagination, Scrollbar } from "swiper";
 import EditModal from "../Modals/EditModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { flexColumn, flexRow, flexBetween, Text } from "../../styles/Flex";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { deleteProof, getProofs } from "../../redux/modules/proofsSlice";
 import ConfirmModal from "../Modals/ConfirmModal";
+import { ReactComponent as VerticalDot } from "../../assets/verticalDot.svg";
+import icons from "../../assets";
 
 const CommunityProof = () => {
+  const { VerticalDot, Delete, Report, Edit } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const dispatch = useDispatch();
@@ -87,18 +91,35 @@ const CommunityProof = () => {
             <CreatAt>{proofs.creatAt}</CreatAt>
           </UerInpo>
         </UserInfoWrap>
-        <ModalButton onClick={openModal}>아이콘</ModalButton>
-        <EditModal open={modalOpen} close={closeModal}>
-          {/* <main> */}
-          {/* <ButtonInModalWrap> */}
-          <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal>
-          <ButtonInModal onClick={modalOnOff}>삭제하기</ButtonInModal>
-          {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={modalOnOff}></ConfirmModal>}
-          {/* <ButtonInModal onClick={onClickDelete}>삭제하기</ButtonInModal>
-          <ButtonInModal onClick={onClickEdit}>수정하기</ButtonInModal> */}
-          {/* </ButtonInModalWrap> */}
-          {/* </main> */}
-        </EditModal>
+        {proofs.writer ? (
+          <>
+            <ModalButton onClick={openModal}>
+              <IconDiv>
+                <VerticalDot />
+              </IconDiv>
+            </ModalButton>
+            <EditModal open={modalOpen} close={closeModal}>
+              <ButtonInModal onClick={onClickEdit}>
+                <ModalIcon>
+                  <Edit />
+                </ModalIcon>
+                수정하기
+              </ButtonInModal>
+              <ButtonInModal onClick={modalOnOff}>
+                <ModalIcon>
+                  <Delete />
+                </ModalIcon>
+                삭제하기
+              </ButtonInModal>
+              <ButtonInModal>
+                <ModalIcon>
+                  <Report />
+                </ModalIcon>
+                신고하기
+              </ButtonInModal>
+            </EditModal>
+          </>
+        ) : null}
       </UserInfoFirstWrap>
       <TextContainer>
         <ContentTitle>{proofs.title}</ContentTitle>
@@ -123,7 +144,8 @@ const UserInfoWrap = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5px;
+  margin-left: 20px;
+  gap: 10px;
   box-sizing: border-box;
 `;
 
@@ -134,44 +156,44 @@ const UerInpo = styled.div`
 
 const UserInfoImg = styled.div`
   background-image: url("https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-0443429487fdc2277fc8f9dd1eca6fb8b678862f593e21222ba9f6592b99ad14.png");
-  width: 40px;
-  height: 40px;
+  width: 37px;
+  height: 37px;
   background-position: center;
   background-size: cover;
   border-radius: 50%;
 `;
 
 const CreatAt = styled.div`
-  font-size: 13px;
-  line-height: 1.46;
-  letter-spacing: -0.6px;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  font-weight: 400;
   color: #212529;
 `;
 
 const Username = styled.div`
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 1.5;
-  letter-spacing: -0.6px;
-  color: #212529;
+  letter-spacing: -0.03em;
+  line-height: 22px;
+  color: #212121;
 `;
 
 //내용
 const TextContainer = styled.div`
-  padding: 10px;
+  padding: 20px;
   border-bottom: 1px solid #e9ecef;
 `;
 const ContentTitle = styled.h1`
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 600;
   line-height: 1.5;
-  letter-spacing: -0.6px;
+  letter-spacing: -0.03em;
 `;
 
 const ContentContent = styled.div`
-  font-size: 17px;
-  line-height: 1.6;
-  letter-spacing: -0.6px;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
   margin: 10px 0;
   word-break: break-all;
   white-space: pre-line;
@@ -180,9 +202,7 @@ const ContentContent = styled.div`
 //스와이퍼
 
 const FirstWrap = styled.div`
-  /* height: 470px; */
   width: 100%;
-  /* max-width: 800px; */
   aspect-ratio: 1 / 1;
   margin: auto;
   display: flex;
@@ -207,14 +227,15 @@ const FirstWrap = styled.div`
     height: 30px;
     background-color: gray;
   }
-
+  /* swiper-pagination-bullet 
+  swiper-pagination-bullet-active */
   .swiper-button-next::after,
   .swiper-button-prev::after {
     display: none;
   }
-
+  .swiper-pagination-bullet,
   .swiper-pagination-bullet-active {
-    background-color: #8f8f8f;
+    background-color: #ffffff;
   }
 `;
 
@@ -228,7 +249,6 @@ const ItemImg = styled.div`
   display: inline-block;
   width: 100%;
   height: 100%;
-  /* border-radius: 10px; */
 `;
 
 const StDiv = styled.div`
@@ -240,25 +260,31 @@ const StDiv = styled.div`
 `;
 
 //모달
-
-const ModalButton = styled.div`
-  background-color: transparent;
-  border: none;
+const IconDiv = styled.div`
+  width: 4px;
+  padding: 10px;
+`;
+const ModalIcon = styled.div`
+  width: 18px;
+  margin-right: 18px;
 `;
 
-const ButtonInModalWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const ModalButton = styled.div`
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  margin-right: 18px;
 `;
 
 const ButtonInModal = styled.button`
+  width: 100%;
+  ${flexRow}
+  font-size: 18px;
+  font-weight: 300;
+  float: left;
+  cursor: pointer;
   border: none;
   border-radius: 5px;
-  padding: 5px;
+  padding: 12px 0;
   background-color: transparent;
-  :hover {
-    font-weight: bolder;
-    padding: 1px solid transparent;
-  }
 `;

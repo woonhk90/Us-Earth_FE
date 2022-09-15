@@ -9,6 +9,7 @@ const initialState = {
   proofs: [],
   heartCommentCnt: {},
   heartCnt: {},
+  userHeart: false,
   isLoading: false,
   error: null,
 };
@@ -36,8 +37,11 @@ export const getProofs = createAsyncThunk("proof/get", async (proofId, thunkAPI)
   try {
     const authorization_token = cookies.get("mycookie");
     const { data } = await axios.get(`${API_URL}/proof/${proofId}`, {
-      Authorization: authorization_token,
+      headers: {
+        Authorization: authorization_token,
+      },
     });
+    console.log("갯요청다시~");
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejected(error);
@@ -78,7 +82,7 @@ export const deleteProof = createAsyncThunk("proof/delete", async (proofId, thun
 });
 
 /* ------------------------ get heartCnt & commentCnt ----------------------- */
-export const getHeartCommentCnt = createAsyncThunk("proof/delete", async (proofId, thunkAPI) => {
+export const getHeartCommentCnt = createAsyncThunk("proof/heartComment", async (proofId, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
     const { data } = await axios.get(`${API_URL}/proof/count/${proofId}`, {
@@ -93,7 +97,7 @@ export const getHeartCommentCnt = createAsyncThunk("proof/delete", async (proofI
   }
 });
 /* ------------------------ paych heart ----------------------- */
-export const patchHeartCnt = createAsyncThunk("proof/delete", async (proofId, thunkAPI) => {
+export const patchHeartCnt = createAsyncThunk("proof/Heart", async (proofId, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
     console.log(authorization_token);
@@ -103,6 +107,7 @@ export const patchHeartCnt = createAsyncThunk("proof/delete", async (proofId, th
       },
     });
     console.log(data);
+    thunkAPI.dispatch(getHeartCommentCnt(proofId));
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -128,7 +133,14 @@ export const patchHeartCnt = createAsyncThunk("proof/delete", async (proofId, th
 export const proofsSlice = createSlice({
   name: "proofs",
   initialState,
-  reducers: {},
+  reducers: {
+    clickHerat: (state, action) => {
+      console.log("슬라이스에서 바뀜!", action.payload);
+      // adNumber이라는 명령(?)
+      state.userHeart = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
+      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
+    },
+  },
   extraReducers: {
     /* -------------------------- post proof (Create) ------------------------- */
     [postProof.pending]: (state) => {
@@ -149,6 +161,7 @@ export const proofsSlice = createSlice({
     [getProofs.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.proofs = action.payload;
+      state.userHeart = action.payload.heart;
     },
     [getProofs.rejected]: (state, action) => {
       state.isLoading = false;
@@ -197,6 +210,7 @@ export const proofsSlice = createSlice({
     [patchHeartCnt.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.heartCnt = action.payload;
+      state.userHeart = action.payload.heart;
     },
     [patchHeartCnt.rejected]: (state, action) => {
       state.isLoading = false;
@@ -205,5 +219,5 @@ export const proofsSlice = createSlice({
   },
 });
 
-export const {} = proofsSlice.actions;
+export const { clickHerat } = proofsSlice.actions;
 export default proofsSlice.reducer;

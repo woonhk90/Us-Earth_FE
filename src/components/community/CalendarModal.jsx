@@ -4,6 +4,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addDates, addDateLists } from "../../redux/modules/communityFormSlice";
+import { ReactComponent as CalendarLeftArrow } from "../../assets/calendarLeftArrow.svg";
+import { ReactComponent as CalendarRightArrowBk } from "../../assets/calendarRightArrowBk.svg";
+import dayjs from "dayjs";
 
 const CalendarModal = (props) => {
   const dispatch = useDispatch();
@@ -67,7 +70,7 @@ const CalendarModal = (props) => {
           <DatePicker
             isdate={date.start === date.end}
             formatMonthDay="YYYY.MM"
-            formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3)}
+            formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3).toUpperCase()}
             renderCustomHeader={({ monthDate, customHeaderCount, decreaseMonth, increaseMonth }) => {
               const month = monthDate.getMonth() + 1;
               const year = monthDate.getFullYear();
@@ -78,7 +81,9 @@ const CalendarModal = (props) => {
                     style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
                     onClick={decreaseMonth}
                   >
-                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--previous"}>{"<"}</span>
+                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--previous"}>
+                      <CalendarRightArrowBk />
+                    </span>
                   </button>
                   <span className="react-datepicker__current-month">
                     {year}.{month}
@@ -88,7 +93,9 @@ const CalendarModal = (props) => {
                     style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
                     onClick={increaseMonth}
                   >
-                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--next"}>{">"}</span>
+                    <span className={"react-datepicker__navigation-icon react-datepicker__navigation-icon--next"}>
+                      <CalendarRightArrowBk />
+                    </span>
                   </button>
                 </div>
               );
@@ -106,11 +113,13 @@ const CalendarModal = (props) => {
           />
         </StInput>
         {date.start.length > 0 && date.end.length > 0 ? (
-          <FooterMenus onClick={addDateDispatch} bgColor={"#e4ffe4"}>
-            {date.start}-{date.end} / 선택완료
+          <FooterMenus color={"#FFFFFF"} onClick={addDateDispatch} bgColor={"#353535"}>
+            {dayjs(date.start).format("YY.MM.DD")} - {dayjs(date.end).format("YY.MM.DD")} / 선택완료
           </FooterMenus>
         ) : (
-          <FooterMenus bgColor={"grey"}>기간을 선택해주세요</FooterMenus>
+          <FooterMenus color={"#BEBEBE"} bgColor={"#EDEDED"}>
+            기간을 선택해 주세요
+          </FooterMenus>
         )}
       </ModalBody>
     </ModalWrap>
@@ -135,12 +144,12 @@ const ModalBody = styled.div``;
 
 const StInput = styled.div`
   width: 100%;
-  bottom: 48px;
+  bottom: 56px;
   left: 0;
   position: absolute;
   .react-datepicker__header {
     padding: 30px 0 8px 0;
-    background-color: #e4ffe4;
+    background-color: #ffffff;
     border: none;
     border-radius: 20px 20px 0 0 !important;
   }
@@ -149,6 +158,7 @@ const StInput = styled.div`
   }
   .react-datepicker__month-container {
     float: none;
+    margin-bottom: 25px;
   }
   .react-datepicker__current-month {
     font-size: 24px !important;
@@ -158,10 +168,16 @@ const StInput = styled.div`
     display: flex;
     justify-content: space-between;
   }
+  .react-datepicker__day-names {
+    color: #000000;
+    opacity: 0.5;
+  }
+
   .react-datepicker__day--selected {
     border-radius: 50%;
-    background-color: rgba(33, 165, 33, 1);
+    background-color: #353535;
   }
+
   .react-datepicker__day,
   .react-datepicker__day--selected,
   .react-datepicker__day--weekend {
@@ -180,7 +196,12 @@ const StInput = styled.div`
     align-items: center;
   }
   .react-datepicker__day-name {
+    margin-top: 20px;
     width: 100%;
+  }
+  .react-datepicker__day--disabled {
+    color: #000000;
+    opacity: 0.5;
   }
   .react-datepicker__day,
   .react-datepicker__time-name {
@@ -203,20 +224,23 @@ const StInput = styled.div`
     font-size: 16px;
   }
   .react-datepicker__day--in-range {
+    color: black;
     border-radius: 0;
-    background-color: #cecece;
+    background-color: #ededed;
     border: none;
   }
   .react-datepicker__day--in-selecting-range {
     border-radius: 50%;
-    background-color: rgba(33, 165, 33, 0.5);
+    background-color: #353535;
     border: none;
   }
   .react-datepicker__day {
     border: none;
+    font-size: 18px;
   }
   .react-datepicker__navigation {
     top: 30px;
+    margin: 0 20px;
   }
   .react-datepicker__day--in-range {
     :hover {
@@ -226,14 +250,15 @@ const StInput = styled.div`
   }
   .react-datepicker__day--range-start {
     border-radius: 50%;
-    background-color: #21a549;
+    background-color: #353535;
+    color: #ffffff;
     :hover {
       border-radius: 50%;
     }
     ::after {
       content: "";
       z-index: -1;
-      background-color: #cecece;
+      background-color: #ededed;
       width: 50%;
       border-radius: 0;
       height: 100%;
@@ -243,12 +268,12 @@ const StInput = styled.div`
   }
   .react-datepicker__day--range-end {
     border-radius: 50%;
-    background-color: #21a549;
-    color: white;
+    background-color: #353535;
+    color: #ffffff;
     ::after {
       content: "";
       z-index: -1;
-      background-color: ${(props) => (props.children.props.isdate ? "transparent" : "#cecece")};
+      background-color: ${(props) => (props.children.props.isdate ? "transparent" : "#EDEDED")};
       width: 50%;
       border-radius: 0;
       height: 100%;
@@ -262,13 +287,17 @@ const StInput = styled.div`
 `;
 
 //bottom
-const FooterMenus = styled.div`
+const FooterMenus = styled.button`
   width: 100%;
-  height: 48px;
+  height: 56px;
   line-height: 48px;
   bottom: 0;
   left: 0;
+  border: none;
   position: absolute;
   text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: ${(props) => props.color};
   background-color: ${(props) => props.bgColor};
 `;

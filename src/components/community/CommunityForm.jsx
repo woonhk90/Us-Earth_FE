@@ -7,7 +7,7 @@ import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
 import { flexBetween } from "../../styles/Flex";
-import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { addDates, postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
 
@@ -36,6 +36,7 @@ const CommunityForm = () => {
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
+      dispatch(addDates({}));
     };
   }, []);
 
@@ -101,7 +102,7 @@ const CommunityForm = () => {
     console.log(dataSet);
     console.log(imageFile);
     dispatch(postCommunityDetail(formData));
-    navigate('/community');
+    navigate("/community");
   };
 
   return (
@@ -129,7 +130,7 @@ const CommunityForm = () => {
             <CheckBoxLabel htmlFor="checkbox" />
           </CheckBoxWrapper>
         </TopTextWrap>
-        <Input inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
+        <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
         {secret ? (
           <>
             <P>비밀번호</P>
@@ -144,7 +145,7 @@ const CommunityForm = () => {
         >
           <P>진행 기간*</P>
           {dates.start?.length > 0 && dates.end?.length > 0 ? (
-            <DateP color={"#424242"}>
+            <DateP color={"#222222"}>
               {dates.start}-{dates.end}
             </DateP>
           ) : (

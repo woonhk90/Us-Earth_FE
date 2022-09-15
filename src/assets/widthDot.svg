@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_2" data-name="레이어 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152.85 32.85">
+  <defs>
+    <style>
+      .widthDot-1 {
+        fill: #222;
+      }
+    </style>
+  </defs>
+  <g id="_최종" data-name="최종">
+    <g>
+      <circle class="widthDot-1" cx="136.42" cy="16.42" r="16.42"/>
+      <circle class="widthDot-1" cx="76.42" cy="16.42" r="16.42"/>
+      <circle class="widthDot-1" cx="16.42" cy="16.42" r="16.42"/>
+    </g>
+  </g>
+</svg>

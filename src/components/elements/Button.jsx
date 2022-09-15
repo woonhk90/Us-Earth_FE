@@ -43,4 +43,21 @@ const StButton = styled.button`
       `
     );
   }}
+  ${(props) => {
+    return (
+      props.btntype === "submit" &&
+      css`
+        background-color:  #353535;
+        border: none;
+        color: #ffffff;
+        /* padding: 25px 0; */
+        width: 79px;
+        height: 54px;
+        font-weight: 500;
+        font-size: 18px;
+        text-align: center;
+        letter-spacing: -0.03em;
+      `
+    );
+  }}
 `;

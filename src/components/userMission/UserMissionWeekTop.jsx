@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
-import { ReactComponent as Bar } from "../../assets/bar.svg";
 
 const UserMissionWeekTop = () => {
   const navigate = useNavigate();
@@ -15,7 +14,6 @@ const UserMissionWeekTop = () => {
             navigate("/mypage");
           }}
         />
-        <Bar />
       </HeaderWrap>
       <HeaderFlex>
         <HeaderP>개인 미션 통계</HeaderP>

@@ -36,7 +36,7 @@ const CommunityProofForm = () => {
     setIsPhotoMessage("");
     if (e.target.files.length + previewImg.length < 6) {
       for (let i = 0; i < e.target.files.length; i++) {
-        if (e.target.files[i].size < 2000000) {
+        if (e.target.files[i].size < 20000000) {
           // 20메가
           const reader = new FileReader();
           reader.readAsDataURL(e.target.files[i]);
