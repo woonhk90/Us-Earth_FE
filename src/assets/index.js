@@ -13,6 +13,8 @@ import { ReactComponent as Report } from "./report.svg";
 import { ReactComponent as VerticalDot } from "./verticalDot.svg";
 import { ReactComponent as Write } from "./write.svg";
 
+import Banner from "./banner.png";
+
 const icons = {
   Kakao: Kakao,
   Google: Google,
@@ -28,6 +30,7 @@ const icons = {
   Report: Report,
   VerticalDot: VerticalDot,
   Write: Write,
+  Banner: Banner,
 };
 
 export default icons;

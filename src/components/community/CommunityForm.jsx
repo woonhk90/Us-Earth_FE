@@ -10,6 +10,7 @@ import { flexBetween } from "../../styles/Flex";
 import { addDates, postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
+import { clearVal } from "../../redux/modules/communitySlice";
 
 const CommunityForm = () => {
   const navigate = useNavigate();
@@ -102,6 +103,7 @@ const CommunityForm = () => {
     console.log(dataSet);
     console.log(imageFile);
     dispatch(postCommunityDetail(formData));
+    dispatch(clearVal());
     navigate("/community");
   };
 

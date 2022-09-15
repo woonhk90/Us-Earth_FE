@@ -4,6 +4,7 @@ import { ReactComponent as Plus } from "../assets/Plus.svg";
 import { ReactComponent as Search } from "../assets/Search.svg";
 import Modal from "./CommunityModal";
 import { useNavigate } from "react-router-dom";
+import { colors } from '../styles/color';
 
 const CommunityTop = () => {
   const navigate = useNavigate();
@@ -33,4 +34,5 @@ const HeaderWrap = styled.div`
   padding:10px;
   box-sizing:border-box;
   z-index:1;
+  color:${colors.black22}
 `;
