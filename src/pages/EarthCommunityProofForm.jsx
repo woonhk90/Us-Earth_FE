@@ -10,9 +10,9 @@ import CommunityProofFormTop from "../components/proof/CommunityProofFormTop";
 const EarthCommunityProofForm = () => {
   return (
     <Layout>
-      <Header>
+      {/* <Header>
         <CommunityProofFormTop />
-      </Header>
+      </Header> */}
       <CommunityBox>
         <CommunityProofForm />
       </CommunityBox>
@@ -27,6 +27,7 @@ export default EarthCommunityProofForm;
 
 const CommunityBox = styled.div`
   height: 100%;
+  width: 100%;
   overflow: auto;
   position: absolute;
   top: 48px;
