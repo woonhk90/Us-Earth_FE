@@ -7,6 +7,16 @@ import { ReactComponent as LeftArrow } from "./LeftArrow.svg";
 import { ReactComponent as Chart } from "./chart.svg";
 import { ReactComponent as Group } from "./group.svg";
 import { ReactComponent as RightThinArrow } from "./RightThinArrow.svg";
+import { ReactComponent as Community_On } from "./community_on.svg";
+import { ReactComponent as Community_Off } from "./community_off.svg";
+import { ReactComponent as Info_On } from "./info_on.svg";
+import { ReactComponent as Info_Off } from "./info_off.svg";
+import { ReactComponent as Chat_On } from "./chat_on.svg";
+import { ReactComponent as Chat_Off } from "./chat_off.svg";
+import { ReactComponent as Mypage_On } from "./mypage_on.svg";
+import { ReactComponent as Mypage_Off } from "./mypage_off.svg";
+
+
 
 import Banner from './banner.png';
 
@@ -21,6 +31,14 @@ const icons = {
   Group: Group,
   RightThinArrow: RightThinArrow,
   Banner: Banner,
+  Community_On,
+  Community_Off,
+  Info_On,
+  Info_Off,
+  Chat_On,
+  Chat_Off,
+  Mypage_On,
+  Mypage_Off,
 };
 
 export default icons;

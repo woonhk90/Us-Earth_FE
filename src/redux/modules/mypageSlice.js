@@ -3,13 +3,14 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
+const API_URL = process.env.REACT_APP_API_URL;
 
-/* -------------------------------- 커뮤니티 상세보기 ------------------------------- */
+/* -------------------------------- 내 정보 가져오기 ------------------------------- */
 export const __getMyInfo = createAsyncThunk("usearth/__getMyInfo", async (payload, thunkAPI) => {
   try {
     console.log('__getMyInfo=>', payload);
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.get(`http://13.209.97.209/api/mypage`, {
+    const data = await axios.get(`${API_URL}/mypage`, {
       headers: {
         Authorization: authorization_token
       },
@@ -18,25 +19,25 @@ export const __getMyInfo = createAsyncThunk("usearth/__getMyInfo", async (payloa
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("내 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
   }
 });
 
+/* ------------------------------- 내 정보 공개/비공개 ------------------------------ */
 export const __updateMyInfoStatus = createAsyncThunk("usearch/__updateMyInfoStatus", async (payload, thunkAPI) => {
   try {
     console.log('__updateMyInfoStatus=>', payload);
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.patch(`http://13.209.97.209/api/mypage/secret`, payload, {
+    const data = await axios.patch(`${API_URL}/mypage/secret`, payload, {
       headers: {
         Authorization: authorization_token
       },
     });
     console.log(data);
     return thunkAPI.fulfillWithValue(data.data);
-    // thunkAPI.dispatch(__getMyInfo());
   } catch (error) {
     window.alert("정보를 불러올 수 없습니다.");
     console.log(error);
@@ -45,18 +46,18 @@ export const __updateMyInfoStatus = createAsyncThunk("usearch/__updateMyInfoStat
   }
 });
 
+/* -------------------------------- 닉네임 중복 확인 ------------------------------- */
 export const __postNickNameOverlap = createAsyncThunk("usearth/__postNickNameOverlap", async (payload, thunkAPI) => {
   try {
     console.log('__postNickNameOverlap=>', payload);
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.post(`http://13.209.97.209/api/mypage/nickname`, payload, {
+    const data = await axios.post(`${API_URL}/mypage/nickname`, payload, {
       headers: {
         Authorization: authorization_token
       },
     });
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
-    // thunkAPI.dispatch(__getMyInfo());
   } catch (error) {
     window.alert("정보를 불러올 수 없습니다.");
     console.log(error);
@@ -65,20 +66,20 @@ export const __postNickNameOverlap = createAsyncThunk("usearth/__postNickNameOve
   }
 });
 
+/* --------------------------------- 닉네임 변경 --------------------------------- */
 export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubmit", async (payload, thunkAPI) => {
   try {
     console.log('__postNickNameSubmit=>', payload);
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.patch(`http://13.209.97.209/api/mypage/nickname`, payload, {
+    const data = await axios.patch(`${API_URL}/mypage/nickname`, payload, {
       headers: {
         Authorization: authorization_token
       },
     });
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
-    // thunkAPI.dispatch(__getMyInfo());
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("닉네임 변경에 실패 하였습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -89,36 +90,35 @@ export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubm
 export const __getTodayMission = createAsyncThunk("usearth/__getTodayMission", async (payload, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.get(`http://13.209.97.209/api/missions`, {
+    const data = await axios.get(`${API_URL}/missions`, {
       headers: {
         Authorization: authorization_token
       },
     });
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
-    // thunkAPI.dispatch(__getMyInfo());
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("오늘의 미션 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
   }
 });
 
+/* ------------------------------ 오늘의 미션 완료 처리 ------------------------------ */
 export const __updateMissionFlag = createAsyncThunk("usearth/__updateMissionFlag", async (payload, thunkAPI) => {
   try {
     console.log('__updateMissionFlag=>', payload);
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.patch(`http://13.209.97.209/api/missions`, payload, {
+    const data = await axios.patch(`${API_URL}/missions`, payload, {
       headers: {
         Authorization: authorization_token
       },
     });
     console.log("DATA=>", data);
-    // return thunkAPI.fulfillWithValue(data.data);
     thunkAPI.dispatch(__getTodayMission());
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("오늘의 미션을 완료처리 할 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -130,7 +130,7 @@ export const __updateMissionFlag = createAsyncThunk("usearth/__updateMissionFlag
 export const __getMyPageMissionGroup = createAsyncThunk("usearth/__getMyPageMissionGroup", async (payload, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.get(`http://13.209.97.209/api/mypage/groupmission`, {
+    const data = await axios.get(`${API_URL}/mypage/groupmission`, {
       headers: {
         Authorization: authorization_token
       },
@@ -138,7 +138,7 @@ export const __getMyPageMissionGroup = createAsyncThunk("usearth/__getMyPageMiss
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("그룹미션 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;

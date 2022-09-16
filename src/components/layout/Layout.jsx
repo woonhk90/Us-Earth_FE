@@ -11,6 +11,6 @@ export default Layout;
 
 const LayoutWrap = styled.div`
   width:100vw;
-  height:calc(100vh - 48px * 2);
+  height:calc(100vh - 48px - 62px);
   position:relative;
 `;

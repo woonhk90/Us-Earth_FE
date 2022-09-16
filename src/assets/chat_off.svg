@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_2" data-name="레이어 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 455.19 420.5">
+  <defs>
+    <style>
+      .chat-off-1 {
+        fill: #ddd;
+      }
+
+      .chat-off-2 {
+        fill: none;
+      }
+
+      .chat-off-2, .chat-off-3 {
+        stroke: #ddd;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 28px;
+      }
+
+      .chat-off-3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="_최종" data-name="최종">
+    <g>
+      <path class="chat-off-2" d="M38.91,354.5h32.1s-.01,52-.01,52l55.83-52h154.26c13.76,0,24.91-11.15,24.91-24.91V181.41c0-13.76-11.15-24.91-24.91-24.91H38.91c-13.76,0-24.91,11.15-24.91,24.91v148.18c0,13.76,11.15,24.91,24.91,24.91Z"/>
+      <path class="chat-off-3" d="M416.28,212h-32.1v52s-55.82-52-55.82-52H174.1c-13.76,0-24.91-11.15-24.91-24.91V38.91c0-13.76,11.15-24.91,24.91-24.91h242.18c13.76,0,24.91,11.15,24.91,24.91V187.09c0,13.76-11.15,24.91-24.91,24.91Z"/>
+      <g>
+        <circle class="chat-off-1" cx="209.47" cy="112.73" r="20.09"/>
+        <circle class="chat-off-1" cx="295.19" cy="112.73" r="20.09"/>
+        <circle class="chat-off-1" cx="380.9" cy="112.73" r="20.09"/>
+      </g>
+    </g>
+  </g>
+</svg>
