@@ -9,6 +9,8 @@ import { useInView } from "react-intersection-observer";
 import SampleImg03 from "../assets/banner.jpg";
 import { useNavigate } from "react-router-dom";
 import banner01 from '../assets/banner.png';
+import PopularGroupItemList from './community/PopularGroupItemList';
+import NewGroupItemList from './community/NewGroupItemList';
 
 const Community = () => {
   const dispatch = useDispatch();
@@ -27,7 +29,6 @@ const Community = () => {
   /* ----------------------------- 커뮤니티 전체목록 가져오기 ----------------------------- */
   useEffect(() => {
     console.log("커뮤니티 호출");
-
     dispatch(__getCommunity({ page, search }));
   }, [page]);
 
@@ -58,60 +59,16 @@ const Community = () => {
               <PopularGroupTitle>인기 그룹</PopularGroupTitle>
             </PopularGroupTop>
             <PopularGroupBox>
-              <PopularGroupItem>
-                <PopularGroupItemImg bgImg={SampleImg01}>
-                  <ItemIcon>
-                    <Lock />
-                  </ItemIcon>
-                  <ItemFlag>
-                    <span>모집중</span>
-                  </ItemFlag>
-                </PopularGroupItemImg>
-                <PopularGroupItemTitle>재활용 합시다</PopularGroupItemTitle>
-              </PopularGroupItem>
-              <PopularGroupItem>
-                <PopularGroupItemImg bgImg={SampleImg02}>
-                  <ItemIcon>
-                    <Lock />
-                  </ItemIcon>
-                  <ItemFlag>
-                    <span>모집중</span>
-                  </ItemFlag>
-                </PopularGroupItemImg>
-                <PopularGroupItemTitle>재활용 합시다</PopularGroupItemTitle>
-              </PopularGroupItem>
-              <PopularGroupItem>
-                <PopularGroupItemImg>
-                  <Lock />
-                </PopularGroupItemImg>
-                <PopularGroupItemTitle>재활용 합시다</PopularGroupItemTitle>
-              </PopularGroupItem>
+              <PopularGroupItemList />
             </PopularGroupBox>
           </PopularGroup>
 
           <NewGroup>
             <NewGroupTop>
-              <NewGroupTitle>신상 그룹</NewGroupTitle>
+              <NewGroupTitle>마감임박 그룹</NewGroupTitle>
             </NewGroupTop>
             <NewGroupBox>
-              <NewGroupItem>
-                <NewGroupItemImg>
-                  <Lock />
-                </NewGroupItemImg>
-                <NewGroupItemTitle>재활용 합시다</NewGroupItemTitle>
-              </NewGroupItem>
-              <NewGroupItem>
-                <NewGroupItemImg>
-                  <Lock />
-                </NewGroupItemImg>
-                <NewGroupItemTitle>재활용 합시다</NewGroupItemTitle>
-              </NewGroupItem>
-              <NewGroupItem>
-                <NewGroupItemImg>
-                  <Lock />
-                </NewGroupItemImg>
-                <NewGroupItemTitle>재활용 합시다</NewGroupItemTitle>
-              </NewGroupItem>
+              <NewGroupItemList />
             </NewGroupBox>
           </NewGroup>
 
@@ -180,36 +137,10 @@ const PopularGroupBox = styled.div`
     display: none;
   }
 `;
-const PopularGroupItem = styled.div`
-  margin: 0 4.5px;
-`;
-const PopularGroupItemImg = styled.div`
-  width: 143px;
-  height: 175px;
-  border-radius: 6px;
-  position: relative;
 
-  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg});
-  background-repeat: no-repeat;
-  background-size: cover;
-`;
-const ItemIcon = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px;
-  color: #fff;
-`;
-const ItemFlag = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 10px;
-  color: #fff;
-`;
-const PopularGroupItemTitle = styled.div`
-  font: bold 20px/40px "Arial", "sans-serif";
-`;
+
+
+
 
 const NewGroup = styled.div`
   width: 100vw;
@@ -230,21 +161,9 @@ const NewGroupBox = styled.div`
     display: none;
   }
 `;
-const NewGroupItem = styled.div`
-  margin: 0 4.5px;
-`;
-const NewGroupItemImg = styled.div`
-  width: 143px;
-  height: 175px;
-  border: 1px solid black;
-  box-sizing: border-box;
-  border-radius: 6px;
 
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%);
-`;
-const NewGroupItemTitle = styled.div`
-  font: bold 20px/40px "Arial", "sans-serif";
-`;
+
+
 
 const CommunityGroup = styled.div`
   box-sizing: border-box;

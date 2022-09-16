@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_2" data-name="레이어 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 416.55 420.5">
+  <defs>
+    <style>
+      .mypage-off-1 {
+        fill: #ddd;
+      }
+
+      .mypage-off-2 {
+        fill: none;
+        stroke: #ddd;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 28px;
+      }
+    </style>
+  </defs>
+  <g id="_최종" data-name="최종">
+    <g>
+      <path class="mypage-off-1" d="M208.28,28c43.37,0,78.65,35.28,78.65,78.65s-35.28,78.65-78.65,78.65-78.65-35.28-78.65-78.65S164.91,28,208.28,28m0-28c-58.9,0-106.65,47.75-106.65,106.65s47.75,106.65,106.65,106.65,106.65-47.75,106.65-106.65S267.18,0,208.28,0h0Z"/>
+      <path class="mypage-off-2" d="M14,406.5c0-98.63,86.98-178.58,194.28-178.58s194.28,79.95,194.28,178.58"/>
+    </g>
+  </g>
+</svg>

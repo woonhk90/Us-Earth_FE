@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_2" data-name="레이어 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440.87 420">
+  <defs>
+    <style>
+      .community-on-1 {
+        fill: #fff;
+      }
+
+      .community-on-1, .community-on-2 {
+        stroke: #94da76;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 28px;
+      }
+
+      .community-on-2 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <g id="_최종" data-name="최종">
+    <g>
+      <circle class="community-on-2" cx="210" cy="210" r="196"/>
+      <ellipse class="community-on-2" cx="210" cy="210" rx="85.92" ry="196"/>
+      <path class="community-on-2" d="M406,194.95s-45.93,55.04-196,55.04c-150.07,0-196-55.04-196-55.04"/>
+      <path class="community-on-1" d="M332.8,406s-85.56-41.96-92.63-92.63c-8.68-62.23,56.44-94.07,92.63-41.97h.66c36.18-52.1,101.31-20.26,92.63,41.97-7.07,50.67-92.63,92.63-92.63,92.63h-.66Z"/>
+    </g>
+  </g>
+</svg>
