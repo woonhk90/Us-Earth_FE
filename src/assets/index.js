@@ -7,6 +7,7 @@ import { ReactComponent as LeftArrow } from "./LeftArrow.svg";
 import { ReactComponent as Chart } from "./chart.svg";
 import { ReactComponent as Group } from "./group.svg";
 import { ReactComponent as RightThinArrow } from "./RightThinArrow.svg";
+
 import { ReactComponent as Community_On } from "./community_on.svg";
 import { ReactComponent as Community_Off } from "./community_off.svg";
 import { ReactComponent as Info_On } from "./info_on.svg";
@@ -16,9 +17,13 @@ import { ReactComponent as Chat_Off } from "./chat_off.svg";
 import { ReactComponent as Mypage_On } from "./mypage_on.svg";
 import { ReactComponent as Mypage_Off } from "./mypage_off.svg";
 
+import { ReactComponent as Edit } from "./Edit2.svg";
+import { ReactComponent as Delete } from "./delete.svg";
+import { ReactComponent as Report } from "./report.svg";
+import { ReactComponent as VerticalDot } from "./verticalDot.svg";
+import { ReactComponent as Write } from "./write.svg";
 
-
-import Banner from './banner.png';
+import Banner from "./banner.png";
 
 const icons = {
   Kakao: Kakao,
@@ -30,6 +35,11 @@ const icons = {
   Chart: Chart,
   Group: Group,
   RightThinArrow: RightThinArrow,
+  Edit: Edit,
+  Delete: Delete,
+  Report: Report,
+  VerticalDot: VerticalDot,
+  Write: Write,
   Banner: Banner,
   Community_On,
   Community_Off,

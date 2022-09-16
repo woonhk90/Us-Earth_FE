@@ -185,7 +185,7 @@ const WeekDatePrevButton = styled.button`
   background-repeat: no-repeat;
   background-size: 8px;
   width: 8px;
-  height: 8px;
+  height: 12px;
   background-color: transparent;
   border: none;
   color: transparent;
@@ -197,7 +197,7 @@ const WeekDateNextButton = styled.button`
   background-repeat: no-repeat;
   background-size: 8px;
   width: 8px;
-  height: 8px;
+  height: 12px;
   background-color: transparent;
   border: none;
   color: transparent;

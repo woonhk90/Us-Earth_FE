@@ -15,7 +15,7 @@ const UserMissionMonth = () => {
   const navigate = useNavigate();
   const { clickDate } = useSelector((state) => state.userMission);
   const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
-
+console.log(dailyMissionData)
   useEffect(() => {
     dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
   }, []);
@@ -38,8 +38,8 @@ const UserMissionMonth = () => {
       <UserMissionMonthCalendar />
       <SelectDateWrap>
         {/* <SelectDateP>{dayjs(clickDate).format("YYYY년 MM월 DD일")}</SelectDateP> */}
-        <SelectDateP>{dayjs(dailyMissionData.selectedDate).format("YYYY년 MM월 DD일")}</SelectDateP>
-        <SuccessMissionP>{dailyMissionData.clearMissionCnt}개 완료</SuccessMissionP>
+        <SelectDateP>{dayjs(dailyMissionData.createdAt).format("YYYY년 MM월 DD일")}</SelectDateP>
+        <SuccessMissionP>{dailyMissionData.count}개 완료</SuccessMissionP>
       </SelectDateWrap>
       <SelectDateMissionListWrap>
         <div>

@@ -6,17 +6,17 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import CommunityBottom from "../components/CommunityBottom";
 import UserMissionMonth from "../components/userMission/UserMissionMonth";
-import UserMissionMonthTop from "../components/userMission/UserMissionMonthTop";
+import UserMissionTop from "../components/userMission/UserMissionTop";
 
 const EarthMyPageMissonMonth = () => {
   return (
     <>
       <Layout>
         <Header>
-          <UserMissionMonthTop />
+          <UserMissionTop />
         </Header>
         <CommunityBox>
-          <UserMissionMonth/>
+          <UserMissionMonth />
         </CommunityBox>
         <Footer>
           <CommunityBottom />

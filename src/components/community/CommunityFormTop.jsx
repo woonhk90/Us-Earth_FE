@@ -37,7 +37,7 @@ const HeaderWrap = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 50px;
+  height: 48px;
   display: flex;
   justify-content: space-between;
   padding: 14px;
@@ -58,6 +58,6 @@ const P = styled.p`
 
 const IconDiv = styled.div`
   cursor: pointer;
-  width: 14px;
-  height: 14px;
+  width: 21px;
+  height: 21px;
 `;

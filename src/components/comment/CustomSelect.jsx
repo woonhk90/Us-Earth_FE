@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled, { css, keyframes } from "styled-components";
-import { ReactComponent as Edit } from "../../assets/Edit.svg";
+import { ReactComponent as WidthDot } from "../../assets/widthDot.svg";
 import { commentSelectBox } from "../../redux/modules/commentsSlice";
+import { flexRow } from "../../styles/Flex";
 // import "./Modal.css";
 
 const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
@@ -39,9 +40,13 @@ const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
   return (
     <>
       <SelectBox ref={modalRef} onClick={() => setShowOptions(!showOptions)}>
+        <EditIcon>
+          <WidthDot />
+        </EditIcon>
         <SelectOptions show={showOptions}>
           {selectBoxData.map((button) => (
             <Option key={button.id} onClick={onClickselectValue}>
+              {button.icon}
               {button.selectName}
             </Option>
           ))}
@@ -55,18 +60,14 @@ export default CustomSelect;
 
 const SelectBox = styled.div`
   position: relative;
-  width: 30px;
+  width: 40px;
   height: 30px;
-  /* padding: 8px; */
+  box-sizing: border-box;
   align-self: center;
   cursor: pointer;
   &::before {
-    content: "⌵";
+    content: "";
     position: absolute;
-    top: 0px;
-    right: 8px;
-    color: #49c181;
-    font-size: 20px;
   }
 `;
 const Label = styled.label`
@@ -81,7 +82,7 @@ const SelectOptions = styled.ul`
   text-align: center;
   /* background-color: #ffffff; */
   position: absolute;
-  z-index:999;
+  z-index: 999;
   list-style: none;
   top: 20px;
   right: 0;
@@ -100,13 +101,23 @@ const SelectOptions = styled.ul`
 //내부 옵션바 텍스트
 const Option = styled.li`
   background-color: #ffffff;
-
+  ${flexRow}
   width: 125px;
   font-size: 16px;
   padding: 13px 8px;
-
+  justify-content: center;
   vertical-align: middle;
   transition: background-color 0.2s ease-in;
 `;
 
-const EditIcon = styled.div``;
+const EditIcon = styled.div`
+  width: 18px;
+  box-sizing: border-box;
+  /* padding: 0 5px 12px 0; */
+  position: absolute;
+  /* padding:2px; */
+  top: -10px;
+  right: 10px;
+  color: #49c181;
+  font-size: 20px;
+`;
