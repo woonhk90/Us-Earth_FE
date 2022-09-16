@@ -11,7 +11,7 @@ const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
   const dispatch = useDispatch();
 
   const [selectValue, setSelectValue] = useState("");
-  console.log(selectBoxData);
+
   useEffect(() => {
     window.addEventListener("mousedown", clickModalOutside);
 
@@ -20,7 +20,6 @@ const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
     };
   });
 
-  console.log(contentId);
   const clickModalOutside = (event) => {
     if (showOptions && !modalRef.current.contains(event.target)) {
       setShowOptions(!showOptions);

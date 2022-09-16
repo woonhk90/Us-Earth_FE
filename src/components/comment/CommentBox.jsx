@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { Navigation, Pagination, Scrollbar } from "swiper";
 import CommentModal from "./CommentModal";
 import { useDispatch, useSelector } from "react-redux";
-import { flexColumn, flexRow, flexBetween, FlexRow, Text } from "../../styles/Flex";
+import { flexColumn, flexRow } from "../../styles/Flex";
 import Comment from "./Comment";
-import useInput from "../../hooks/useInput";
 import CommentInput from "./CommentInput";
 import CommentInputEdit from "./CommentInputEdit";
 import { commentEditChange } from "../../redux/modules/commentsSlice";
@@ -16,66 +14,43 @@ import { ReactComponent as Heart } from "../../assets/heart.svg";
 import { ReactComponent as HeartGy } from "../../assets/heartGy.svg";
 import { ReactComponent as CommentIcon } from "../../assets/commentIcon.svg";
 import Cookies from "universal-cookie";
+import LoginModal from "../Modals/LoginModal";
 
 const CommentBox = () => {
   const cookies = new Cookies();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const param = useParams();
-  const [modalOpen, setModalOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
+  const { userHeart, heartCommentCnt } = useSelector((state) => state.proofs);
   const { comments, commentEdit } = useSelector((state) => state.comments);
-  const { userHeart, proofs, heartCommentCnt } = useSelector((state) => state.proofs);
+  const editMode = commentEdit.editMode;
+
   const [userToken, setUserToken] = useState(false);
 
-  console.log("유저의 헐트 상태", userHeart);
-  console.log(userToken);
+  const [commentModal, setCommentModal] = useState(false);
 
-  console.log("커멘트에서 에딧모드", commentEdit);
-
-  const editMode = commentEdit.editMode;
-  const openModal = () => {
-    setModalOpen(true);
+  const commentModalOpen = () => {
+    setCommentModal(true);
   };
 
   useEffect(() => {
-    console.log("랜더링");
     if (cookies.get("mycookie")) {
       setUserToken(true);
     } else setUserToken(false);
     dispatch(getHeartCommentCnt(param.proofId));
-    return console.log("커멘트박스 언마운트");
   }, []);
 
-  const closeModal = () => {
-    console.log("클로즈모달?");
+  const commentModalClose = () => {
     if (editMode) {
-      modalOnOff();
-      // if (window.confirm("삭제모드 취소 하시겠습니까")) {
-      //   setModalOpen(false);
-      //   dispatch(commentEditChange({}));
-      //   console.log("에딧모드 리셋");
-      // } else return;
-    } else setModalOpen(false);
-  };
-
-  const onClickDelete = () => {
-    if (window.confirm("삭제하시겠습니까?")) {
-      // dispatch(__deleteDetail(param.id));
-      // navigate("/");
-    } else {
-      return;
-    }
-  };
-
-  const onClickEdit = () => {
-    // navigate(`/edit/${param.id}`);
+      setDeleteModal(true);
+    } else setCommentModal(false);
   };
 
   /* -------------------------------- delete modal ------------------------------- */
-  const [modal, setModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   // modal text data
-  const confirmModalData = {
+  const deleteModalData = {
     title: "수정을 취소하시겠습니까?",
     cancel: "아니오",
     submit: "예",
@@ -83,53 +58,69 @@ const CommentBox = () => {
   };
 
   // editMode cancel function
-  const clickSubmit = () => {
-    setModalOpen(false);
+  const deleteModalOnclickSubmit = () => {
+    setDeleteModal(false);
     dispatch(commentEditChange({}));
+    setCommentModal(false);
   };
 
-  const modalOnOff = () => {
-    setModal(!modal);
+  const deleteModalOnOff = () => {
+    setDeleteModal(!deleteModal);
   };
 
-  /* -------------------------------- 빠른좋아요 구현 -------------------------------- */
-  const [heart, setHeart] = useState(false);
+  /* ----------------------------------- 좋아요 ---------------------------------- */
+
   const onClickHeart = () => {
-    if (userToken) {
+    if (userToken && participant) {
       dispatch(patchHeartCnt(param.proofId));
     }
   };
 
+  /* ----------------------------------- 로그인 ---------------------------------- */
+  const [loginModal, setLoginModal] = useState(false);
+  const loginModalOnOff = () => {
+    setLoginModal(!loginModal);
+  };
+  const loginCheck = () => {
+    if (!userToken) setLoginModal(true);
+  };
+
   return (
     <>
+      {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
+
       <IconContainer>
         <IconWrap>
           <div onClick={onClickHeart}>
             {userHeart ? (
               <>
-                <BottomIcon>
-                  <HeartGy />
-                </BottomIcon>
+                <HeartButtonWrap isHeart={!participant || !userToken}>
+                  <BottomIcon>
+                    <HeartGy />
+                  </BottomIcon>
+                </HeartButtonWrap>
               </>
             ) : (
               <>
-                <BottomIcon>
-                  <Heart />
-                </BottomIcon>
+                <HeartButtonWrap isHeart={!participant || !userToken}>
+                  <BottomIcon>
+                    <Heart />
+                  </BottomIcon>
+                </HeartButtonWrap>
               </>
             )}
           </div>
           <IconP>{heartCommentCnt.heartCnt}</IconP>
         </IconWrap>
-        <IconWrap onClick={openModal}>
+        <CommentButtonWrap onClick={commentModalOpen}>
           <BottomIcon>
             <CommentIcon />
           </BottomIcon>
           <IconP>{heartCommentCnt.commentCnt}</IconP>
-        </IconWrap>
+        </CommentButtonWrap>
       </IconContainer>
-      {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={modalOnOff}></ConfirmModal>}
-      <CommentModal open={modalOpen} close={closeModal}>
+      {deleteModal && <ConfirmModal clickSubmit={deleteModalOnclickSubmit} confirmModalData={deleteModalData} closeModal={deleteModalOnOff}></ConfirmModal>}
+      <CommentModal open={commentModal} close={commentModalClose}>
         <ButtonInModalWrap>
           <StHeader>
             <HeaderP>댓글 {comments.commentResponseDtoList?.length}</HeaderP>
@@ -137,19 +128,15 @@ const CommentBox = () => {
           <CommentContainer>
             <Comment userToken={userToken} />
           </CommentContainer>
-          
-          {editMode ? <CommentInputEdit /> : <CommentInput userToken={userToken}/>}
+          <CommentContainer onClick={loginCheck}>
+            {editMode ? <CommentInputEdit userToken={userToken} /> : <CommentInput userToken={userToken} />}
+          </CommentContainer>
         </ButtonInModalWrap>
       </CommentModal>
     </>
   );
 };
 export default React.memo(CommentBox);
-
-const ModalButton = styled.div`
-  background-color: transparent;
-  border: none;
-`;
 
 const ButtonInModalWrap = styled.div`
   width: 100%;
@@ -173,15 +160,8 @@ const IconContainer = styled.div`
   gap: 10px;
 `;
 
-// height: 100%;
-// width: 100%;
-
-// position: absolute;
-// top: 48px;
-// left: 0;
 
 const BottomIcon = styled.div`
-  cursor: pointer;
   width: 23px;
   padding-right: 5px;
   height: 21px;
@@ -192,15 +172,25 @@ const IconWrap = styled.div`
   margin: 10px;
 `;
 
+const CommentButtonWrap = styled.div`
+  ${flexRow}
+  margin: 10px;
+  cursor: pointer;
+`;
+
 const IconP = styled.p`
   font-weight: 400;
   font-size: 18px;
   letter-spacing: -0.02em;
   color: #9b9b9b;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 `;
 
 const HeaderP = styled.p`
   font-size: 24px;
   font-weight: 600;
+`;
+
+const HeartButtonWrap = styled.div`
+  cursor: ${(props) => (props.isHeart ? "auto" : "pointer")};
 `;

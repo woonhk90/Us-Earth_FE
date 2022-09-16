@@ -1,46 +1,62 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import CustomSelect from "./CustomSelect";
-import { flexColumn, flexRow, flexBetween, FlexRow, Text, flexColumnLeft } from "../../styles/Flex";
+import { flexRow, flexBetween, flexColumnLeft } from "../../styles/Flex";
 import { useDispatch, useSelector } from "react-redux";
-import { commentEditChange, deleteComments, getComments, patchComment } from "../../redux/modules/commentsSlice";
+import { commentEditChange, deleteComments, getComments } from "../../redux/modules/commentsSlice";
 import ConfirmModal from "../Modals/ConfirmModal";
 import icons from "../../assets";
+import OkModal from "../Modals/OkModal";
 
-const Comment = ({ userToken }) => {
-  const { VerticalDot, Delete, Report, Edit } = icons;
+const Comment = () => {
+  const { Delete, Report, Edit } = icons;
   const dispatch = useDispatch();
   const param = useParams();
+  const { dateStatus } = useSelector((state) => state.community.communityDetail);
   const { commentResponseDtoList, commentEdit } = useSelector((state) => state.comments.comments);
-  console.log(commentResponseDtoList);
 
   useEffect(() => {
     dispatch(getComments(param.proofId));
   }, []);
 
-  /* -------------------- Select Box function (Update & Delete) -------------------- */
+  /* -------------------------- 캠페인 종료 시 댓글 수정 실패 모달 -------------------------- */
+  const [okModal, setOkModal] = useState(false);
+
+  // modal text
+  const okModalTitle = "종료된 캠페인의 댓글은 수정하실 수 없습니다.";
+
+  // onOff Modal
+  const okModalOnOff = () => {
+    setOkModal(!okModal);
+  };
+
+  /* --------------------------- 수정, 삭제, 신고하기 셀렉트 박스 -------------------------- */
+
+  // dispatch function
   const clickDispatch = (payload) => {
     if (payload.selectName === "수정하기") {
-      if (commentEdit?.editMode !== true) {
-        const commentList = commentResponseDtoList.find((comment) => comment.commentId === payload.contentId);
-        dispatch(commentEditChange({}));
-        dispatch(
-          commentEditChange({
-            editMode: true,
-            comment: commentList.content,
-            commentImg: commentList.img?.imgUrl,
-            commentId: payload.contentId,
-          })
-        );
-      }
+      if (dateStatus === "ongoing") {
+        if (commentEdit?.editMode !== true) {
+          const commentList = commentResponseDtoList.find((comment) => comment.commentId === payload.contentId);
+          dispatch(commentEditChange({}));
+          dispatch(
+            commentEditChange({
+              editMode: true,
+              comment: commentList.content,
+              commentImg: commentList.img?.imgUrl,
+              commentId: payload.contentId,
+            })
+          );
+        }
+      } else setOkModal(true);
     } else if (payload.selectName === "삭제하기") {
       setModal(!modal);
       setDispaychPayload(payload);
     }
   };
 
-  /* ----------------------------- Select Box Data ---------------------------- */
+  // data
   const selectBoxData = [
     {
       id: 1,
@@ -101,6 +117,7 @@ const Comment = ({ userToken }) => {
 
   return (
     <>
+      {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
       <CommentContainer>
         {commentResponseDtoList?.map((comment) => (
           <CommentBox key={comment.commentId}>
@@ -110,7 +127,7 @@ const Comment = ({ userToken }) => {
                   <Nickname>{comment.nickname}</Nickname>
                   <CreatAt>{comment.creatAt}</CreatAt>
                 </CommentText>
-                <CustomSelect clickDispatch={clickDispatch} contentId={comment.commentId} selectBoxData={selectBoxData} />
+                {comment.writer ? <CustomSelect clickDispatch={clickDispatch} contentId={comment.commentId} selectBoxData={selectBoxData} /> : null}
                 {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmModal>}
               </CommentTop>
               {comment.img !== null ? <CommentImg src={comment.img} alt="img" /> : null}

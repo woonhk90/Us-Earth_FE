@@ -42,7 +42,7 @@ const CommunityFormEdit = () => {
           end: data.endDate,
         })
       );
-      setPreviewImg([data.img.imgUrl]);
+      setPreviewImg([data.img]);
       setIsPassword(data.secret);
     } catch (error) {
       return error;

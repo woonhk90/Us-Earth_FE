@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
 import Textarea from "../elements/Textarea";
@@ -11,11 +11,11 @@ import Cookies from "universal-cookie";
 import ConfirmModal from "../Modals//ConfirmModal";
 import { ReactComponent as Camera } from "../../assets/camera.svg";
 import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
-import cancelWh from "../../assets/cancelWh.svg";
 import Button from "../elements/Button";
 import { flexColumn } from "../../styles/Flex";
 
-const CommentInputEdit = () => {
+const CommentInputEdit = ({ userToken }) => {
+  const inputRef = useRef();
   const param = useParams();
   const cookies = new Cookies();
   const dispatch = useDispatch();
@@ -30,10 +30,18 @@ const CommentInputEdit = () => {
   /* --------------------------------- on input -------------------------------- */
   const [inputOn, setInputOn] = useState(false);
 
-  const onInputHandler = () => {
-    setInputOn(!inputOn);
-  };
 
+  const textRef = useRef();
+  const handleResizeHeight = useCallback(() => {
+    if (textRef.current.scrollHeight < 150) {
+      textRef.current.style.height = `auto`;
+      textRef.current.style.height = textRef.current.scrollHeight + "px";
+    }
+  }, []);
+
+  const clickInputOutside = (event) => {
+    setInputOn(inputRef.current.contains(event.target));
+  };
   /* -------------------------------- axios get ------------------------------- */
 
   const getComments = async (payload) => {
@@ -46,6 +54,7 @@ const CommentInputEdit = () => {
       // find data & into input
       const commentList = data.commentResponseDtoList.find((comment) => comment.commentId === payload.commentId);
       setInputOn(true);
+      console.log("겟요청");
       setContent(commentList.content);
       if (commentList.img === null) {
         setImageFile([]);
@@ -59,21 +68,16 @@ const CommentInputEdit = () => {
 
   /* ----------------------------- edit useEffect(*) ---------------------------- */
   useEffect(() => {
+    window.addEventListener("mousedown", clickInputOutside);
     if (commentEdit.editMode) {
+      console.log("아?");
       getComments({
         proofId: param.proofId,
         commentId: commentEdit.commentId,
       });
     }
     return () => {
-      // unmount clean code
-      if (!commentEdit.editMode) {
-        imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
-        commentReset();
-        setImageFile([]);
-        setPreviewImg([]);
-        dispatch(commentEditChange({}));
-      }
+      window.removeEventListener("mousedown", clickInputOutside);
     };
   }, [commentEdit.commentId]);
 
@@ -85,6 +89,7 @@ const CommentInputEdit = () => {
 
   // add image
   const addImageFile = (e) => {
+    console.log("렌더링되니 이미지파일?");
     setIsPhotoMessage("");
     let reader = new FileReader();
     if (e.target.files.length > 0) {
@@ -97,7 +102,7 @@ const CommentInputEdit = () => {
         };
       } else {
         setPreviewImg([]);
-        setIsPhotoMessage("사진 사이즈가 20MB를 초과했습니다.");
+        setIsPhotoMessage("사진은 최대 20MB까지 등록 가능합니다.");
       }
     }
   };
@@ -107,6 +112,14 @@ const CommentInputEdit = () => {
     setImageFile([]);
     setPreviewImg([]);
     setDeleteImg(true);
+  };
+
+  
+  const inputOnButton = () => {
+    if (userToken) {
+      setInputOn(true);
+      textRef.current.focus();
+    }
   };
 
   /* ---------------------------------- submit(*) ---------------------------------- */
@@ -123,18 +136,19 @@ const CommentInputEdit = () => {
       // dispatch formData
       dispatch(patchComment({ commentId: commentEdit.commentId, proofId: param.proofId, formData: formData }));
       setInputOn(false);
+      commentReset();
+      setImageFile([]);
+      setPreviewImg([]);
+      textRef.current.style.height = `auto`;
     }
 
     // data reset function
-    commentReset();
-    setImageFile([]);
-    setPreviewImg([]);
   };
 
   /* -------------------------------- edit modal ------------------------------- */
-  const [modal, setModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
 
-  // modal text data
+  // editModal text data
   const confirmModalData = {
     title: "수정을 취소하시겠습니까?",
     cancel: "아니오",
@@ -150,102 +164,90 @@ const CommentInputEdit = () => {
     dispatch(commentEditChange({}));
   };
 
-  const modalOnOff = () => {
-    setModal(!modal);
+  const editModalOnOff = () => {
+    setEditModal(!editModal);
   };
 
   return (
     <>
-      <CommentInputWrap>
-        <form onClick={() => setInputOn(true)} encType="multipart/form-data">
-          <StLabel htmlFor="file">
-            <StIcon>
-              <CameraIcon>
-                <Camera />
-              </CameraIcon>
-            </StIcon>
-          </StLabel>
-          <StImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
-          {/* <input type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} /> */}
-        </form>
-        <InputWrap inputOn={inputOn}>
-          {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
-          {inputOn ? (
-            <>
-              {previewImg.length > 0 && (
-                <>
-                  <Container>
-                    <DeleteButton onClick={deleteImageFile}>
+     <CommentInputContainer>
+        <CommentInputWrap ref={inputRef}>
+          <form onClick={inputOnButton} encType="multipart/form-data">
+            <StLabel htmlFor={!userToken ? null : "file"}>
+              <StIcon>
+                <CameraIcon>
+                  <Camera />
+                </CameraIcon>
+              </StIcon>
+            </StLabel>
+            <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} />
+          </form>
+          <CommentInputWrap>
+            <InputWrap inputOn={inputOn}>
+              {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
+              {previewImg.length > 0 && inputOn && (
+                <Container>
+                  <DeleteButton onClick={deleteImageFile}>
+                    <CancelIconWrap>
                       <CancelIcon>
                         <CancelWh />
                       </CancelIcon>
-                    </DeleteButton>
-                    {/* <DeleteButton >x</DeleteButton> */}
-                    <Thumb src={previewImg} alt="img" />
-                  </Container>
-                </>
+                    </CancelIconWrap>
+                  </DeleteButton>
+                  <Thumb src={previewImg} alt="img" />
+                </Container>
               )}
-              <TextareaWrap>
-                <Textarea
-                  cols="50"
-                  rows="8"
-                  maxLength="100"
-                  textareaType="comment"
-                  autoFocus={true}
-                  value={content}
-                  onChange={commentOnChange}
-                  placeholder="댓글을 입력해주세요"
-                />
-              </TextareaWrap>
-            </>
-          ) : (
-            <TextareaP style={{ cursor: "pointer" }} onClick={onInputHandler}>
-              댓글을 입력해주세요.
-            </TextareaP>
-          )}
-        </InputWrap>
-        <SubmitButtonWrap>
-        <SubmitButton>
-          <Button btntype="submit" onClick={onClickSubmit}>
-          수정
-          </Button>
-        </SubmitButton>
-        <SubmitButton>
-          <Button btntype="submit" onClick={modalOnOff}>
-          수정취소
-          </Button>
-        </SubmitButton>
-        </SubmitButtonWrap>
-        {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={modalOnOff}></ConfirmModal>}
-      </CommentInputWrap>
+              <CommentTextarea
+                emptyCheck={inputOn || content.length || previewImg.length}
+                maxLength="100"
+                textareaType="comment"
+                value={content}
+                onChange={commentOnChange}
+                placeholder="댓글을 입력해주세요"
+                ref={textRef}
+                onInput={handleResizeHeight}
+                disabled={!userToken}
+              />
+            </InputWrap>
+            <SubmitButtonWrap>
+              <Button btntype="submit" onClick={onClickSubmit}>
+                수정
+              </Button>
+              {/* <SubmitButton>
+                <Button btntype="submit" onClick={modalOnOff}>
+                  수정취소
+                </Button>
+              </SubmitButton> */}
+            </SubmitButtonWrap>
+            {editModal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={editModalOnOff}></ConfirmModal>}
+          </CommentInputWrap>
+        </CommentInputWrap>
+      </CommentInputContainer>
     </>
   );
 };
 
 export default CommentInputEdit;
 
+const CommentInputContainer = styled.div`
+  width: 100%;
+`;
+
 const CommentInputWrap = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  padding: 0px 0px 0px 14px;
-  /* border-top: 1px solid gray; */
-  /* background-color: #3a3a3a; */
+  padding: 6px 6px 6px 14px;
   background-color: #f9f9f9;
 `;
 
 const InputWrap = styled.div`
   width: 100%;
-  /* margin: 5px 8px 14px 8px; */
-  margin: ${(props) => (!props.inputOn ? "5px 8px 0px 8px" : "5px 8px 14px 8px")};
+  margin-right: 6px;
   border-radius: 6px;
-  /* background-color: ${(props) => (!props.inputOn ? "white" : "#ac2727")}; */
   background-color: ${(props) => (props.inputOn ? "white" : "#f9f9f9")};
 `;
-
-const SubmitButton = styled.div``;
-//사진
 
 const StImageInput = styled.input`
   position: absolute;
@@ -264,13 +266,12 @@ const StIcon = styled.div`
   cursor: pointer;
   width: 30px;
   height: 30px;
-  margin: 9px 9px 0 0;
+  margin: 9px 0px 0 0;
   background-color: transparent;
   position: relative;
 `;
 
 const Thumb = styled.img`
-  /* display: inline-flex; */
   background-size: 100px;
   width: 100px;
   height: 100px;
@@ -299,20 +300,15 @@ const Container = styled.section`
   margin: 10px;
 `;
 
-const StIcons = styled.div`
-  cursor: pointer;
-  :hover {
-    border: 1px solid #999999;
-  }
-  width: 100px;
-  height: 100px;
-  background-color: #d9d9d9;
-  /* border: 1px solid #cccccc; */
-  border-radius: 10px;
-`;
-
-//삭제 아이콘 위치
 const CancelIcon = styled.div`
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 0px;
+  top: -3px;
+  z-index: 100;
+`;
+const CancelIconWrap = styled.div`
   width: 12px;
   height: 12px;
   position: absolute;
@@ -320,46 +316,42 @@ const CancelIcon = styled.div`
   top: 5px;
   border-radius: 50%;
   z-index: 99;
-  /* background-image: url("${cancelWh}"); */
 `;
-// const CancelIcon = styled.div`
-//   width: 17px;
-//   height: 17px;
-//   position: absolute;
-//   right: 4.5px;
-//   top: 4.5px;
-//   border-radius: 50%;
-//   z-index: 99;
-//   /* background-image: url("${cancelWh}"); */
-// `;
 
 const CameraIcon = styled.div`
   width: 34px;
-  /* height: 30px; */
-  /* position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); */
-`;
-
-const TextareaP = styled.p`
-  padding: 10px 10px 5px 10px;
-  font-weight: 400;
-  font-size: 16px;
-  letter-spacing: -0.03em;
-`;
-
-const TextareaWrap = styled.div`
-  /* height: 54px; */
 `;
 
 const ErrorMessageP = styled.p`
-padding: 10px 10px 5px 10px;
-font-weight: 400;
-font-size: 16px;
-letter-spacing: -0.03em;
-`
+  padding: 10px 10px 5px 10px;
+  font-weight: 200;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  color: #ff0000;
+`;
 
 const SubmitButtonWrap = styled.div`
   ${flexColumn}
-`
+`;
+
+const CommentTextarea = styled.textarea`
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  resize: none;
+  box-sizing: border-box;
+  border: none;
+  width: 100%;
+  outline: none;
+  color: #222222;
+  height: 35px;
+  padding: 10px 10px 0 10px;
+  font-weight: 400;
+  font-size: 16px;
+  border-radius: 6px;
+  letter-spacing: -0.03em;
+  background-color: ${(props) => (props.emptyCheck ? "white" : "#f9f9f9")};
+  ::placeholder {
+    color: #939393;
+  }
+`;

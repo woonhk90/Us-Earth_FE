@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { getHeartCommentCnt } from "./proofsSlice";
 
 const cookies = new Cookies();
 const API_URL = process.env.REACT_APP_API_URL;
@@ -30,6 +31,7 @@ export const postComment = createAsyncThunk("comment/post", async (payload, thun
       },
     });
     thunkAPI.dispatch(getComments(payload.proofId));
+    thunkAPI.dispatch(getHeartCommentCnt(payload.proofId));
     console.log(data);
     return data;
   } catch (err) {
@@ -84,6 +86,7 @@ export const deleteComments = createAsyncThunk("comment/delete", async (payload,
       },
     });
     thunkAPI.dispatch(getComments(payload.proofId));
+    thunkAPI.dispatch(getHeartCommentCnt(payload.proofId));
     console.log(data);
     return thunkAPI.fulfillWithValue(payload);
   } catch (error) {

@@ -47,12 +47,13 @@ const StButton = styled.button`
     return (
       props.btntype === "submit" &&
       css`
-        background-color:  #353535;
+        background-color:  #525252;
         border: none;
+        border-radius: 6px;
         color: #ffffff;
         /* padding: 25px 0; */
-        width: 79px;
-        height: 54px;
+        width: 60px;
+        height: 40px;
         font-weight: 500;
         font-size: 18px;
         text-align: center;

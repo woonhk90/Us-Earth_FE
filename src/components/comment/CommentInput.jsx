@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
 import { useDropzone } from "react-dropzone";
@@ -8,33 +8,72 @@ import { postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
 import { ReactComponent as Camera } from "../../assets/camera.svg";
 import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
-import LoginModal from "../Modals/LoginModal";
-import cancelWh from "../../assets/cancelWh.svg";
-import { useRef } from "react";
 import Button from "../elements/Button";
+import OkModal from "../Modals/OkModal";
 
-const CommentInput = ({ userToken }) => {
+const CommentInput = ({userToken}) => {
   const dispatch = useDispatch();
+  const inputRef = useRef();
   const param = useParams();
   const [content, commentOnChange, commentReset] = useInput("");
-  const { commentEdit } = useSelector((state) => state.comments);
-  const [editContent, setEditContent] = useState(commentEdit.comment);
-  const [inputOn, setInputOn] = useState(false);
-  const onInputHandler = () => {
-    if (userToken) {
-      setInputOn(!inputOn);
-    } else {
-      setModal(!modal);
+  const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
+   const [inputOn, setInputOn] = useState(false);
+  const [InputRefCheck, setInputRefCheck] = useState(false);
+
+  const textRef = useRef();
+  const handleResizeHeight = useCallback(() => {
+    if (textRef.current.scrollHeight < 150) {
+      textRef.current.style.height = `auto`;
+      textRef.current.style.height = textRef.current.scrollHeight + "px";
     }
-  };
-  console.log("인풋", inputOn);
+  }, []);
 
   useEffect(() => {
+    window.addEventListener("mousedown", clickInputOutside);
     return () => {
+      window.removeEventListener("mousedown", clickInputOutside);
       // imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
-      commentReset();
     };
-  }, [editContent]);
+  }, [inputOn]);
+
+  
+  /* -------------------------- 댓글 작성 실패 모달 -------------------------- */
+  const [okModal, setOkModal] = useState(false);
+  const [okModalTitle, setOkModalTitle] = useState(false);
+
+  // onOff Modal
+  const okModalOnOff = () => {
+    setOkModal(!okModal);
+  };
+
+  // user check
+  const canWriteCheck = () =>{
+    if(participant && dateStatus === "end"){
+      setOkModalTitle(`그룹 미션이 종료되어 댓글을 작성할 수 없습니다.`)
+      setOkModal(true)
+    } else if (!participant && userToken ){
+      setOkModalTitle("그룹 참가자만 댓글을 작성할 수 있습니다.")
+      setOkModal(true)
+    }
+  }
+
+
+  //
+  const clickInputOutside = (event) => {
+    setInputRefCheck(inputRef.current.contains(event.target));
+
+    setInputOn(inputRef.current.contains(event.target) && previewImg.length > 0);
+
+    console.log(inputRef.current.contains(event.target));
+    if (inputOn && !inputRef.current.contains(event.target)) {
+      setInputOn(!inputOn);
+    }
+    // } else {
+    //   console.log("dfgdfg?");
+    //   setModal(modal);
+    // }
+  };
+
   /* ---------------------------------- 사진 업로드 ---------------------------------- */
 
   const [imageFile, setImageFile] = useState([]);
@@ -54,7 +93,7 @@ const CommentInput = ({ userToken }) => {
         };
       } else {
         setPreviewImg([]);
-        setIsPhotoMessage("사진 사이즈가 20MB를 초과했습니다.");
+        setIsPhotoMessage("사진은 최대 20MB까지 등록 가능합니다.");
       }
     }
   };
@@ -65,128 +104,100 @@ const CommentInput = ({ userToken }) => {
     setPreviewImg([]);
     // imageUrlLists.push(currentImageUrl);
   };
-
   /* ---------------------------------- submit ---------------------------------- */
   const onClickSubmit = () => {
-    if (!userToken) {
-      setModal(!modal);
-    } else {
-      if (inputOn) {
-        let formData = new FormData();
-        if (content === "") {
-          alert("내용을 입력해 주세요");
-        } else {
-          formData.append("multipartFile", imageFile);
-          formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
-          dispatch(postComment({ proofId: param.proofId, formData: formData }));
-          setInputOn(false);
+    if (participant && dateStatus === "ongoing") {
+      let formData = new FormData();
+      if (content === "") {
+        alert("내용을 입력해 주세요");
+      } else {
+        formData.append("multipartFile", imageFile);
+        formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
+        dispatch(postComment({ proofId: param.proofId, formData: formData }));
+        setInputOn(false);
 
-          // clear input
-          commentReset();
-          setImageFile([]);
-          setPreviewImg([]);
-        }
-      } else return;
+        // clear input
+        commentReset();
+        setImageFile([]);
+        setPreviewImg([]);
+        textRef.current.style.height = `auto`;
+      }
     }
-  };
-  const [modal, setModal] = useState(false);
-
-  const inputOnButton = () => {
-    console.log(userToken);
-    if (userToken) {
-      setInputOn(true);
-    } else {
-      setModal(true);
-    }
-  };
-
-  const modalOnOff = () => {
-    setModal(!modal);
   };
 
   return (
     <>
-      <CommentInputWrap>
-        {modal && <LoginModal modalOnOff={modalOnOff} modal={modal}></LoginModal>}
-        <form disabled={false} onClick={inputOnButton} encType="multipart/form-data">
-          <StLabel htmlFor={!userToken ? null : "file"}>
-            <StIcon>
-              <CameraIcon>
-                <Camera />
-              </CameraIcon>
-            </StIcon>
-          </StLabel>
-          <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} />
-        </form>
-        <InputWrap inputOn={inputOn}>
-          {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
-          {inputOn ? (
-            <>
-              {previewImg.length > 0 && (
-                <>
-                  <Container>
-                    <DeleteButton onClick={deleteImageFile}>
+     {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
+           <CommentInputContainer onClick={canWriteCheck} >
+        <CommentInputWrap ref={inputRef}>
+          <form  encType="multipart/form-data">
+            <StLabel htmlFor={!participant ? null : "file"}>
+              <StIcon>
+                <CameraIcon>
+                  <Camera />
+                </CameraIcon>
+              </StIcon>
+            </StLabel>
+            <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} />
+          </form>
+          <CommentInputWrap>
+            <InputWrap inputOn={inputOn}>
+              {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
+              {previewImg.length > 0 && inputOn && (
+                <Container>
+                  <DeleteButton onClick={deleteImageFile}>
+                    <CancelIconWrap>
                       <CancelIcon>
                         <CancelWh />
                       </CancelIcon>
-                    </DeleteButton>
-                    <Thumb src={previewImg} alt="img" />
-                  </Container>
-                </>
+                    </CancelIconWrap>
+                  </DeleteButton>
+                  <Thumb src={previewImg} alt="img" />
+                </Container>
               )}
-              <TextareaWrap>
-                <Textarea
-                  cols="50"
-                  rows="8"
-                  maxLength="100"
-                  textareaType="comment"
-                  autoFocus={true}
-                  value={content}
-                  onChange={commentOnChange}
-                  placeholder="댓글을 입력해주세요"
-                />
-              </TextareaWrap>
-            </>
-          ) : (
-            <TextareaP style={{ cursor: "pointer" }} onClick={onInputHandler}>
-              댓글을 입력해주세요.
-            </TextareaP>
-          )}
-        </InputWrap>
-        <SubmitButton>
-          <Button btntype="submit" onClick={onClickSubmit}>
-            등록
-          </Button>
-        </SubmitButton>
-      </CommentInputWrap>
+              <CommentTextarea
+                emptyCheck={InputRefCheck || content.length || previewImg.length}
+                maxLength="100"
+                textareaType="comment"
+                value={content}
+                onChange={commentOnChange}
+                placeholder="댓글을 입력해주세요"
+                ref={textRef}
+                onInput={handleResizeHeight}
+                // disabled={!userToken}
+              />
+            </InputWrap>
+            <Button btntype="submit" onClick={onClickSubmit}>
+              등록
+            </Button>
+          </CommentInputWrap>
+        </CommentInputWrap>
+      </CommentInputContainer>
     </>
   );
 };
 
 export default CommentInput;
 
+const CommentInputContainer = styled.div`
+  width: 100%;
+`;
+
 const CommentInputWrap = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  padding: 0px 0px 0px 14px;
-  /* border-top: 1px solid gray; */
-  /* background-color: #3a3a3a; */
+  padding: 6px 6px 6px 14px;
   background-color: #f9f9f9;
 `;
 
 const InputWrap = styled.div`
   width: 100%;
-  /* margin: 5px 8px 14px 8px; */
-  margin: ${(props) => (!props.inputOn ? "5px 8px 0px 8px" : "5px 8px 14px 8px")};
+  margin-right: 6px;
   border-radius: 6px;
-  /* background-color: ${(props) => (!props.inputOn ? "white" : "#ac2727")}; */
   background-color: ${(props) => (props.inputOn ? "white" : "#f9f9f9")};
 `;
-
-const SubmitButton = styled.div``;
-//사진
 
 const StImageInput = styled.input`
   position: absolute;
@@ -205,13 +216,12 @@ const StIcon = styled.div`
   cursor: pointer;
   width: 30px;
   height: 30px;
-  margin: 9px 9px 0 0;
+  margin: 9px 0px 0 0;
   background-color: transparent;
   position: relative;
 `;
 
 const Thumb = styled.img`
-  /* display: inline-flex; */
   background-size: 100px;
   width: 100px;
   height: 100px;
@@ -240,20 +250,15 @@ const Container = styled.section`
   margin: 10px;
 `;
 
-const StIcons = styled.div`
-  cursor: pointer;
-  :hover {
-    border: 1px solid #999999;
-  }
-  width: 100px;
-  height: 100px;
-  background-color: #d9d9d9;
-  /* border: 1px solid #cccccc; */
-  border-radius: 10px;
-`;
-
-//삭제 아이콘 위치
 const CancelIcon = styled.div`
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 0px;
+  top: -3px;
+  z-index: 100;
+`;
+const CancelIconWrap = styled.div`
   width: 12px;
   height: 12px;
   position: absolute;
@@ -261,34 +266,38 @@ const CancelIcon = styled.div`
   top: 5px;
   border-radius: 50%;
   z-index: 99;
-  /* background-image: url("${cancelWh}"); */
 `;
-
-const FormWrap = styled.button``;
 
 const CameraIcon = styled.div`
   width: 34px;
-  /* height: 30px; */
-  /* position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); */
-`;
-
-const TextareaP = styled.p`
-  padding: 10px 10px 5px 10px;
-  font-weight: 400;
-  font-size: 16px;
-  letter-spacing: -0.03em;
-`;
-
-const TextareaWrap = styled.div`
-  /* height: 54px; */
 `;
 
 const ErrorMessageP = styled.p`
   padding: 10px 10px 5px 10px;
+  font-weight: 200;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  color: #ff0000;
+`;
+
+const CommentTextarea = styled.textarea`
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  resize: none;
+  box-sizing: border-box;
+  border: none;
+  width: 100%;
+  outline: none;
+  color: #222222;
+  height: 35px;
+  padding: 10px 10px 0 10px;
   font-weight: 400;
   font-size: 16px;
+  border-radius: 6px;
   letter-spacing: -0.03em;
+  background-color: ${(props) => (props.emptyCheck ? "white" : "#f9f9f9")};
+  ::placeholder {
+    color: #939393;
+  }
 `;
