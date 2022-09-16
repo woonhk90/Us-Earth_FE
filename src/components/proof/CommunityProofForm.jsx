@@ -6,8 +6,10 @@ import { postProof } from "../../redux/modules/proofsSlice";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
 import { certifyReset } from "../../redux/modules/communitySlice";
+import Cookies from "universal-cookie";
 
 const CommunityProofForm = () => {
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
@@ -19,6 +21,10 @@ const CommunityProofForm = () => {
 
   const { title, content } = inputData;
   useEffect(() => {
+    console.log(cookies.get("mycookie"))
+    if (cookies.get("mycookie") === undefined) {
+      navigate("/login");
+    }
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();

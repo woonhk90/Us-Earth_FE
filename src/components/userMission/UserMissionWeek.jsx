@@ -12,19 +12,27 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getDailyMissionStats, getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
 import { useEffect } from "react";
+import Cookies from "universal-cookie";
 
 const UserMissionWeek = () => {
+  const format = "YYYY-MM-DD";
+  const this_sunday = dayjs().day(0).format(format);
+  const this_saturday = dayjs().day(6).format(format);
+  const [startDate, setStartDate] = useState(this_sunday);
+  const [endDate, setEndDate] = useState(this_saturday);
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { periodMissionData, dailyMissionData } = useSelector((state) => state.userMission);
 
-  // console.log(periodMissionData);
+  console.log("나",periodMissionData);
   // console.log(dailyMissionData);
-  const format = "YYYY-MM-DD";
-  const this_sunday = dayjs().day(0).format(format);
-  const this_saturday = dayjs().day(6).format(format);
+
 
   useEffect(() => {
+    if (cookies.get("mycookie") === undefined) {
+      navigate("/login");
+    }
     dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
     dispatch(
       getPeriodMissionStats({
@@ -32,10 +40,9 @@ const UserMissionWeek = () => {
         endDate: dayjs().endOf("week").format("YYYY-MM-DD"),
       })
     );
-  }, []);
+  }, [dispatch,startDate]);
 
-  const [startDate, setStartDate] = useState(this_sunday);
-  const [endDate, setEndDate] = useState(this_saturday);
+
   const prevWeek = () => {
     setStartDate(dayjs(startDate).day(-7).format(format));
     setEndDate(dayjs(endDate).day(-1).format(format));
@@ -73,8 +80,6 @@ const UserMissionWeek = () => {
         </Button>
       </MissionStatsButtonWrap>
       <StCalender>
-        {/* <div>이번주 월요일----{this_monday}</div> */}
-        {/* <div>다음주 월요일----{next_monday}</div> */}
         <WeekDateButtonWrap>
           <WeekDatePrevButton onClick={prevWeek}>＜</WeekDatePrevButton>
           <WeekDatePWrap>
@@ -86,14 +91,11 @@ const UserMissionWeek = () => {
         </WeekDateButtonWrap>
       </StCalender>
       <BarWrap>
-        {/* <MyResponsiveBar /> */}
         <MyResponsiveLine startDate={startDate} endDate={endDate} />
       </BarWrap>
-      {/* <div>다음주 일요일----{next_sunday}</div> */}
       <SelectDateWrap>
-        {/* <SelectDateP>{dayjs(clickDate).format("YYYY년 MM월 DD일")}</SelectDateP> */}
-        <SelectDateP>{dayjs(dailyMissionData.selectedDate).format("YYYY년 MM월 DD일")}</SelectDateP>
-        <SuccessMissionP>{dailyMissionData.clearMissionCnt}개 완료</SuccessMissionP>
+        <SelectDateP>{dayjs(dailyMissionData.createdAt).format("YYYY년 MM월 DD일")}</SelectDateP>
+        <SuccessMissionP>{dailyMissionData.count}개 완료</SuccessMissionP>
       </SelectDateWrap>
       <SelectDateMissionListWrap>
         <div>

@@ -31,10 +31,10 @@ const StButton = styled.button`
       css`
         background-color: transparent;
         border: transparent;
-        color: #222222;
+        color:${(props) => (props.on === "on" ? "6px solid #222222" : " #CBCBCB")}; ;
         padding: 25px 0;
         width: 100%;
-        border-bottom: ${(props) => (props.on === "on" ? "6px solid #8ecf70" : "none")};
+        border-bottom: ${(props) => (props.on === "on" ? "6px solid #8ecf70" : "6px solid #F5F5F5")};
         font-size: 20px;
         font-weight: 600;
         :hover {

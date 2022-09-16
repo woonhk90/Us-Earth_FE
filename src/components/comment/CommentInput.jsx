@@ -11,13 +11,13 @@ import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
 import Button from "../elements/Button";
 import OkModal from "../Modals/OkModal";
 
-const CommentInput = ({userToken}) => {
+const CommentInput = ({ userToken }) => {
   const dispatch = useDispatch();
   const inputRef = useRef();
   const param = useParams();
   const [content, commentOnChange, commentReset] = useInput("");
   const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
-   const [inputOn, setInputOn] = useState(false);
+  const [inputOn, setInputOn] = useState(false);
   const [InputRefCheck, setInputRefCheck] = useState(false);
 
   const textRef = useRef();
@@ -36,7 +36,6 @@ const CommentInput = ({userToken}) => {
     };
   }, [inputOn]);
 
-  
   /* -------------------------- 댓글 작성 실패 모달 -------------------------- */
   const [okModal, setOkModal] = useState(false);
   const [okModalTitle, setOkModalTitle] = useState(false);
@@ -47,16 +46,15 @@ const CommentInput = ({userToken}) => {
   };
 
   // user check
-  const canWriteCheck = () =>{
-    if(participant && dateStatus === "end"){
-      setOkModalTitle(`그룹 미션이 종료되어 댓글을 작성할 수 없습니다.`)
-      setOkModal(true)
-    } else if (!participant && userToken ){
-      setOkModalTitle("그룹 참가자만 댓글을 작성할 수 있습니다.")
-      setOkModal(true)
+  const canWriteCheck = () => {
+    if (participant && dateStatus === "end") {
+      setOkModalTitle(`그룹 미션이 종료되어 댓글을 작성할 수 없습니다.`);
+      setOkModal(true);
+    } else if (!participant && userToken) {
+      setOkModalTitle("그룹 참가자만 댓글을 작성할 수 있습니다.");
+      setOkModal(true);
     }
-  }
-
+  };
 
   //
   const clickInputOutside = (event) => {
@@ -127,10 +125,10 @@ const CommentInput = ({userToken}) => {
 
   return (
     <>
-     {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
-           <CommentInputContainer onClick={canWriteCheck} >
+      {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
+      <CommentInputContainer onClick={canWriteCheck}>
         <CommentInputWrap ref={inputRef}>
-          <form  encType="multipart/form-data">
+          <form encType="multipart/form-data">
             <StLabel htmlFor={!participant ? null : "file"}>
               <StIcon>
                 <CameraIcon>
@@ -164,7 +162,6 @@ const CommentInput = ({userToken}) => {
                 placeholder="댓글을 입력해주세요"
                 ref={textRef}
                 onInput={handleResizeHeight}
-                // disabled={!userToken}
               />
             </InputWrap>
             <Button btntype="submit" onClick={onClickSubmit}>

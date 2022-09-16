@@ -9,14 +9,19 @@ import UserMissionMonthCalendar from "./UserMissionMonthCalendar";
 import { getDailyMissionStats, getOnClickDate } from "../../redux/modules/userMissonSlice";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 const UserMissionMonth = () => {
+  const cookies = new Cookies();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { clickDate } = useSelector((state) => state.userMission);
   const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
 console.log(dailyMissionData)
   useEffect(() => {
+    if (cookies.get("mycookie") === undefined) {
+      navigate("/login");
+    }
     dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
   }, []);
 

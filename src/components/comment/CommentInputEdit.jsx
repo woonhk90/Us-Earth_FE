@@ -42,6 +42,14 @@ const CommentInputEdit = ({ userToken }) => {
   const clickInputOutside = (event) => {
     setInputOn(inputRef.current.contains(event.target));
   };
+   
+  const inputOnButton = () => {
+    if (userToken) {
+      setInputOn(true);
+      textRef.current.focus();
+    }
+  };
+
   /* -------------------------------- axios get ------------------------------- */
 
   const getComments = async (payload) => {
@@ -66,7 +74,7 @@ const CommentInputEdit = ({ userToken }) => {
     } catch (error) {}
   };
 
-  /* ----------------------------- edit useEffect(*) ---------------------------- */
+  /* ----------------------------- useEffect(*) ---------------------------- */
   useEffect(() => {
     window.addEventListener("mousedown", clickInputOutside);
     if (commentEdit.editMode) {
@@ -114,14 +122,7 @@ const CommentInputEdit = ({ userToken }) => {
     setDeleteImg(true);
   };
 
-  
-  const inputOnButton = () => {
-    if (userToken) {
-      setInputOn(true);
-      textRef.current.focus();
-    }
-  };
-
+ 
   /* ---------------------------------- submit(*) ---------------------------------- */
   const onClickSubmit = () => {
     let formData = new FormData();
@@ -255,6 +256,7 @@ const StImageInput = styled.input`
   height: 0;
   overflow: hidden;
 `;
+
 const StLabel = styled.label`
   display: inline-block;
   font-size: inherit;
@@ -262,6 +264,7 @@ const StLabel = styled.label`
   vertical-align: middle;
   cursor: pointer;
 `;
+
 const StIcon = styled.div`
   cursor: pointer;
   width: 30px;
@@ -308,6 +311,7 @@ const CancelIcon = styled.div`
   top: -3px;
   z-index: 100;
 `;
+
 const CancelIconWrap = styled.div`
   width: 12px;
   height: 12px;
