@@ -7,6 +7,10 @@ import { ReactComponent as LeftArrow } from "./LeftArrow.svg";
 import { ReactComponent as Chart } from "./chart.svg";
 import { ReactComponent as Group } from "./group.svg";
 import { ReactComponent as RightThinArrow } from "./RightThinArrow.svg";
+import { ReactComponent as MoveNext } from "./moveNext.svg";
+import { ReactComponent as Plus } from "./Plus.svg";
+import { ReactComponent as Search } from "./Search.svg";
+import { ReactComponent as Cancel } from "./Cancel.svg";
 
 import { ReactComponent as Community_On } from "./community_on.svg";
 import { ReactComponent as Community_Off } from "./community_off.svg";
@@ -49,6 +53,10 @@ const icons = {
   Chat_Off,
   Mypage_On,
   Mypage_Off,
+  MoveNext,
+  Plus,
+  Search,
+  Cancel,
 };
 
 export default icons;

@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { ReactComponent as Cancel } from "../assets/Cancel.svg";
+// import { ReactComponent as Cancel } from "../assets/Cancel.svg";
 import { __getCommunity } from "../redux/modules/communitySlice";
 import { useDispatch } from "react-redux";
 import { ingVal } from "../redux/modules/communitySlice";
+import icons from "../assets";
 
 const CommunityModal = (props) => {
+  const {Cancel}=icons;
   /* ---------------------------------- 모달 닫기 --------------------------------- */
   const closeModal = () => {
     props.closeModal();
@@ -61,7 +63,7 @@ const ModalWrap = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - 48px);
+  height: calc(100% - 62px);
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;

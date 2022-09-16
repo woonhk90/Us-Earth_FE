@@ -31,7 +31,7 @@ const CommunityBottom = () => {
 
   const path = window.location.pathname;
   let pathFlag = '';
-  if (path.includes('/mypage')) {
+  if (path.includes('/mypage') || path.includes('/login')) {
     pathFlag = 'mypage';
   } else if (path.includes('/chat')) {
     pathFlag = 'chat';
@@ -44,10 +44,10 @@ const CommunityBottom = () => {
   return (
     <>
       <FooterWrap>
-        <FooterMenus onClick={() => { cookieCheck('/') }}>{pathFlag === 'root' ? <Community_On width='25' /> : <Community_Off width='25' />}<span>커뮤니티</span></FooterMenus>
-        <FooterMenus onClick={() => { navigate('/info') }}>{pathFlag === 'info' ? <Info_On width='25' /> : <Info_Off width='25' />}<span>소식지</span></FooterMenus>
-        <FooterMenus >{pathFlag === 'chat' ? <Chat_On width='25' /> : <Chat_Off width='25' />}<span>채팅</span></FooterMenus>
-        <FooterMenus onClick={() => { cookieCheck('/mypage') }}>{pathFlag === 'mypage' ? <Mypage_On width='25' /> : <Mypage_Off width='25' />}<span>내정보</span></FooterMenus>
+        <FooterMenus onClick={() => { cookieCheck('/') }}>{pathFlag === 'root' ? <Community_On /> : <Community_Off />}<span>커뮤니티</span></FooterMenus>
+        <FooterMenus onClick={() => { navigate('/info') }}>{pathFlag === 'info' ? <Info_On /> : <Info_Off />}<span>소식지</span></FooterMenus>
+        <FooterMenus >{pathFlag === 'chat' ? <Chat_On /> : <Chat_Off />}<span>채팅</span></FooterMenus>
+        <FooterMenus onClick={() => { cookieCheck('/mypage') }}>{pathFlag === 'mypage' ? <Mypage_On /> : <Mypage_Off />}<span>{usercookie === undefined ? '로그인' : '내정보'}</span></FooterMenus>
       </FooterWrap>
     </>
   )
@@ -65,6 +65,7 @@ const FooterWrap = styled.div`
   display:flex;
   text-align:center;
   border-top:1px solid #F5F5F5;
+  box-sizing:border-box;
 `;
 
 const FooterMenus = styled.div`

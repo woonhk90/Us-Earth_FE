@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_2" data-name="레이어 2" xmlns="http://www.w3.org/2000/svg" width="7.39" height="14" viewBox="0 0 7.39 14">
+  <defs>
+    <style>
+      .moveNext-1 {
+        fill: #222;
+      }
+    </style>
+  </defs>
+  <g id="_최종" data-name="최종">
+    <path class="moveNext-1" d="M.41,14c-.1,0-.21-.04-.29-.12-.16-.16-.16-.42,0-.58L6.42,7,.12,.7c-.16-.16-.16-.42,0-.58s.42-.16,.58,0L7.27,6.7c.08,.08,.12,.18,.12,.29v.03c0,.11-.04,.21-.12,.29L.7,13.88c-.08,.08-.18,.12-.29,.12Z"/>
+  </g>
+</svg>

@@ -13,11 +13,24 @@ const CommunityModal = (props) => {
     props.closeModal();
   }
   const [viewFlag, setViewFlag] = React.useState(false);
-  const onViewFlagHandler = (id) => {
-    dispatch(__updateCommunityJoin({ communityId: props.communityId }));
-
-    setViewFlag(!viewFlag);
+  const { error, isLoading, statusCode } = useSelector((state) => state.community);
+  console.log("ERROR=>", error, isLoading, statusCode);
+  const [errorCode,setErrorCode]=React.useState(0);
+  const onViewFlagHandler = async (id) => {
+    await dispatch(__updateCommunityJoin({ communityId: id }));
+    
+    setErrorCode(statusCode);
   }
+
+  React.useEffect(()=>{
+    console.log("코드값1=>", errorCode);
+    if (errorCode === 200) {
+      console.log("코드값2=>", errorCode);
+      setViewFlag(!viewFlag);
+    }
+  },[errorCode])
+  
+
   /* --------------------- 로그인 되어있는지 우선 확인(안되어있으면 로그인페이지) --------------------- */
   const usercookie = getCookie('mycookie');
   const { pathname } = useLocation();

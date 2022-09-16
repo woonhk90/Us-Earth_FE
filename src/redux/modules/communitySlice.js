@@ -51,17 +51,17 @@ export const __updateCommunityJoin = createAsyncThunk("usearth/__updateCommunity
   try {
     console.log('__updateCommunityJoin=>', payload);
     const authorization_token = cookies.get("mycookie");
-    await axios.patch(`${API_URL}/join/${payload.communityId}`, payload, {
+    const data = await axios.patch(`${API_URL}/join/${payload.communityId}`, payload, {
       headers: {
         Authorization: authorization_token
       },
     });
-
+    return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    window.alert("참여하기에 실패 하였습니다.");
     console.log(error);
-    console.log(error.response.data.errorMessage);
-    return;
+    window.alert(error.response.data.msg);
+    thunkAPI.rejectWithValue(error.response.data.msg);
+    return thunkAPI.rejectWithValue(error);
   }
 });
 
@@ -123,6 +123,9 @@ const initialState = {
   certify: [],
   popularGroupList: [],
   newGroupList: [],
+  isLoading: false,
+  error: [],
+  statusCode: 0,
 }
 
 export const communitySlice = createSlice({
@@ -197,7 +200,32 @@ export const communitySlice = createSlice({
     [__getNewGroupItemList.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    [__updateCommunityJoin.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__updateCommunityJoin.fulfilled]: (state, action) => {
+      console.log('action===>', action);
+      state.isLoading = false;
+      state.newGroupList = action.payload.data;
+      state.statusCode = action.payload.status;
+    },
+    [__updateCommunityJoin.rejected]: (state, action) => {
+      console.log("ERROR=>", action);
+      console.log("ERROR=>", action.payload.response.data);
+      console.log("ERROR=>", action.payload.response.status);
+      state.isLoading = false;
+      state.error = action.payload.response.data;
+      state.statusCode = action.payload.response.status;
+      console.log(state.isLoading, state.error, state.statusCode);
+
     }
+
+
+
+
+
+
   },
 });
 

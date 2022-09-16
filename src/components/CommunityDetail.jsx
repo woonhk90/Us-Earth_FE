@@ -256,7 +256,7 @@ const CertifyContent = styled.div`
 `;
 const CertifyContentIcon = styled.div`
   position:fixed;
-  bottom:60px;right:17px;
+  bottom:80px;right:17px;
   width:71px;
   height:71px;
   background-color:#515151;

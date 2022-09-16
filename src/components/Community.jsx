@@ -35,7 +35,6 @@ const Community = () => {
   useEffect(() => {
     if (inView) {
       setPage((page) => page + 1);
-      // setSearch(searchVal.community.search);
     }
   }, [inView]);
 
@@ -47,6 +46,17 @@ const Community = () => {
     dispatch(certifyReset());
     navigate(`/community/detail/${id}`);
   };
+
+  /* ------------------------------- 전체 그룹 상태정보 ------------------------------- */
+  const states = (flag) => {
+    if (flag === 'before') {
+      return '모집중';
+    } else if (flag === 'ongoing') {
+      return '진행중';
+    } else {
+      return '종료';
+    }
+  }
 
   return (
     <>
@@ -79,23 +89,13 @@ const Community = () => {
             <CommunityBox>
 
               {community?.map((v) => (
-                <CommunityItem
-                  key={v.communityId}
-                  onClick={() => {
-                    onDetailHandler(v.communityId);
-                  }}
-                >
-                  <ItemImg
-                    bgImg={
-                      v.img !== null
-                        ? v.img
-                        : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"
-                    }
-                  >
-                    <ItemCount>{v.communityId}%</ItemCount>
-                    <ItemProgress>
-                      <IP value={v.communityId} max="100"></IP>
-                    </ItemProgress>
+                <CommunityItem key={v.communityId} onClick={() => { onDetailHandler(v.communityId); }}>
+                  <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
+                    <div>
+                      <p>{states(v.dateStatus)}</p>
+                      <p>{Math.ceil(v.dateStatus === 'before' ? v.currentPercent : v.successPercent)}%</p>
+                      <progress value={v.dateStatus === 'before' ? v.currentPercent : v.successPercent} max="100"></progress>
+                    </div>
                   </ItemImg>
                   <ItemTitle>{v.title}</ItemTitle>
                 </CommunityItem>
@@ -187,27 +187,40 @@ const CommunityItem = styled.div``;
 const ItemImg = styled.div`
   width: 176px;
   height: 215px;
-  border: 1px solid black;
-  box-sizing: border-box;
-  border-radius: 6px;
 
   position: relative;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg}) no-repeat center center;
   background-size: cover;
   color: #fff;
+  div{
+    position:absolute;
+    width:100%;
+    bottom:0;
+    padding:6px;
+    box-sizing:border-box;
+
+    text-align:center;
+    p{
+      text-align:right;
+    }
+
+    progress{
+      appearance: none;
+      width:100%;
+      height:15px;
+    }
+    progress::-webkit-progress-bar {
+      background:#fff;
+      border-radius:10px;
+      box-shadow: 0px 0px 1px 0px gray;
+      
+    }
+    progress::-webkit-progress-value {
+      border-radius:10px;
+      background: linear-gradient(to right, #AEDC89, #80BC28);
+    }
+  }
 `;
-const ItemCount = styled.div`
-  position: absolute;
-  bottom: 35px;
-  right: 10px;
-`;
-const ItemProgress = styled.div`
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  margin-left: -80px;
-`;
-const IP = styled.progress``;
 const ItemTitle = styled.div`
   font: bold 20px/40px "Arial", "sans-serif";
   /* color:black; */
