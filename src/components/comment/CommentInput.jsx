@@ -6,8 +6,14 @@ import Textarea from "../elements/Textarea";
 import { useDispatch, useSelector } from "react-redux";
 import { postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
+import { ReactComponent as Camera } from "../../assets/camera.svg";
+import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
+import LoginModal from "../Modals/LoginModal";
+import cancelWh from "../../assets/cancelWh.svg";
+import { useRef } from "react";
+import Button from "../elements/Button";
 
-const CommentInput = () => {
+const CommentInput = ({ userToken }) => {
   const dispatch = useDispatch();
   const param = useParams();
   const [content, commentOnChange, commentReset] = useInput("");
@@ -15,8 +21,13 @@ const CommentInput = () => {
   const [editContent, setEditContent] = useState(commentEdit.comment);
   const [inputOn, setInputOn] = useState(false);
   const onInputHandler = () => {
-    setInputOn(!inputOn);
+    if (userToken) {
+      setInputOn(!inputOn);
+    } else {
+      setModal(!modal);
+    }
   };
+  console.log("인풋", inputOn);
 
   useEffect(() => {
     return () => {
@@ -28,16 +39,23 @@ const CommentInput = () => {
 
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
+  const [isPhotoMessage, setIsPhotoMessage] = useState("");
 
   const addImageFile = (e) => {
+    setIsPhotoMessage("");
     let reader = new FileReader();
     if (e.target.files.length > 0) {
-      reader.readAsDataURL(e.target.files[0]);
-      setImageFile(e.target.files[0]);
-      reader.onloadend = () => {
-        const previewImgUrl = reader.result;
-        setPreviewImg([previewImgUrl]);
-      };
+      if (e.target.files[0].size < 2000000) {
+        reader.readAsDataURL(e.target.files[0]);
+        setImageFile(e.target.files[0]);
+        reader.onloadend = () => {
+          const previewImgUrl = reader.result;
+          setPreviewImg([previewImgUrl]);
+        };
+      } else {
+        setPreviewImg([]);
+        setIsPhotoMessage("사진 사이즈가 20MB를 초과했습니다.");
+      }
     }
   };
 
@@ -50,48 +68,96 @@ const CommentInput = () => {
 
   /* ---------------------------------- submit ---------------------------------- */
   const onClickSubmit = () => {
-    let formData = new FormData();
-    if (content === "") {
-      alert("내용을 입력해 주세요");
+    if (!userToken) {
+      setModal(!modal);
     } else {
-      formData.append("multipartFile", imageFile);
-      formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
-      dispatch(postComment({ proofId: param.proofId, formData: formData }));
-      setInputOn(false);
+      if (inputOn) {
+        let formData = new FormData();
+        if (content === "") {
+          alert("내용을 입력해 주세요");
+        } else {
+          formData.append("multipartFile", imageFile);
+          formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
+          dispatch(postComment({ proofId: param.proofId, formData: formData }));
+          setInputOn(false);
 
-      // clear input
-      commentReset();
-      setImageFile([]);
-      setPreviewImg([]);
+          // clear input
+          commentReset();
+          setImageFile([]);
+          setPreviewImg([]);
+        }
+      } else return;
     }
+  };
+  const [modal, setModal] = useState(false);
+
+  const inputOnButton = () => {
+    console.log(userToken);
+    if (userToken) {
+      setInputOn(true);
+    } else {
+      setModal(true);
+    }
+  };
+
+  const modalOnOff = () => {
+    setModal(!modal);
   };
 
   return (
     <>
       <CommentInputWrap>
-        <form onClick={() => setInputOn(true)} encType="multipart/form-data">
-          <StLabel htmlFor="file">
-            <StIcon>○</StIcon>
+        {modal && <LoginModal modalOnOff={modalOnOff} modal={modal}></LoginModal>}
+        <form disabled={false} onClick={inputOnButton} encType="multipart/form-data">
+          <StLabel htmlFor={!userToken ? null : "file"}>
+            <StIcon>
+              <CameraIcon>
+                <Camera />
+              </CameraIcon>
+            </StIcon>
           </StLabel>
-          <StImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
-          {/* <input type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} /> */}
+          <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} />
         </form>
         <InputWrap inputOn={inputOn}>
+          {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
           {inputOn ? (
             <>
               {previewImg.length > 0 && (
-                <Container>
-                  <DeleteButton onClick={deleteImageFile}>x</DeleteButton>
-                  <Thumb src={previewImg} alt="img" />
-                </Container>
+                <>
+                  <Container>
+                    <DeleteButton onClick={deleteImageFile}>
+                      <CancelIcon>
+                        <CancelWh />
+                      </CancelIcon>
+                    </DeleteButton>
+                    <Thumb src={previewImg} alt="img" />
+                  </Container>
+                </>
               )}
-              <Textarea value={content} onChange={commentOnChange} placeholder="댓글을 입력해주세요" />
+              <TextareaWrap>
+                <Textarea
+                  cols="50"
+                  rows="8"
+                  maxLength="100"
+                  textareaType="comment"
+                  autoFocus={true}
+                  value={content}
+                  onChange={commentOnChange}
+                  placeholder="댓글을 입력해주세요"
+                />
+              </TextareaWrap>
             </>
           ) : (
-            <div onClick={onInputHandler}>댓글을 입력해주세요.</div>
+            <TextareaP style={{ cursor: "pointer" }} onClick={onInputHandler}>
+              댓글을 입력해주세요.
+            </TextareaP>
           )}
         </InputWrap>
-        <SubmitButton onClick={onClickSubmit}>등록</SubmitButton>
+        <SubmitButton>
+          <Button btntype="submit" onClick={onClickSubmit}>
+            등록
+          </Button>
+        </SubmitButton>
       </CommentInputWrap>
     </>
   );
@@ -104,23 +170,22 @@ const CommentInputWrap = styled.div`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  padding: 5px 10px 15px 10px;
+  padding: 0px 0px 0px 14px;
   /* border-top: 1px solid gray; */
+  /* background-color: #3a3a3a; */
   background-color: #f9f9f9;
-  /* background-color: #a0a0a0; */
 `;
 
 const InputWrap = styled.div`
   width: 100%;
-  margin: 0 8px;
+  /* margin: 5px 8px 14px 8px; */
+  margin: ${(props) => (!props.inputOn ? "5px 8px 0px 8px" : "5px 8px 14px 8px")};
   border-radius: 6px;
-  background-color: ${(props) => (!props.onCommentInput ? "white" : "#f9f9f9")};
+  /* background-color: ${(props) => (!props.inputOn ? "white" : "#ac2727")}; */
+  background-color: ${(props) => (props.inputOn ? "white" : "#f9f9f9")};
 `;
 
-const SubmitButton = styled.button`
-  width: 60px;
-  height: 40px;
-`;
+const SubmitButton = styled.div``;
 //사진
 
 const StImageInput = styled.input`
@@ -138,14 +203,10 @@ const StLabel = styled.label`
 `;
 const StIcon = styled.div`
   cursor: pointer;
-  :hover {
-    border: 1px solid #999999;
-  }
   width: 30px;
   height: 30px;
-  background-color: #f1f1f1;
-  border: 1px solid #cccccc;
-  border-radius: 10px;
+  margin: 9px 9px 0 0;
+  background-color: transparent;
   position: relative;
 `;
 
@@ -160,12 +221,15 @@ const Thumb = styled.img`
 `;
 
 const DeleteButton = styled.button`
+  cursor: pointer;
   width: 26px;
   height: 26px;
   border-radius: 50%;
   position: absolute;
   top: 0;
   left: 80px;
+  background-color: #525252;
+  border: none;
 `;
 
 const Container = styled.section`
@@ -174,4 +238,57 @@ const Container = styled.section`
   display: flex;
   flex-direction: row;
   margin: 10px;
+`;
+
+const StIcons = styled.div`
+  cursor: pointer;
+  :hover {
+    border: 1px solid #999999;
+  }
+  width: 100px;
+  height: 100px;
+  background-color: #d9d9d9;
+  /* border: 1px solid #cccccc; */
+  border-radius: 10px;
+`;
+
+//삭제 아이콘 위치
+const CancelIcon = styled.div`
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  right: 7px;
+  top: 5px;
+  border-radius: 50%;
+  z-index: 99;
+  /* background-image: url("${cancelWh}"); */
+`;
+
+const FormWrap = styled.button``;
+
+const CameraIcon = styled.div`
+  width: 34px;
+  /* height: 30px; */
+  /* position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+`;
+
+const TextareaP = styled.p`
+  padding: 10px 10px 5px 10px;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: -0.03em;
+`;
+
+const TextareaWrap = styled.div`
+  /* height: 54px; */
+`;
+
+const ErrorMessageP = styled.p`
+  padding: 10px 10px 5px 10px;
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: -0.03em;
 `;

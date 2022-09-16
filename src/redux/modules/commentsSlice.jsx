@@ -42,7 +42,9 @@ export const getComments = createAsyncThunk("comment/get", async (proofId, thunk
   try {
     const authorization_token = cookies.get("mycookie");
     const { data } = await axios.get(`${API_URL}/comments/${proofId}`, {
-      Authorization: authorization_token,
+      headers: {
+        Authorization: authorization_token,
+      },
     });
     console.log(data);
     return thunkAPI.fulfillWithValue(data);
@@ -68,6 +70,7 @@ export const patchComment = createAsyncThunk("comment/patch", async (payload, th
     return data;
   } catch (err) {
     console.log(err);
+    thunkAPI.dispatch(commentEditChange({}));
   }
 });
 
@@ -109,7 +112,7 @@ export const commentsSlice = createSlice({
   initialState,
   reducers: {
     commentSelectBox: (state, action) => {
-      console.log("슬라이스에서 바뀜!",action.payload);
+      console.log("슬라이스에서 바뀜!", action.payload);
       // adNumber이라는 명령(?)
       state.commentSelectBoxId = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
       // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.

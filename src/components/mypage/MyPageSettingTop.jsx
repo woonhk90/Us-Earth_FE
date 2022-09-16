@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
 import { useNavigate } from 'react-router-dom';
+import { colors } from '../../styles/color';
 
 const CommunityTop = () => {
   const navigate = useNavigate();
@@ -34,4 +35,5 @@ const HeaderWrap = styled.div`
   border-bottom:1px solid rgba(0,0,0,0.14);
   box-sizing:border-box;
   z-index:1;
+  color:${colors.black22}
 `;

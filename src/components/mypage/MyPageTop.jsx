@@ -5,6 +5,7 @@ import { ReactComponent as Setting } from "../../assets/Setting.svg";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { clearVal } from '../../redux/modules/communitySlice';
+import { colors } from '../../styles/color';
 
 const CommunityTop = () => {
   const navigate = useNavigate();
@@ -44,4 +45,5 @@ const HeaderWrap = styled.div`
   border-bottom:1px solid rgba(0,0,0,0.14);
   box-sizing:border-box;
   z-index:1;
+  color:${colors.black22}
 `;

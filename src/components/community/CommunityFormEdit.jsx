@@ -203,8 +203,8 @@ const CommunityFormEdit = () => {
           height="150px"
           cols="50"
           rows="8"
-          size="18px"
           maxLength="500"
+          size="18px"
           name="content"
           value={content}
           onChange={inputOnChangeHandler}

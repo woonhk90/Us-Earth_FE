@@ -3,75 +3,113 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
+const API_URL = process.env.REACT_APP_API_URL;
 
 /* ----------------------------- 전체 그룹 모임 정보 출력 ----------------------------- */
-export const __getCommunity = createAsyncThunk("todos/__getCommunity", async (payload, thunkAPI) => {
+export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (payload, thunkAPI) => {
   try {
     console.log('__getCommunity=>', payload);
     const search = payload.search;
-    const data = await axios.get(`http://13.209.97.209/api/community?page=${payload.page}&size=10&title=${payload.search}`);
-    // const data = await axios.get(`https://www.sparta99.com/api/community?page=${payload.page}&size=10&title=${payload.search}`);
-    console.log('커뮤니티=>', data);
+    if (payload.page === '0' || payload.page === 0) {
+      thunkAPI.dispatch(certifyReset());
+    }
+    const data = await axios.get(`${API_URL}/community?page=${payload.page}&size=10&title=${payload.search}`);
+    console.log('전체커뮤니티=>', data);
 
     return thunkAPI.fulfillWithValue({ data: data.data, search: search });
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("전체 커뮤니티 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
   }
 });
+
 /* -------------------------------- 커뮤니티 상세보기 ------------------------------- */
-export const __getCommunityDetail = createAsyncThunk("todos/__getCommunityDetail", async (payload, thunkAPI) => {
+export const __getCommunityDetail = createAsyncThunk("usearth/__getCommunityDetail", async (payload, thunkAPI) => {
   try {
     console.log('__getCommunityDetail=>', payload);
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.get(`http://13.209.97.209/api/community/${payload.communityId}`, {
+    const data = await axios.get(`${API_URL}/community/${payload.communityId}`, {
       headers: {
         Authorization: authorization_token
       },
     });
-    console.log('커뮤니티=>', data);
+    console.log('상세커뮤니티=>', data);
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("커뮤니티 상세 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
   }
 });
+
 /* --------------------------- 커뮤니티 참여하기 버튼 눌렀을 때 --------------------------- */
-export const __updateCommunityJoin = createAsyncThunk("todos/__updateCommunityJoin", async (payload, thunkAPI) => {
+export const __updateCommunityJoin = createAsyncThunk("usearth/__updateCommunityJoin", async (payload, thunkAPI) => {
   try {
     console.log('__updateCommunityJoin=>', payload);
     const authorization_token = cookies.get("mycookie");
-    // const data = await axios.patch(`http://13.209.97.209/api/join/${payload.communityId}`, payload, {
-    await axios.patch(`http://13.209.97.209/api/join/${payload.communityId}`, payload, {
+    const data = await axios.patch(`${API_URL}/join/${payload.communityId}`, payload, {
       headers: {
         Authorization: authorization_token
       },
     });
-
-    // return thunkAPI.fulfillWithValue(data.data);
+    return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
     console.log(error);
-    console.log(error.response.data.errorMessage);
-    return;
+    window.alert(error.response.data.msg);
+    thunkAPI.rejectWithValue(error.response.data.msg);
+    return thunkAPI.rejectWithValue(error);
   }
 });
 
 /* ------------------------------ 인증 게시글 목록 출력 ------------------------------ */
-export const __getCommunityCertify = createAsyncThunk("todos/__getCommunityCertify", async (payload, thunkAPI) => {
+export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCertify", async (payload, thunkAPI) => {
   try {
     console.log('__getCommunityCertify=>', payload);
-    const data = await axios.get(`http://13.209.97.209/api/community/${payload.communityId}/proof?page=${payload.page}&size=3`);
+    if (payload.page === '0' || payload.page === 0) {
+      thunkAPI.dispatch(certifyReset());
+    }
+    const data = await axios.get(`${API_URL}/community/${payload.communityId}/proof?page=${payload.page}&size=3`);
     console.log('인증게시글=>', data);
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("인증 정보를 불러올 수 없습니다.");
+    console.log(error);
+    console.log(error.response.data.errorMessage);
+    return;
+  }
+});
+
+/* -------------------------------- 활발 그룹 출력 -------------------------------- */
+export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularGroupItemList", async (payload, thunkAPI) => {
+  try {
+    console.log('__getPopularGroupItemList=>', payload);
+    const data = await axios.get(`${API_URL}/active`);
+    console.log('활발그룹Slice=>', data);
+
+    return thunkAPI.fulfillWithValue(data);
+  } catch (error) {
+    window.alert("활발 그룹 정보를 불러올 수 없습니다.");
+    console.log(error);
+    console.log(error.response.data.errorMessage);
+    return;
+  }
+});
+
+/* ------------------------------- 마감임박 그룹 출력 ------------------------------- */
+export const __getNewGroupItemList = createAsyncThunk("usearth/__getNewGroupItemList", async (payload, thunkAPI) => {
+  try {
+    console.log('__getNewGroupItemList=>', payload);
+    const data = await axios.get(`${API_URL}/nearDone`);
+    console.log('마감임박그룹Slice=>', data);
+
+    return thunkAPI.fulfillWithValue(data);
+  } catch (error) {
+    window.alert("마감임박 그룹 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -82,7 +120,12 @@ const initialState = {
   community: [],
   search: '',
   communityDetail: [],
-  certify: []
+  certify: [],
+  popularGroupList: [],
+  newGroupList: [],
+  isLoading: false,
+  error: [],
+  statusCode: 0,
 }
 
 export const communitySlice = createSlice({
@@ -133,7 +176,56 @@ export const communitySlice = createSlice({
     [__getCommunityCertify.rejected]: (state, action) => {
       state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+    },
+    [__getPopularGroupItemList.pending]: (state) => {
+      state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+    },
+    [__getPopularGroupItemList.fulfilled]: (state, action) => {
+      console.log('action=>', action);
+      state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+      state.popularGroupList = action.payload.data;
+    },
+    [__getPopularGroupItemList.rejected]: (state, action) => {
+      state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
+      state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+    },
+    [__getNewGroupItemList.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getNewGroupItemList.fulfilled]: (state, action) => {
+      console.log('action=>', action);
+      state.isLoading = false;
+      state.newGroupList = action.payload.data;
+    },
+    [__getNewGroupItemList.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [__updateCommunityJoin.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__updateCommunityJoin.fulfilled]: (state, action) => {
+      console.log('action===>', action);
+      state.isLoading = false;
+      state.newGroupList = action.payload.data;
+      state.statusCode = action.payload.status;
+    },
+    [__updateCommunityJoin.rejected]: (state, action) => {
+      console.log("ERROR=>", action);
+      console.log("ERROR=>", action.payload.response.data);
+      console.log("ERROR=>", action.payload.response.status);
+      state.isLoading = false;
+      state.error = action.payload.response.data;
+      state.statusCode = action.payload.response.status;
+      console.log(state.isLoading, state.error, state.statusCode);
+
     }
+
+
+
+
+
+
   },
 });
 

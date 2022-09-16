@@ -11,20 +11,14 @@ const ConfirmModal = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  /* ---------------------------------- 사용안함 ---------------------------------- */
   const [viewFlag, setViewFlag] = React.useState(false);
   console.log(viewFlag);
   const submitonClick = (id) => {
     clickSubmit();
     setViewFlag(!viewFlag);
   };
-  /* --------------------- 로그인 되어있는지 우선 확인(안되어있으면 로그인페이지) --------------------- */
-  // const usercookie = getCookie("mycookie");
-  // const { pathname } = useLocation();
-  // if (usercookie === undefined) {
-  //   localStorage.setItem("pathname", pathname);
-  //   navigate("/login");
-  // }
-
+  
   return (
     <>
       <ModalWrap onClick={closeModal}>
@@ -67,7 +61,7 @@ const ModalWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 999;
   padding: 0 15px;
   box-sizing: border-box;
 `;

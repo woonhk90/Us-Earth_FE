@@ -7,6 +7,9 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const initialState = {
   proofs: [],
+  heartCommentCnt: {},
+  heartCnt: {},
+  userHeart: false,
   isLoading: false,
   error: null,
 };
@@ -34,8 +37,11 @@ export const getProofs = createAsyncThunk("proof/get", async (proofId, thunkAPI)
   try {
     const authorization_token = cookies.get("mycookie");
     const { data } = await axios.get(`${API_URL}/proof/${proofId}`, {
-      Authorization: authorization_token,
+      headers: {
+        Authorization: authorization_token,
+      },
     });
+    console.log("갯요청다시~");
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejected(error);
@@ -74,6 +80,39 @@ export const deleteProof = createAsyncThunk("proof/delete", async (proofId, thun
     return thunkAPI.rejectWithValue(error);
   }
 });
+
+/* ------------------------ get heartCnt & commentCnt ----------------------- */
+export const getHeartCommentCnt = createAsyncThunk("proof/heartComment", async (proofId, thunkAPI) => {
+  try {
+    const authorization_token = cookies.get("mycookie");
+    const { data } = await axios.get(`${API_URL}/proof/count/${proofId}`, {
+      headers: {
+        Authorization: authorization_token,
+      },
+    });
+    console.log("하트댓글갯수", data);
+    return thunkAPI.fulfillWithValue(data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+/* ------------------------ paych heart ----------------------- */
+export const patchHeartCnt = createAsyncThunk("proof/Heart", async (proofId, thunkAPI) => {
+  try {
+    const authorization_token = cookies.get("mycookie");
+    console.log(authorization_token);
+    const { data } = await axios.patch(`${API_URL}/proof/heart/${proofId}`, "", {
+      headers: {
+        Authorization: authorization_token,
+      },
+    });
+    console.log(data);
+    thunkAPI.dispatch(getHeartCommentCnt(proofId));
+    return thunkAPI.fulfillWithValue(data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
 // export const postCommunityFormData = async (formData) => {
 //   try {
 //     const token = localStorage.getItem("token");
@@ -94,7 +133,14 @@ export const deleteProof = createAsyncThunk("proof/delete", async (proofId, thun
 export const proofsSlice = createSlice({
   name: "proofs",
   initialState,
-  reducers: {},
+  reducers: {
+    clickHerat: (state, action) => {
+      console.log("슬라이스에서 바뀜!", action.payload);
+      // adNumber이라는 명령(?)
+      state.userHeart = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
+      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
+    },
+  },
   extraReducers: {
     /* -------------------------- post proof (Create) ------------------------- */
     [postProof.pending]: (state) => {
@@ -115,6 +161,7 @@ export const proofsSlice = createSlice({
     [getProofs.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.proofs = action.payload;
+      state.userHeart = action.payload.heart;
     },
     [getProofs.rejected]: (state, action) => {
       state.isLoading = false;
@@ -143,8 +190,34 @@ export const proofsSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    /* ------------------------ get heartCnt & commentCnt ----------------------- */
+    [getHeartCommentCnt.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getHeartCommentCnt.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      console.log(action.payload);
+      state.heartCommentCnt = action.payload;
+    },
+    [getHeartCommentCnt.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    /* ------------------------ get heartCnt ----------------------- */
+    [patchHeartCnt.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [patchHeartCnt.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.heartCnt = action.payload;
+      state.userHeart = action.payload.heart;
+    },
+    [patchHeartCnt.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
-export const {} = proofsSlice.actions;
+export const { clickHerat } = proofsSlice.actions;
 export default proofsSlice.reducer;

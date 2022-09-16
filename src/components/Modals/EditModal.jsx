@@ -133,6 +133,7 @@ const Stsection = styled.section`
 const StHeader = styled.header``;
 
 const Footer = styled.p`
+cursor: pointer;
   text-align: center;
   padding: 17.5px 0;
   font-size: 18px;
@@ -144,6 +145,7 @@ const ButtonInModalWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-items: flex-start;
   padding: 21px 31px 14px 31px;
 `;
 

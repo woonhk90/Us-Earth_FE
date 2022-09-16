@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from "react-redux";
 import { __postNickNameOverlap, __updateMyInfoStatus, __postNickNameSubmit } from '../../redux/modules/mypageSlice';
-import { removeCookie } from '../../shared/cookie';
+import { returnRemoveCookie, removeCookie } from '../../shared/cookie';
 import { ReactComponent as Pen } from "../../assets/Pen.svg";
 import Input from '../elements/Input';
 import { __getMyInfo } from '../../redux/modules/mypageSlice';
+import { debounce } from "lodash";
+import { useNavigate } from 'react-router-dom';
+
 
 
 const MyPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.mypage);//유저정보가져옴
   console.log(userInfo);
@@ -24,23 +28,22 @@ const MyPage = () => {
   }
 
   /* -------------------------- 닉네임 실시간으로 상태값 받을 수 있음 ------------------------- */
-  const onNickChangeHandler = (e) => {
-    console.log(e.target.value);
-    if(e.target.value.length>0){
-      setOverlapFlag(true);
-    }else{
-      setOverlapFlag(false);
+  const debounceSomethingFunc = debounce((val) => {
+    if (val.length > 0) {
+      setOverlapFlag(val);
+    } else {
+      setOverlapFlag(val);
     }
-    setChangeNickName(e.target.value);
-    let timer = null;
-    if (timer) //이전에 이벤트가 발생했다면
-      clearTimeout(timer); //이전 이벤트를 지운다.
-    if (e.target.value) {
-      timer = setTimeout(() => {
-        dispatch(__postNickNameOverlap({ nickname: e.target.value }));
-      }, 1000);
-    }
-  }
+    setChangeNickName(val);
+    dispatch(__postNickNameOverlap({ nickname: val }));
+  }, 200);
+
+
+  const onDebounceChange = event => {
+    debounceSomethingFunc(event.target.value);
+  };
+
+
   useEffect(() => {
     dispatch(__getMyInfo());
     setOverlapFlag(overlap);
@@ -50,10 +53,16 @@ const MyPage = () => {
     if (changeNicName.length > 0) {
       await dispatch(__postNickNameSubmit({ nickname: changeNicName }));
       setNickFlag(!nickFlag);
-    }else{
+    } else {
       window.alert("변경할 닉네임을 입력해주세요.");
       return false;
     }
+  }
+
+  const onLogoutHandler =  () => {
+    // returnRemoveCookie('mycookie');
+    removeCookie('mycookie');
+    navigate('/');
   }
 
   return (
@@ -72,7 +81,7 @@ const MyPage = () => {
               </>) :
               (<>
                 <NickInfoTitle><span>닉네임 변경</span> <span onClick={() => { onNickNameSubmit() }}><Pen /></span></NickInfoTitle>
-                <Input type="text" placeholder={userInfo.nickname} onChange={onNickChangeHandler} maxLength='20'/>
+                <Input type="text" placeholder={userInfo.nickname} onChange={onDebounceChange} maxLength='20' />
                 <OverlapFlagBox><OverlapFlagContent color={overlapFlag ? 'black' : 'red'}>사용{overlapFlag ? '가능한' : '불가능한'} 닉네임 입니다.</OverlapFlagContent></OverlapFlagBox>
               </>)}
           </NickInfo>
@@ -84,7 +93,7 @@ const MyPage = () => {
             </CheckBoxWrapper>
           </MyPageFlag>
           <div>
-            <LogoutBtn onClick={() => removeCookie('mycookie')}>로그아웃</LogoutBtn>
+            <LogoutBtn onClick={onLogoutHandler}>로그아웃</LogoutBtn>
           </div>
         </Container>
       </MyPageWrap>
@@ -144,7 +153,7 @@ const OverlapFlagBox = styled.div`
 `;
 const OverlapFlagContent = styled.span`
   font-size:10px;
-  color:${(props)=>props.color}
+  color:${(props) => props.color}
 `;
 
 

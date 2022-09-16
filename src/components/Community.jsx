@@ -8,6 +8,9 @@ import { __getCommunity, certifyReset } from "../redux/modules/communitySlice";
 import { useInView } from "react-intersection-observer";
 import SampleImg03 from "../assets/banner.jpg";
 import { useNavigate } from "react-router-dom";
+import banner01 from '../assets/banner.png';
+import PopularGroupItemList from './community/PopularGroupItemList';
+import NewGroupItemList from './community/NewGroupItemList';
 
 const Community = () => {
   const dispatch = useDispatch();
@@ -26,14 +29,12 @@ const Community = () => {
   /* ----------------------------- 커뮤니티 전체목록 가져오기 ----------------------------- */
   useEffect(() => {
     console.log("커뮤니티 호출");
-
     dispatch(__getCommunity({ page, search }));
   }, [page]);
 
   useEffect(() => {
     if (inView) {
       setPage((page) => page + 1);
-      // setSearch(searchVal.community.search);
     }
   }, [inView]);
 
@@ -46,71 +47,38 @@ const Community = () => {
     navigate(`/community/detail/${id}`);
   };
 
+  /* ------------------------------- 전체 그룹 상태정보 ------------------------------- */
+  const states = (flag) => {
+    if (flag === 'before') {
+      return '모집중';
+    } else if (flag === 'ongoing') {
+      return '진행중';
+    } else {
+      return '종료';
+    }
+  }
+
   return (
     <>
       <CommunityWrap>
         <Container>
-          <Banner bgImg={SampleImg03}>메인배너</Banner>
+          <Banner><img src={banner01} alt='bannerImg' /></Banner>
 
           <PopularGroup>
             <PopularGroupTop>
               <PopularGroupTitle>인기 그룹</PopularGroupTitle>
             </PopularGroupTop>
             <PopularGroupBox>
-              <PopularGroupItem>
-                <PopularGroupItemImg bgImg={SampleImg01}>
-                  <ItemIcon>
-                    <Lock />
-                  </ItemIcon>
-                  <ItemFlag>
-                    <span>모집중</span>
-                  </ItemFlag>
-                </PopularGroupItemImg>
-                <PopularGroupItemTitle>재활용 합시다</PopularGroupItemTitle>
-              </PopularGroupItem>
-              <PopularGroupItem>
-                <PopularGroupItemImg bgImg={SampleImg02}>
-                  <ItemIcon>
-                    <Lock />
-                  </ItemIcon>
-                  <ItemFlag>
-                    <span>모집중</span>
-                  </ItemFlag>
-                </PopularGroupItemImg>
-                <PopularGroupItemTitle>재활용 합시다</PopularGroupItemTitle>
-              </PopularGroupItem>
-              <PopularGroupItem>
-                <PopularGroupItemImg>
-                  <Lock />
-                </PopularGroupItemImg>
-                <PopularGroupItemTitle>재활용 합시다</PopularGroupItemTitle>
-              </PopularGroupItem>
+              <PopularGroupItemList />
             </PopularGroupBox>
           </PopularGroup>
 
           <NewGroup>
             <NewGroupTop>
-              <NewGroupTitle>신상 그룹</NewGroupTitle>
+              <NewGroupTitle>마감임박 그룹</NewGroupTitle>
             </NewGroupTop>
             <NewGroupBox>
-              <NewGroupItem>
-                <NewGroupItemImg>
-                  <Lock />
-                </NewGroupItemImg>
-                <NewGroupItemTitle>재활용 합시다</NewGroupItemTitle>
-              </NewGroupItem>
-              <NewGroupItem>
-                <NewGroupItemImg>
-                  <Lock />
-                </NewGroupItemImg>
-                <NewGroupItemTitle>재활용 합시다</NewGroupItemTitle>
-              </NewGroupItem>
-              <NewGroupItem>
-                <NewGroupItemImg>
-                  <Lock />
-                </NewGroupItemImg>
-                <NewGroupItemTitle>재활용 합시다</NewGroupItemTitle>
-              </NewGroupItem>
+              <NewGroupItemList />
             </NewGroupBox>
           </NewGroup>
 
@@ -121,23 +89,13 @@ const Community = () => {
             <CommunityBox>
 
               {community?.map((v) => (
-                <CommunityItem
-                  key={v.communityId}
-                  onClick={() => {
-                    onDetailHandler(v.communityId);
-                  }}
-                >
-                  <ItemImg
-                    bgImg={
-                      v.img !== null
-                        ? v.img.imgUrl
-                        : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"
-                    }
-                  >
-                    <ItemCount>{v.communityId}%</ItemCount>
-                    <ItemProgress>
-                      <IP value={v.communityId} max="100"></IP>
-                    </ItemProgress>
+                <CommunityItem key={v.communityId} onClick={() => { onDetailHandler(v.communityId); }}>
+                  <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
+                    <div>
+                      <p>{states(v.dateStatus)}</p>
+                      <p>{Math.ceil(v.dateStatus === 'before' ? v.currentPercent : v.successPercent)}%</p>
+                      <progress value={v.dateStatus === 'before' ? v.currentPercent : v.successPercent} max="100"></progress>
+                    </div>
                   </ItemImg>
                   <ItemTitle>{v.title}</ItemTitle>
                 </CommunityItem>
@@ -152,26 +110,12 @@ const Community = () => {
 };
 export default Community;
 
-// transition: all ease 1s;
-// .jb {
-// width: 100px;
-// height: 100px;
-// margin: 60px auto;
-// background-color: orange;
-// transition: all ease 1s;
-// }
-// .jb:hover {
-// transform: rotate( 45deg );
-// }
-
 const CommunityWrap = styled.div``;
 const Container = styled.div``;
 
 const Banner = styled.div`
   width: 100%;
-  height: 204px;
-  background: url(${(props) => props.bgImg}) no-repeat 50% 50%;
-  background-size: cover;
+  height: 100%;
 `;
 
 const PopularGroup = styled.div`
@@ -193,36 +137,10 @@ const PopularGroupBox = styled.div`
     display: none;
   }
 `;
-const PopularGroupItem = styled.div`
-  margin: 0 4.5px;
-`;
-const PopularGroupItemImg = styled.div`
-  width: 143px;
-  height: 175px;
-  border-radius: 6px;
-  position: relative;
 
-  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg});
-  background-repeat: no-repeat;
-  background-size: cover;
-`;
-const ItemIcon = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px;
-  color: #fff;
-`;
-const ItemFlag = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  margin: 10px;
-  color: #fff;
-`;
-const PopularGroupItemTitle = styled.div`
-  font: bold 20px/40px "Arial", "sans-serif";
-`;
+
+
+
 
 const NewGroup = styled.div`
   width: 100vw;
@@ -243,21 +161,9 @@ const NewGroupBox = styled.div`
     display: none;
   }
 `;
-const NewGroupItem = styled.div`
-  margin: 0 4.5px;
-`;
-const NewGroupItemImg = styled.div`
-  width: 143px;
-  height: 175px;
-  border: 1px solid black;
-  box-sizing: border-box;
-  border-radius: 6px;
 
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%);
-`;
-const NewGroupItemTitle = styled.div`
-  font: bold 20px/40px "Arial", "sans-serif";
-`;
+
+
 
 const CommunityGroup = styled.div`
   box-sizing: border-box;
@@ -281,27 +187,41 @@ const CommunityItem = styled.div``;
 const ItemImg = styled.div`
   width: 176px;
   height: 215px;
-  border: 1px solid black;
-  box-sizing: border-box;
-  border-radius: 6px;
 
   position: relative;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg}) no-repeat center center;
   background-size: cover;
   color: #fff;
+  div{
+    position:absolute;
+    width:100%;
+    bottom:0;
+    padding:6px;
+    box-sizing:border-box;
+
+    text-align:center;
+    p{
+      text-align:right;
+    }
+
+    progress{
+      appearance: none;
+      width:100%;
+      height:15px;
+    }
+    progress::-webkit-progress-bar {
+      background:#fff;
+      border-radius:10px;
+      box-shadow: 0px 0px 1px 0px gray;
+      
+    }
+    progress::-webkit-progress-value {
+      border-radius:10px;
+      background: linear-gradient(to right, #AEDC89, #80BC28);
+    }
+  }
 `;
-const ItemCount = styled.div`
-  position: absolute;
-  bottom: 35px;
-  right: 10px;
-`;
-const ItemProgress = styled.div`
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  margin-left: -80px;
-`;
-const IP = styled.progress``;
 const ItemTitle = styled.div`
   font: bold 20px/40px "Arial", "sans-serif";
+  /* color:black; */
 `;

@@ -48,7 +48,7 @@ const CommunityDetail = () => {
             <ContentItem font={"16px/22px 'Noto sans','Arial','sans-serif'"} marginBottom={'10px'}>{communityDetail.startDate} - {communityDetail.endDate}</ContentItem>
             <ContentItem font={"700 26px/35px 'Noto sans','Arial','sans-serif'"} marginBottom={'9px'}>{communityDetail.title}</ContentItem>
             <ContentItem font={"22px/30px 'Noto sans','Arial','sans-serif'"} marginBottom={'35px'}>{communityDetail.content}</ContentItem>
-            <ContentItem marginBottom={'35px'} height={'500px'} imgUrl={communityDetail?.img !== null ? communityDetail?.img?.imgUrl : 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg'}></ContentItem>
+            <ContentItem marginBottom={'35px'}> {communityDetail?.img !== null ? <img src={communityDetail?.img} alt='img' /> : null} </ContentItem>
           </Content>
           <StateBox>
             {communityDetail.dateStatus === "before" ? (
@@ -102,7 +102,7 @@ const CommunityDetail = () => {
           </StateBox>
           <CertifyContentBox>
             <CertifyContent>
-              {certify.map((v)=><CertifyItem key={v.proofId} onClick={()=>navigate(`/community/${param.id}/proof/${v.proofId}`)}>{v.title}</CertifyItem>)}
+              {certify.map((v) => <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}><img src={v.img[0].imgUrl} alt='proofImg'/></CertifyItem>)}
             </CertifyContent>
             <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`)}><Edit /></CertifyContentIcon>
           </CertifyContentBox>
@@ -132,19 +132,18 @@ const Forest = styled.div`
 
 const Content = styled.div`
   width: 100%;
-  height: 100%;
   padding: 0 17px;
   box-sizing: border-box;
   margin-bottom: 35px;
 `;
 const ContentItem = styled.div`
   width: 100%;
-  height: ${(props) => props.height};
   font: ${(props) => props.font};
-  margin-bottom: 10px;
+  margin-bottom: ${(props) => props.marginBottom};
   word-break: break-all;
-  background: url(${(props) => props.imgUrl}) no-repeat 50% 50%;
-  background-size: cover;
+  img{
+    width:100%;
+  }
 `;
 
 const StateBox = styled.div`
@@ -243,27 +242,29 @@ const ProgressBar = styled.progress`
   margin: 0;
 `;
 
-const CertifyContentBox = styled.div`
-  position: relative;
-`;
+const CertifyContentBox = styled.div``;
+
 const CertifyContent = styled.div`
   display: grid;
   justify-items: center;
   grid-template-columns: repeat(auto-fill, minmax(33%, auto));
   gap: 1px;
+  img{
+    width:100%;
+    height:100%;
+  }
 `;
 const CertifyContentIcon = styled.div`
-  position: absolute;
-  bottom: 43px;
-  right: 17px;
-  width: 71px;
-  height: 71px;
-  background-color: #515151;
-  border-radius: 50%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position:fixed;
+  bottom:80px;right:17px;
+  width:71px;
+  height:71px;
+  background-color:#515151;
+  border-radius:50%;
+  
+  display:flex;
+  justify-content:center;
+  align-items:center;
 `;
 const CertifyItem = styled.div`
   width: 128px;

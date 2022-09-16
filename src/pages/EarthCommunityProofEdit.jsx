@@ -10,9 +10,9 @@ import CommunityProofFormTop from "../components/proof/CommunityProofFormTop";
 const EarthCommunityProofEdit = () => {
   return (
     <Layout>
-      <Header>
+      {/* <Header>
         <CommunityProofFormTop />
-      </Header>
+      </Header> */}
       <CommunityBox>
         <CommunityProofEdit />
       </CommunityBox>
