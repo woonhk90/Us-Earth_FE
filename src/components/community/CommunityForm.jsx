@@ -11,8 +11,10 @@ import { addDates, postCommunityDetail } from "../../redux/modules/communityForm
 import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
 import { clearVal } from "../../redux/modules/communitySlice";
+import Cookies from "universal-cookie";
 
 const CommunityForm = () => {
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { dates } = useSelector((state) => state.communityForm);
@@ -34,6 +36,9 @@ const CommunityForm = () => {
   const { limitScore, limitParticipants, title, content } = inputData;
 
   useEffect(() => {
+    if (cookies.get("mycookie") === undefined) {
+      navigate("/login");
+    }
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
