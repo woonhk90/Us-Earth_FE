@@ -62,7 +62,7 @@ const Line = styled.div`
   width:100%;
   height:1px;
   background-color:rgba(0,0,0,0.14);
-  margin:10px;
+  margin:10px 0;
 `;
 
 const PopularGroup = styled.div`
