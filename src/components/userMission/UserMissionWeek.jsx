@@ -99,8 +99,8 @@ const UserMissionWeek = () => {
         <MyResponsiveLine startDate={startDate} endDate={endDate} />
       </BarWrap>
       <SelectDateWrap>
-        <SelectDateP>{dayjs(dailyMissionData.createdAt).format("YYYY년 MM월 DD일")}</SelectDateP>
-        <SuccessMissionP>{dailyMissionData.count}개 완료</SuccessMissionP>
+        <SelectDateP>{dayjs(dailyMissionData?.createdAt).format("YYYY년 MM월 DD일")}</SelectDateP>
+        <SuccessMissionP>{dailyMissionData?.count}개 완료</SuccessMissionP>
       </SelectDateWrap>
       <SelectDateMissionListWrap>
         <div>
