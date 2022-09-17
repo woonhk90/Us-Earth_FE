@@ -49,11 +49,11 @@ const StButton = styled.button`
       css`
         background-color:  #525252;
         border: none;
-        border-radius: 6px;
+        /* border-radius: 6px; */
         color: #ffffff;
         /* padding: 25px 0; */
-        width: 60px;
-        height: 40px;
+        width: 79px;
+        height: 54px;
         font-weight: 500;
         font-size: 18px;
         text-align: center;

@@ -18,7 +18,6 @@ const CommentInput = ({ userToken }) => {
   const [content, commentOnChange, commentReset] = useInput("");
   const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
   const [inputOn, setInputOn] = useState(false);
-  const [InputRefCheck, setInputRefCheck] = useState(false);
 
   const textRef = useRef();
   const handleResizeHeight = useCallback(() => {
@@ -58,19 +57,8 @@ const CommentInput = ({ userToken }) => {
 
   //
   const clickInputOutside = (event) => {
-    setInputRefCheck(inputRef.current.contains(event.target));
-
-    setInputOn(inputRef.current.contains(event.target) && previewImg.length > 0);
-
-    console.log(inputRef.current.contains(event.target));
-    if (inputOn && !inputRef.current.contains(event.target)) {
-      setInputOn(!inputOn);
+    setInputOn(inputRef.current.contains(event.target));
     }
-    // } else {
-    //   console.log("dfgdfg?");
-    //   setModal(modal);
-    // }
-  };
 
   /* ---------------------------------- 사진 업로드 ---------------------------------- */
 
@@ -154,7 +142,7 @@ const CommentInput = ({ userToken }) => {
                 </Container>
               )}
               <CommentTextarea
-                emptyCheck={InputRefCheck || content.length || previewImg.length}
+                emptyCheck={inputOn || content.length || previewImg.length}
                 maxLength="100"
                 textareaType="comment"
                 value={content}
@@ -185,13 +173,13 @@ const CommentInputWrap = styled.div`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  padding: 6px 6px 6px 14px;
+  padding: 0px 0px 0px 14px;
   background-color: #f9f9f9;
 `;
 
 const InputWrap = styled.div`
   width: 100%;
-  margin-right: 6px;
+  margin: 6px 6px 0 0;
   border-radius: 6px;
   background-color: ${(props) => (props.inputOn ? "white" : "#f9f9f9")};
 `;
@@ -287,7 +275,7 @@ const CommentTextarea = styled.textarea`
   width: 100%;
   outline: none;
   color: #222222;
-  height: 35px;
+  height: 38px;
   padding: 10px 10px 0 10px;
   font-weight: 400;
   font-size: 16px;

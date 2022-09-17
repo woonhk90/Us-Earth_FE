@@ -12,12 +12,13 @@ import calendarLeftDoubleArrow from "../../assets/calendarLeftDoubleArrow.svg";
 import calendarRightArrow from "../../assets/calendarRightArrow.svg";
 import calendarLeftArrow from "../../assets/calendarLeftArrow.svg";
 import { useEffect } from "react";
+import { colors } from "../../styles/color";
 
 const UserMissionMonthCalendar = () => {
   const dispatch = useDispatch();
   const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
 
-  
+
   useEffect(() => {
     dispatch(
       getPeriodMissionStats({
@@ -88,6 +89,21 @@ const StCalender = styled.div`
     background: #d9d9d9;
     border-radius: 50%;
     display: flex;
+    :nth-child(1){
+      background-color: ${colors.dot1};
+    }
+    :nth-child(2){
+      background-color: ${colors.dot2};
+    }
+    :nth-child(3){
+      background-color: ${colors.dot3};
+    }
+    :nth-child(4){
+      background-color: ${colors.dot4};
+    }
+    :nth-child(5){
+      background-color: ${colors.dot5};
+    }
     /* flex-direction:; */
     /* margin: 0 0 2px 3px; */
     /* margin-left: 3px; */

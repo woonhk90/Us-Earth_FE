@@ -239,13 +239,13 @@ const CommentInputWrap = styled.div`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  padding: 6px 6px 6px 14px;
+  padding: 0px 0px 0px 14px;
   background-color: #f9f9f9;
 `;
 
 const InputWrap = styled.div`
   width: 100%;
-  margin-right: 6px;
+  margin: 6px 6px 0 0;
   border-radius: 6px;
   background-color: ${(props) => (props.inputOn ? "white" : "#f9f9f9")};
 `;
@@ -339,23 +339,23 @@ const SubmitButtonWrap = styled.div`
 `;
 
 const CommentTextarea = styled.textarea`
-  overflow-wrap: break-word;
-  word-break: break-all;
-  white-space: pre-wrap;
-  resize: none;
-  box-sizing: border-box;
-  border: none;
-  width: 100%;
-  outline: none;
-  color: #222222;
-  height: 35px;
-  padding: 10px 10px 0 10px;
-  font-weight: 400;
-  font-size: 16px;
-  border-radius: 6px;
-  letter-spacing: -0.03em;
-  background-color: ${(props) => (props.emptyCheck ? "white" : "#f9f9f9")};
-  ::placeholder {
-    color: #939393;
-  }
+overflow-wrap: break-word;
+word-break: break-all;
+white-space: pre-wrap;
+resize: none;
+box-sizing: border-box;
+border: none;
+width: 100%;
+outline: none;
+color: #222222;
+height: 38px;
+padding: 10px 10px 0 10px;
+font-weight: 400;
+font-size: 16px;
+border-radius: 6px;
+letter-spacing: -0.03em;
+background-color: ${(props) => (props.emptyCheck ? "white" : "#f9f9f9")};
+::placeholder {
+  color: #939393;
+}
 `;

@@ -11,5 +11,12 @@ export const colors = {
 
     white:'#FFFFFF',
 
+    dot1:`#E1B183`,
+    dot2:`#FCE7B2`,
+    dot3:`#CDDB86`,
+    dot4:`#9BBA74`,
+    dot5:`#638A55`,
+
+
   };
   

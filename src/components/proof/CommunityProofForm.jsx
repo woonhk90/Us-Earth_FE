@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postProof } from "../../redux/modules/proofsSlice";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
@@ -13,8 +13,8 @@ const CommunityProofForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
-  console.log(param);
-  const [inputData, inputOnChangeHandler, inputReset] = useInputs({
+  const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
+   const [inputData, inputOnChangeHandler, inputReset] = useInputs({
     title: "",
     content: "",
   });
@@ -25,6 +25,9 @@ const CommunityProofForm = () => {
     if (cookies.get("mycookie") === undefined) {
       navigate("/login");
     }
+    if(!participant || dateStatus !== "ongoing") {
+      navigate(`/community/detail/${param.communityId}`);
+    } 
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();

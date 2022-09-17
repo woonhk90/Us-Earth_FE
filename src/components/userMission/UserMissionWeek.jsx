@@ -4,8 +4,10 @@ import Calendar from "react-calendar";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { flexBetween, flexColumn, flexRow } from "../../styles/Flex";
-import calendarRightArrow from "../../assets/calendarRightArrow.svg";
-import calendarLeftArrow from "../../assets/calendarLeftArrow.svg";
+// import calendarRightArrow from "../../assets/calendarRightArrow.svg";
+import { ReactComponent as CalendarRightArrow } from "../../assets/calendarRightArrow.svg";
+import { ReactComponent as CalendarLeftArrow } from "../../assets/calendarLeftArrow.svg";
+// import calendarLeftArrow from "../../assets/calendarLeftArrow.svg";
 import MyResponsiveLine from "./UserMissionWeekLine";
 import Button from "../elements/Button";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDailyMissionStats, getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
+import { colors } from "../../styles/color";
 
 const UserMissionWeek = () => {
   const format = "YYYY-MM-DD";
@@ -25,9 +28,8 @@ const UserMissionWeek = () => {
   const dispatch = useDispatch();
   const { periodMissionData, dailyMissionData } = useSelector((state) => state.userMission);
 
-  console.log("나",periodMissionData);
+  console.log("나", periodMissionData);
   // console.log(dailyMissionData);
-
 
   useEffect(() => {
     if (cookies.get("mycookie") === undefined) {
@@ -40,8 +42,7 @@ const UserMissionWeek = () => {
         endDate: dayjs().endOf("week").format("YYYY-MM-DD"),
       })
     );
-  }, [dispatch,startDate]);
-
+  }, [dispatch, startDate]);
 
   const prevWeek = () => {
     setStartDate(dayjs(startDate).day(-7).format(format));
@@ -81,13 +82,17 @@ const UserMissionWeek = () => {
       </MissionStatsButtonWrap>
       <StCalender>
         <WeekDateButtonWrap>
-          <WeekDatePrevButton onClick={prevWeek}>＜</WeekDatePrevButton>
+          <WeekDatePrevButton onClick={prevWeek}>
+            <CalendarLeftArrow width="7px" />
+          </WeekDatePrevButton>
           <WeekDatePWrap>
             <WeekDateP>
               {dayjs(startDate).format("MM.DD")}~{dayjs(endDate).format("MM.DD")}
             </WeekDateP>
           </WeekDatePWrap>
-          <WeekDateNextButton onClick={nextWeek}>＞</WeekDateNextButton>
+          <WeekDatePrevButton onClick={nextWeek}>
+            <CalendarRightArrow width="7px" />
+          </WeekDatePrevButton>
         </WeekDateButtonWrap>
       </StCalender>
       <BarWrap>
@@ -99,10 +104,10 @@ const UserMissionWeek = () => {
       </SelectDateWrap>
       <SelectDateMissionListWrap>
         <div>
-          {dailyMissionData.clearMissionList?.map((data) => {
+          {dailyMissionData.clearMissionList?.map((data, index) => {
             return (
               <SelectMissionSingleWrap key={data.id}>
-                <SelectDateMissionDot />
+                <SelectDateMissionDot className={`dot${index}`} />
                 <SelectDateSingleP>{data.content}</SelectDateSingleP>
               </SelectMissionSingleWrap>
             );
@@ -119,7 +124,7 @@ const MissionStatsButtonWrap = styled.div`
   ${flexRow}
 `;
 const StCalender = styled.div`
-  ${flexRow}
+  /* ${flexRow} */
   .dot {
     height: 8px;
     width: 8px;
@@ -128,6 +133,7 @@ const StCalender = styled.div`
     display: flex;
     margin-left: 1px;
   }
+  margin: 20px 0 14.5px 0;
 `;
 
 const Stdic = styled.div`
@@ -160,13 +166,28 @@ const SelectDateWrap = styled.div`
 `;
 
 const SelectDateMissionListWrap = styled.div`
-  /* ${flexColumn} */
   padding: 12px 33px;
 `;
 const SelectMissionSingleWrap = styled.div`
   ${flexRow}
   padding:14px 0;
   box-sizing: border-box;
+
+  .dot0 {
+    background-color: ${colors.dot1};
+  }
+  .dot1 {
+    background-color: ${colors.dot2};
+  }
+  .dot2 {
+    background-color: ${colors.dot3};
+  }
+  .dot3 {
+    background-color: ${colors.dot4};
+  }
+  .dot4 {
+    background-color: ${colors.dot5};
+  }
 `;
 const SelectDateMissionDot = styled.div`
   width: 22px;
@@ -177,40 +198,21 @@ const SelectDateMissionDot = styled.div`
 `;
 
 const WeekDateButtonWrap = styled.div`
-  ${flexBetween}
-  padding: 25px 0 15px 0;
-  margin: 0 auto;
+  ${flexBetween}/* margin: 0 auto; */
+  /* padding: 0 250px; */
 `;
-const WeekDatePrevButton = styled.button`
-  /* margin: 0; */
-  background-image: url("${calendarLeftArrow}");
-  background-repeat: no-repeat;
-  background-size: 8px;
-  width: 8px;
-  height: 12px;
-  background-color: transparent;
-  border: none;
-  color: transparent;
-  background-position: center;
+const WeekDatePrevButton = styled.div`
+  text-align: center;
+  cursor: pointer;
+  padding: 10px 50px;
 `;
-
-const WeekDateNextButton = styled.button`
-  background-image: url("${calendarRightArrow}");
-  background-repeat: no-repeat;
-  background-size: 8px;
-  width: 8px;
-  height: 12px;
-  background-color: transparent;
-  border: none;
-  color: transparent;
-  background-position: center;
-`;
-
 const WeekDatePWrap = styled.div`
+  text-align: center;
   width: 100%;
-  margin: 0 53px;
 `;
 const WeekDateP = styled.p`
   font-size: 24px;
   font-weight: 700;
+  width: 144px;
+  margin: 0 auto;
 `;

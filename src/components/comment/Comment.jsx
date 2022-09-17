@@ -142,12 +142,20 @@ const Comment = () => {
 
 export default Comment;
 const CommentContainer = styled.div`
+  /* max-height: 546px; */
   max-height: 546px;
   width: 100%;
   overflow: auto;
   &::-webkit-scrollbar {
     display: none;
   }
+  @media (min-height: 600px) and (max-height: 700px) {
+    max-height: 400px;
+  }
+  @media (min-height: 300px) and (max-height: 556px) {
+    max-height: 300px;
+  }
+
 `;
 //700부터는 450으로 하기
 /* --------------------------------- Top div -------------------------------- */
