@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.2.1",
     "axios": "^0.27.2",
     "dayjs": "^1.11.5",
+    "heic2any": "^0.0.3",
     "intersection-observer": "^0.12.2",
     "json-server": "^0.17.0",
     "lodash": "^4.17.21",

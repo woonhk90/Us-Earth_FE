@@ -9,14 +9,20 @@ import UserMissionMonthCalendar from "./UserMissionMonthCalendar";
 import { getDailyMissionStats, getOnClickDate } from "../../redux/modules/userMissonSlice";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
+import { colors } from "../../styles/color";
 
 const UserMissionMonth = () => {
+  const cookies = new Cookies();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { clickDate } = useSelector((state) => state.userMission);
   const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
 console.log(dailyMissionData)
   useEffect(() => {
+    if (cookies.get("mycookie") === undefined) {
+      navigate("/login");
+    }
     dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
   }, []);
 
@@ -43,10 +49,10 @@ console.log(dailyMissionData)
       </SelectDateWrap>
       <SelectDateMissionListWrap>
         <div>
-          {dailyMissionData.clearMissionList?.map((data) => {
+          {dailyMissionData.clearMissionList?.map((data,index) => {
             return (
-              <SelectMissionSingleWrap key={data.id}>
-                <SelectDateMissionDot />
+              <SelectMissionSingleWrap  key={data.id}>
+                <SelectDateMissionDot className={`dot${index}`}/>
                 <SelectDateSingleP>{data.content}</SelectDateSingleP>
               </SelectMissionSingleWrap>
             );
@@ -87,7 +93,22 @@ const SelectDateWrap = styled.div`
 
 const SelectDateMissionListWrap = styled.div`
   /* ${flexColumn} */
-  padding: 12px 33px;
+  padding: 12px 33px;  
+  .dot0 {
+      background-color: ${colors.dot1};
+    }
+    .dot1{
+      background-color: ${colors.dot2};
+    }
+    .dot2{
+      background-color: ${colors.dot3};
+    }
+    .dot3{
+      background-color: ${colors.dot4};
+    }
+    .dot4{
+      background-color: ${colors.dot5};
+    }
 `;
 const SelectMissionSingleWrap = styled.div`
   ${flexRow}
@@ -100,4 +121,5 @@ const SelectDateMissionDot = styled.div`
   background-color: #d9d9d9;
   border-radius: 50%;
   margin-right: 17px;
+ 
 `;

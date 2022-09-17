@@ -2,6 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useRef } from "react";
+
+
 const ConfirmModal = (props) => {
   const { modalOnOff } = props;
   const navigate = useNavigate();
@@ -49,7 +52,7 @@ const ModalWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 999;
   padding: 0 15px;
   box-sizing: border-box;
 `;
@@ -64,7 +67,7 @@ const ConfirmWrap = styled.div`
   /* display: ${(props) => (!props.viewFlag ? "block" : "none")}; */
 `;
 const ConfirmTitle = styled.p`
-  font-size: 18px;
+  font-size: 22px;
   text-align: center;
   padding: 50px 0;
 `;
