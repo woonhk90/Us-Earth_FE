@@ -1,17 +1,13 @@
 import React from "react";
-import { useNavigate, useLocation, Redirect, Routes, Route, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-// import { getCookie } from "../shared/cookie";
-import { useDispatch, useSelector } from "react-redux";
-// import { __updateCommunityJoin } from "../redux/modules/communitySlice";
+import { useDispatch } from "react-redux";
 
 const ConfirmModal = (props) => {
   const { clickSubmit, closeModal } = props;
   const { title, cancel, submit, submitReturn } = props.confirmModalData;
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  /* ---------------------------------- 사용안함 ---------------------------------- */
+  /* ---------------------------------- 2차 모달 ---------------------------------- */
   const [viewFlag, setViewFlag] = React.useState(false);
   console.log(viewFlag);
   const submitonClick = (id) => {

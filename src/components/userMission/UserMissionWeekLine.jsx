@@ -7,44 +7,32 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { getDailyMissionStats, getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
 const MyResponsiveLine = ({ startDate, endDate }) => {
   const dispatch = useDispatch();
   const { periodMissionData, dailyMissionData } = useSelector((state) => state.userMission);
-  console.log(startDate);
-  // console.log(endDate);
-  console.log(periodMissionData);
-  // console.log(dailyMissionData);
-
-  const [arrData, setArrData] = useState([]);
-  console.log(arrData);
+  const [weekMissionData, setWeekMissionData] = useState([]);
 
   useEffect(() => {
-    arrys(startDate);
-  }, []);
-let arry = [];
-  let arr = [
-    { selectedDate: null, clearMissionCnt: 0, clearMissionList: null, createdAt: "2022-09-12", count: 4 },
-    { selectedDate: null, clearMissionCnt: 0, clearMissionList: null, createdAt: "2022-09-13", count: 4 },
-    { selectedDate: null, clearMissionCnt: 0, clearMissionList: null, createdAt: "2022-09-14", count: 3 },
-    { selectedDate: null, clearMissionCnt: 0, clearMissionList: null, createdAt: "2022-09-15", count: 1 },
-  ];
-  const arrys = () => {
-    arr.map((item)=>{
+    weekMissionDataCheck();
+  }, [startDate, periodMissionData]);
+
+  let arry = [];
+  const weekMissionDataCheck = () => {
+    for (let i = 0; i < 7; i++) {
+      console.log("추가", i);
+      let finding = periodMissionData.find((item) => item.createdAt === dayjs(startDate).add(i, "day").format("YYYY-MM-DD"));
+      if (finding === undefined) finding = { count: "" };
+      console.log(finding);
       arry.push({
-        x:dayjs(item.createdAt).format("MM.DD"),
-        y:item.count,
-      })
-    })
+        x: dayjs(startDate).add(i, "day").format("MM.DD"),
+        y: finding.count,
+      });
+    }
     arry.push({
       x: "",
       y: null,
     });
-    setArrData(arry);
+    setWeekMissionData(arry);
   };
 
   return (
@@ -53,12 +41,12 @@ let arry = [];
         data={[
           {
             id: "mission",
-            data: arrData,
+            data: weekMissionData,
           },
         ]}
         onClick={(data) => {
           let year = dayjs(startDate).format("YYYY-");
-          dispatch(getDailyMissionStats(`${year}${dayjs(data.data["xFormatted"]).format("MM-DD")}`))
+          dispatch(getDailyMissionStats(`${year}${dayjs(data.data["xFormatted"]).format("MM-DD")}`));
         }}
         lineWidth={1.5}
         margin={{ top: 15, right: 0, bottom: 55, left: 50 }}

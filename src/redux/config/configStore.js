@@ -5,6 +5,7 @@ import communityForm from "../modules/communityFormSlice";
 import comments from "../modules/commentsSlice";
 import proofs from "../modules/proofsSlice";
 import userMission from "../modules/userMissonSlice";
+import info from "../modules/infoSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     comments,
     proofs,
     userMission,
+    info,
   },
 });
