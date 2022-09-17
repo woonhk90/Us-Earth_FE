@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 import Chart from './Chart';
+import CampaignList from './CampaignList';
 
 const Info = () => {
   return (
@@ -31,25 +32,12 @@ const Info = () => {
             </ChartWrap>
           </InfoTop>
 
+
           <InfoBottom>
             <BottomTitle>캠페인 소식</BottomTitle>
-            <CampaignBox>
-              <CampaignItem>
-                <CampaignItemPoster></CampaignItemPoster>
-                <CampaignItemTitle>캠페인 소식 제목</CampaignItemTitle>
-                <CampaignItemContent>캠페인 소식 내용 미리보기캠페인 소식 내용 미리보기</CampaignItemContent>
-              </CampaignItem>
-              <CampaignItem>
-                <CampaignItemPoster></CampaignItemPoster>
-                <CampaignItemTitle>캠페인 소식 제목</CampaignItemTitle>
-                <CampaignItemContent>캠페인 소식 내용 미리보기</CampaignItemContent>
-              </CampaignItem>
-              <CampaignItem>
-                <CampaignItemPoster></CampaignItemPoster>
-                <CampaignItemTitle>캠페인 소식 제목</CampaignItemTitle>
-                <CampaignItemContent>캠페인 소식 내용 미리보기</CampaignItemContent>
-              </CampaignItem>
-            </CampaignBox>
+
+            <CampaignList />
+
           </InfoBottom>
         </Container>
       </InfoWrap>
@@ -125,24 +113,4 @@ const InfoBottom = styled.div`
 const BottomTitle = styled.div`
   font:600 26px/1 'Noto Sans','Arial','sans-serif';
   padding:0 0 22px;
-`;
-const CampaignBox = styled.div``;
-const CampaignItem = styled.div``;
-const CampaignItemPoster = styled.div`
-  width:100%;
-  height:150px;
-  background:gray;
-  border-radius:6px;
-  margin-bottom:15px;
-`;
-const CampaignItemTitle = styled.div`
-  font:600 20px/28px 'Noto Sans','Arial','sans-serif';
-`;
-const CampaignItemContent = styled.div`
-  font:300 18px/25px 'Noto Sans','Arial','sans-serif';
-  margin-bottom:15px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-
 `;
