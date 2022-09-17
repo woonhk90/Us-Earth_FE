@@ -22,7 +22,7 @@ const CommunityTop = () => {
   return (
     <>
       <HeaderWrap>
-        <div onClick={() => onClickHandler()}><LeftArrow /></div>
+        <div></div>
         <p>내정보</p>
         <div onClick={() => { navigate('/mypage/setting') }}><Setting /></div>
       </HeaderWrap>

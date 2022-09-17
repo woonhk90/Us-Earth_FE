@@ -50,8 +50,8 @@ const Community = () => {
 };
 export default Community;
 
-const CommunityWrap = styled.div``;
-const Container = styled.div``;
+const CommunityWrap = styled.div`width:100%;`;
+const Container = styled.div`width:100%;`;
 
 const Banner = styled.div`
   width: 100%;
