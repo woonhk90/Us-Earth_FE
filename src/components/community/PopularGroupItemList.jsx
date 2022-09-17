@@ -19,7 +19,7 @@ const PopularGroupItemList = () => {
         <PopularGroupItem onClick={() => { navigate(`/community/detail/${v.communityId}`) }} key={v.communityId}>
           <PopularGroupItemImg bgImg={v.img === null ? 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg' : v.img} >
             <ItemFlag>
-              <span>모집중</span>
+              <span>진행중</span>
             </ItemFlag>
           </PopularGroupItemImg>
           <PopularGroupItemTitle>{v.title}</PopularGroupItemTitle>

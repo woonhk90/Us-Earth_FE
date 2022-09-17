@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Seed from "../../assets/Seed.svg";
+import MypageBG from "../../assets/mypage-bg.png";
 import { useDispatch, useSelector } from "react-redux";
 import { __getTodayMission, __updateMissionFlag } from '../../redux/modules/mypageSlice';
 import { colors } from '../../styles/color';
@@ -26,7 +27,7 @@ const MyPageTodayMission = () => {
   }
   return (
     <>
-      <MyPageMission>
+      <MyPageMission imgUrl={MypageBG}>
         {
           missionFlag ?
             (<TodayMission>
@@ -46,7 +47,6 @@ const MyPageTodayMission = () => {
                 <p onClick={() => onClickTodayMission()}>미션 보기({todayMission.filter((v) => v.complete === true).length}/5)</p>
               </MissionTop>
               <MissionBottom>
-                <div><img src={Seed} alt='seed-icon' /></div>
                 <progress value='1' max="7" />
               </MissionBottom></>)
         }
@@ -65,6 +65,9 @@ const MyPageMission = styled.div`
   justify-content:space-between;
   padding:20px 15px 0;
   box-sizing:border-box;
+
+  background: url(${(props) => props.imgUrl}) no-repeat 50% 80%;
+  background-size:cover;
 `;
 const MissionTop = styled.div`
   width:100%;
@@ -82,27 +85,18 @@ const MissionBottom = styled.div`
   width:100%;
   padding:0 35px 8px;
   box-sizing:border-box;
-  div{
-    width:100%;
-    img{
-      display:block;
-      width:50%;
-      margin:0 auto;
-      /* background-image: url('${Seed}'); */
-    }
-  }
   progress{
     appearance: none;
     width:100%;
     height:15px;
   }
   progress::-webkit-progress-bar {
-    background:#e2e2e2;
+    background:rgba(255,255,255,0.25);
     border-radius:10px;
   }
   progress::-webkit-progress-value {
     border-radius:10px;
-    background:#818181;
+    background:${colors.green89};
   }
 `;
 

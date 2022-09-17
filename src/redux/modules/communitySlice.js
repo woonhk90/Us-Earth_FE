@@ -126,6 +126,7 @@ const initialState = {
   isLoading: false,
   error: [],
   statusCode: 0,
+  isLoading: false,
 }
 
 export const communitySlice = createSlice({
