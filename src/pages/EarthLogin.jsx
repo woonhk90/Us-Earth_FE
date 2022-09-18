@@ -11,7 +11,7 @@ const EarthLogin = () => {
     return (
         <Layout>
             <Header>
-                {/* <LoginTop /> */}
+                <LoginTop />
             </Header>
             <LoginBox>
                 <Login />
@@ -25,10 +25,10 @@ const EarthLogin = () => {
 export default EarthLogin;
 
 const LoginBox = styled.div`
+  width:100%;
   height:100%;
   overflow:auto;
   position:absolute;
-  /* top:48px; */
-  top:0;
+  top:48px;
   left:0;
 `;
