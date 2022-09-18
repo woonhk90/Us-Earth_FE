@@ -151,7 +151,7 @@ const initialState = {
   overlap: false,
   todayMission: [],
   myGroupList: [],
-  saveCagegoryFlag: 'onGoing'
+  saveCagegoryFlag: 'ongoing'
 }
 
 export const mypageSlice = createSlice({

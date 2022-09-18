@@ -26,7 +26,7 @@ const MyPageMissionGroup = () => {
       <GroupWrap>
         <Container>
           <CategoryBox>
-            <ItemOnGoing onClick={() => { onClickCategory('onGoing') }} active={categoryFlag} name="onGoing">진행중</ItemOnGoing>
+            <ItemOnGoing onClick={() => { onClickCategory('ongoing') }} active={categoryFlag} name="ongoing">진행중</ItemOnGoing>
             <ItemBefore onClick={() => { onClickCategory('before') }} active={categoryFlag} name="before">진행전</ItemBefore>
             <ItemEnd onClick={() => { onClickCategory('end') }} active={categoryFlag} name='end'>종료</ItemEnd>
           </CategoryBox>

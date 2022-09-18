@@ -48,7 +48,7 @@ const MyPage = () => {
 }
 export default MyPage;
 
-const MyPageWrap = styled.div`width:100%;height:100%;`;
+const MyPageWrap = styled.div`width:100%;height:100%;letter-spacing:-0.1em;`;
 const Container = styled.div`
   width:100%;
   display:flex;

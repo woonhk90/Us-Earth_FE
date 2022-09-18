@@ -58,7 +58,7 @@ export default MyPageTodayMission;
 
 const MyPageMission = styled.div`
   width:100%;
-  height:50vh;
+  min-height:50vh;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -76,7 +76,7 @@ const MissionTop = styled.div`
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:25px 26px;
+  padding:25px 15px;
   box-sizing:border-box;
   p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
   p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
@@ -104,8 +104,9 @@ const TodayMission = styled.div`
   width:100%;
   background-color:#fff;
   border-radius:12px;
-  padding:25px 26px 15px;
+  padding:25px 15px 15px;
   box-sizing:border-box;
+  margin-bottom:20px;
   `;
 const TodayMissionBox = styled.div`
     display:flex;

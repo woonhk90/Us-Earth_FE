@@ -55,7 +55,9 @@ const Container = styled.div`width:100%;`;
 
 const Banner = styled.div`
   width: 100%;
-  height: 100%;
+  img{
+    width:100%;
+  }
 `;
 
 const Line = styled.div`
