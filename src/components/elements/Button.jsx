@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import {ReactComponent as Edit} from"../../assets/Edit2.svg"
 
 const Button = ({ imgUrl, on, font, outline, border, margin, height, width, btntype, type, onClick, children, disabled }) => {
   return (
@@ -16,7 +17,8 @@ const Button = ({ imgUrl, on, font, outline, border, margin, height, width, btnt
       on={on}
       imgUrl={imgUrl}
     >
-      {children}
+      {btntype === "submit" && <Edit width="25px" height="25px"/>}
+            {children}
     </StButton>
   );
 };
@@ -47,17 +49,8 @@ const StButton = styled.button`
     return (
       props.btntype === "submit" &&
       css`
-        background-color:  #525252;
+        background-color:  transparent;
         border: none;
-        /* border-radius: 6px; */
-        color: #ffffff;
-        /* padding: 25px 0; */
-        width: 79px;
-        height: 54px;
-        font-weight: 500;
-        font-size: 18px;
-        text-align: center;
-        letter-spacing: -0.03em;
       `
     );
   }}

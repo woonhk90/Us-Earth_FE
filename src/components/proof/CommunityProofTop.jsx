@@ -62,7 +62,6 @@ const IconDiv = styled.div`
   height: 21px;
 `;
 const WriteIcon = styled.div`
-  cursor: pointer;
   width: 29px;
   height: 33px;
 `;

@@ -88,7 +88,6 @@ const CommentBox = () => {
   return (
     <>
       {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
-
       <IconContainer>
         <IconWrap>
           <div onClick={onClickHeart}>
@@ -125,8 +124,8 @@ const CommentBox = () => {
           <StHeader>
             <HeaderP>댓글 {comments.commentResponseDtoList?.length}</HeaderP>
           </StHeader>
-          <CommentContainer>
             <Comment userToken={userToken} />
+          <CommentContainer>
           </CommentContainer>
           <CommentContainer onClick={loginCheck}>
             {editMode ? <CommentInputEdit userToken={userToken} /> : <CommentInput userToken={userToken} />}
@@ -149,10 +148,14 @@ const StHeader = styled.header`
   width: 100%;
   padding: 28px 0 10px 28px;
   font-weight: 800;
+  
 `;
 
 const CommentContainer = styled.div`
   width: 100%;
+  position: fixed;
+  bottom: 0px;
+  z-index: 99;
 `;
 const IconContainer = styled.div`
   ${flexRow}

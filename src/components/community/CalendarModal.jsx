@@ -69,11 +69,9 @@ const CalendarModal = (props) => {
         <StInput>
           <DatePicker
             isdate={date.start === date.end}
-            formatMonthDay="YYYY.MM"
             formatWeekDay={(nameOfDay) => nameOfDay.substring(0, 3).toUpperCase()}
             renderCustomHeader={({ monthDate, customHeaderCount, decreaseMonth, increaseMonth }) => {
-              const month = monthDate.getMonth() + 1;
-              const year = monthDate.getFullYear();
+              const month = dayjs(monthDate).format("YYYY.MM");
               return (
                 <div>
                   <button
@@ -86,7 +84,7 @@ const CalendarModal = (props) => {
                     </span>
                   </button>
                   <span className="react-datepicker__current-month">
-                    {year}.{month}
+                    {month}
                   </span>
                   <button
                     className={"react-datepicker__navigation react-datepicker__navigation--next"}
@@ -113,9 +111,9 @@ const CalendarModal = (props) => {
           />
         </StInput>
         {date.start.length > 0 && date.end.length > 0 ? (
-          <FooterMenus color={"#FFFFFF"} onClick={addDateDispatch} bgColor={"#353535"}>
+          <SelectDate color={"#FFFFFF"} onClick={addDateDispatch} bgColor={"#315300"}>
             {dayjs(date.start).format("YY.MM.DD")} - {dayjs(date.end).format("YY.MM.DD")} / 선택완료
-          </FooterMenus>
+          </SelectDate>
         ) : (
           <FooterMenus color={"#BEBEBE"} bgColor={"#EDEDED"}>
             기간을 선택해 주세요
@@ -147,27 +145,33 @@ const StInput = styled.div`
   bottom: 56px;
   left: 0;
   position: absolute;
+  
   .react-datepicker__header {
     padding: 30px 0 8px 0;
     background-color: #ffffff;
     border: none;
     border-radius: 20px 20px 0 0 !important;
   }
+
   .react-datepicker {
     border-radius: 20px 20px 0 0 !important;
   }
+
   .react-datepicker__month-container {
     float: none;
     margin-bottom: 25px;
   }
+
   .react-datepicker__current-month {
     font-size: 24px !important;
   }
+
   .react-datepicker__day-names,
   .react-datepicker__week {
     display: flex;
     justify-content: space-between;
   }
+
   .react-datepicker__day-names {
     color: #000000;
     opacity: 0.5;
@@ -175,7 +179,7 @@ const StInput = styled.div`
 
   .react-datepicker__day--selected {
     border-radius: 50%;
-    background-color: #353535;
+    background-color: #ADD477 !important;
   }
 
   .react-datepicker__day,
@@ -186,10 +190,12 @@ const StInput = styled.div`
     }
     border: none;
   }
+
   .react-datepicker__day-names,
   .react-datepicker__month {
     margin: 0 17px;
   }
+
   .react-datepicker__day {
     display: flex;
     justify-content: center;
@@ -199,10 +205,12 @@ const StInput = styled.div`
     margin-top: 20px;
     width: 100%;
   }
+
   .react-datepicker__day--disabled {
     color: #000000;
     opacity: 0.5;
   }
+
   .react-datepicker__day,
   .react-datepicker__time-name {
     width: 100%;
@@ -210,6 +218,7 @@ const StInput = styled.div`
     margin: 3px 0;
     border: none;
   }
+
   .react-datepicker {
     justify-content: start;
     align-items: flex-end;
@@ -220,37 +229,50 @@ const StInput = styled.div`
     bottom: 0;
     border: none;
   }
+
   .react-datepicker__current-month {
     font-size: 16px;
   }
+
   .react-datepicker__day--in-range {
     color: black;
     border-radius: 0;
-    background-color: #ededed;
+    background-color: #EBF5DD;
     border: none;
   }
+.react-datepicker__day--selecting-range-start{
+  color:white !important;
+}
   .react-datepicker__day--in-selecting-range {
     border-radius: 50%;
-    background-color: #353535;
+    background-color: transparent;
     border: none;
+    color:black;
+    :hover {
+      background-color: #ededed;
+    }
   }
+
   .react-datepicker__day {
     border: none;
     font-size: 18px;
   }
+
   .react-datepicker__navigation {
     top: 30px;
     margin: 0 20px;
   }
+
   .react-datepicker__day--in-range {
     :hover {
       border-radius: 0%;
     }
     position: relative;
   }
+
   .react-datepicker__day--range-start {
     border-radius: 50%;
-    background-color: #353535;
+    background-color: #ADD477;
     color: #ffffff;
     :hover {
       border-radius: 50%;
@@ -258,7 +280,7 @@ const StInput = styled.div`
     ::after {
       content: "";
       z-index: -1;
-      background-color: #ededed;
+      background-color: #EBF5DD;
       width: 50%;
       border-radius: 0;
       height: 100%;
@@ -266,14 +288,15 @@ const StInput = styled.div`
       right: 0;
     }
   }
+
   .react-datepicker__day--range-end {
     border-radius: 50%;
-    background-color: #353535;
+    background-color: #ADD477;
     color: #ffffff;
     ::after {
       content: "";
       z-index: -1;
-      background-color: ${(props) => (props.children.props.isdate ? "transparent" : "#EDEDED")};
+      background-color: ${(props) => (props.children.props.isdate ? "transparent" : "#EBF5DD")};
       width: 50%;
       border-radius: 0;
       height: 100%;
@@ -297,6 +320,20 @@ const FooterMenus = styled.button`
   position: absolute;
   text-align: center;
   font-size: 20px;
+  font-weight: 600;
+  color: ${(props) => props.color};
+  background-color: ${(props) => props.bgColor};
+`;
+const SelectDate = styled.button`
+  width: 100%;
+  height: 56px;
+  line-height: 48px;
+  bottom: 0;
+  left: 0;
+  border: none;
+  position: absolute;
+  text-align: center;
+  font-size: 18px;
   font-weight: 600;
   color: ${(props) => props.color};
   background-color: ${(props) => props.bgColor};

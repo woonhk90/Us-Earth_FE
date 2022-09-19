@@ -6,12 +6,13 @@ import Input from "../elements/Input";
 import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
-import { flexBetween } from "../../styles/Flex";
+import { flexBetween, flexRow } from "../../styles/Flex";
 import { addDates, postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
 import { clearVal } from "../../redux/modules/communitySlice";
 import Cookies from "universal-cookie";
+import { useRef } from "react";
 
 const CommunityForm = () => {
   const cookies = new Cookies();
@@ -70,12 +71,13 @@ const CommunityForm = () => {
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
     const passwordCurrent = e.target.value;
+    console.log(passwordCurrent)
     setPassword(e.target.value);
     if (!passwordRegex.test(passwordCurrent)) {
-      setPasswordMessage("숫자 4자리를 입력해 주세요!");
+      setPasswordMessage("비밀번호 숫자 4자리");
       setIsPassword(false);
     } else {
-      setPasswordMessage("안전한 비밀번호입니다.");
+      setPasswordMessage("");
       setIsPassword(true);
     }
   };
@@ -124,7 +126,6 @@ const CommunityForm = () => {
                   <BottomText>대표이미지</BottomText>
                 </BottonTextWrap>
               </ImageIcon>
-              {/* <button onClick={deleteImage}>삭제</button> */}
             </label>
             <ImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
           </ImageForm>
@@ -140,9 +141,11 @@ const CommunityForm = () => {
         <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
         {secret ? (
           <>
-            <P>비밀번호</P>
+            <PasswordWrap>
+              <P>비밀번호</P>
+            {password.length > 0 && <MessageP>{passwordMessage}</MessageP>}
+            </PasswordWrap>
             <Input inputype="basic" placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
-            {password.length > 0 && <span>{passwordMessage}</span>}
           </>
         ) : null}
         <DateSpan
@@ -152,9 +155,9 @@ const CommunityForm = () => {
         >
           <P>진행 기간*</P>
           {dates.start?.length > 0 && dates.end?.length > 0 ? (
-            <DateP color={"#222222"}>
+            <SelectDateP color={"#222222"}>
               {dates.start}-{dates.end}
-            </DateP>
+            </SelectDateP>
           ) : (
             <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
           )}
@@ -163,14 +166,15 @@ const CommunityForm = () => {
         <P>참여인원*</P>
         <Input
           inputype="basic"
+          maxLength="2"
           placeholder="인원을 입력해 주세요(최대 10명)"
-          type="number"
+          type="tel"
           name="limitParticipants"
           value={limitParticipants}
           onChange={inputOnChangeHandler}
         ></Input>
         <P>목표달성갯수*</P>
-        <Input inputype="basic" type="number" name="limitScore" placeholder="최대 100개" value={limitScore} onChange={inputOnChangeHandler}></Input>
+        <Input inputype="basic" maxLength="3" type="tel" name="limitScore" placeholder="최대 100개" value={limitScore} onChange={inputOnChangeHandler}></Input>
         <P>그룹소개*</P>
         <Textarea
           placeholder="소개글을 입력해 주세요"
@@ -195,7 +199,7 @@ const CommunityForm = () => {
               cursor: "pointer",
             }}
             onClick={submitHandler}
-            bgColor={"#353535"}
+            bgColor={"#315300"}
             color={"white"}
           >
             그룹 등록
@@ -251,14 +255,14 @@ const CheckBox = styled.input`
   width: 54px;
   height: 29px;
   &:checked + ${CheckBoxLabel} {
-    background: #353535;
+    background: #80BC28;
     &::after {
       background-color: white;
       display: block;
       border-radius: 50%;
       width: 25px;
       height: 25px;
-      margin: 2px 0px 0px 27px;
+      margin: 2px 0px 2px 27px;
       transition: 0.2s;
     }
   }
@@ -281,7 +285,7 @@ const ImageForm = styled.form`
 `;
 
 const ImageInput = styled.input`
-  position: absolute;
+  /* position: absolute; */
   width: 0;
   height: 0;
   overflow: hidden;
@@ -318,6 +322,8 @@ const Thumb = styled.img`
   width: 206px;
   height: 206px;
   border-radius: 14px;
+  position: absolute;
+  z-index: 1;
 `;
 
 const BottonTextWrap = styled.div`
@@ -333,7 +339,7 @@ const BottonTextWrap = styled.div`
   height: 39px;
   border: none;
   border-radius: 0 0 14px 14px;
-  z-index: 99;
+  z-index: 0;
   background: #cbcbcb;
   background-size: 100%;
   display: flex;
@@ -387,6 +393,24 @@ const DateP = styled.p`
   font-weight: 700;
   border-bottom: 1px solid rgba(0, 0, 0, 0.14);
   color: ${(props) => props.color};
+
+  @media (max-width: 390px) {
+    font-size: 16px;
+  }
+`;
+const SelectDateP = styled.p`
+  box-sizing: content-box;
+  height: 35px;
+  margin: 0;
+  font-size: 22px;
+  padding: 10px 0 26px 0;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  color: ${(props) => props.color};
+
+  @media (max-width: 390px) {
+    font-size: 20px;
+    }
 `;
 
 const RightText = styled.p`
@@ -399,3 +423,20 @@ const RightText = styled.p`
 const TopTextWrap = styled.div`
   ${flexBetween}
 `;
+
+const MessageP = styled.p`
+font-weight: 200;
+font-size: 14px;
+line-height: 19px;
+display: flex;
+align-items: center;
+text-align: right;
+letter-spacing: -0.02em;
+color: #FF0000;
+
+`
+const PasswordWrap = styled.div`
+  ${flexBetween}
+  text-align: end;
+  align-items: flex-end;  
+`

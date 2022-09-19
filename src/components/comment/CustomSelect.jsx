@@ -58,13 +58,14 @@ const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
 export default CustomSelect;
 
 const SelectBox = styled.div`
+
   position: relative;
   width: 40px;
   height: 30px;
   box-sizing: border-box;
   align-self: center;
   cursor: pointer;
-  &::before {
+  &::after {
     content: "";
     position: absolute;
   }
@@ -80,8 +81,9 @@ const SelectOptions = styled.ul`
   /* list-style: none; */
   text-align: center;
   /* background-color: #ffffff; */
+  
   position: absolute;
-  z-index: 999;
+  z-index: 9999;
   list-style: none;
   top: 20px;
   right: 0;
@@ -114,6 +116,7 @@ const EditIcon = styled.div`
   box-sizing: border-box;
   /* padding: 0 5px 12px 0; */
   position: absolute;
+
   /* padding:2px; */
   top: -10px;
   right: 10px;
