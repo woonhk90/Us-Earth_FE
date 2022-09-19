@@ -2,7 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 const Textarea = (props) => {
-  const { ref, onInput, onFocus, textareaType, margin, weight, autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } = props;
+  const { textareaRef, onInput, onFocus, textareaType, margin, weight, autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } = props;
 console.log(props.ref)
   return (
     <TextareaWrap>
@@ -23,7 +23,7 @@ console.log(props.ref)
         margin={margin}
         textareaType={textareaType}
         onInput={onInput}
-        ref={ref}
+        ref={textareaRef}
       />
     </TextareaWrap>
   );
@@ -74,6 +74,25 @@ const StTextarea = styled.textarea`
     );
   }}
   
+
+  ${(props) => {
+    return (
+      props.textareaType === "proofTop" &&
+      css`
+        border-bottom: 2px solid rgba(217, 217, 217, 0.3);
+        box-sizing: border-box;
+        margin: 0;
+        padding: 14px 30px;
+        font-size: 24px;
+        height:64px;
+        font-weight: 600;
+        
+  /* @media (max-width: 390px) {
+    font-size: 18px;
+  } */
+      `
+    );
+  }}
   ${(props) => {
     return (
       props.textareaType === "comment" &&

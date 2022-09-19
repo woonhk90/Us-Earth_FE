@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 const Input = (props) => {
-  const { inputype, fontWeight, maxLength, pattern, title, size, id, type, value, name, onChange, placeholder, margin } = props;
+  const { onInput,inputype, fontWeight, maxLength, pattern, title, size, id, type, value, name, onChange, placeholder, margin } = props;
   return (
     <InputWrap>
       <StInput
@@ -18,6 +18,7 @@ const Input = (props) => {
         margin={margin}
         fontWeight={fontWeight}
         inputype={inputype}
+        onInput={onInput}
       />
     </InputWrap>
   );
@@ -44,27 +45,17 @@ const StInput = styled.input`
       props.inputype === "basic" &&
       css`
         border-bottom: 1px solid rgba(0, 0, 0, 0.14);
-       
-box-sizing: border-box;
+        box-sizing: border-box;
         margin: 0;
         font-size: 22px;
         padding: 10px 0 26px 0;
         font-weight: 700;
-      `
-    );
-  }}
-
-  ${(props) => {
-    return (
-      props.inputype === "proof" &&
-      css`
-        border-bottom: 2px solid rgba(217, 217, 217, 0.3);
-        
-box-sizing: border-box;
-        margin: 0;
-        padding: 14px 30px;
-        font-size: 24px;
-        font-weight: 600;
+            
+    @media (max-width: 390px) {
+      ::placeholder{
+        font-size: 16px;
+      }
+    }
       `
     );
   }}

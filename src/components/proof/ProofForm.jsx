@@ -7,11 +7,20 @@ import { ReactComponent as CameraWh } from "../../assets/cameraWh.svg";
 import cancelWh from "../../assets/cancelWh.svg";
 import Input from "../elements/Input";
 import Textarea from "../elements/Textarea";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Header from "../Header";
+import { useRef } from "react";
 
 const ProofForm = ({ ProofFormData }) => {
   const navigate = useNavigate();
+  const textRef = useRef();
+  const param = useParams();
+  const handleResizeHeight = useCallback(() => {
+    if (textRef.current.scrollHeight < 250) {
+      textRef.current.style.height = `64px`;
+      textRef.current.style.height = textRef.current.scrollHeight + "px";
+    }
+  }, []);
 
   const {
     files: files,
@@ -23,6 +32,7 @@ const ProofForm = ({ ProofFormData }) => {
     submitHandler: submitHandler,
     deleteImageFile: deleteImageFile,
     addImageFile: addImageFile,
+    submitButton: submitButton,
   } = ProofFormData;
 
   return (
@@ -33,11 +43,11 @@ const ProofForm = ({ ProofFormData }) => {
             <IconDiv>
               <Back
                 onClick={() => {
-                  navigate("/mypage");
+                  navigate(`/community/detail/${param.communityId}`);
                 }}
               />
             </IconDiv>
-            <HeaderP onClick={submitHandler}>등록</HeaderP>
+            <HeaderP onClick={submitHandler}>{submitButton}</HeaderP>
           </HeaderWrap>
         </Header>
       </>
@@ -73,7 +83,16 @@ const ProofForm = ({ ProofFormData }) => {
           <ErrorMessage>{isPhotoMessage}</ErrorMessage>
         </Test>
         <BottomWrap>
-          <Input inputype="proof"    maxLength="30" placeholder="제목" name="title" value={title} onChange={inputOnChangeHandler}></Input>
+          <Textarea
+            textareaRef={textRef}
+            onInput={handleResizeHeight}
+            textareaType="proofTop"
+            maxLength="30"
+            placeholder="제목"
+            name="title"
+            value={title}
+            onChange={inputOnChangeHandler}
+          ></Textarea>
           <Textarea
             cols="50"
             rows="8"
@@ -102,13 +121,15 @@ const Test = styled.div`
   border-bottom: 2px solid rgba(217, 217, 217, 0.3);
 `;
 
-const Test2 = styled.div``;
-
 const AddPhotoWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+
+  @media (max-width: 390px) {
+    grid-template-columns: 1fr 1fr;
+  }
   flex-wrap: wrap;
-  padding: 20px 15px;
+  padding: 20px 15px 13px 15px;
   justify-items: center;
 `;
 
@@ -129,8 +150,8 @@ const Stform = styled.form`
 const ImageContainer = styled.div``;
 
 const BottomWrap = styled.div`
-width: 100%;
-box-sizing: border-box;
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const StImageInput = styled.input`
@@ -162,9 +183,6 @@ const CameraIcon = styled.div`
 
 const StIcon = styled.div`
   cursor: pointer;
-  :hover {
-    border: 1px solid #999999;
-  }
   width: 100px;
   height: 100px;
   background-color: #d9d9d9;
@@ -224,6 +242,7 @@ const IconDiv = styled.div`
 `;
 
 const HeaderP = styled.p`
+  cursor: pointer;
   font-weight: 600;
   font-size: 20px;
   letter-spacing: -0.03em;
@@ -232,4 +251,10 @@ const HeaderP = styled.p`
 
 const ErrorMessage = styled.div`
   display: absolute;
+  font-weight: 200;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #ff0000;
+  padding: 0 24px 18px 24px;
 `;

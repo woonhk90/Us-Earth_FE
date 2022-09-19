@@ -8,8 +8,11 @@ import { commentEditChange, deleteComments, getComments } from "../../redux/modu
 import ConfirmModal from "../Modals/ConfirmModal";
 import icons from "../../assets";
 import OkModal from "../Modals/OkModal";
+import CommentInput from "./CommentInput";
+import CommentInputEdit from "./CommentInputEdit";
 
-const Comment = () => {
+import LoginModal from "../Modals/LoginModal";
+const Comment = ({userToken,editMode}) => {
   const { Delete, Report, Edit } = icons;
   const dispatch = useDispatch();
   const param = useParams();
@@ -141,7 +144,19 @@ const Comment = () => {
 };
 
 export default Comment;
+
+
+const CommentInputWrap = styled.div`
+  width: 100%;
+  position: fixed;
+  /* top: 0; */
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99;
+`;
 const CommentContainer = styled.div`
+padding-bottom: 75px;
   /* max-height: 546px; */
   max-height: 546px;
   width: 100%;
