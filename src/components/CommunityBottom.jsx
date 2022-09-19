@@ -29,6 +29,7 @@ const CommunityBottom = () => {
     }
   }
 
+  /* ------------------------------- 버튼에 불 들어오는거 ------------------------------ */
   const path = window.location.pathname;
   let pathFlag = '';
   if (path.includes('/mypage') || path.includes('/login')) {
