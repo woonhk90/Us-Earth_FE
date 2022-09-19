@@ -12,8 +12,13 @@ const CommunityTop = () => {
   const dispatch = useDispatch();
 
   const onClickHandler = () => {
-    console.log("뒤로가자");
-    navigate(-1);
+    const url = localStorage.getItem('pathname');
+    localStorage.removeItem('pathname');
+    if(url){
+      navigate('/');
+    }else{
+      navigate(-1);
+    }
   }
   useEffect(() => {
     return () => {

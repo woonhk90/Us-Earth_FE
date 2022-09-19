@@ -18,7 +18,6 @@ const Login = () => {
   const goAction = () => {
     /* ----------------------- 어디에서 로그인을 했는지 그 위치로 다시 이동함 ----------------------- */
     const pathname = localStorage.getItem('pathname');
-    localStorage.removeItem('pathname');
     pathname ? navigate(pathname) : navigate('/login');
   }
 

@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { setCookie } from "./cookie";
-import Swal from 'sweetalert2';
-import { useQuery } from 'react-query';
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../components/Modals/AlertModal";
 
@@ -16,10 +14,10 @@ const Login = () => {
     setModal(!modal);
   };
   const goAction = () => {
-    /* ----------------------- 어디에서 로그인을 했는지 그 위치로 다시 이동함 ----------------------- */
+    /* 값이 있으면 그 값으로 페이지 이동 없으면 -1(뒤로가기) */
     const pathname = localStorage.getItem('pathname');
-    localStorage.removeItem('pathname');
-    pathname ? navigate(pathname) : navigate('/login');
+    // localStorage.removeItem('pathname');
+    pathname ? navigate(pathname) : navigate('/mypage');
   }
 
   const navigate = useNavigate();
@@ -29,7 +27,7 @@ const Login = () => {
       const data = await axios.get(`${process.env.REACT_APP_SERVER_API_GOOGLE}?code=${code}`);
       console.log('로그인리턴=>', data);
 
-      if(await data.headers.authorization){
+      if (await data.headers.authorization) {
         setCookie("mycookie", data.headers.authorization);
         setCookie("refreshToken", data.headers.refreshtoken);
       }

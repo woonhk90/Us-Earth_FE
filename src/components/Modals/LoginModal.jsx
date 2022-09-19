@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useRef } from "react";
 
@@ -9,7 +9,10 @@ const ConfirmModal = (props) => {
   const { modalOnOff } = props;
   const navigate = useNavigate();
 
+  const { pathname } = useLocation();
   const clickSubmit = () => {
+    /* 현재 위치 주소 */
+    localStorage.setItem('pathname', pathname);
     navigate("/login");
   };
 
