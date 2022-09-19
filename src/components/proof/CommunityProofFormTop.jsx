@@ -16,7 +16,7 @@ const CommunityProofFormTop = () => {
             }}
           />
         </IconDiv>
-        <HeaderP>등록</HeaderP>
+        <RightButton>등g록</RightButton>
       </HeaderWrap>
     </>
   );
@@ -43,7 +43,9 @@ const IconDiv = styled.div`
   height: 21px;
 `;
 
-const HeaderP = styled.p`
+const RightButton = styled.button`
+
+cursor: pointer;
   font-weight: 600;
   font-size: 20px;
   letter-spacing: -0.03em;

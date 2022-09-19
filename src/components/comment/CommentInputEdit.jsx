@@ -13,6 +13,7 @@ import { ReactComponent as Camera } from "../../assets/camera.svg";
 import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
 import Button from "../elements/Button";
 import { flexColumn } from "../../styles/Flex";
+import { ReactComponent as Edit } from "../../assets/Edit2.svg";
 
 const CommentInputEdit = ({ userToken }) => {
   const inputRef = useRef();
@@ -30,7 +31,6 @@ const CommentInputEdit = ({ userToken }) => {
   /* --------------------------------- on input -------------------------------- */
   const [inputOn, setInputOn] = useState(false);
 
-
   const textRef = useRef();
   const handleResizeHeight = useCallback(() => {
     if (textRef.current.scrollHeight < 150) {
@@ -42,7 +42,7 @@ const CommentInputEdit = ({ userToken }) => {
   const clickInputOutside = (event) => {
     setInputOn(inputRef.current.contains(event.target));
   };
-   
+
   const inputOnButton = () => {
     if (userToken) {
       setInputOn(true);
@@ -122,7 +122,6 @@ const CommentInputEdit = ({ userToken }) => {
     setDeleteImg(true);
   };
 
- 
   /* ---------------------------------- submit(*) ---------------------------------- */
   const onClickSubmit = () => {
     let formData = new FormData();
@@ -146,83 +145,54 @@ const CommentInputEdit = ({ userToken }) => {
     // data reset function
   };
 
-  /* -------------------------------- edit modal ------------------------------- */
-  const [editModal, setEditModal] = useState(false);
-
-  // editModal text data
-  const confirmModalData = {
-    title: "수정을 취소하시겠습니까?",
-    cancel: "아니오",
-    submit: "예",
-    // submitReturn: "취소되었습니다.",
-  };
-
-  // editMode cancel function
-  const clickSubmit = () => {
-    setImageFile([]);
-    setPreviewImg([]);
-    commentReset();
-    dispatch(commentEditChange({}));
-  };
-
-  const editModalOnOff = () => {
-    setEditModal(!editModal);
-  };
 
   return (
     <>
-     <CommentInputContainer>
-        <CommentInputWrap ref={inputRef}>
+      <CommentInputContainer ref={inputRef}>
+        <CommentInputWrap>
+          <InputWrap inputOn={inputOn}>
+            {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
+            {previewImg.length > 0 && inputOn && (
+              <Container>
+                <DeleteButton onClick={deleteImageFile}>
+                  <CancelIconWrap>
+                    <CancelIcon>
+                      <CancelWh />
+                    </CancelIcon>
+                  </CancelIconWrap>
+                </DeleteButton>
+                <Thumb src={previewImg} alt="img" />
+              </Container>
+            )}
+            <CommentTextarea
+              img={previewImg}
+              rows="1"
+              inputOn={inputOn}
+              emptyCheck={inputOn || content.length || previewImg.length}
+              maxLength="100"
+              textareaType="comment"
+              value={content}
+              onChange={commentOnChange}
+              placeholder="댓글을 입력해주세요"
+              ref={textRef}
+              onInput={handleResizeHeight}
+              disabled={!userToken}
+            />
+          </InputWrap>
+          <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} />
           <form onClick={inputOnButton} encType="multipart/form-data">
             <StLabel htmlFor={!userToken ? null : "file"}>
-              <StIcon>
-                <CameraIcon>
-                  <Camera />
-                </CameraIcon>
-              </StIcon>
+              <CameraIcon>
+                <Camera height="25" />
+              </CameraIcon>
             </StLabel>
-            <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} />
           </form>
-          <CommentInputWrap>
-            <InputWrap inputOn={inputOn}>
-              {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
-              {previewImg.length > 0 && inputOn && (
-                <Container>
-                  <DeleteButton onClick={deleteImageFile}>
-                    <CancelIconWrap>
-                      <CancelIcon>
-                        <CancelWh />
-                      </CancelIcon>
-                    </CancelIconWrap>
-                  </DeleteButton>
-                  <Thumb src={previewImg} alt="img" />
-                </Container>
-              )}
-              <CommentTextarea
-                emptyCheck={inputOn || content.length || previewImg.length}
-                maxLength="100"
-                textareaType="comment"
-                value={content}
-                onChange={commentOnChange}
-                placeholder="댓글을 입력해주세요"
-                ref={textRef}
-                onInput={handleResizeHeight}
-                disabled={!userToken}
-              />
-            </InputWrap>
-            <SubmitButtonWrap>
-              <Button btntype="submit" onClick={onClickSubmit}>
-                수정
-              </Button>
-              {/* <SubmitButton>
-                <Button btntype="submit" onClick={modalOnOff}>
-                  수정취소
-                </Button>
-              </SubmitButton> */}
-            </SubmitButtonWrap>
-            {editModal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={editModalOnOff}></ConfirmModal>}
+          <SubmitButtonWrap>
+            <WriteIcon>
+              <Edit height="25" onClick={onClickSubmit} />
+            </WriteIcon>
+          </SubmitButtonWrap>
           </CommentInputWrap>
-        </CommentInputWrap>
       </CommentInputContainer>
     </>
   );
@@ -232,6 +202,12 @@ export default CommentInputEdit;
 
 const CommentInputContainer = styled.div`
   width: 100%;
+  .edit2-1 {
+    fill: #cbcbcb;
+  }
+  .camera-1 {
+    fill: #cbcbcb;
+  }
 `;
 
 const CommentInputWrap = styled.div`
@@ -239,15 +215,16 @@ const CommentInputWrap = styled.div`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  padding: 0px 0px 0px 14px;
+  /* padding: 0px 0px 0px 14px; */
   background-color: #f9f9f9;
 `;
 
 const InputWrap = styled.div`
+  margin: 9px 0px 9px 16px;
   width: 100%;
-  margin: 6px 6px 0 0;
+  background-color: white;
+  border: 1px solid #ececec;
   border-radius: 6px;
-  background-color: ${(props) => (props.inputOn ? "white" : "#f9f9f9")};
 `;
 
 const StImageInput = styled.input`
@@ -265,15 +242,19 @@ const StLabel = styled.label`
   cursor: pointer;
 `;
 
-const StIcon = styled.div`
+const CameraIcon = styled.div`
   cursor: pointer;
   width: 30px;
-  height: 30px;
-  margin: 9px 0px 0 0;
   background-color: transparent;
-  position: relative;
+  padding: 21px 0px 0px 15px;
 `;
 
+const WriteIcon = styled.div`
+  cursor: pointer;
+  background-color: transparent;
+  height: 30px;
+  padding: 21px 15px 0px 15px;
+`;
 const Thumb = styled.img`
   background-size: 100px;
   width: 100px;
@@ -319,11 +300,7 @@ const CancelIconWrap = styled.div`
   right: 7px;
   top: 5px;
   border-radius: 50%;
-  z-index: 99;
-`;
-
-const CameraIcon = styled.div`
-  width: 34px;
+  z-index: 0;
 `;
 
 const ErrorMessageP = styled.p`
@@ -339,23 +316,23 @@ const SubmitButtonWrap = styled.div`
 `;
 
 const CommentTextarea = styled.textarea`
-overflow-wrap: break-word;
-word-break: break-all;
-white-space: pre-wrap;
-resize: none;
-box-sizing: border-box;
-border: none;
-width: 100%;
-outline: none;
-color: #222222;
-height: 38px;
-padding: 10px 10px 0 10px;
-font-weight: 400;
-font-size: 16px;
-border-radius: 6px;
-letter-spacing: -0.03em;
-background-color: ${(props) => (props.emptyCheck ? "white" : "#f9f9f9")};
-::placeholder {
-  color: #939393;
-}
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  resize: none;
+  box-sizing: border-box;
+  width: 100%;
+  outline: none;
+  color: #222222;
+  height: 44px;
+  max-height: ${(props) => (props.inputOn ? "150px" : "44px")};
+  border: none;
+  padding: 11px;
+  font-weight: 400;
+  font-size: 16px;
+  border-radius: 6px;
+  letter-spacing: -0.03em;
+  ::placeholder {
+    color: #939393;
+  }
 `;

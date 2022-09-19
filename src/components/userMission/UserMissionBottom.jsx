@@ -11,44 +11,42 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { colors } from "../../styles/color";
-import UserMissionBottom from "./UserMissionBottom";
 
-const UserMissionMonth = () => {
+const UserMissionBottom = () => {
   const cookies = new Cookies();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { clickDate } = useSelector((state) => state.userMission);
   const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
-console.log(dailyMissionData)
+  console.log(dailyMissionData);
   useEffect(() => {
-    if (cookies.get("mycookie") === undefined) {
-      navigate("/login");
-    }
     dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
   }, []);
 
   return (
     <>
-      <MissionStatsButtonWrap>
-        <Button
-          onClick={() => {
-            navigate("/mypage/mission/week");
-          }}
-          btntype="onOff"
-        >
-          주간통계
-        </Button>
-        <Button btntype="onOff" on="on">
-          월간통계
-        </Button>
-      </MissionStatsButtonWrap>
-      <UserMissionMonthCalendar />
-      <UserMissionBottom/>
+      <SelectDateWrap>
+        {/* <SelectDateP>{dayjs(clickDate).format("YYYY년 MM월 DD일")}</SelectDateP> */}
+        <SelectDateP>{dayjs(dailyMissionData.createdAt).format("YYYY년 MM월 DD일")}</SelectDateP>
+        <SuccessMissionP>{dailyMissionData.count}개 완료</SuccessMissionP>
+      </SelectDateWrap>
+      <SelectDateMissionListWrap>
+        <div>
+          {dailyMissionData.clearMissionList?.map((data, index) => {
+            return (
+              <SelectMissionSingleWrap key={data.id}>
+                <SelectDateMissionDot className={`dot${index}`} />
+                <SelectDateSingleP>{data.content}</SelectDateSingleP>
+              </SelectMissionSingleWrap>
+            );
+          })}
+        </div>
+      </SelectDateMissionListWrap>
     </>
   );
 };
 
-export default UserMissionMonth;
+export default UserMissionBottom;
 
 const MissionStatsButtonWrap = styled.div`
   ${flexRow}
@@ -78,26 +76,25 @@ const SelectDateWrap = styled.div`
 
 const SelectDateMissionListWrap = styled.div`
   /* ${flexColumn} */
-  padding: 12px 33px;  
+  padding: 12px 33px;
   .dot0 {
-      background-color: ${colors.dot1};
-    }
-    .dot1{
-      background-color: ${colors.dot2};
-    }
-    .dot2{
-      background-color: ${colors.dot3};
-    }
-    .dot3{
-      background-color: ${colors.dot4};
-    }
-    .dot4{
-      background-color: ${colors.dot5};
-    }
-    @media (max-width: 390px) {
-      padding: 12px;  
+    background-color: ${colors.dot1};
   }
- 
+  .dot1 {
+    background-color: ${colors.dot2};
+  }
+  .dot2 {
+    background-color: ${colors.dot3};
+  }
+  .dot3 {
+    background-color: ${colors.dot4};
+  }
+  .dot4 {
+    background-color: ${colors.dot5};
+  }
+  @media (max-width: 390px) {
+    padding: 12px;
+  }
 `;
 const SelectMissionSingleWrap = styled.div`
   ${flexRow}
@@ -110,10 +107,9 @@ const SelectDateMissionDot = styled.div`
   background-color: #d9d9d9;
   border-radius: 50%;
   margin-right: 17px;
-  
+
   @media (max-width: 390px) {
     width: 18px;
-  height: 18px;
+    height: 18px;
   }
- 
 `;

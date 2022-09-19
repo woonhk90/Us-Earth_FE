@@ -86,6 +86,12 @@ const StCalender = styled.div`
   .dot {
     height: 8px;
     width: 8px;
+    
+    @media (max-width: 390px) {
+      
+    height: 7px;
+    width: 7px;
+  }
     background: #d9d9d9;
     border-radius: 50%;
     display: flex;
@@ -104,9 +110,6 @@ const StCalender = styled.div`
     :nth-child(5){
       background-color: ${colors.dot5};
     }
-    /* flex-direction:; */
-    /* margin: 0 0 2px 3px; */
-    /* margin-left: 3px; */
   }
   .react-calendar {
     width: 100%;
@@ -117,6 +120,7 @@ const StCalender = styled.div`
     border-bottom: 1px solid #DBDBDB;
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.125em;
+    
   }
 
   .react-calendar--doubleView {
@@ -149,6 +153,9 @@ const StCalender = styled.div`
   .react-calendar__navigation {
     span {
       font-size: 24px;
+      @media (max-width: 390px) {
+        font-size: 20px;
+  }
       font-weight: 700;
     }
     display: flex;
@@ -174,19 +181,20 @@ const StCalender = styled.div`
     abbr {
       text-decoration: none;
       font-size: 16px;
+      @media (max-width: 390px) {
+        font-size: 13px;
+  }
       font-weight: 400;
       opacity: 0.5;
     }
   }
   .react-calendar__month-view__weekdays__weekday {
     padding: 0.5em;
+    @media (max-width: 390px) {
+      padding: 0;
+  }
     margin-bottom: 25px;
   }
-  /* .react-calendar__month-view__weekdays__weekday:nth-child(1) { //얜 7개 
-    abbr {
-      color: red;
-    }
-  } */
   .react-calendar__month-view__weekNumbers .react-calendar__tile {
     display: flex;
     align-items: center;
@@ -203,7 +211,6 @@ const StCalender = styled.div`
 
   .react-calendar__month-view__days__day--weekend {
     color: black;
-    /* color: #ff7878; */
   }
   .react-calendar__month-view__days__day--neighboringMonth {
     color: black;
@@ -245,7 +252,6 @@ const StCalender = styled.div`
   }
   .react-calendar__tile {
     max-width: 100%;
-    padding: 10px 10px;
     background: none;
     text-align: center; 
     line-height: 16px;
@@ -258,8 +264,7 @@ const StCalender = styled.div`
     position: relative;
     z-index: 0;
     color: black;
-    abbr {
-      ::before {
+    ::before {
         content: "";
         position: absolute;
         top: 50%;
@@ -271,7 +276,6 @@ const StCalender = styled.div`
         border-radius: 50%;
         background-color: #eaeaea;
       }
-    }
   }
 
   .react-calendar__tile--now {
@@ -296,13 +300,10 @@ const StCalender = styled.div`
       height: 50px;
       border-radius: 50%;
       background-color: rgba(187, 187, 187, 0.2);
-      /* background: #006edc;
-  color: white; */
     }
   }
   .react-calendar__tile--hasActive {
     background: transparent;
-    //선택된 년도/월
     position: relative;
     z-index: 0;
     color: white;
@@ -318,20 +319,6 @@ const StCalender = styled.div`
       border-radius: 50%;
       background-color: #add477;
     }
-    abbr {
-      ::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -75%);
-        z-index: -1;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-color: #add477;
-      }
-    }
   }
 
   .react-calendar__tile--hasActive:enabled:hover,
@@ -342,8 +329,7 @@ const StCalender = styled.div`
     background: transparent;
     position: relative;
     color: black;
-    abbr {
-      ::before {
+    ::before {
         content: "";
         position: absolute;
         top: 50%;
@@ -355,15 +341,14 @@ const StCalender = styled.div`
         border-radius: 50%;
         background-color: rgba(187, 187, 187, 0.2);
       }
-    }
   }
   .react-calendar__tile--active,
   .react-calendar__month-view__days__day:enabled:focus {
     color: white;
     position: relative;
     z-index: 0;
-    abbr {
-      ::before {
+    text-align: center;
+    ::before {
         content: "";
         position: absolute;
         top: 50%;
@@ -375,17 +360,14 @@ const StCalender = styled.div`
         border-radius: 50%;
         background-color: #add477;
       }
-    }
   }
   .react-calendar__century-view__decades__decade {
     color: black !important;
   }
   .react-calendar__tile--active:enabled:hover,
-  .react-calendar__tile--active:enabled:focus {
-    background: transparent;
-  }
+  .react-calendar__tile--active:enabled:focus,
   .react-calendar--selectRange .react-calendar__tile--hover {
-    background-color: transparent;
+    background: transparent;
   }
 `;
 
@@ -393,6 +375,9 @@ const MissionCnt = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 3px;
+    @media (max-width: 390px) {
+    gap: 1px;
+  }
   justify-items: center;
   margin-top: 13px;
   height: 10px;

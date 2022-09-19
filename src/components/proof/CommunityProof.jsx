@@ -85,7 +85,7 @@ const CommunityProof = () => {
       </FirstWrap>
       <UserInfoFirstWrap>
         <UserInfoWrap>
-          <UserInfoImg />
+          <UserInfoImg imgUrl={proofs.profileImage}/>
           <UerInpo>
             <Username>{proofs.nickname}</Username>
             <CreatAt>{proofs.creatAt}</CreatAt>
@@ -155,7 +155,7 @@ const UerInpo = styled.div`
 `;
 
 const UserInfoImg = styled.div`
-  background-image: url("https://d1unjqcospf8gs.cloudfront.net/assets/users/default_profile_80-0443429487fdc2277fc8f9dd1eca6fb8b678862f593e21222ba9f6592b99ad14.png");
+ background-image: url(${(props) => props.imgUrl});
   width: 37px;
   height: 37px;
   background-position: center;

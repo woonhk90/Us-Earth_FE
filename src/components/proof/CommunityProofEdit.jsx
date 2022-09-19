@@ -93,7 +93,7 @@ const CommunityProofEdit = () => {
         }
       }
     } else {
-      setIsPhotoMessage("사진은 5장까지만 업로드 가능합니다.");
+      setIsPhotoMessage("사진은 5장까지만 등록 가능합니다.");
       setIsPhoto(false);
     }
     if (arry?.length > 0) {
@@ -156,6 +156,7 @@ const CommunityProofEdit = () => {
     submitHandler: submitHandler,
     deleteImageFile: deleteImageFile,
     addImageFile: addImageFile,
+    submitButton:"수정"
   };
 
   return (
