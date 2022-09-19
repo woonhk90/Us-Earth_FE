@@ -109,7 +109,7 @@ const CommunityForm = () => {
     console.log(imageFile);
     dispatch(postCommunityDetail(formData));
     dispatch(clearVal());
-    navigate("/community");
+    navigate("/");
   };
 
   return (

@@ -12,13 +12,15 @@ const CommunityModal = (props) => {
   const closeModal = () => {
     props.closeModal();
   }
+
   const [viewFlag, setViewFlag] = React.useState(false);
   const { error, isLoading, statusCode } = useSelector((state) => state.community);
   console.log("ERROR=>", error, isLoading, statusCode);
   const [errorCode,setErrorCode]=React.useState(0);
+
+  /* --------------------------------- 참여하기버튼 --------------------------------- */
   const onViewFlagHandler = async (id) => {
     await dispatch(__updateCommunityJoin({ communityId: id }));
-    
     setErrorCode(statusCode);
   }
 

@@ -7,6 +7,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __getCommunityDetail, __getCommunityCertify } from '../redux/modules/communitySlice';
 import { useInView } from "react-intersection-observer";
+import { colors } from '../styles/color';
+import { getCookie } from '../shared/cookie';
+import LoginModal from "./Modals/LoginModal";
 
 
 const CommunityDetail = () => {
@@ -39,8 +42,24 @@ const CommunityDetail = () => {
   }, [inView]);
   console.log("inView=>", inView);
 
+  /* --------------------------------- 참여하기 버튼 -------------------------------- */
+  /* ----------------------------------- 로그인 ---------------------------------- */
+  const [loginModal, setLoginModal] = useState(false);
+  const loginModalOnOff = () => {
+    setLoginModal(!loginModal);
+  };
+
+  const onInJoinBtn = () => {
+    if (getCookie('mycookie') === undefined) {
+      setLoginModal(!loginModal);
+      // navigate('/login');
+    } else {
+      setModal(!modal);
+    }
+  }
   return (
     <>
+      {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
       <CommunityDetailWrap>
         <Container>
           <Forest imgUrl={forest}></Forest>
@@ -50,24 +69,19 @@ const CommunityDetail = () => {
             <ContentItem font={"22px/30px 'Noto sans','Arial','sans-serif'"} marginBottom={'35px'}>{communityDetail.content}</ContentItem>
             <ContentItem marginBottom={'35px'}> {communityDetail?.img !== null ? <img src={communityDetail?.img} alt='img' /> : null} </ContentItem>
           </Content>
+
           <StateBox>
             {communityDetail.dateStatus === "before" ? (
               !communityDetail.participant ? (
                 <State>
                   <StateTop>
                     <StateItem font={"600 30px/40px 'Arial','sans-serif'"}>모집중</StateItem>
-                    <StateItem font={"600 60px/82px 'Arial','sans-serif'"}> 5 </StateItem>
+                    <StateItem font={"600 60px/82px 'Arial','sans-serif'"}> {communityDetail.participantsCnt} </StateItem>
                     <StateItem font={"24px/32px 'Arial','sans-serif'"} color={"#9E9E9E"}>
-                      / 10명
+                      / {communityDetail.limitParticipants}명
                     </StateItem>
                   </StateTop>
-                  <StateBottom
-                    onClick={() => {
-                      setModal(!modal);
-                    }}
-                  >
-                    참여하기
-                  </StateBottom>
+                  <StateBottom onClick={() => { onInJoinBtn() }}>참여하기</StateBottom>
                   {modal && <Modal closeModal={() => setModal(!modal)} communityId={param.id}></Modal>}
                 </State>
               ) : (
@@ -77,19 +91,18 @@ const CommunityDetail = () => {
                 </OnGoingState>
               )
             ) : null}
+
             {communityDetail.dateStatus === "ongoing" ? (
               <EndState>
                 <EndStateTop>
-                  <EndStateItem position={"absolute"} top={"0"} left={"0"}>
-                    달성률
-                  </EndStateItem>
+                  <EndStateItem position={"absolute"} top={"0"} left={"0"} font={"600 20px/1 'Noto Sans','Arial','sans-serif'"}>달성률</EndStateItem>
                   <EndStateItem font={"600 44px/1 'Noto Sans', 'Arial', 'sans-serif'"} textAlign={"right"}>
-                    50<span>% </span>
+                    {communityDetail.successPercent}<span>% </span>
                     <span> /100%</span>
                   </EndStateItem>
                 </EndStateTop>
                 <EndStateBottom>
-                  <ProgressBar value="50" max="100"></ProgressBar>
+                  <progress value={communityDetail.successPercent} max="100"></progress>
                 </EndStateBottom>
               </EndState>
             ) : null}
@@ -100,9 +113,10 @@ const CommunityDetail = () => {
               </OnGoingState>
             ) : null}
           </StateBox>
+
           <CertifyContentBox>
             <CertifyContent>
-              {certify.map((v) => <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}><img src={v.img[0].imgUrl} alt='proofImg'/></CertifyItem>)}
+              {certify.map((v) => <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}><img src={v.img[0].imgUrl} alt='proofImg' /></CertifyItem>)}
             </CertifyContent>
             <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`)}><Edit /></CertifyContentIcon>
           </CertifyContentBox>
@@ -231,16 +245,32 @@ const EndStateItem = styled.div`
 `;
 const EndStateBottom = styled.div`
   width: 100%;
+  margin:10px 0;
+  
+  progress{
+    appearance: none;
+    width:100%;
+    height:20px;
+  }
+  progress::-webkit-progress-bar {
+    background:transparent;
+    border-radius:10px;
+    box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.2);
+  }
+  progress::-webkit-progress-value {
+    border-radius:10px;
+    background:linear-gradient(to right, ${colors.green89}, ${colors.green28});
+  }
 `;
-const ProgressBar = styled.progress`
-  accent-color: #1c1c1c;
-  display: inline-block;
-  width: 100%;
-  height: 50px;
-  opacity: 0.4;
-  padding: 0;
-  margin: 0;
-`;
+// const ProgressBar = styled.progress`
+//   accent-color: #1c1c1c;
+//   display: inline-block;
+//   width: 100%;
+//   height: 50px;
+//   opacity: 0.4;
+//   padding: 0;
+//   margin: 0;
+// `;
 
 const CertifyContentBox = styled.div``;
 

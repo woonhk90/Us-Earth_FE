@@ -59,9 +59,9 @@ const MyPage = () => {
     }
   }
 
-  const onLogoutHandler =  () => {
+  const onLogoutHandler = async () => {
     // returnRemoveCookie('mycookie');
-    removeCookie('mycookie');
+    await removeCookie('mycookie');
     navigate('/');
   }
 
