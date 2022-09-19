@@ -52,7 +52,6 @@ const CommunityDetail = () => {
   const onInJoinBtn = () => {
     if (getCookie('mycookie') === undefined) {
       setLoginModal(!loginModal);
-      // navigate('/login');
     } else {
       setModal(!modal);
     }
