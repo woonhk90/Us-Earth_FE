@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
 import { useDispatch, useSelector } from "react-redux";
 import { __getInfo } from "../../redux/modules/infoSlice";
+import Loading from '../etc/Loading';
 
 const Info = () => {
   const { infoList, isLoading } = useSelector((state) => state.info);
@@ -41,8 +42,7 @@ const Info = () => {
           );
         })}
       </CampaignBox>
-      {/* {isLoading ? <div>로딩중</div> : <div ref={ref}></div>} */}
-      {isLoading ? null : <div ref={ref}></div>}
+      {isLoading ? <Loading /> : <div ref={ref}></div>}
     </>
   );
 };

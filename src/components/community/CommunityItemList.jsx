@@ -4,18 +4,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { __getCommunity, certifyReset } from "../../redux/modules/communitySlice";
+import Loading from '../etc/Loading';
 
 
 const PopularGroupItemList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { community, isLoading } = useSelector((state) => state.community);
-  const searchVal = useSelector((state) => state);
   console.log("community=>", community);
-  console.log("검색단어=>", searchVal.community.search);
+
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
-  const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
   const { ref, inView, entry } = useInView({
     threshold: 0,
@@ -24,7 +23,7 @@ const PopularGroupItemList = () => {
   /* ----------------------------- 커뮤니티 전체목록 가져오기 ----------------------------- */
   useEffect(() => {
     console.log("커뮤니티 호출");
-    dispatch(__getCommunity({ page, search }));
+    dispatch(__getCommunity({ page }));
   }, [page]);
 
   useEffect(() => {
@@ -47,6 +46,7 @@ const PopularGroupItemList = () => {
 
   return (
     <>
+      {isLoading ? <Loading /> : <Loading />}
       {community?.map((v) => (
         <CommunityItem key={v.communityId} onClick={() => { dispatch(certifyReset()); navigate(`/community/detail/${v.communityId}`); }}>
           <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
