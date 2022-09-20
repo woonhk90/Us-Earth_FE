@@ -7,6 +7,9 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
 import { certifyReset } from "../../redux/modules/communitySlice";
 import Cookies from "universal-cookie";
+import isLogin from "../../lib/isLogin";
+import IsLoginModal from "../../pages/IsLoginModal";
+import OkModal from "../Modals/OkModal";
 
 const CommunityProofForm = () => {
   const cookies = new Cookies();
@@ -14,20 +17,13 @@ const CommunityProofForm = () => {
   const dispatch = useDispatch();
   const param = useParams();
   const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
-   const [inputData, inputOnChangeHandler, inputReset] = useInputs({
+  const [inputData, inputOnChangeHandler, inputReset] = useInputs({
     title: "",
     content: "",
   });
 
   const { title, content } = inputData;
   useEffect(() => {
-    console.log(cookies.get("mycookie"))
-    if (cookies.get("mycookie") === undefined) {
-      navigate("/login");
-    }
-    if(!participant || dateStatus !== "ongoing") {
-      navigate(`/community/detail/${param.communityId}`);
-    } 
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
@@ -108,11 +104,12 @@ const CommunityProofForm = () => {
     submitHandler: submitHandler,
     deleteImageFile: deleteImageFile,
     addImageFile: addImageFile,
-    submitButton:"등록",
+    submitButton: "등록",
   };
 
   return (
     <>
+      {isLogin() ? null : <IsLoginModal />}
       <ProofForm ProofFormData={ProofFormData} />
     </>
   );

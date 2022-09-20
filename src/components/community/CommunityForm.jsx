@@ -13,6 +13,8 @@ import cameraWh from "../../assets/cameraWh.svg";
 import { clearVal } from "../../redux/modules/communitySlice";
 import Cookies from "universal-cookie";
 import { useRef } from "react";
+import isLogin from "../../lib/isLogin";
+import IsLoginModal from "../../pages/IsLoginModal";
 
 const CommunityForm = () => {
   const cookies = new Cookies();
@@ -37,9 +39,7 @@ const CommunityForm = () => {
   const { limitScore, limitParticipants, title, content } = inputData;
 
   useEffect(() => {
-    if (cookies.get("mycookie") === undefined) {
-      navigate("/login");
-    }
+    
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
@@ -116,6 +116,7 @@ const CommunityForm = () => {
 
   return (
     <>
+    {isLogin() ? null : <IsLoginModal/>}
       <CommunityFormWrap>
         <ImageBoxWrap>
           <ImageForm encType="multipart/form-data">

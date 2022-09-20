@@ -11,7 +11,7 @@ root.render(
     <BrowserRouter>
       <GlobalStyle />
       <Provider store={store}>
-        <App />
+       <App />
       </Provider>
     </BrowserRouter>
   </>

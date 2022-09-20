@@ -11,6 +11,8 @@ import { addDates, getCommunityDetail, patchCommunityDetail, postCommunityDetail
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import isLogin from "../../lib/isLogin";
+import IsLoginModal from "../../pages/IsLoginModal";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -142,6 +144,7 @@ const CommunityFormEdit = () => {
 
   return (
     <>
+        {isLogin() ? null : <IsLoginModal/>}
       <CommunityFormWrap>
         <ImageBoxWrap>
           <ImageForm encType="multipart/form-data">
