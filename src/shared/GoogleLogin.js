@@ -16,7 +16,7 @@ const Login = () => {
   const goAction = () => {
     /* 값이 있으면 그 값으로 페이지 이동 없으면 -1(뒤로가기) */
     const pathname = localStorage.getItem('pathname');
-    // localStorage.removeItem('pathname');
+    localStorage.removeItem('pathname');
     pathname ? navigate(pathname, { replace: true }) : navigate('/mypage', { replace: true });
   }
 

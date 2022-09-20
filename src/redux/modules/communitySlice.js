@@ -9,14 +9,13 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (payload, thunkAPI) => {
   try {
     console.log('__getCommunity=>', payload);
-    const search = payload.search;
     if (payload.page === '0' || payload.page === 0) {
-      thunkAPI.dispatch(certifyReset());
+      thunkAPI.dispatch(clearVal());
     }
-    const data = await axios.get(`${API_URL}/community?page=${payload.page}&size=10&title=${payload.search}`);
+    const data = await axios.get(`${API_URL}/community?page=${payload.page}&size=10`);
     console.log('전체커뮤니티=>', data);
 
-    return thunkAPI.fulfillWithValue({ data: data.data, search: search });
+    return thunkAPI.fulfillWithValue({ data: data.data });
   } catch (error) {
     window.alert("전체 커뮤니티 정보를 불러올 수 없습니다.");
     console.log(error);
@@ -88,7 +87,7 @@ export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCer
 export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularGroupItemList", async (payload, thunkAPI) => {
   try {
     console.log('__getPopularGroupItemList=>', payload);
-    const data = await axios.get(`${API_URL}/active`);
+    const data = await axios.get(`${API_URL}/community/active`);
     console.log('활발그룹Slice=>', data);
 
     return thunkAPI.fulfillWithValue(data.data);
@@ -105,7 +104,7 @@ export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularG
 export const __getNewGroupItemList = createAsyncThunk("usearth/__getNewGroupItemList", async (payload, thunkAPI) => {
   try {
     console.log('__getNewGroupItemList=>', payload);
-    const data = await axios.get(`${API_URL}/nearDone`);
+    const data = await axios.get(`${API_URL}/community/nearDone`);
     console.log('마감임박그룹Slice=>', data);
 
     return thunkAPI.fulfillWithValue(data.data);
@@ -120,7 +119,6 @@ export const __getNewGroupItemList = createAsyncThunk("usearth/__getNewGroupItem
 
 const initialState = {
   community: [],
-  search: '',
   communityDetail: [],
   certify: [],
   popularGroupList: [],
@@ -147,7 +145,6 @@ export const communitySlice = createSlice({
       console.log('action=>', action.payload.data.content);
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
       state.community = [...state.community, ...action.payload.data.content];
-      state.search = action.payload.search;
     },
     [__getCommunity.rejected]: (state, action) => {
       state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
