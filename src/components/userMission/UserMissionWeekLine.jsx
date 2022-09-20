@@ -61,11 +61,14 @@ const MyResponsiveLine = ({ startDate, endDate }) => {
         enableGridX={false}
         tooltip={({ point }) => {
           return (
-            <p>
-              완료일자: <b>{point.data.xFormatted}</b>
+            <ClickDot>
+              완료일자
               <br />
-              완료 수: <b>{point.data.yFormatted}</b>
-            </p>
+              <b>{point.data.xFormatted}</b>
+              <br />
+              완료 수 <br />
+              <b>{point.data.yFormatted}개</b>
+            </ClickDot>
           );
         }}
         colors={"#ADD477"}
@@ -107,52 +110,13 @@ const LineWrap = styled.div`
   height: 100%;
 
   border-bottom: 1px solid #dbdbdb;
-  > div > div > svg > g > g {
-    text {
-      font-size: 14px !important;
-      font-weight: 400 !important;
-    }
-    /* background-color:red !important;
-    color:red !important;
-    border: 1px solid red; */
-    line {
-      transform: translateX(-15px);
-    }
-    &:nth-child(1) line:nth-child(2n) {
-      stroke: transparent !important;
-    }
-    &:nth-child(1) line:nth-child(2n-1) {
-      stroke: #f5f5f5 !important;
-    }
-    &:nth-child(3) {
-      line {
-        stroke: #d9d9d9 !important;
-      }
-    }
-    &:nth-child(2) {
-      transform: translate(5, 200);
-      width: 100px !important;
-
-      line {
-        width: 100px !important;
-        line-height: normal 1 20%;
-        stroke: #d9d9d9 !important;
-      }
-    }
-    &:nth-child(1) {
-      stroke-width: 20px;
-      position: absolute;
-      top: 0;
-      transform: translate(5, 200) !important;
-      margin: 20px;
-      box-sizing: border-box;
-    }
-    /* &:nth-child(5) > g > circle {
-      &:nth-child(1) {
-          background-color: green !important;
-          fill: rgb(255, 255, 255) !important;
-          stroke: rgb(255, 255, 255) !important;
-      }
-    } */
-  }
 `;
+
+const ClickDot = styled.div`
+  text-align: start;
+  font-size: 12px;
+  b{
+    font-size: 12px;
+
+  }
+`

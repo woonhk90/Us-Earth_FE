@@ -45,7 +45,7 @@ const CommunityProofForm = () => {
     setIsPhotoMessage("");
     if (e.target.files.length + previewImg.length < 6) {
       for (let i = 0; i < e.target.files.length; i++) {
-        if (e.target.files[i].size < 20000000) {
+        if (e.target.files[i].size < 200000) {
           // 20메가
           const reader = new FileReader();
           reader.readAsDataURL(e.target.files[i]);
@@ -60,7 +60,7 @@ const CommunityProofForm = () => {
         }
       }
     } else {
-      setIsPhotoMessage("사진은 5장까지만 업로드 가능합니다.");
+      setIsPhotoMessage("사진은 5장까지만 등록 가능합니다.");
       setIsPhoto(false);
     }
     if (arry?.length > 0) {
@@ -108,6 +108,7 @@ const CommunityProofForm = () => {
     submitHandler: submitHandler,
     deleteImageFile: deleteImageFile,
     addImageFile: addImageFile,
+    submitButton:"등록",
   };
 
   return (

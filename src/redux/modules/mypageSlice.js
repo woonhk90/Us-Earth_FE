@@ -116,7 +116,8 @@ export const __updateMissionFlag = createAsyncThunk("usearth/__updateMissionFlag
       },
     });
     console.log("DATA=>", data);
-    thunkAPI.dispatch(__getTodayMission());
+    await thunkAPI.dispatch(__getTodayMission());
+    await thunkAPI.dispatch(__getMyInfo());
   } catch (error) {
     window.alert("오늘의 미션을 완료처리 할 수 없습니다.");
     console.log(error);
@@ -151,7 +152,7 @@ const initialState = {
   overlap: false,
   todayMission: [],
   myGroupList: [],
-  saveCagegoryFlag: 'onGoing'
+  saveCagegoryFlag: 'ongoing'
 }
 
 export const mypageSlice = createSlice({

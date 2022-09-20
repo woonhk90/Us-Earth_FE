@@ -98,7 +98,7 @@ const ChartBox = styled.div`
   font:600 20px/28px 'Noto Sans','Arial','sans-serif';
 `;
 const ChartItem = styled.div``;
-const ChartItemTitle = styled.div``;
+const ChartItemTitle = styled.div`letter-spacing:-0.1em;`;
 const ChartItemContent = styled.div``;
 
 

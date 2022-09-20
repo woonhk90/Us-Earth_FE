@@ -3,7 +3,7 @@ import axios from "axios";
 // import Cookies from "universal-cookie";
 
 // const cookies = new Cookies();
-const API_URL = process.env.REACT_APP_API_URL_INFO;
+const API_URL = process.env.REACT_APP_API_URL;
 
 /* ------------------------------- 소식시 캠페인 리스트 ------------------------------ */
 export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, thunkAPI) => {

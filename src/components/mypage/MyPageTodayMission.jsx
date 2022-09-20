@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import Seed from "../../assets/Seed.svg";
 import MypageBG from "../../assets/mypage-bg.png";
 import { useDispatch, useSelector } from "react-redux";
 import { __getTodayMission, __updateMissionFlag } from '../../redux/modules/mypageSlice';
 import { colors } from '../../styles/color';
 
 
-const MyPageTodayMission = () => {
+const MyPageTodayMission = ({ userInfo }) => {
   /* --------------------------- 나무 성장모습 & 미션 리스트 토글 -------------------------- */
   const [missionFlag, setMissionFlag] = React.useState(false);
   const dispatch = useDispatch();
@@ -22,6 +21,8 @@ const MyPageTodayMission = () => {
   React.useEffect(() => {
     dispatch(__getTodayMission());
   }, [])
+
+  /* -------------------------------- 일일 미션 누르면 ------------------------------- */
   const missionFlagChange = (key) => {
     dispatch(__updateMissionFlag({ missionName: key }));
   }
@@ -47,7 +48,7 @@ const MyPageTodayMission = () => {
                 <p onClick={() => onClickTodayMission()}>미션 보기({todayMission.filter((v) => v.complete === true).length}/5)</p>
               </MissionTop>
               <MissionBottom>
-                <progress value='1' max="7" />
+                <progress value={(5 * userInfo.level - 5 - userInfo.nextLevelExp).toString()} max='5' />
               </MissionBottom></>)
         }
       </MyPageMission>
@@ -58,7 +59,7 @@ export default MyPageTodayMission;
 
 const MyPageMission = styled.div`
   width:100%;
-  height:50vh;
+  min-height:50vh;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -76,7 +77,7 @@ const MissionTop = styled.div`
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:25px 26px;
+  padding:25px 15px;
   box-sizing:border-box;
   p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
   p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
@@ -104,8 +105,9 @@ const TodayMission = styled.div`
   width:100%;
   background-color:#fff;
   border-radius:12px;
-  padding:25px 26px 15px;
+  padding:25px 15px 15px;
   box-sizing:border-box;
+  margin-bottom:20px;
   `;
 const TodayMissionBox = styled.div`
     display:flex;

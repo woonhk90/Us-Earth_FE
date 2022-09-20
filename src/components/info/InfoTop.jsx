@@ -1,15 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
-import { useNavigate } from "react-router-dom";
 import { colors } from '../../styles/color';
 
 const InfoTop = () => {
-  const navigate = useNavigate();
   return (
     <>
       <HeaderWrap>
-        <div onClick={() => { navigate(-1) }}><LeftArrow /></div>
+        <div></div>
         <div>정보제공</div>
         <div></div>
       </HeaderWrap>

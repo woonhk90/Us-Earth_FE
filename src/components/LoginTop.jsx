@@ -7,7 +7,6 @@ const CommunityTop = () => {
   return (
     <>
       <HeaderWrap>
-        <div><Cancel /></div>
         <span>로그인</span>
       </HeaderWrap>
     </>
@@ -20,8 +19,7 @@ const HeaderWrap = styled.div`
   position:fixed;
   top:0;
   left:0;
-
-  width:100vw;
+  width:100%;
   height:48px;
   display:flex;
   justify-content:center;
@@ -29,7 +27,7 @@ const HeaderWrap = styled.div`
   padding:10px;
   box-sizing:border-box;
   z-index:1;
-  border-bottom:1px solid black;
+  border-bottom:1px solid #F5F5F5;
   div{
     position:absolute;
     left:10px;

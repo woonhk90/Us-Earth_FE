@@ -16,6 +16,7 @@ import { getDailyMissionStats, getPeriodMissionStats } from "../../redux/modules
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { colors } from "../../styles/color";
+import UserMissionBottom from "./UserMissionBottom";
 
 const UserMissionWeek = () => {
   const format = "YYYY-MM-DD";
@@ -29,7 +30,7 @@ const UserMissionWeek = () => {
   const { periodMissionData, dailyMissionData } = useSelector((state) => state.userMission);
 
   console.log("나", periodMissionData);
-  // console.log(dailyMissionData);
+  console.log(dailyMissionData);
 
   useEffect(() => {
     if (cookies.get("mycookie") === undefined) {
@@ -98,22 +99,7 @@ const UserMissionWeek = () => {
       <BarWrap>
         <MyResponsiveLine startDate={startDate} endDate={endDate} />
       </BarWrap>
-      <SelectDateWrap>
-        <SelectDateP>{dayjs(dailyMissionData.createdAt).format("YYYY년 MM월 DD일")}</SelectDateP>
-        <SuccessMissionP>{dailyMissionData.count}개 완료</SuccessMissionP>
-      </SelectDateWrap>
-      <SelectDateMissionListWrap>
-        <div>
-          {dailyMissionData.clearMissionList?.map((data, index) => {
-            return (
-              <SelectMissionSingleWrap key={data.id}>
-                <SelectDateMissionDot className={`dot${index}`} />
-                <SelectDateSingleP>{data.content}</SelectDateSingleP>
-              </SelectMissionSingleWrap>
-            );
-          })}
-        </div>
-      </SelectDateMissionListWrap>
+      <UserMissionBottom/>
     </>
   );
 };
@@ -204,7 +190,8 @@ const WeekDateButtonWrap = styled.div`
 const WeekDatePrevButton = styled.div`
   text-align: center;
   cursor: pointer;
-  padding: 10px 50px;
+  padding: 10px;
+  width: 100%;
 `;
 const WeekDatePWrap = styled.div`
   text-align: center;
@@ -215,4 +202,8 @@ const WeekDateP = styled.p`
   font-weight: 700;
   width: 144px;
   margin: 0 auto;
+  
+  @media (max-width: 390px) {
+        font-size: 20px;
+  }
 `;
