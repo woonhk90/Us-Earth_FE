@@ -46,7 +46,7 @@ const PopularGroupItemList = () => {
 
   return (
     <>
-      {isLoading ? <Loading /> : <Loading />}
+      {isLoading ? <Loading /> : null}
       {community?.map((v) => (
         <CommunityItem key={v.communityId} onClick={() => { dispatch(certifyReset()); navigate(`/community/detail/${v.communityId}`); }}>
           <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
