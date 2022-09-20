@@ -112,13 +112,22 @@ const CommunityDetail = () => {
               </OnGoingState>
             ) : null}
           </StateBox>
-
           <CertifyContentBox>
             <CertifyContent>
               {certify.map((v) => <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}><img src={v.img[0].imgUrl} alt='proofImg' /></CertifyItem>)}
             </CertifyContent>
-            <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`)}><Edit /></CertifyContentIcon>
           </CertifyContentBox>
+          {getCookie('mycookie') === undefined ?
+            null
+            :
+            (communityDetail.participant ?
+              (communityDetail.dateStatus ?
+                <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`)}><Edit /></CertifyContentIcon>
+                :
+                null)
+              :
+              null)
+          }
           <div ref={ref}></div>
         </Container>
       </CommunityDetailWrap>
