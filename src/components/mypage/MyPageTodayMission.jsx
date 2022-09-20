@@ -1,13 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import Seed from "../../assets/Seed.svg";
 import MypageBG from "../../assets/mypage-bg.png";
 import { useDispatch, useSelector } from "react-redux";
 import { __getTodayMission, __updateMissionFlag } from '../../redux/modules/mypageSlice';
 import { colors } from '../../styles/color';
 
 
-const MyPageTodayMission = () => {
+const MyPageTodayMission = ({ userInfo }) => {
   /* --------------------------- 나무 성장모습 & 미션 리스트 토글 -------------------------- */
   const [missionFlag, setMissionFlag] = React.useState(false);
   const dispatch = useDispatch();
@@ -22,6 +21,8 @@ const MyPageTodayMission = () => {
   React.useEffect(() => {
     dispatch(__getTodayMission());
   }, [])
+
+  /* -------------------------------- 일일 미션 누르면 ------------------------------- */
   const missionFlagChange = (key) => {
     dispatch(__updateMissionFlag({ missionName: key }));
   }
@@ -47,7 +48,7 @@ const MyPageTodayMission = () => {
                 <p onClick={() => onClickTodayMission()}>미션 보기({todayMission.filter((v) => v.complete === true).length}/5)</p>
               </MissionTop>
               <MissionBottom>
-                <progress value='1' max="7" />
+                <progress value={(5 * userInfo.level - 5 - userInfo.nextLevelExp).toString()} max='5' />
               </MissionBottom></>)
         }
       </MyPageMission>

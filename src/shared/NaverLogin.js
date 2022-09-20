@@ -18,7 +18,7 @@ const Login = () => {
   const goAction = () => {
     /* ----------------------- 어디에서 로그인을 했는지 그 위치로 다시 이동함 ----------------------- */
     const pathname = localStorage.getItem('pathname');
-    pathname ? navigate(pathname) : navigate('/login');
+    pathname ? navigate(pathname,{replace:true}) : navigate('/mypage',{replace:true});
   }
 
   const navigate = useNavigate();

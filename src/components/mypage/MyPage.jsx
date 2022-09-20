@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Seed from "../../assets/Seed.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { __getMyInfo } from '../../redux/modules/mypageSlice';
 import MyPageTodayMission from './MyPageTodayMission';
@@ -8,14 +7,14 @@ import { useNavigate } from "react-router-dom";
 import icons from '../../assets';
 
 const MyPage = () => {
-  const { Chart, Group, RightThinArrow, MoveNext } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.mypage);
-  console.log('userInfo=>', userInfo);
   React.useEffect(() => {
     dispatch(__getMyInfo());
   }, [dispatch])
+  const { Chart, Group, RightThinArrow, MoveNext } = icons;
+  const { userInfo } = useSelector((state) => state.mypage);
+  console.log('userInfo=>', userInfo);
 
 
   return (
@@ -31,7 +30,7 @@ const MyPage = () => {
           </MyPageInfo>
 
 
-          <MyPageTodayMission />
+          <MyPageTodayMission userInfo={userInfo}/>
 
 
           <MyPageMissionList>

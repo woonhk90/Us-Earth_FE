@@ -44,12 +44,12 @@ const Logo = styled.div`
   display:flex;
   justify-content:center;
   align-items:center;
-  height: 210px;
-  width: 200px;
+  height: 150px;
+  width: 80%;
   margin-bottom:25px;
   
   background:url(${LogoImg}) no-repeat center center;
-  background-size: cover;
+  background-size: contain;
 `;
 const Container = styled.div`
   width:100%;
