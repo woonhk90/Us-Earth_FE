@@ -9,7 +9,6 @@ const NewGroupItemList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { newGroupList } = useSelector((state) => state.community);
-  console.log("마감임박그룹컴포넌트", newGroupList);
   React.useEffect(() => {
     dispatch(__getNewGroupItemList());
   }, [])
