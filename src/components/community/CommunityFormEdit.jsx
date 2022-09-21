@@ -27,7 +27,9 @@ const CommunityFormEdit = () => {
     try {
       const authorization_token = cookies.get("mycookie");
       const { data } = await axios.get(`${API_URL}/community/${communityId}`, {
-        Authorization: authorization_token,
+        headers: {
+          Authorization: authorization_token,
+        },
       });
       console.log(data);
       setSecret(data.secret);
@@ -68,7 +70,7 @@ const CommunityFormEdit = () => {
   const { limitScore, limitParticipants, title, content } = inputData;
   const inputValid = Object.values(isForm);
   const result = inputValid.find((word) => word === false);
-
+console.log(inputData)
   useEffect(() => {
     getCommunityDetail(param.id);
     return () => {
@@ -144,7 +146,7 @@ const CommunityFormEdit = () => {
 
   return (
     <>
-        {isLogin() ? null : <IsLoginModal/>}
+        {/* {isLogin() ? null : <IsLoginModal/>} */}
       <CommunityFormWrap>
         <ImageBoxWrap>
           <ImageForm encType="multipart/form-data">

@@ -11,6 +11,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../../pages/IsLoginModal";
+import imageCompression from "browser-image-compression";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -25,8 +26,11 @@ const CommunityProofEdit = () => {
     try {
       const authorization_token = cookies.get("mycookie");
       const { data } = await axios.get(`${API_URL}/proof/${proofId}`, {
-        Authorization: authorization_token,
+        headers: {
+          Authorization: authorization_token,
+        },
       });
+      console.log(data)
       const { img, title, content } = data;
       img.map((imgdata) => {
         setPreviewImg((previewImg) => [
@@ -74,24 +78,39 @@ const CommunityProofEdit = () => {
 
   console.log(files);
   console.log(previewImg);
-  const addImageFile = (e) => {
-    console.log("업로드!", e.target.files);
+  
+  const addImageFile = async (e) => {
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     let arry = [];
     setIsPhotoMessage("");
     if (e.target.files.length + previewImg.length < 6) {
       for (let i = 0; i < e.target.files.length; i++) {
-        if (e.target.files[i].size < 2000000) {
-          // 20메가
-          const reader = new FileReader();
-          reader.readAsDataURL(e.target.files[i]);
-          reader.onload = () => {
-            const previewImgUrl = reader.result;
-            setPreviewImg((previewImg) => [...previewImg, { imgUrl: previewImgUrl }]);
-          };
-          const currentFiles = e.target.files[i];
-          setFiles((files) => [...files, currentFiles]);
+        if (acceptImageFiles.includes(e.target.files[i].type)) {
+          if (e.target.files[i].size < 210000) {
+            const options = {
+              maxSizeMB: 1,
+              maxWidthOrHeight: 1920,
+              useWebWorker: true,
+              type: "image/gif",
+            };
+            try {
+              const compressedFile = await imageCompression(e.target.files[i], options);
+              let reader = new FileReader();
+              reader.readAsDataURL(compressedFile);
+              reader.onloadend = () => {
+                const previewImgUrl = reader.result;
+                setPreviewImg((previewImg) => [...previewImg, { imgUrl: previewImgUrl }]);
+              };
+              const convertedBlobFile = new File([compressedFile], e.target.files[i].name, { type: e.target.files[i].type, lastModified: Date.now() });
+              setFiles((files) => [...files, convertedBlobFile]);
+            } catch (error) {
+              console.log(error);
+            }
+          } else {
+            arry.push(`${i + 1}`);
+          }
         } else {
-          arry.push(`${i + 1}`);
+          setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
         }
       }
     } else {
@@ -99,7 +118,7 @@ const CommunityProofEdit = () => {
       setIsPhoto(false);
     }
     if (arry?.length > 0) {
-      setIsPhotoMessage(`${arry}번째 파일이 너무 큽니다. 20MB미만의 파일만 업로드 됩니다.`);
+      setIsPhotoMessage(`추가한 ${arry}번째 파일이 너무 큽니다. 20MB미만의 파일만 업로드 됩니다.`);
     }
   };
 

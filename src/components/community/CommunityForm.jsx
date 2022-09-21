@@ -53,35 +53,36 @@ const CommunityForm = () => {
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
 
   const addImageFile = async (e) => {
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
     // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
-    console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
-
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-      fileType: 'image/png',
-    };
-    try {
-      const compressedFile = await imageCompression(imageFile, options);
-      // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-      console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-      let reader = new FileReader();
-      reader.readAsDataURL(compressedFile);
-      setImageFile(compressedFile);
-      reader.onloadend = () => {
-        const previewImgUrl = reader.result;
-        setPreviewImg([previewImgUrl]);
-      };
-      const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now()})
-      console.log(imageFile);
-      console.log(convertedBlobFile);
-      setImageFile(convertedBlobFile);
-      // await ; // write your own logic
-    } catch (error) {
-      console.log(error);
-    }
+    if (acceptImageFiles.includes(imageFile.type)) {
+      if (imageFile.size < 21000000) {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          type:"image/gif",
+        };
+        try {
+          const compressedFile = await imageCompression(imageFile, options);
+          // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+          let reader = new FileReader();
+          reader.readAsDataURL(compressedFile);
+          setImageFile(compressedFile);
+          reader.onloadend = () => {
+            const previewImgUrl = reader.result;
+            setPreviewImg([previewImgUrl]);
+          };
+          const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
+          setImageFile(convertedBlobFile);
+          // await ; // write your own logic
+        } catch (error) {
+          console.log(error);
+        }
+      } else setIsPhotoMessage("20mb이상의 이미지만 가능합니다.");
+    } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
   };
 
   // const addImageFile = (e) => {
@@ -164,9 +165,19 @@ const CommunityForm = () => {
                 </BottonTextWrap>
               </ImageIcon>
             </label>
-            <ImageInput multiple type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
+            <ImageInput
+              multiple
+              type="file"
+              id="file"
+              accept="image/*"
+              onChange={(e) => {
+                addImageFile(e);
+                e.target.value = "";
+              }}
+            />
           </ImageForm>
           <DeleteImage onClick={deleteImage}>기본 이미지로 변경</DeleteImage>
+          {isPhotoMessage}
         </ImageBoxWrap>
         <RightText>비공개</RightText>
         <TopTextWrap>
