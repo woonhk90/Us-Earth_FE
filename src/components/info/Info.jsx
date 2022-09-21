@@ -61,7 +61,7 @@ const Info = () => {
 
           <StGoBack
             onClick={onClickScroll}
-            style={{ display: scrollPosition < 1 ? "none" : "inline" }}
+            style={{ display: scrollPosition < 500 ? "none" : "inline" }}
           >
             upupupupupupupup
           </StGoBack>

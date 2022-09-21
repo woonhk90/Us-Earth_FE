@@ -95,7 +95,7 @@ const CommunityForm = () => {
   };
 
   /* ---------------------------------- submit ---------------------------------- */
-  const submitHandler = () => {
+  const submitHandler = async () => {
     console.log(/^\d{1,10}$/.test(limitParticipants));
     let formData = new FormData();
     const dataSet = {
@@ -109,8 +109,8 @@ const CommunityForm = () => {
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     console.log(dataSet);
     console.log(imageFile);
-    dispatch(postCommunityDetail(formData));
-    dispatch(clearVal());
+    await dispatch(postCommunityDetail(formData));
+    await dispatch(clearVal());
     navigate("/");
   };
 
@@ -143,7 +143,7 @@ const CommunityForm = () => {
           <>
             <PasswordWrap>
               <P>비밀번호</P>
-            {password.length > 0 && <MessageP>{passwordMessage}</MessageP>}
+              {password.length > 0 && <MessageP>{passwordMessage}</MessageP>}
             </PasswordWrap>
             <Input inputype="basic" placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
           </>
@@ -189,11 +189,11 @@ const CommunityForm = () => {
       </CommunityFormWrap>
       <BottomWrap>
         {/^([1-9]|10)$/.test(limitParticipants) &&
-        /^[1-9][0-9]?$|^100/.test(limitScore) &&
-        result.length === 0 &&
-        dates.start?.length > 0 &&
-        dates.end?.length > 0 &&
-        secret === isPassword ? (
+          /^[1-9][0-9]?$|^100/.test(limitScore) &&
+          result.length === 0 &&
+          dates.start?.length > 0 &&
+          dates.end?.length > 0 &&
+          secret === isPassword ? (
           <BottomButton
             style={{
               cursor: "pointer",

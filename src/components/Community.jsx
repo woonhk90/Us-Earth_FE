@@ -35,6 +35,7 @@ const Community = () => {
 
           <Line />
 
+          {/* 전체그룹 */}
           <CommunityItemList />
 
         </Container>
