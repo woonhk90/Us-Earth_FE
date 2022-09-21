@@ -5,7 +5,7 @@ import { ReactComponent as Edit } from "../assets/Edit.svg";
 import forest from "../assets/Forest.jpg";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __getCommunityDetail, __getCommunityCertify } from '../redux/modules/communitySlice';
+import { __getCommunityDetail, __getCommunityCertify, errorReset } from '../redux/modules/communitySlice';
 import { useInView } from "react-intersection-observer";
 import { colors } from '../styles/color';
 import { getCookie } from '../shared/cookie';
@@ -50,6 +50,7 @@ const CommunityDetail = () => {
   };
 
   const onInJoinBtn = () => {
+    dispatch(errorReset());
     if (getCookie('mycookie') === undefined) {
       setLoginModal(!loginModal);
     } else {

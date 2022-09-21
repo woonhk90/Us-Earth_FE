@@ -27,6 +27,12 @@ import { ReactComponent as Report } from "./report.svg";
 import { ReactComponent as VerticalDot } from "./verticalDot.svg";
 import { ReactComponent as Write } from "./write.svg";
 
+import level_01 from "./level_01.gif";
+import level_02 from "./level_02.gif";
+import level_03 from "./level_03.gif";
+import level_04 from "./level_04.gif";
+import level_05 from "./level_05.gif";
+
 import Banner from "./banner.png";
 
 const icons = {
@@ -57,6 +63,11 @@ const icons = {
   Plus,
   Search,
   Cancel,
+  level_01,
+  level_02,
+  level_03,
+  level_04,
+  level_05,
 };
 
 export default icons;

@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import { __getCommunity, certifyReset } from "../../redux/modules/communitySlice";
 import Loading from '../etc/Loading';
+import HashMore from '../etc/HasMore';
 
 
 const PopularGroupItemList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { community, isLoading } = useSelector((state) => state.community);
+  const { community, isLoading, hasMore } = useSelector((state) => state.community);
   console.log("community=>", community);
-
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const [page, setPage] = useState(0);
@@ -46,34 +46,75 @@ const PopularGroupItemList = () => {
 
   return (
     <>
-      {isLoading ? <Loading /> : null}
-      {community?.map((v) => (
-        <CommunityItem key={v.communityId} onClick={() => { dispatch(certifyReset()); navigate(`/community/detail/${v.communityId}`); }}>
-          <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
-            <div>
-              <p>{states(v.dateStatus)}</p>
-              <p>{Math.ceil(v.dateStatus === 'before' ? v.currentPercent : v.successPercent)}%</p>
-              <progress value={v.dateStatus === 'before' ? v.currentPercent : v.successPercent} max="100"></progress>
-            </div>
-          </ItemImg>
-          <ItemTitle>{v.title}</ItemTitle>
-        </CommunityItem>
-      ))}
-      {isLoading ? null : <div ref={ref}></div>}
+      {isLoading ? <Loading />
+        :
+        (
+          <CommunityGroup>
+            <CommunityGroupTop>
+              <CommunityGroupTitle>전체 그룹</CommunityGroupTitle>
+            </CommunityGroupTop>
+            <CommunityBox>
+
+              {community?.map((v) => (
+                <CommunityItem key={v.communityId} onClick={() => { dispatch(certifyReset()); navigate(`/community/detail/${v.communityId}`); }}>
+                  <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
+                    <div>
+                      <p>{states(v.dateStatus)}</p>
+                      <p>{Math.ceil(v.dateStatus === 'before' ? v.currentPercent : v.successPercent)}%</p>
+                      <progress value={v.dateStatus === 'before' ? v.currentPercent : v.successPercent} max="100"></progress>
+                    </div>
+                  </ItemImg>
+                  <ItemTitle>{v.title}</ItemTitle>
+                </CommunityItem>
+              ))}
+
+            </CommunityBox>
+          </CommunityGroup>
+        )}
+
+      {hasMore ? (isLoading ? null : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'그룹 항목의 마지막 입니다.'} />}
     </>
   )
 }
 export default PopularGroupItemList;
 
-const CommunityItem = styled.div``;
+const CommunityGroup = styled.div`
+  box-sizing: border-box;
+`;
+const CommunityGroupTop = styled.div`
+  padding: 0 15px;
+`;
+const CommunityGroupTitle = styled.span`
+  font: bold 26px/50px 'Noto sans', "Arial", "sans-serif";
+`;
+const CommunityBox = styled.div`
+  display: grid;
+  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(50%, auto));
+`;
+
+
+
+
+
+const CommunityItem = styled.div`
+  width:100%;
+  padding:2px;
+  box-sizing:border-box;
+  margin-bottom:25px;
+`;
 const ItemImg = styled.div`
-  width: 176px;
-  height: 215px;
+  width: 100%;
+  height:215px;
+  @media (max-width: 370px) {
+    height: 175px;
+  }
 
   position: relative;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg}) no-repeat center center;
   background-size: cover;
   color: #fff;
+  margin-bottom:10px;
   div{
     position:absolute;
     width:100%;
@@ -104,6 +145,15 @@ const ItemImg = styled.div`
   }
 `;
 const ItemTitle = styled.div`
-  font: bold 20px/40px "Arial", "sans-serif";
+  font: bold 20px/1 "Arial", "sans-serif";
+  /* 말줄임 */
+  /* white-space:nowrap; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* 두줄 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   /* color:black; */
 `;
