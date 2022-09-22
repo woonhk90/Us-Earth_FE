@@ -1,19 +1,17 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
-import Textarea from "../elements/Textarea";
 import { useDispatch, useSelector } from "react-redux";
 import { patchComment, postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
-import { commentEditChange } from "../../redux/modules/commentsSlice";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import ConfirmModal from "../Modals//ConfirmModal";
 import { ReactComponent as Camera } from "../../assets/camera.svg";
 import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
-import Button from "../elements/Button";
 import { flexColumn } from "../../styles/Flex";
 import { ReactComponent as Edit } from "../../assets/Edit2.svg";
+import imageCompression from "browser-image-compression";
+import ImageLoading from "../etc/ImageLoading";
 
 const CommentInputEdit = ({ userToken }) => {
   const inputRef = useRef();
@@ -94,25 +92,42 @@ const CommentInputEdit = ({ userToken }) => {
   const [previewImg, setPreviewImg] = useState([]);
   const [deleteImg, setDeleteImg] = useState(false);
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
+  const [upLoading, setUploading] = useState(100);
 
-  // add image
-  const addImageFile = (e) => {
-    console.log("렌더링되니 이미지파일?");
-    setIsPhotoMessage("");
-    let reader = new FileReader();
-    if (e.target.files.length > 0) {
-      if (e.target.files[0].size < 2000000) {
-        reader.readAsDataURL(e.target.files[0]);
-        setImageFile(e.target.files[0]);
-        reader.onloadend = () => {
-          const previewImgUrl = reader.result;
-          setPreviewImg([previewImgUrl]);
+  const addImageFile = async (e) => {
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const imageFile = e.target.files[0];
+    // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+    if (acceptImageFiles.includes(imageFile.type)) {
+      if (imageFile.size < 21000000) {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          onProgress: (data) => {
+            console.log(data);
+            setUploading(data);
+          },
         };
-      } else {
-        setPreviewImg([]);
-        setIsPhotoMessage("사진은 최대 20MB까지 등록 가능합니다.");
-      }
-    }
+        try {
+          const compressedFile = await imageCompression(imageFile, options);
+          // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+          let reader = new FileReader();
+          reader.readAsDataURL(compressedFile);
+          setImageFile(compressedFile);
+          reader.onloadend = () => {
+            const previewImgUrl = reader.result;
+            setPreviewImg([previewImgUrl]);
+          };
+          const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
+          setImageFile(convertedBlobFile);
+          // await ; // write your own logic
+        } catch (error) {
+          setIsPhotoMessage("오류가 발생했습니다. 다시 업로드해주세요.");
+        }
+      } else setIsPhotoMessage("20mb이상의 이미지만 가능합니다.");
+    } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
   };
 
   // delete image
@@ -152,17 +167,31 @@ const CommentInputEdit = ({ userToken }) => {
         <CommentInputWrap>
           <InputWrap inputOn={inputOn}>
             {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
-            {previewImg.length > 0 && inputOn && (
+            {upLoading < 100 ? (
               <Container>
-                <DeleteButton onClick={deleteImageFile}>
-                  <CancelIconWrap>
-                    <CancelIcon>
-                      <CancelWh />
-                    </CancelIcon>
-                  </CancelIconWrap>
-                </DeleteButton>
-                <Thumb src={previewImg} alt="img" />
+                <LoadingContainer>
+                  <LoadingWrap>
+                    <LoadingPosition>
+                      <ImageLoading />
+                    </LoadingPosition>
+                  </LoadingWrap>
+                </LoadingContainer>
               </Container>
+            ) : (
+              <>
+                {previewImg.length > 0 && inputOn && (
+                  <Container>
+                    <DeleteButton onClick={deleteImageFile}>
+                      <CancelIconWrap>
+                        <CancelIcon>
+                          <CancelWh />
+                        </CancelIcon>
+                      </CancelIconWrap>
+                    </DeleteButton>
+                    <Thumb src={previewImg} alt="img" />
+                  </Container>
+                )}
+              </>
             )}
             <CommentTextarea
               img={previewImg}
@@ -179,7 +208,11 @@ const CommentInputEdit = ({ userToken }) => {
               disabled={!userToken}
             />
           </InputWrap>
-          <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} />
+          <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" 
+            onChange={(e) => {
+              addImageFile(e);
+              e.target.value = "";
+            }} />
           <form onClick={inputOnButton} encType="multipart/form-data">
             <StLabel htmlFor={!userToken ? null : "file"}>
               <CameraIcon>
@@ -187,11 +220,11 @@ const CommentInputEdit = ({ userToken }) => {
               </CameraIcon>
             </StLabel>
           </form>
-          <SubmitButtonWrap>
+          {/* <SubmitButtonWrap> */}
             <WriteIcon>
               <Edit height="25" onClick={onClickSubmit} />
             </WriteIcon>
-          </SubmitButtonWrap>
+          {/* </SubmitButtonWrap> */}
           </CommentInputWrap>
       </CommentInputContainer>
     </>
@@ -215,7 +248,6 @@ const CommentInputWrap = styled.div`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  /* padding: 0px 0px 0px 14px; */
   background-color: #f9f9f9;
 `;
 
@@ -256,32 +288,36 @@ const WriteIcon = styled.div`
   padding: 21px 15px 0px 15px;
 `;
 const Thumb = styled.img`
-  background-size: 100px;
-  width: 100px;
-  height: 100px;
-  padding: 4px;
-  box-sizing: border-box;
-  border-radius: 6px;
+position: absolute;
+top: 0;
+background-size: 100px;
+width: 100px;
+height: 100px;
+box-sizing: border-box;
+border-radius: 6px;
 `;
 
 const DeleteButton = styled.button`
-  cursor: pointer;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  position: absolute;
-  top: 0;
-  left: 80px;
-  background-color: #525252;
-  border: none;
+cursor: pointer;
+width: 26px;
+height: 26px;
+border-radius: 50%;
+position: absolute;
+z-index: 1;
+top: -10px;
+left: 90px;
+background-color: #525252;
+border: none;
 `;
 
 const Container = styled.section`
-  position: relative;
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  margin: 10px;
+position: relative;
+align-items: center;
+display: flex;
+flex-direction: row;
+margin: 15px;
+width: 100px;
+height: 100px;
 `;
 
 const CancelIcon = styled.div`
@@ -335,4 +371,32 @@ const CommentTextarea = styled.textarea`
   ::placeholder {
     color: #939393;
   }
+
+@media (max-width: 390px) {
+  font-size: 14px;
+}
+`;
+const LoadingContainer = styled.div`
+  position: absolute;
+  top: 0;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  width: 100px;
+  height: 100px;
+  z-index: 999;
+  background-color: #d9d9d9;
+  align-items: center;
+  border-radius: 6px;
+`;
+
+const LoadingWrap = styled.div`
+  /* align-items: center; */
+`;
+const LoadingPosition = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;

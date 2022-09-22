@@ -57,7 +57,7 @@ const CalendarModal = (props) => {
     dispatch(addDates(date));
     props.closeModal();
   };
-  // const datesss = date.start === date.end
+  
   console.log(date.start === date.end);
   return (
     <ModalWrap onClick={closeModal}>
@@ -135,7 +135,7 @@ const ModalWrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 0;
 `;
 
 const ModalBody = styled.div``;

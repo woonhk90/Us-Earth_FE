@@ -75,6 +75,7 @@ const CommunityProofEdit = () => {
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
   const [isPhoto, setIsPhoto] = useState(true);
   const [deleteImgId, setDeleteImgId] = useState([]);
+  const [upLoading, setUploading] = useState(100);
 
   console.log(files);
   console.log(previewImg);
@@ -86,12 +87,15 @@ const CommunityProofEdit = () => {
     if (e.target.files.length + previewImg.length < 6) {
       for (let i = 0; i < e.target.files.length; i++) {
         if (acceptImageFiles.includes(e.target.files[i].type)) {
-          if (e.target.files[i].size < 210000) {
+          if (e.target.files[i].size < 21000000) {
             const options = {
               maxSizeMB: 1,
               maxWidthOrHeight: 1920,
               useWebWorker: true,
-              type: "image/gif",
+              onProgress: (data)=>{
+                console.log(data)
+                setUploading(data)
+              },
             };
             try {
               const compressedFile = await imageCompression(e.target.files[i], options);
@@ -134,14 +138,25 @@ const CommunityProofEdit = () => {
     if (img.imgId !== undefined) setDeleteImgId((deleteImgId) => [...deleteImgId, img.imgId]);
   };
   console.log(deleteImgId);
+/* -------------------------------- 빈값 확인 모달 -------------------------------- */
+const [okModal, setOkModal] = useState(false);
+const [okModalTitle, setOkModalTitle] = useState("");
 
-  const submitHandler = () => {
-    let formData = new FormData();
-    if (title === "") {
-    } else if (content === "") {
-      alert("내용을 입력해 주세요");
-    } else if (previewImg.length === 0) {
-      alert("사진을 추가해 주세요");
+const okModalOnOff = () => {
+  setOkModal(!okModal);
+};
+
+const submitHandler = async () => {
+  let formData = new FormData();
+  if (title === "") {
+    setOkModalTitle("제목을 입력해 주세요");
+    okModalOnOff();
+  } else if (content === "") {
+    setOkModalTitle("내용을 입력해 주세요");
+    okModalOnOff();
+  } else if (files.length === 0) {
+    setOkModalTitle("사진을 추가해 주세요");
+    okModalOnOff();
     } else {
       const dataSet = {
         ...inputData,
@@ -177,7 +192,11 @@ const CommunityProofEdit = () => {
     submitHandler: submitHandler,
     deleteImageFile: deleteImageFile,
     addImageFile: addImageFile,
-    submitButton:"수정"
+    submitButton:"수정",
+    upLoading: upLoading,
+    okModal: okModal,
+    okModalTitle: okModalTitle,
+    okModalOnOff: okModalOnOff,
   };
 
   return (

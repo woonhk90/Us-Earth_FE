@@ -3,6 +3,8 @@ import { useState, useCallback } from "react";
 function useInputs(initialForm) {
   const [form, setForm] = useState(initialForm);
   const [isForm, setIsForm] = useState(initialForm);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [validationValue, setValidationValue] = useState(false);
 
   const onChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -16,7 +18,7 @@ function useInputs(initialForm) {
 
   const reset = useCallback(() => setForm(initialForm), [initialForm]);
 
-  return [form, onChange, reset, isForm];
+  return [form, onChange, reset, isForm, isSubmit, setForm];
 }
 
 export default useInputs;

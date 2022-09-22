@@ -1,19 +1,15 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
-import { useDropzone } from "react-dropzone";
-import Textarea from "../elements/Textarea";
 import { useDispatch, useSelector } from "react-redux";
 import { postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
-import { flexBetween, flexColumn, flexRow } from "../../styles/Flex";
 import { ReactComponent as Camera } from "../../assets/camera.svg";
 import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
-
 import { ReactComponent as Edit } from "../../assets/Edit2.svg";
-import Button from "../elements/Button";
 import OkModal from "../Modals/OkModal";
-import ConfirmModal from "../Modals/ConfirmModal";
+import imageCompression from "browser-image-compression";
+import ImageLoading from "../etc/ImageLoading";
 
 const CommentInput = ({ userToken }) => {
   const dispatch = useDispatch();
@@ -61,8 +57,6 @@ const CommentInput = ({ userToken }) => {
     }
   };
 
-  //
-
   const clickInputOutside = (event) => {
     setInputOn(inputRef.current.contains(event.target));
   };
@@ -72,23 +66,42 @@ const CommentInput = ({ userToken }) => {
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
+  const [upLoading, setUploading] = useState(100);
 
-  const addImageFile = (e) => {
-    setIsPhotoMessage("");
-    let reader = new FileReader();
-    if (e.target.files.length > 0) {
-      if (e.target.files[0].size < 2000000) {
-        reader.readAsDataURL(e.target.files[0]);
-        setImageFile(e.target.files[0]);
-        reader.onloadend = () => {
-          const previewImgUrl = reader.result;
-          setPreviewImg([previewImgUrl]);
+  const addImageFile = async (e) => {
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const imageFile = e.target.files[0];
+    // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+    if (acceptImageFiles.includes(imageFile.type)) {
+      if (imageFile.size < 21000000) {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          onProgress: (data) => {
+            console.log(data);
+            setUploading(data);
+          },
         };
-      } else {
-        setPreviewImg([]);
-        setIsPhotoMessage("사진은 최대 20MB까지 등록 가능합니다.");
-      }
-    }
+        try {
+          const compressedFile = await imageCompression(imageFile, options);
+          // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+          let reader = new FileReader();
+          reader.readAsDataURL(compressedFile);
+          setImageFile(compressedFile);
+          reader.onloadend = () => {
+            const previewImgUrl = reader.result;
+            setPreviewImg([previewImgUrl]);
+          };
+          const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
+          setImageFile(convertedBlobFile);
+          // await ; // write your own logic
+        } catch (error) {
+          setIsPhotoMessage("오류가 발생했습니다. 다시 업로드해주세요.");
+        }
+      } else setIsPhotoMessage("20mb이상의 이미지만 가능합니다.");
+    } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
   };
 
   // X버튼 클릭 시 이미지 삭제
@@ -118,7 +131,6 @@ const CommentInput = ({ userToken }) => {
     }
   };
 
-
   return (
     <>
       {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
@@ -126,17 +138,31 @@ const CommentInput = ({ userToken }) => {
         <CommentInputWrap>
           <InputWrap inputOn={inputOn}>
             {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
-            {previewImg.length > 0 && inputOn && (
+            {upLoading < 100 ? (
               <Container>
-                <DeleteButton onClick={deleteImageFile}>
-                  <CancelIconWrap>
-                    <CancelIcon>
-                      <CancelWh />
-                    </CancelIcon>
-                  </CancelIconWrap>
-                </DeleteButton>
-                <Thumb src={previewImg} alt="img" />
+                <LoadingContainer>
+                  <LoadingWrap>
+                    <LoadingPosition>
+                      <ImageLoading />
+                    </LoadingPosition>
+                  </LoadingWrap>
+                </LoadingContainer>
               </Container>
+            ) : (
+              <>
+                {previewImg.length > 0 && inputOn && (
+                  <Container>
+                    <DeleteButton onClick={deleteImageFile}>
+                      <CancelIconWrap>
+                        <CancelIcon>
+                          <CancelWh />
+                        </CancelIcon>
+                      </CancelIconWrap>
+                    </DeleteButton>
+                    <Thumb src={previewImg} alt="img" />
+                  </Container>
+                )}
+              </>
             )}
             <CommentTextarea
               img={previewImg}
@@ -152,10 +178,18 @@ const CommentInput = ({ userToken }) => {
               onInput={handleResizeHeight}
             />
           </InputWrap>
-          <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" onChange={(e) => addImageFile(e)} />
+          <StImageInput
+            type="file"
+            id="file"
+            accept="image/jpg, image/jpeg, image/png"
+            onChange={(e) => {
+              addImageFile(e);
+              e.target.value = "";
+            }}
+          />
           {/* </Column> */}
           <form encType="multipart/form-data">
-            <StLabel htmlFor={!participant ? null : "file"}>
+            <StLabel htmlFor={!participant || upLoading < 100 ? null : "file"}>
               <CameraIcon>
                 <Camera height="25" />
               </CameraIcon>
@@ -187,11 +221,11 @@ const CommentInputWrap = styled.div`
   flex-direction: row;
   align-items: flex-start;
   box-sizing: border-box;
-  /* padding: 0px 0px 0px 14px; */
   background-color: #f9f9f9;
 `;
 
 const InputWrap = styled.div`
+  position: relative;
   margin: 9px 0px 9px 16px;
   width: 100%;
   background-color: white;
@@ -229,10 +263,11 @@ const WriteIcon = styled.div`
 `;
 
 const Thumb = styled.img`
+  position: absolute;
+  top: 0;
   background-size: 100px;
   width: 100px;
   height: 100px;
-  padding: 4px;
   box-sizing: border-box;
   border-radius: 6px;
 `;
@@ -243,18 +278,21 @@ const DeleteButton = styled.button`
   height: 26px;
   border-radius: 50%;
   position: absolute;
-  top: 0px;
-  left: 80px;
+  z-index: 1;
+  top: -10px;
+  left: 90px;
   background-color: #525252;
   border: none;
 `;
 
-const Container = styled.section`
+const Container = styled.div`
   position: relative;
   align-items: center;
   display: flex;
   flex-direction: row;
-  margin: 10px;
+  margin: 15px;
+  width: 100px;
+  height: 100px;
 `;
 
 const CancelIcon = styled.div`
@@ -283,10 +321,6 @@ const ErrorMessageP = styled.p`
   color: #ff0000;
 `;
 
-// background-image:  ${({ img }) => `url(${img})`};
-// background-size: 100px;
-// background-repeat: no-repeat;
-// back
 const CommentTextarea = styled.textarea`
   overflow-wrap: break-word;
   word-break: break-all;
@@ -307,6 +341,33 @@ const CommentTextarea = styled.textarea`
   ::placeholder {
     color: #939393;
   }
+
+  @media (max-width: 390px) {
+    font-size: 14px;
+  }
 `;
 
-const ButtonWrap = styled.div``;
+const LoadingContainer = styled.div`
+  position: absolute;
+  top: 0;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  width: 100px;
+  height: 100px;
+  z-index: 999;
+  background-color: #d9d9d9;
+  align-items: center;
+  border-radius: 6px;
+`;
+
+const LoadingWrap = styled.div`
+  /* align-items: center; */
+`;
+const LoadingPosition = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;

@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
-import cameraWh from "../../assets/cameraWh.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import { ReactComponent as CameraWh } from "../../assets/cameraWh.svg";
 import cancelWh from "../../assets/cancelWh.svg";
-import Input from "../elements/Input";
 import Textarea from "../elements/Textarea";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../Header";
 import { useRef } from "react";
+import ImageLoading from "../etc/ImageLoading";
+import OkModal from "../Modals/OkModal";
 
 const ProofForm = ({ ProofFormData }) => {
   const navigate = useNavigate();
@@ -33,12 +33,17 @@ const ProofForm = ({ ProofFormData }) => {
     deleteImageFile: deleteImageFile,
     addImageFile: addImageFile,
     submitButton: submitButton,
+    upLoading: upLoading,
+    okModal:okModal,
+    okModalTitle:okModalTitle,
+    okModalOnOff:okModalOnOff,
   } = ProofFormData;
 
   return (
     <>
       <>
-        <Header>
+      {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
+              <Header>
           <HeaderWrap>
             <IconDiv>
               <Back
@@ -56,29 +61,37 @@ const ProofForm = ({ ProofFormData }) => {
           <AddPhotoWrap>
             <Stform encType="multipart/form-data">
               <Container>
-                <label htmlFor="file">
+                <label  htmlFor={upLoading <100 ? null: "file"}>
                   <StIcon>
                     <CameraIcon>
                       <CameraWh />
                     </CameraIcon>
                   </StIcon>
-                  <ImageLength>({previewImg.length}/5)</ImageLength>
+                  <ImageLength>{`(${previewImg.length}/5)`}</ImageLength>
                 </label>
                 <StImageInput multiple type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
               </Container>
             </Stform>
             {previewImg?.map((image, index) => {
               return (
-                <ImageContainer key={index}>
-                  <Container>
+                  <Container key={index}>
                     <StButton onClick={() => deleteImageFile(image, index)}>
                       <CancelIcon>{/* <Cancel/> */}</CancelIcon>
                     </StButton>
                     <Thumb src={image.imgUrl} alt="img" />
                   </Container>
-                </ImageContainer>
               );
             })}
+            
+            {upLoading < 100 ? (
+              <Container>
+                <LoadingWrap>
+                  <LoadingPosition>
+                  <ImageLoading />
+                  </LoadingPosition>
+                </LoadingWrap>
+               </Container>
+            ) : null}
           </AddPhotoWrap>
           <ErrorMessage>{isPhotoMessage}</ErrorMessage>
         </Test>
@@ -138,16 +151,28 @@ const Container = styled.div`
   width: 100px;
   height: 100px;
   margin: 9px;
-`;
+  `;
 
+const LoadingWrap = styled.div`
+display: flex;
+  width: 100px;
+  height: 100px;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+`;
+const LoadingPosition = styled.div`
+display: flex;
+position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 const Stform = styled.form`
-  display: flex;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const ImageContainer = styled.div``;
 
 const BottomWrap = styled.div`
   width: 100%;
