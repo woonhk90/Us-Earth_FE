@@ -1,12 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
-import MypageBG from "../../assets/mypage-bg.png";
+import icons from "../../assets/index";
 import { useDispatch, useSelector } from "react-redux";
 import { __getTodayMission, __updateMissionFlag } from '../../redux/modules/mypageSlice';
 import { colors } from '../../styles/color';
 
 
 const MyPageTodayMission = ({ userInfo }) => {
+  const { level_01, level_02, level_03, level_04, level_05 } = icons;
+  let imgUrl = null;
+  if (userInfo.level === 1) {
+    imgUrl = level_01;
+  } else if (userInfo.level === 2) {
+    imgUrl = level_02;
+  } else if (userInfo.level === 3) {
+    imgUrl = level_03;
+  } else if (userInfo.level === 4) {
+    imgUrl = level_04;
+  } else if (userInfo.level === 5) {
+    imgUrl = level_05;
+  }
+
+
   /* --------------------------- 나무 성장모습 & 미션 리스트 토글 -------------------------- */
   const [missionFlag, setMissionFlag] = React.useState(false);
   const dispatch = useDispatch();
@@ -26,9 +41,10 @@ const MyPageTodayMission = ({ userInfo }) => {
   const missionFlagChange = (key) => {
     dispatch(__updateMissionFlag({ missionName: key }));
   }
+
   return (
     <>
-      <MyPageMission imgUrl={MypageBG}>
+      <MyPageMission imgUrl={imgUrl}>
         {
           missionFlag ?
             (<TodayMission>
@@ -48,7 +64,8 @@ const MyPageTodayMission = ({ userInfo }) => {
                 <p onClick={() => onClickTodayMission()}>미션 보기({todayMission.filter((v) => v.complete === true).length}/5)</p>
               </MissionTop>
               <MissionBottom>
-                <progress value={(5 * userInfo.level - 5 - userInfo.nextLevelExp).toString()} max='5' />
+                <p>{5 - userInfo.nextLevelExp}/5</p>
+                <progress value={(5 - userInfo.nextLevelExp).toString()} max='5' />
               </MissionBottom></>)
         }
       </MyPageMission>
@@ -81,15 +98,27 @@ const MissionTop = styled.div`
   box-sizing:border-box;
   p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
   p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
+  @media (max-width: 370px) {
+    p:nth-child(1){font:600 23px/1 'Noto Sans','Arial','sans-serif';}
+    p:nth-child(2){font:500 19px/1 'Noto Sans','Arial','sans-serif';}
+  }
 `;
 const MissionBottom = styled.div`
   width:100%;
   padding:0 35px 8px;
   box-sizing:border-box;
+  position:relative;
+  p{
+    position:absolute;
+    top:0;left:50%;
+    transform: translate(-50%, 0);
+    letter-spacing: 5px;
+    color:${colors.white};
+  }
   progress{
     appearance: none;
     width:100%;
-    height:15px;
+    height:18px;
   }
   progress::-webkit-progress-bar {
     background:rgba(255,255,255,0.25);
@@ -97,7 +126,7 @@ const MissionBottom = styled.div`
   }
   progress::-webkit-progress-value {
     border-radius:10px;
-    background:${colors.green89};
+    background:linear-gradient(to right, ${colors.green89}, ${colors.green28});
   }
 `;
 
@@ -117,6 +146,10 @@ const TodayMissionBox = styled.div`
     box-sizing:border-box;
     p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
     p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
+    @media (max-width: 370px) {
+      p:nth-child(1){font:600 23px/1 'Noto Sans','Arial','sans-serif';}
+      p:nth-child(2){font:500 19px/1 'Noto Sans','Arial','sans-serif';}
+  }
 `;
 const MissionBox = styled.div`
   display:flex;
@@ -131,15 +164,18 @@ const MissionItem = styled.span`
   border-radius:50px;
   display:inline-block;
   width:100%;
-  font:500 18px/1 'Noto Sans','Arial','sans-serif';
   color:#2c2c2c;
   padding:18px 0;
   box-sizing:border-box;
   color:${(props) => props.background ? `${colors.grayCF}` : `${colors.white}`};
   background-color:${(props) => props.background ? `${colors.grayF9}` : `${colors.green77}`};
-  background-color:${(props) => props.background ? `${colors.grayF9}` : `${colors.green77}`};
+  
 `;
 const ItemTitle = styled.span`
   display:block;
   text-decoration:${(props) => props.background ? 'line-through' : 'blue'};
+  font:500 18px/1 'Noto Sans','Arial','sans-serif';
+  @media (max-width: 370px) {
+    font:500 16px/1 'Noto Sans','Arial','sans-serif';
+  }
 `;

@@ -3,33 +3,44 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { getCookie } from '../shared/cookie';
 import { useDispatch, useSelector } from "react-redux";
-import { __updateCommunityJoin } from '../redux/modules/communitySlice';
+import { __updateCommunityJoin, __getCommunityDetail } from '../redux/modules/communitySlice';
 
 const CommunityModal = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const closeModal = () => {
+    if (statusCode === 200) { onClickResetInfo(props.communityId) }
     props.closeModal();
   }
+
   const [viewFlag, setViewFlag] = React.useState(false);
   const { error, isLoading, statusCode } = useSelector((state) => state.community);
+  const [msg, setMsg] = React.useState('aa');
   console.log("ERROR=>", error, isLoading, statusCode);
-  const [errorCode,setErrorCode]=React.useState(0);
+
+  /* ------------------------------- 참여하기 버튼 누름 ------------------------------- */
   const onViewFlagHandler = async (id) => {
     await dispatch(__updateCommunityJoin({ communityId: id }));
-    
-    setErrorCode(statusCode);
   }
 
-  React.useEffect(()=>{
-    console.log("코드값1=>", errorCode);
-    if (errorCode === 200) {
-      console.log("코드값2=>", errorCode);
+  /* ------------------------- 참가완료하고 확인누름(정보초기화(랜더링)) ------------------------ */
+  const onClickResetInfo = async (id) => {
+    await dispatch(__getCommunityDetail({ communityId: id }));
+  }
+
+
+
+
+  React.useEffect(() => {
+    if (statusCode === 200) {
+      setMsg('참가 완료 되었습니다.');
+      setViewFlag(!viewFlag);
+    } else if (Number(statusCode) === 400) {
+      setMsg(error.msg);
       setViewFlag(!viewFlag);
     }
-  },[errorCode])
-  
+  }, [statusCode])
+
 
   /* --------------------- 로그인 되어있는지 우선 확인(안되어있으면 로그인페이지) --------------------- */
   const usercookie = getCookie('mycookie');
@@ -43,19 +54,22 @@ const CommunityModal = (props) => {
     <>
       <ModalWrap onClick={closeModal}>
         <ModalBody onClick={(e) => { e.stopPropagation() }}>
+
           <ConfirmWrap viewFlag={viewFlag}>
-            <ConfirmTitle><ConfirmTitleSpan>드룹투두제목</ConfirmTitleSpan>에<br /> 가입하시겠습니까?</ConfirmTitle>
+            <ConfirmTitle>참여 하시겠습니까?</ConfirmTitle>
             <ConfirmBox>
               <ConfirmItem borderRight={'1px solid #d9d9d9'} onClick={closeModal}>취소</ConfirmItem>
               <ConfirmItem borderLeft={'1px solid #d9d9d9'} onClick={() => { onViewFlagHandler(props.communityId) }} >가입</ConfirmItem>
             </ConfirmBox>
           </ConfirmWrap>
+
           <AttendWrap viewFlag={viewFlag}>
-            <AttendTitle><AttendTitleSpan>드룹투두제목</AttendTitleSpan>에<br /> 가입이 완료되었습니다</AttendTitle>
+            <AttendTitle>{msg}</AttendTitle>
             <AttendBox>
               <AttendItem onClick={closeModal}>확인</AttendItem>
             </AttendBox>
           </AttendWrap>
+
         </ModalBody>
       </ModalWrap>
     </>
@@ -113,6 +127,9 @@ const ConfirmItem = styled.div`
   font:600 22px/30px 'arial','sans-serif';
   padding:19px 0;
 `;
+
+
+
 
 
 const AttendWrap = styled.div`

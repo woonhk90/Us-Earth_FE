@@ -37,7 +37,7 @@ const Login = () => {
       modalOnOff();
 
     } catch (error) {
-      window.alert("오류났어요");
+      window.alert("로그인 실패");
       console.log(error);
     }
   }

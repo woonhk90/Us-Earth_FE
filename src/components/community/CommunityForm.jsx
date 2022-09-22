@@ -131,7 +131,7 @@ const CommunityForm = () => {
   };
 
   /* ---------------------------------- submit ---------------------------------- */
-  const submitHandler = () => {
+  const submitHandler = async () => {
     console.log(/^\d{1,10}$/.test(limitParticipants));
     let formData = new FormData();
     const dataSet = {
@@ -145,8 +145,8 @@ const CommunityForm = () => {
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     console.log(dataSet);
     console.log(imageFile);
-    dispatch(postCommunityDetail(formData));
-    dispatch(clearVal());
+    await dispatch(postCommunityDetail(formData));
+    await dispatch(clearVal());
     navigate("/");
   };
 
@@ -227,11 +227,11 @@ const CommunityForm = () => {
       </CommunityFormWrap>
       <BottomWrap>
         {/^([1-9]|10)$/.test(limitParticipants) &&
-        /^[1-9][0-9]?$|^100/.test(limitScore) &&
-        result.length === 0 &&
-        dates.start?.length > 0 &&
-        dates.end?.length > 0 &&
-        secret === isPassword ? (
+          /^[1-9][0-9]?$|^100/.test(limitScore) &&
+          result.length === 0 &&
+          dates.start?.length > 0 &&
+          dates.end?.length > 0 &&
+          secret === isPassword ? (
           <BottomButton
             style={{
               cursor: "pointer",
