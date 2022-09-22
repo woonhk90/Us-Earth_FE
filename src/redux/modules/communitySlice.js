@@ -15,6 +15,13 @@ export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (
     const data = await axios.get(`${API_URL}/community?page=${payload.page}&size=10`);
     console.log('전체커뮤니티=>', data);
 
+    /* ---------------------------- 해당 페이지에 값이 있는지 확인 --------------------------- */
+    if (data.data.content.length > 0) {
+      thunkAPI.dispatch(hasMoreFn(true));
+    } else {
+      thunkAPI.dispatch(hasMoreFn(false));
+    }
+
     return thunkAPI.fulfillWithValue({ data: data.data });
   } catch (error) {
     window.alert("전체 커뮤니티 정보를 불러올 수 없습니다.");
@@ -55,12 +62,14 @@ export const __updateCommunityJoin = createAsyncThunk("usearth/__updateCommunity
         Authorization: authorization_token
       },
     });
+
+    // thunkAPI.dispatch(__getCommunityDetail({ communityId: payload.communityId }))
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
-    window.alert(error.response.data.msg);
-    thunkAPI.rejectWithValue(error.response.data.msg);
-    return thunkAPI.rejectWithValue(error);
+    // window.alert(error.response.data.msg);
+    // thunkAPI.rejectWithValue(error.response.data.msg);
+    return thunkAPI.rejectWithValue(error.response.data);
   }
 });
 
@@ -86,34 +95,22 @@ export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCer
 /* -------------------------------- 활발 그룹 출력 -------------------------------- */
 export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularGroupItemList", async (payload, thunkAPI) => {
   try {
-    console.log('__getPopularGroupItemList=>', payload);
     const data = await axios.get(`${API_URL}/community/active`);
-    console.log('활발그룹Slice=>', data);
-
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("활발 그룹 정보를 불러올 수 없습니다.");
-    // console.log(error);
     return thunkAPI.rejectWithValue(error.response.data.errorMessage);
-    // console.log(error.response.data.errorMessage);
-    // return;
   }
 });
 
 /* ------------------------------- 마감임박 그룹 출력 ------------------------------- */
 export const __getNewGroupItemList = createAsyncThunk("usearth/__getNewGroupItemList", async (payload, thunkAPI) => {
   try {
-    console.log('__getNewGroupItemList=>', payload);
     const data = await axios.get(`${API_URL}/community/nearDone`);
-    console.log('마감임박그룹Slice=>', data);
-
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("마감임박 그룹 정보를 불러올 수 없습니다.");
-    // console.log(error);
     return thunkAPI.rejectWithValue(error.response.data.errorMessage);
-    // console.log(error.response.data.errorMessage);
-    // return;
   }
 });
 
@@ -126,6 +123,7 @@ const initialState = {
   isLoading: false,
   error: [],
   statusCode: 0,
+  hasMore: true,/* 무한스크롤 값이 더 있는지 확인 */
 }
 
 export const communitySlice = createSlice({
@@ -134,6 +132,8 @@ export const communitySlice = createSlice({
   reducers: {
     clearVal: (state) => { state.community = [] },
     certifyReset: (state) => { state.certify = [] },
+    errorReset: (state) => { state.error = []; },
+    hasMoreFn: (state, action) => { state.hasMore = action.payload; },
     ingVal: (state, action) => { console.log(action); console.log(action); console.log(action); console.log(action); console.log(action); /* state.community = []  */ }
   },
   extraReducers: {
@@ -180,7 +180,6 @@ export const communitySlice = createSlice({
       state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
     },
     [__getPopularGroupItemList.fulfilled]: (state, action) => {
-      console.log('action=>', action);
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
       state.popularGroupList = action.payload;
     },
@@ -192,7 +191,6 @@ export const communitySlice = createSlice({
       state.isLoading = true;
     },
     [__getNewGroupItemList.fulfilled]: (state, action) => {
-      console.log('action=>', action);
       state.isLoading = false;
       state.newGroupList = action.payload;
     },
@@ -206,17 +204,13 @@ export const communitySlice = createSlice({
     [__updateCommunityJoin.fulfilled]: (state, action) => {
       console.log('action===>', action);
       state.isLoading = false;
-      state.newGroupList = action.payload.data;
       state.statusCode = action.payload.status;
     },
     [__updateCommunityJoin.rejected]: (state, action) => {
       console.log("ERROR=>", action);
-      console.log("ERROR=>", action.payload.response.data);
-      console.log("ERROR=>", action.payload.response.status);
       state.isLoading = false;
-      state.error = action.payload.response.data;
-      state.statusCode = action.payload.response.status;
-      console.log(state.isLoading, state.error, state.statusCode);
+      state.error = action.payload;
+      state.statusCode = Number(action.payload.errorCode);
 
     }
 
@@ -228,5 +222,5 @@ export const communitySlice = createSlice({
   },
 });
 
-export const { clearVal, ingVal, certifyReset } = communitySlice.actions;
+export const { clearVal, ingVal, certifyReset, errorReset, hasMoreFn } = communitySlice.actions;
 export default communitySlice.reducer;

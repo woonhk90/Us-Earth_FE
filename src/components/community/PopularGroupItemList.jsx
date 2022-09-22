@@ -9,7 +9,6 @@ const PopularGroupItemList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { popularGroupList } = useSelector((state) => state.community);
-  console.log("활발그룹컴포넌트", popularGroupList);
   React.useEffect(() => {
     dispatch(__getPopularGroupItemList());
   }, [])

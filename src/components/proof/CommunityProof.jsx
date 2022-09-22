@@ -23,7 +23,6 @@ const CommunityProof = () => {
   const param = useParams();
   const [modalOpen, setModalOpen] = useState(false);
   const { proofs } = useSelector((state) => state.proofs);
-  console.log(proofs);
 
   useEffect(() => {
     dispatch(getProofs(param.proofId));
@@ -227,8 +226,7 @@ const FirstWrap = styled.div`
     height: 30px;
     background-color: gray;
   }
-  /* swiper-pagination-bullet 
-  swiper-pagination-bullet-active */
+  
   .swiper-button-next::after,
   .swiper-button-prev::after {
     display: none;

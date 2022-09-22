@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { colors } from "../../styles/color";
 import UserMissionBottom from "./UserMissionBottom";
+import LineChart from "./LineChart";
 
 const UserMissionWeek = () => {
   const format = "YYYY-MM-DD";
@@ -97,7 +98,8 @@ const UserMissionWeek = () => {
         </WeekDateButtonWrap>
       </StCalender>
       <BarWrap>
-        <MyResponsiveLine startDate={startDate} endDate={endDate} />
+        <LineChart startDate={startDate} endDate={endDate} />
+        {/* <MyResponsiveLine startDate={startDate} endDate={endDate} /> */}
       </BarWrap>
       <UserMissionBottom/>
     </>
@@ -128,6 +130,11 @@ const Stdic = styled.div`
 
 const BarWrap = styled.div`
   height: 300px;
+    width: 100%;
+    box-sizing: border-box;
+  padding-bottom: 55px;
+
+  border-bottom: 1px solid #dbdbdb;
 `;
 const SelectDateP = styled.p`
   font-weight: 600;

@@ -35,14 +35,9 @@ const Community = () => {
 
           <Line />
 
-          <CommunityGroup>
-            <CommunityGroupTop>
-              <CommunityGroupTitle>전체 그룹</CommunityGroupTitle>
-            </CommunityGroupTop>
-            <CommunityBox>
-              <CommunityItemList />
-            </CommunityBox>
-          </CommunityGroup>
+          {/* 전체그룹 */}
+          <CommunityItemList />
+
         </Container>
       </CommunityWrap>
     </>
@@ -114,22 +109,3 @@ const NewGroupBox = styled.div`
 
 
 
-
-const CommunityGroup = styled.div`
-  box-sizing: border-box;
-`;
-const CommunityGroupTop = styled.div`
-  padding: 0 15px;
-`;
-const CommunityGroupTitle = styled.span`
-  font: bold 26px/50px "Arial", "sans-serif";
-`;
-const CommunityBox = styled.div`
-  /* display:flex;
-  justify-content:center;
-  flex-wrap: wrap; */
-
-  display: grid;
-  justify-items: center;
-  grid-template-columns: repeat(auto-fill, minmax(50%, auto));
-`;

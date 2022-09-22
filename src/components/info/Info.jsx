@@ -4,6 +4,24 @@ import Chart from './Chart';
 import CampaignList from './CampaignList';
 
 const Info = () => {
+  /* ------------------------------- goToTop 버튼 ------------------------------- */
+  const [scrollPosition, setScrollPosition] = React.useState(0);
+  console.log(scrollPosition);
+
+  const updateScroll = () => {
+    setScrollPosition(window.scrollY);
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("scroll", () => { updateScroll() });
+  }, [scrollPosition]);
+
+  const onClickScroll = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
   return (
     <>
       <InfoWrap>
@@ -39,6 +57,15 @@ const Info = () => {
             <CampaignList />
 
           </InfoBottom>
+
+
+          <StGoBack
+            onClick={onClickScroll}
+            style={{ display: scrollPosition < 500 ? "none" : "inline" }}
+          >
+            upupupupupupupup
+          </StGoBack>
+
         </Container>
       </InfoWrap>
     </>
@@ -113,4 +140,18 @@ const InfoBottom = styled.div`
 const BottomTitle = styled.div`
   font:600 26px/1 'Noto Sans','Arial','sans-serif';
   padding:0 0 22px;
+`;
+
+
+
+
+const StGoBack = styled.div`
+  position: fixed;
+  bottom: 13%;
+  right: 8%;
+  border-radius: 100px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  width: 50px;
+  height: 50px;
+  border:2px solid red;
 `;

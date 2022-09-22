@@ -6,16 +6,18 @@ import Input from "../elements/Input";
 import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
-import { flexBetween, flexRow } from "../../styles/Flex";
+import { flexBetween, flexColumn, flexRow } from "../../styles/Flex";
 import { addDates, postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
 import { clearVal } from "../../redux/modules/communitySlice";
 import Cookies from "universal-cookie";
-import { useRef } from "react";
+import isLogin from "../../lib/isLogin";
+import IsLoginModal from "../../pages/IsLoginModal";
+import imageCompression from "browser-image-compression";
+import ImageLoading from "../etc/ImageLoading";
 
 const CommunityForm = () => {
-  const cookies = new Cookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { dates } = useSelector((state) => state.communityForm);
@@ -23,7 +25,7 @@ const CommunityForm = () => {
   const [modal, setModal] = useState(false);
   const [secret, setSecret] = useState(false);
   const [files, setFiles] = useState([]);
-  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmits] = useInputs({
+  const [inputData, inputOnChangeHandler, inputReset, isForm] = useInputs({
     limitScore: "",
     limitParticipants: "",
     title: "",
@@ -37,9 +39,6 @@ const CommunityForm = () => {
   const { limitScore, limitParticipants, title, content } = inputData;
 
   useEffect(() => {
-    if (cookies.get("mycookie") === undefined) {
-      navigate("/login");
-    }
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
@@ -50,18 +49,46 @@ const CommunityForm = () => {
   /* ------------------------------ photo upload ------------------------------ */
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
+  const [isPhotoMessage, setIsPhotoMessage] = useState("");
+  const [upLoading, setUploading] = useState(100);
 
-  const addImageFile = (e) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(e.target.files[0]);
-    setImageFile(e.target.files[0]);
-    reader.onloadend = () => {
-      const previewImgUrl = reader.result;
-      setPreviewImg([previewImgUrl]);
-    };
+  const addImageFile = async (e) => {
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const imageFile = e.target.files[0];
+    // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+    if (acceptImageFiles.includes(imageFile.type)) {
+      if (imageFile.size < 21000000) {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          onProgress: (data) => {
+            console.log(data);
+            setUploading(data);
+          },
+        };
+        try {
+          const compressedFile = await imageCompression(imageFile, options);
+          // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+          let reader = new FileReader();
+          reader.readAsDataURL(compressedFile);
+          setImageFile(compressedFile);
+          reader.onloadend = () => {
+            const previewImgUrl = reader.result;
+            setPreviewImg([previewImgUrl]);
+          };
+          const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
+          setImageFile(convertedBlobFile);
+          // await ; // write your own logic
+        } catch (error) {
+          console.log(error);
+        }
+      } else setIsPhotoMessage("20mb이상의 이미지만 가능합니다.");
+    } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
   };
 
-  const deleteImage = (e) => {
+  const OnClickDeleteImage = (e) => {
     e.preventDefault();
     setPreviewImg([]);
     setImageFile([]);
@@ -71,7 +98,7 @@ const CommunityForm = () => {
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
     const passwordCurrent = e.target.value;
-    console.log(passwordCurrent)
+    console.log(passwordCurrent);
     setPassword(e.target.value);
     if (!passwordRegex.test(passwordCurrent)) {
       setPasswordMessage("비밀번호 숫자 4자리");
@@ -95,7 +122,7 @@ const CommunityForm = () => {
   };
 
   /* ---------------------------------- submit ---------------------------------- */
-  const submitHandler = () => {
+  const submitHandler = async () => {
     console.log(/^\d{1,10}$/.test(limitParticipants));
     let formData = new FormData();
     const dataSet = {
@@ -109,26 +136,49 @@ const CommunityForm = () => {
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     console.log(dataSet);
     console.log(imageFile);
-    dispatch(postCommunityDetail(formData));
-    dispatch(clearVal());
+    await dispatch(postCommunityDetail(formData));
+    await dispatch(clearVal());
     navigate("/");
   };
 
   return (
     <>
+      {isLogin() ? null : <IsLoginModal />}
       <CommunityFormWrap>
         <ImageBoxWrap>
           <ImageForm encType="multipart/form-data">
-            <label htmlFor="file">
+            <label htmlFor={upLoading < 100 ? null : "file"}>
               <ImageIcon>
+                {upLoading < 100 ? (
+                  <Container>
+                    <LoadingWrap>
+                      <LoadingPosition>
+                        <ImageLoading />
+                      </LoadingPosition>
+                    </LoadingWrap>
+                  </Container>
+                ) : null}
                 {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <CameraIcon />}
                 <BottonTextWrap>
                   <BottomText>대표이미지</BottomText>
                 </BottonTextWrap>
               </ImageIcon>
             </label>
-            <ImageInput type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
+            <ImageInput
+              multiple
+              type="file"
+              id="file"
+              accept="image/*"
+              onChange={(e) => {
+                addImageFile(e);
+                e.target.value = "";
+              }}
+            />
           </ImageForm>
+          <TextWrap>
+            <DeleteImage onClick={OnClickDeleteImage}>기본 이미지로 변경</DeleteImage>
+            <ErrorMessage>{isPhotoMessage}</ErrorMessage>
+          </TextWrap>
         </ImageBoxWrap>
         <RightText>비공개</RightText>
         <TopTextWrap>
@@ -143,7 +193,7 @@ const CommunityForm = () => {
           <>
             <PasswordWrap>
               <P>비밀번호</P>
-            {password.length > 0 && <MessageP>{passwordMessage}</MessageP>}
+              {password.length > 0 && <MessageP>{passwordMessage}</MessageP>}
             </PasswordWrap>
             <Input inputype="basic" placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
           </>
@@ -189,11 +239,11 @@ const CommunityForm = () => {
       </CommunityFormWrap>
       <BottomWrap>
         {/^([1-9]|10)$/.test(limitParticipants) &&
-        /^[1-9][0-9]?$|^100/.test(limitScore) &&
-        result.length === 0 &&
-        dates.start?.length > 0 &&
-        dates.end?.length > 0 &&
-        secret === isPassword ? (
+          /^[1-9][0-9]?$|^100/.test(limitScore) &&
+          result.length === 0 &&
+          dates.start?.length > 0 &&
+          dates.end?.length > 0 &&
+          secret === isPassword ? (
           <BottomButton
             style={{
               cursor: "pointer",
@@ -243,7 +293,6 @@ const CheckBoxLabel = styled.label`
     height: 25px;
     margin: 2px 0px 0px 2px;
     background: #ffffff;
-    /* box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2); */
     transition: 0.2s;
   }
 `;
@@ -255,7 +304,7 @@ const CheckBox = styled.input`
   width: 54px;
   height: 29px;
   &:checked + ${CheckBoxLabel} {
-    background: #80BC28;
+    background: #80bc28;
     &::after {
       background-color: white;
       display: block;
@@ -270,22 +319,36 @@ const CheckBox = styled.input`
 
 /* ----------------------------------- image ---------------------------------- */
 const ImageBoxWrap = styled.div`
-  justify-content: center;
-  align-items: center;
-  display: flex;
+  ${flexColumn}
 `;
 
+const ErrorMessage = styled.p`
+  position: absolute;
+  bottom: 3px;
+font-weight: 200;
+font-size: 14px;
+line-height: 19px;
+letter-spacing: -0.02em;
+color: #FF0000;
+`;
+const TextWrap = styled.div`
+  position: relative;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const ImageForm = styled.form`
   width: 206px;
   height: 206px;
   justify-content: center;
   align-items: center;
   display: flex;
-  margin-bottom: 36px;
+  margin-bottom: 12px;
 `;
 
 const ImageInput = styled.input`
-  /* position: absolute; */
   width: 0;
   height: 0;
   overflow: hidden;
@@ -324,6 +387,7 @@ const Thumb = styled.img`
   border-radius: 14px;
   position: absolute;
   z-index: 1;
+  background-color: white;
 `;
 
 const BottonTextWrap = styled.div`
@@ -352,6 +416,43 @@ const BottomText = styled.p`
   letter-spacing: -0.03em;
 `;
 
+const DeleteImage = styled.button`
+  cursor: pointer;
+  border: none;
+  display: flex;
+  background-color: transparent;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  text-decoration-line: underline;
+  color: #9b9b9b;
+  margin-bottom: 28px;
+`;
+
+const Container = styled.div`
+  position: fixed;
+  background-size: contain;
+  background-position: center;
+  width: 206px;
+  height: 206px;
+  border-radius: 14px;
+  z-index: 999;
+  background-color: #cbcbcb;
+  align-items: center;
+`;
+
+const LoadingWrap = styled.div`
+  /* align-items: center; */
+`;
+const LoadingPosition = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 /* ------------------------------ bottom button ----------------------------- */
 const BottomWrap = styled.div`
   position: fixed;
@@ -410,7 +511,7 @@ const SelectDateP = styled.p`
 
   @media (max-width: 390px) {
     font-size: 20px;
-    }
+  }
 `;
 
 const RightText = styled.p`
@@ -425,18 +526,17 @@ const TopTextWrap = styled.div`
 `;
 
 const MessageP = styled.p`
-font-weight: 200;
-font-size: 14px;
-line-height: 19px;
-display: flex;
-align-items: center;
-text-align: right;
-letter-spacing: -0.02em;
-color: #FF0000;
-
-`
+  font-weight: 200;
+  font-size: 14px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+  text-align: right;
+  letter-spacing: -0.02em;
+  color: #ff0000;
+`;
 const PasswordWrap = styled.div`
   ${flexBetween}
   text-align: end;
-  align-items: flex-end;  
-`
+  align-items: flex-end;
+`;
