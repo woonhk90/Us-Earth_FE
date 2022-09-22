@@ -23,6 +23,9 @@ const CommentBox = () => {
   const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
   const { userHeart, heartCommentCnt } = useSelector((state) => state.proofs);
   const { comments, commentEdit } = useSelector((state) => state.comments);
+  
+  const data = useSelector((state) => state.proofs);
+  console.log(data)
   const editMode = commentEdit.editMode;
 
   const [userToken, setUserToken] = useState(false);
@@ -126,8 +129,8 @@ const CommentBox = () => {
           </StHeader>
             <Comment userToken={userToken} />
           <CommentContainer>
-          </CommentContainer>
           <CommentContainer onClick={loginCheck}>
+          </CommentContainer>
             {editMode ? <CommentInputEdit userToken={userToken} /> : <CommentInput userToken={userToken} />}
           </CommentContainer>
         </ButtonInModalWrap>
@@ -152,10 +155,10 @@ const StHeader = styled.header`
 `;
 
 const CommentContainer = styled.div`
-  width: 100%;
-  position: fixed;
-  bottom: 0px;
-  z-index: 99;
+ width: 100%;
+  /* width: 100%;
+  position: relative;
+  bottom: 0px;*/
 `;
 const IconContainer = styled.div`
   ${flexRow}

@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 const OkModal = (props) => {
   const { title, modalOnOff } = props;
 console.log(title,modalOnOff)
+
   return (
     <>
       <ModalWrap onClick={modalOnOff}>
