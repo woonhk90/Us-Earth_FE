@@ -26,9 +26,10 @@ const EarthCommunityDetail = () => {
 export default EarthCommunityDetail;
 
 const CommunityBox = styled.div`
-  height:100%;
-  overflow:auto;
-  position:absolute;
-  top:48px;
-  left:0;
+height: 100%;
+width: 390px;
+overflow: auto;
+  @media (max-width: 540px) {
+    width: 100%;
+  }
 `;

@@ -34,16 +34,16 @@ const ProofForm = ({ ProofFormData }) => {
     addImageFile: addImageFile,
     submitButton: submitButton,
     upLoading: upLoading,
-    okModal:okModal,
-    okModalTitle:okModalTitle,
-    okModalOnOff:okModalOnOff,
+    okModal: okModal,
+    okModalTitle: okModalTitle,
+    okModalOnOff: okModalOnOff,
   } = ProofFormData;
-
+  console.log(title.length > 0 && content.length > 0 && files.length > 0);
   return (
     <>
       <>
-      {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
-              <Header>
+        {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
+        <Header>
           <HeaderWrap>
             <IconDiv>
               <Back
@@ -52,7 +52,9 @@ const ProofForm = ({ ProofFormData }) => {
                 }}
               />
             </IconDiv>
-            <HeaderP onClick={submitHandler}>{submitButton}</HeaderP>
+            <HeaderP disabled={!(title.length > 0 && content.length > 0 && files.length > 0)} onClick={submitHandler}>
+              {submitButton}
+            </HeaderP>
           </HeaderWrap>
         </Header>
       </>
@@ -61,7 +63,7 @@ const ProofForm = ({ ProofFormData }) => {
           <AddPhotoWrap>
             <Stform encType="multipart/form-data">
               <Container>
-                <label  htmlFor={upLoading <100 ? null: "file"}>
+                <label htmlFor={upLoading < 100 ? null : "file"}>
                   <StIcon>
                     <CameraIcon>
                       <CameraWh />
@@ -74,23 +76,23 @@ const ProofForm = ({ ProofFormData }) => {
             </Stform>
             {previewImg?.map((image, index) => {
               return (
-                  <Container key={index}>
-                    <StButton onClick={() => deleteImageFile(image, index)}>
-                      <CancelIcon>{/* <Cancel/> */}</CancelIcon>
-                    </StButton>
-                    <Thumb src={image.imgUrl} alt="img" />
-                  </Container>
+                <Container key={index}>
+                  <StButton onClick={() => deleteImageFile(image, index)}>
+                    <CancelIcon>{/* <Cancel/> */}</CancelIcon>
+                  </StButton>
+                  <Thumb src={image.imgUrl} alt="img" />
+                </Container>
               );
             })}
-            
+
             {upLoading < 100 ? (
               <Container>
                 <LoadingWrap>
                   <LoadingPosition>
-                  <ImageLoading />
+                    <ImageLoading />
                   </LoadingPosition>
                 </LoadingWrap>
-               </Container>
+              </Container>
             ) : null}
           </AddPhotoWrap>
           <ErrorMessage>{isPhotoMessage}</ErrorMessage>
@@ -151,18 +153,18 @@ const Container = styled.div`
   width: 100px;
   height: 100px;
   margin: 9px;
-  `;
+`;
 
 const LoadingWrap = styled.div`
-display: flex;
+  display: flex;
   width: 100px;
   height: 100px;
   background-color: #d9d9d9;
   border-radius: 10px;
 `;
 const LoadingPosition = styled.div`
-display: flex;
-position: absolute;
+  display: flex;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -172,7 +174,6 @@ const Stform = styled.form`
   justify-content: center;
   align-items: center;
 `;
-
 
 const BottomWrap = styled.div`
   width: 100%;
@@ -247,10 +248,10 @@ const Thumb = styled.img`
   height: 100px;
 `;
 const HeaderWrap = styled.div`
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 48px;
   display: flex;
   justify-content: space-between;
@@ -266,12 +267,17 @@ const IconDiv = styled.div`
   height: 21px;
 `;
 
-const HeaderP = styled.p`
+const HeaderP = styled.button`
   cursor: pointer;
+  border: none;
+  background-color: transparent;
   font-weight: 600;
   font-size: 20px;
   letter-spacing: -0.03em;
   color: #222222;
+  :disabled{
+    color: #cdcdcd;
+  }
 `;
 
 const ErrorMessage = styled.div`

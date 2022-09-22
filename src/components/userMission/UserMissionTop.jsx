@@ -26,23 +26,23 @@ const UserMissionTop = () => {
 };
 export default UserMissionTop;
 const HeaderWrap = styled.div`
-  position: fixed;
+position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 48px;
   display: flex;
   justify-content: space-between;
   padding: 13px;
   box-sizing: border-box;
   z-index: 1;
-  border-bottom: 1px solid #f5f5f5;
 `;
 const HeaderFlex = styled.div`
   width: 100%;
   padding-top: 10px;
+  box-sizing: border-box;
   margin: auto;
   text-align: center;
+  height: 48px;
+  border-bottom: 1px solid #f5f5f5;
 `;
 
 const HeaderP = styled.p`

@@ -4,6 +4,7 @@ import { setCookie } from "./cookie";
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../components/Modals/AlertModal";
+import Layout from '../components/layout/Layout';
 
 const Login = () => {
 
@@ -48,7 +49,7 @@ const Login = () => {
   }, [])
   return (
     <>
-      <div>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</div>
+      <Layout>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</Layout>
     </>
   )
 }

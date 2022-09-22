@@ -6,37 +6,31 @@ import OkModal from "../components/Modals/OkModal";
 import styled, { css } from "styled-components";
 const cookies = new Cookies();
 
-const IsLoginModal = () => {
+const ErrorModal = ({error}) => {
   const [okModal, setOkModal] = useState(false);
   const navigate = useNavigate();
-  const [okModalTitle, setOkModalTitle] = useState(false);
-  const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
-  // onOff Modal
-  
-  
-  console.log(!!cookies.get("mycookie"));
+    
   const okModalOnOff = () => {
     setOkModal(!okModal);
     navigate("/login");
   };
-  const title = "로그인이 필요합니다. 로그인 창으로 이동합니다";
-  console.log("모달")
+
   return (
     <>
       <Background>
-        <OkModal title={title} modalOnOff={okModalOnOff}></OkModal>
+        <OkModal title={error} modalOnOff={okModalOnOff}></OkModal>
       </Background>
     </>
   );
 };
 
-export default IsLoginModal;
+export default ErrorModal;
 
 const Background = styled.div`
   background-color: #ffffff;
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   z-index: 9999;
   top: 0;
   right: 0;

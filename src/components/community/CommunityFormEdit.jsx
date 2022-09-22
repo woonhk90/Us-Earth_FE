@@ -248,23 +248,23 @@ const CommunityFormEdit = () => {
         <P>참여인원*</P>
         <Input
           inputype="basic"
+          maxLength="2"
           placeholder="인원을 입력해주세요(최대 10명)"
-          type="number"
+          type="tel"
           name="limitParticipants"
           value={limitParticipants}
           onChange={inputOnChangeHandler}
         ></Input>
         <P>목표달성갯수*</P>
-        <Input type="number" name="limitScore" value={limitScore} onChange={inputOnChangeHandler}></Input>
+        <Input inputype="basic" maxLength="3" type="tel"  name="limitScore" value={limitScore} onChange={inputOnChangeHandler}></Input>
         <P>그룹소개*</P>
         <Textarea
-          placeholder="소개글을 입력해주세요"
-          height="150px"
+          placeholder="소개글을 입력해 주세요"
           cols="50"
           rows="8"
           maxLength="500"
-          size="18px"
           name="content"
+          textareaType="basic"
           value={content}
           onChange={inputOnChangeHandler}
         ></Textarea>
@@ -299,7 +299,7 @@ const CommunityFormEdit = () => {
 export default CommunityFormEdit;
 
 const CommunityFormWrap = styled.div`
-  margin: 53px 16px 16px 16px;
+margin: 53px 16px 60px 16px;
 `;
 
 /* ------------------------------ switch button ----------------------------- */
@@ -495,9 +495,9 @@ const LoadingPosition = styled.div`
 `;
 /* ------------------------------ bottom button ----------------------------- */
 const BottomWrap = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
+position: absolute;
+bottom:0;
+height: 56px;
   width: 100%;
   display: flex;
   text-align: center;
@@ -512,6 +512,7 @@ const BottomButton = styled.button`
   color: ${(props) => props.color};
   background-color: ${(props) => props.bgColor};
 `;
+
 /* -------------------------------- font & div -------------------------------- */
 const DateSpan = styled.div`
   margin: 30px 0;

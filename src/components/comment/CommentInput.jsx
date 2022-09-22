@@ -10,6 +10,7 @@ import { ReactComponent as Edit } from "../../assets/Edit2.svg";
 import OkModal from "../Modals/OkModal";
 import imageCompression from "browser-image-compression";
 import ImageLoading from "../etc/ImageLoading";
+import isLogin from "../../lib/isLogin";
 
 const CommentInput = ({ userToken }) => {
   const dispatch = useDispatch();
@@ -48,6 +49,10 @@ const CommentInput = ({ userToken }) => {
 
   // user check
   const canWriteCheck = () => {
+    if(!isLogin()){
+      setOkModalTitle(`로그인을 해주세요.`);
+      setOkModal(true);
+    }
     if (participant && dateStatus === "end") {
       setOkModalTitle(`그룹 미션이 종료되어 댓글을 작성할 수 없습니다.`);
       setOkModal(true);

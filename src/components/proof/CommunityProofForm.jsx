@@ -1,7 +1,7 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { postProof } from "../../redux/modules/proofsSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
@@ -86,7 +86,7 @@ const CommunityProofForm = () => {
     setPreviewImg(previewImg.filter((file, id) => id !== index));
     setFiles(files.filter((file, id) => id !== index));
   };
-  
+
   /* -------------------------------- 빈값 확인 모달 -------------------------------- */
   const [okModal, setOkModal] = useState(false);
   const [okModalTitle, setOkModalTitle] = useState("");
@@ -97,16 +97,7 @@ const CommunityProofForm = () => {
 
   const submitHandler = async () => {
     let formData = new FormData();
-    if (title === "") {
-      setOkModalTitle("제목을 입력해 주세요");
-      okModalOnOff();
-    } else if (content === "") {
-      setOkModalTitle("내용을 입력해 주세요");
-      okModalOnOff();
-    } else if (files.length === 0) {
-      setOkModalTitle("사진을 추가해 주세요");
-      okModalOnOff();
-    } else {
+    if (title !== "" && content !== "" && files.length !== 0) {
       const dataSet = {
         ...inputData,
       };

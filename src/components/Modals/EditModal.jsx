@@ -47,7 +47,7 @@ export default EditModal;
 
 const StModal = styled.div`
   transition: opacity 0.3s ease-out;
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;

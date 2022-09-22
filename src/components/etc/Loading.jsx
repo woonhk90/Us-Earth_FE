@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import LoadingBackground from '../../assets/loading-background.jpg';
 import LoadingMain from '../../assets/loading-main.gif';
+import Layout from "../layout/Layout";
 
 const Loading = () => {
   return (
@@ -15,24 +16,23 @@ const Loading = () => {
 export default Loading;
 
 const LoadingWrap = styled.div`
-    position:fixed;
+    position:absolute;
     top:0;left:0;
     z-index:900;
     width:100%;
-    height:100%;
-    padding:0 5px;
+    height:100vh;
+    padding:0;
     box-sizing:border-box;
     background-image:url(${(props) => props.imgUrl});
     background-position:center;
     background-size:cover;
-
     display:flex;
     justify-content:center;
     align-items:center;
     
 `;
 const MainLoading = styled.div`
-    width:40%;
+    width:50%;
     height:200px;
     background-image:url(${(props) => props.imgUrl});
     background-repeat:no-repeat;
