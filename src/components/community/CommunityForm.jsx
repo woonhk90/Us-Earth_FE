@@ -12,13 +12,12 @@ import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
 import { clearVal } from "../../redux/modules/communitySlice";
 import Cookies from "universal-cookie";
-import { useRef } from "react";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../../pages/IsLoginModal";
 import imageCompression from "browser-image-compression";
+import ImageLoading from "../etc/ImageLoading";
 
 const CommunityForm = () => {
-  const cookies = new Cookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { dates } = useSelector((state) => state.communityForm);
@@ -26,7 +25,7 @@ const CommunityForm = () => {
   const [modal, setModal] = useState(false);
   const [secret, setSecret] = useState(false);
   const [files, setFiles] = useState([]);
-  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmits] = useInputs({
+  const [inputData, inputOnChangeHandler, inputReset, isForm] = useInputs({
     limitScore: "",
     limitParticipants: "",
     title: "",
@@ -51,53 +50,45 @@ const CommunityForm = () => {
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
+  const [upLoading, setUploading] = useState(100);
 
   const addImageFile = async (e) => {
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
     // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
-    console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
-
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-      fileType: 'image/png',
-    };
-    try {
-      const compressedFile = await imageCompression(imageFile, options);
-      // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-      console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-      let reader = new FileReader();
-      reader.readAsDataURL(compressedFile);
-      setImageFile(compressedFile);
-      reader.onloadend = () => {
-        const previewImgUrl = reader.result;
-        setPreviewImg([previewImgUrl]);
-      };
-      const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now()})
-      console.log(imageFile);
-      console.log(convertedBlobFile);
-      setImageFile(convertedBlobFile);
-      // await ; // write your own logic
-    } catch (error) {
-      console.log(error);
-    }
+    if (acceptImageFiles.includes(imageFile.type)) {
+      if (imageFile.size < 21000000) {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+          onProgress: (data) => {
+            console.log(data);
+            setUploading(data);
+          },
+        };
+        try {
+          const compressedFile = await imageCompression(imageFile, options);
+          // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+          let reader = new FileReader();
+          reader.readAsDataURL(compressedFile);
+          setImageFile(compressedFile);
+          reader.onloadend = () => {
+            const previewImgUrl = reader.result;
+            setPreviewImg([previewImgUrl]);
+          };
+          const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
+          setImageFile(convertedBlobFile);
+          // await ; // write your own logic
+        } catch (error) {
+          console.log(error);
+        }
+      } else setIsPhotoMessage("20mb이상의 이미지만 가능합니다.");
+    } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
   };
 
-  // const addImageFile = (e) => {
-  //   let reader = new FileReader();
-  //   if (e.target.files[0].size < 21000000) {
-  //     reader.readAsDataURL(e.target.files[0]);
-  //     setImageFile(e.target.files[0]);
-  //     reader.onloadend = () => {
-  //       const previewImgUrl = reader.result;
-  //       setPreviewImg([previewImgUrl]);
-  //     };
-  //   } else  setIsPhotoMessage(`20MB미만의 파일만 업로드 가능합니다.`);
-
-  // };
-
-  const deleteImage = (e) => {
+  const OnClickDeleteImage = (e) => {
     e.preventDefault();
     setPreviewImg([]);
     setImageFile([]);
@@ -156,17 +147,38 @@ const CommunityForm = () => {
       <CommunityFormWrap>
         <ImageBoxWrap>
           <ImageForm encType="multipart/form-data">
-            <label htmlFor="file">
+            <label htmlFor={upLoading < 100 ? null : "file"}>
               <ImageIcon>
+                {upLoading < 100 ? (
+                  <Container>
+                    <LoadingWrap>
+                      <LoadingPosition>
+                        <ImageLoading />
+                      </LoadingPosition>
+                    </LoadingWrap>
+                  </Container>
+                ) : null}
                 {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <CameraIcon />}
                 <BottonTextWrap>
                   <BottomText>대표이미지</BottomText>
                 </BottonTextWrap>
               </ImageIcon>
             </label>
-            <ImageInput multiple type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
+            <ImageInput
+              multiple
+              type="file"
+              id="file"
+              accept="image/*"
+              onChange={(e) => {
+                addImageFile(e);
+                e.target.value = "";
+              }}
+            />
           </ImageForm>
-          <DeleteImage onClick={deleteImage}>기본 이미지로 변경</DeleteImage>
+          <TextWrap>
+            <DeleteImage onClick={OnClickDeleteImage}>기본 이미지로 변경</DeleteImage>
+            <ErrorMessage>{isPhotoMessage}</ErrorMessage>
+          </TextWrap>
         </ImageBoxWrap>
         <RightText>비공개</RightText>
         <TopTextWrap>
@@ -281,7 +293,6 @@ const CheckBoxLabel = styled.label`
     height: 25px;
     margin: 2px 0px 0px 2px;
     background: #ffffff;
-    /* box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2); */
     transition: 0.2s;
   }
 `;
@@ -311,6 +322,23 @@ const ImageBoxWrap = styled.div`
   ${flexColumn}
 `;
 
+const ErrorMessage = styled.p`
+  position: absolute;
+  bottom: 3px;
+font-weight: 200;
+font-size: 14px;
+line-height: 19px;
+letter-spacing: -0.02em;
+color: #FF0000;
+`;
+const TextWrap = styled.div`
+  position: relative;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const ImageForm = styled.form`
   width: 206px;
   height: 206px;
@@ -321,7 +349,6 @@ const ImageForm = styled.form`
 `;
 
 const ImageInput = styled.input`
-  /* position: absolute; */
   width: 0;
   height: 0;
   overflow: hidden;
@@ -360,6 +387,7 @@ const Thumb = styled.img`
   border-radius: 14px;
   position: absolute;
   z-index: 1;
+  background-color: white;
 `;
 
 const BottonTextWrap = styled.div`
@@ -403,6 +431,28 @@ const DeleteImage = styled.button`
   margin-bottom: 28px;
 `;
 
+const Container = styled.div`
+  position: fixed;
+  background-size: contain;
+  background-position: center;
+  width: 206px;
+  height: 206px;
+  border-radius: 14px;
+  z-index: 999;
+  background-color: #cbcbcb;
+  align-items: center;
+`;
+
+const LoadingWrap = styled.div`
+  /* align-items: center; */
+`;
+const LoadingPosition = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 /* ------------------------------ bottom button ----------------------------- */
 const BottomWrap = styled.div`
   position: fixed;

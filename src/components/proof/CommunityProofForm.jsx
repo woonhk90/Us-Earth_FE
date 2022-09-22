@@ -1,23 +1,19 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { postProof } from "../../redux/modules/proofsSlice";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
 import { certifyReset } from "../../redux/modules/communitySlice";
-import Cookies from "universal-cookie";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../../pages/IsLoginModal";
-import OkModal from "../Modals/OkModal";
-import imageCompression from 'browser-image-compression';
+import imageCompression from "browser-image-compression";
 
 const CommunityProofForm = () => {
-  const cookies = new Cookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
-  const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
   const [inputData, inputOnChangeHandler, inputReset] = useInputs({
     title: "",
     content: "",
@@ -36,59 +32,53 @@ const CommunityProofForm = () => {
   const [previewImg, setPreviewImg] = useState([]);
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
   const [isPhoto, setIsPhoto] = useState(true);
+  const [upLoading, setUploading] = useState(100);
 
- const addImageFile =async (e) => {
-    const imageFile = e.target.files[0];
-    // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
-    console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
-  
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-      fileType: 'image/png',
+  const addImageFile = async (e) => {
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    let arry = [];
+    setIsPhotoMessage("");
+    if (e.target.files.length + previewImg.length < 6) {
+      for (let i = 0; i < e.target.files.length; i++) {
+        if (acceptImageFiles.includes(e.target.files[i].type)) {
+          if (e.target.files[i].size < 21000000) {
+            const options = {
+              maxSizeMB: 1,
+              maxWidthOrHeight: 1920,
+              useWebWorker: true,
+              onProgress: (data) => {
+                console.log(data);
+                setUploading(data);
+              },
+            };
+            try {
+              const compressedFile = await imageCompression(e.target.files[i], options);
+              let reader = new FileReader();
+              reader.readAsDataURL(compressedFile);
+              reader.onloadend = () => {
+                const previewImgUrl = reader.result;
+                setPreviewImg((previewImg) => [...previewImg, { imgUrl: previewImgUrl }]);
+              };
+              const convertedBlobFile = new File([compressedFile], e.target.files[i].name, { type: e.target.files[i].type, lastModified: Date.now() });
+              setFiles((files) => [...files, convertedBlobFile]);
+            } catch (error) {
+              console.log(error);
+            }
+          } else {
+            arry.push(`${i + 1}`);
+          }
+        } else {
+          setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
+        }
+      }
+    } else {
+      setIsPhotoMessage("사진은 5장까지만 등록 가능합니다.");
+      setIsPhoto(false);
     }
-    try {
-      const compressedFile = await imageCompression(imageFile, options);
-      // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-      console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-  console.log(imageFile)
-  console.log(compressedFile)
-  setFiles(compressedFile);
-      // await ; // write your own logic
-    } catch (error) {
-      console.log(error);
+    if (arry?.length > 0) {
+      setIsPhotoMessage(`추가한 ${arry}번째 파일이 너무 큽니다. 20MB미만의 파일만 업로드 됩니다.`);
     }
-  
-  }
-  console.log(files)
-  // const addImageFile = (e) => {
-  //   let arry = [];
-  //   setIsPhotoMessage("");
-  //   if (e.target.files.length + previewImg.length < 6) {
-  //     for (let i = 0; i < e.target.files.length; i++) {
-  //       if (e.target.files[i].size < 21000000) {
-  //         // 20메가
-  //         const reader = new FileReader();
-  //         reader.readAsDataURL(e.target.files[i]);
-  //         reader.onload = () => {
-  //           const previewImgUrl = reader.result;
-  //           setPreviewImg((previewImg) => [...previewImg, { imgUrl: previewImgUrl }]);
-  //         };
-  //         const currentFiles = e.target.files[i];
-  //         setFiles((files) => [...files, currentFiles]);
-  //       } else {
-  //         arry.push(`${i + 1}`);
-  //       }
-  //     }
-  //   } else {
-  //     setIsPhotoMessage("사진은 5장까지만 등록 가능합니다.");
-  //     setIsPhoto(false);
-  //   }
-  //   if (arry?.length > 0) {
-  //     setIsPhotoMessage(`${arry}번째 파일이 너무 큽니다. 20MB미만의 파일만 업로드 됩니다.`);
-  //   }
-  // };
+  };
 
   // X버튼 클릭 시 이미지 삭제
   const deleteImageFile = (img, index) => {
@@ -96,14 +86,26 @@ const CommunityProofForm = () => {
     setPreviewImg(previewImg.filter((file, id) => id !== index));
     setFiles(files.filter((file, id) => id !== index));
   };
+  
+  /* -------------------------------- 빈값 확인 모달 -------------------------------- */
+  const [okModal, setOkModal] = useState(false);
+  const [okModalTitle, setOkModalTitle] = useState("");
+
+  const okModalOnOff = () => {
+    setOkModal(!okModal);
+  };
 
   const submitHandler = async () => {
     let formData = new FormData();
     if (title === "") {
+      setOkModalTitle("제목을 입력해 주세요");
+      okModalOnOff();
     } else if (content === "") {
-      alert("내용을 입력해 주세요");
+      setOkModalTitle("내용을 입력해 주세요");
+      okModalOnOff();
     } else if (files.length === 0) {
-      alert("사진을 추가해 주세요");
+      setOkModalTitle("사진을 추가해 주세요");
+      okModalOnOff();
     } else {
       const dataSet = {
         ...inputData,
@@ -131,6 +133,10 @@ const CommunityProofForm = () => {
     deleteImageFile: deleteImageFile,
     addImageFile: addImageFile,
     submitButton: "등록",
+    upLoading: upLoading,
+    okModal: okModal,
+    okModalTitle: okModalTitle,
+    okModalOnOff: okModalOnOff,
   };
 
   return (

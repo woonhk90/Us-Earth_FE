@@ -130,6 +130,11 @@ const Stdic = styled.div`
 
 const BarWrap = styled.div`
   height: 300px;
+    width: 100%;
+    box-sizing: border-box;
+  padding-bottom: 55px;
+
+  border-bottom: 1px solid #dbdbdb;
 `;
 const SelectDateP = styled.p`
   font-weight: 600;

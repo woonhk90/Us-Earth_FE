@@ -50,13 +50,13 @@ const LineChart = ({ startDate, endDate }) => {
       labels: week,
       datasets: [
         {
-          label: "success",
+          label: "완료 수",
           data: stats,
           borderColor: "#ADD477",
           backgroundColor: "#ADD477",
           pointStyle: "circle",
           pointRadius: 5,
-          pointHoverRadius: 10,
+          pointHoverRadius: 8,
           borderWidth: 2,
         },
       ],
@@ -65,8 +65,25 @@ const LineChart = ({ startDate, endDate }) => {
   const options = {
     responsive: true,
     plugins: {
+      tooltip: {
+        backgroundColor:'rgba(206, 243, 119, 0.486)',
+        displayColors:false,
+        bodyColor:`#000000`,
+        titleColor:`#000000`,
+
+        // callbacks: {
+        //     label: function(context) {
+        //         let label = context.dataset.label || '';
+        //         console.log(context)
+        //         return label;
+        //     },
+        //   },
+        // family :"Noto Sans",
+        },
       legend: {
         display: false,
+        
+        
       },
       title: {
         display: false,
@@ -76,6 +93,7 @@ const LineChart = ({ startDate, endDate }) => {
       mode: "index",
       intersect: false,
     },
+    
     onClick: (event, array) => {
       let index = array[0].index;
       let day = weekMissionDate[index];
@@ -94,26 +112,46 @@ const LineChart = ({ startDate, endDate }) => {
       },
     },
     scales: {
-      y: {
-        type: "linear",
-        display: true,
-        position: "left",
-
-        min: 0,
-        max: 6,
+      xAxes: {
         ticks: {
-          stepSize: 1,
+          autoSkip: false,
+          padding: 4,
+          font: {
+            size: 14,
+          },
+          // color: green,
         },
         grid: {
-          tickLength: 7,
-          display: true,
+          display: false, //뒷배경 라인 없애기
         },
       },
       x: {
-        display: true,
-        grid: {
-          display: false,
+        display: false, //하단 라인을 없애기
+        ticks: {
+          display: false, //새로운tick을 만들었으니 기존의 tick을 제거
         },
+      },
+
+      yAxes: {
+        ticks: {
+          autoSkip: false,
+          padding: 4,
+          font: {
+            size: 14,
+          },
+          
+          stepSize: 1,
+          // color: green,
+        },
+        
+        min: 0,
+        max: 6,
+        grid: {
+          display: true, //뒷배경 라인 없애기
+        },
+      },
+      y: {
+        display: false,
       },
     },
   };
