@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { instance } from "../../api/axios";
 
 const cookies = new Cookies();
 const API_URL = process.env.REACT_APP_API_URL;
@@ -95,7 +96,7 @@ export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCer
 /* -------------------------------- 활발 그룹 출력 -------------------------------- */
 export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularGroupItemList", async (payload, thunkAPI) => {
   try {
-    const data = await axios.get(`${API_URL}/community/active`);
+    const data = await instance.get('/community/active');
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("활발 그룹 정보를 불러올 수 없습니다.");
@@ -106,7 +107,7 @@ export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularG
 /* ------------------------------- 마감임박 그룹 출력 ------------------------------- */
 export const __getNewGroupItemList = createAsyncThunk("usearth/__getNewGroupItemList", async (payload, thunkAPI) => {
   try {
-    const data = await axios.get(`${API_URL}/community/nearDone`);
+    const data = await instance.get('/community/nearDone');
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("마감임박 그룹 정보를 불러올 수 없습니다.");
