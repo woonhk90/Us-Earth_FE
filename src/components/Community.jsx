@@ -45,7 +45,10 @@ const Community = () => {
 };
 export default Community;
 
-const CommunityWrap = styled.div`width:100%;`;
+const CommunityWrap = styled.div`
+width:100%;
+
+`;
 const Container = styled.div`width:100%;`;
 
 const Banner = styled.div`
@@ -63,7 +66,7 @@ const Line = styled.div`
 `;
 
 const PopularGroup = styled.div`
-  width: 100vw;
+  width: 100%;
   overflow: hidden;
   box-sizing: border-box;
 `;
@@ -87,7 +90,6 @@ const PopularGroupBox = styled.div`
 
 
 const NewGroup = styled.div`
-  width: 100vw;
   overflow: hidden;
   box-sizing: border-box;
 `;

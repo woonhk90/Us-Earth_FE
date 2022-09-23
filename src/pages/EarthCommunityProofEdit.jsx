@@ -5,14 +5,10 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import CommunityBottom from "../components/CommunityBottom";
 import CommunityProofEdit from "../components/proof/CommunityProofEdit";
-import CommunityProofFormTop from "../components/proof/CommunityProofFormTop";
 
 const EarthCommunityProofEdit = () => {
   return (
     <Layout>
-      {/* <Header>
-        <CommunityProofFormTop />
-      </Header> */}
       <CommunityBox>
         <CommunityProofEdit />
       </CommunityBox>
@@ -25,11 +21,12 @@ const EarthCommunityProofEdit = () => {
 
 export default EarthCommunityProofEdit;
 
+
 const CommunityBox = styled.div`
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  position: absolute;
-  top: 48px;
-  left: 0;
+height: 100%;
+width: 390px;
+overflow: auto;
+  @media (max-width: 540px) {
+    width: 100%;
+  }
 `;

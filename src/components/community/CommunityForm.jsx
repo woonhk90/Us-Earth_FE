@@ -230,7 +230,7 @@ const CommunityForm = () => {
           placeholder="소개글을 입력해 주세요"
           cols="50"
           rows="8"
-          maxLength="200"
+          maxLength="500"
           name="content"
           textareaType="basic"
           value={content}
@@ -267,7 +267,7 @@ const CommunityForm = () => {
 export default CommunityForm;
 
 const CommunityFormWrap = styled.div`
-  margin: 53px 16px 16px 16px;
+  margin: 53px 16px 60px 16px;
 `;
 
 /* ------------------------------ switch button ----------------------------- */
@@ -455,9 +455,9 @@ const LoadingPosition = styled.div`
 `;
 /* ------------------------------ bottom button ----------------------------- */
 const BottomWrap = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
+position: absolute;
+bottom:0;
+height: 56px;
   width: 100%;
   display: flex;
   text-align: center;

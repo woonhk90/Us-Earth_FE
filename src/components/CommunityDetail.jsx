@@ -138,7 +138,7 @@ const CommunityDetail = () => {
 export default CommunityDetail;
 
 const CommunityDetailWrap = styled.div`
-  width: 100vw;
+  width: 100%;
 `;
 const Container = styled.div`
   width: 100%;
@@ -294,7 +294,7 @@ const CertifyContent = styled.div`
   }
 `;
 const CertifyContentIcon = styled.div`
-  position:fixed;
+  position:absolute;
   bottom:80px;right:17px;
   width:71px;
   height:71px;
