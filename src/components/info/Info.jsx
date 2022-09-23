@@ -69,81 +69,80 @@ const Info = () => {
         </Container>
       </InfoWrap>
     </>
-  )
-}
+  );
+};
 export default Info;
 
-const InfoWrap = styled.div`width:100%`;
-const Container = styled.div`width:100%`;
+const InfoWrap = styled.div`
+  width: 100%;
+`;
+const Container = styled.div`
+  width: 100%;
+`;
 const InfoTop = styled.div`
-  width:100%;
-  padding:40px 16px;
-  box-sizing:border-box;
+  width: 100%;
+  padding: 40px 16px;
+  box-sizing: border-box;
 `;
 const TopTitle = styled.div`
-  font:600 26px/1 'Noto Sans','Arial','sans-serif';
-  padding:0 0 22px;
+  font: 600 26px/1 "Noto Sans","sans-serif";
+  padding: 0 0 22px;
 `;
 
 const ChartWrap = styled.div`
-  width:100%;
-  padding:32px 25px 40px;
-  box-sizing:border-box;
-  background-color:#f6f6f6;
+  width: 100%;
+  padding: 32px 25px 40px;
+  box-sizing: border-box;
+  background-color: #f6f6f6;
 `;
 const ChartTotal = styled.div``;
 const ChartTotalTitle = styled.div`
-  font:600 20px/28px 'Noto Sans','Arial','sans-serif';
-  span:nth-child(1){
-    font:600 32px/45px 'Noto Sans','Arial','sans-serif';  
+  font: 600 20px/28px "Noto Sans","sans-serif";
+  span:nth-child(1) {
+    font: 600 32px/45px "Noto Sans", "sans-serif";
   }
 `;
 const ChartTotalContent = styled.div`
-  width:100%;
-  padding:0 0 25px;
-  box-sizing:border-box;
-  progress{
+  width: 100%;
+  padding: 0 0 25px;
+  box-sizing: border-box;
+  progress {
     appearance: none;
-    width:100%;
-    height:15px;
+    width: 100%;
+    height: 15px;
   }
   progress::-webkit-progress-bar {
-    background:#e2e2e2;
-    border-radius:50px;
+    background: #e2e2e2;
+    border-radius: 50px;
   }
   progress::-webkit-progress-value {
-    border-radius:50px;
-    background:#818181;
+    border-radius: 50px;
+    background: #818181;
   }
 `;
 const ChartBox = styled.div`
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:30px;
-  text-align:center;
-  font:600 20px/28px 'Noto Sans','Arial','sans-serif';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  text-align: center;
+  font: 600 20px/28px "Noto Sans", "sans-serif";
 `;
 const ChartItem = styled.div``;
-const ChartItemTitle = styled.div`letter-spacing:-0.1em;`;
+const ChartItemTitle = styled.div`
+  letter-spacing: -0.1em;
+`;
 const ChartItemContent = styled.div``;
 
-
-
-
-
 const InfoBottom = styled.div`
-  width:100%;
-  padding:0 16px;
-  box-sizing:border-box;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
 `;
 const BottomTitle = styled.div`
-  font:600 26px/1 'Noto Sans','Arial','sans-serif';
-  padding:0 0 22px;
+  font: 600 26px/1 "Noto Sans", "sans-serif";
+  padding: 0 0 22px;
 `;
-
-
-
 
 const StGoBack = styled.div`
   position: fixed;
@@ -153,5 +152,5 @@ const StGoBack = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   width: 50px;
   height: 50px;
-  border:2px solid red;
+  border: 2px solid red;
 `;

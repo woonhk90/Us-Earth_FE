@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import Modal from "./CommunityDetailModal";
 import { ReactComponent as Edit } from "../assets/Edit.svg";
 import forest from "../assets/Forest.jpg";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __getCommunityDetail, __getCommunityCertify, errorReset } from '../redux/modules/communitySlice';
+import { __getCommunityDetail, __getCommunityCertify, errorReset } from "../redux/modules/communitySlice";
 import { useInView } from "react-intersection-observer";
-import { colors } from '../styles/color';
-import { getCookie } from '../shared/cookie';
+import { colors } from "../styles/color";
+import { getCookie } from "../shared/cookie";
 import LoginModal from "./Modals/LoginModal";
-
 
 const CommunityDetail = () => {
   const navigate = useNavigate();
@@ -19,8 +18,7 @@ const CommunityDetail = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(__getCommunityDetail({ communityId: param.id }));
-
-  }, [dispatch, param.id])
+  }, [dispatch, param.id]);
   const { communityDetail } = useSelector((state) => state.community);
   console.log(communityDetail);
 
@@ -33,7 +31,7 @@ const CommunityDetail = () => {
   });
 
   useEffect(() => {
-    dispatch(__getCommunityCertify({ page, communityId: param.id }));/*인증글전체조회하려고*/
+    dispatch(__getCommunityCertify({ page, communityId: param.id })); /*인증글전체조회하려고*/
   }, [page, dispatch, param]);
   useEffect(() => {
     if (inView) {
@@ -51,12 +49,12 @@ const CommunityDetail = () => {
 
   const onInJoinBtn = () => {
     dispatch(errorReset());
-    if (getCookie('mycookie') === undefined) {
+    if (getCookie("mycookie") === undefined) {
       setLoginModal(!loginModal);
     } else {
       setModal(!modal);
     }
-  }
+  };
   return (
     <>
       {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
@@ -64,10 +62,16 @@ const CommunityDetail = () => {
         <Container>
           <Forest imgUrl={forest}></Forest>
           <Content>
-            <ContentItem font={"16px/22px 'Noto sans','Arial','sans-serif'"} marginBottom={'10px'}>{communityDetail.startDate} - {communityDetail.endDate}</ContentItem>
-            <ContentItem font={"700 26px/35px 'Noto sans','Arial','sans-serif'"} marginBottom={'9px'}>{communityDetail.title}</ContentItem>
-            <ContentItem font={"22px/30px 'Noto sans','Arial','sans-serif'"} marginBottom={'35px'}>{communityDetail.content}</ContentItem>
-            <ContentItem marginBottom={'35px'}> {communityDetail?.img !== null ? <img src={communityDetail?.img} alt='img' /> : null} </ContentItem>
+            <ContentItem font={"16px/22px 'Noto Sans KR', 'sans-serif'"} marginBottom={"10px"}>
+              {communityDetail.startDate} - {communityDetail.endDate}
+            </ContentItem>
+            <ContentItem font={"700 26px/35px 'Noto Sans KR', 'sans-serif'"} marginBottom={"9px"}>
+              {communityDetail.title}
+            </ContentItem>
+            <ContentItem font={"22px/30px 'Noto Sans KR', 'sans-serif'"} marginBottom={"35px"}>
+              {communityDetail.content}
+            </ContentItem>
+            <ContentItem marginBottom={"35px"}> {communityDetail?.img !== null ? <img src={communityDetail?.img} alt="img" /> : null} </ContentItem>
           </Content>
 
           <StateBox>
@@ -75,13 +79,19 @@ const CommunityDetail = () => {
               !communityDetail.participant ? (
                 <State>
                   <StateTop>
-                    <StateItem font={"600 30px/40px 'Arial','sans-serif'"}>모집중</StateItem>
-                    <StateItem font={"600 60px/82px 'Arial','sans-serif'"}> {communityDetail.participantsCnt} </StateItem>
-                    <StateItem font={"24px/32px 'Arial','sans-serif'"} color={"#9E9E9E"}>
+                    <StateItem font={"600 30px/40px 'Noto Sans KR', 'sans-serif'"}>모집중</StateItem>
+                    <StateItem font={"600 60px/82px 'Noto Sans KR', 'sans-serif'"}> {communityDetail.participantsCnt} </StateItem>
+                    <StateItem font={"24px/32px 'Noto Sans KR', 'sans-serif'"} color={"#9E9E9E"}>
                       / {communityDetail.limitParticipants}명
                     </StateItem>
                   </StateTop>
-                  <StateBottom onClick={() => { onInJoinBtn() }}>참여하기</StateBottom>
+                  <StateBottom
+                    onClick={() => {
+                      onInJoinBtn();
+                    }}
+                  >
+                    참여하기
+                  </StateBottom>
                   {modal && <Modal closeModal={() => setModal(!modal)} communityId={param.id}></Modal>}
                 </State>
               ) : (
@@ -95,9 +105,12 @@ const CommunityDetail = () => {
             {communityDetail.dateStatus === "ongoing" ? (
               <EndState>
                 <EndStateTop>
-                  <EndStateItem position={"absolute"} top={"0"} left={"0"} font={"600 20px/1 'Noto Sans','Arial','sans-serif'"}>달성률</EndStateItem>
-                  <EndStateItem font={"600 44px/1 'Noto Sans', 'Arial', 'sans-serif'"} textAlign={"right"}>
-                    {communityDetail.successPercent}<span>% </span>
+                  <EndStateItem position={"absolute"} top={"0"} left={"0"} font={"600 20px/1 'Noto Sans KR', 'sans-serif'"}>
+                    달성률
+                  </EndStateItem>
+                  <EndStateItem font={"600 44px/1 'Noto Sans KR', 'sans-serif'"} textAlign={"right"}>
+                    {communityDetail.successPercent}
+                    <span>% </span>
                     <span> /100%</span>
                   </EndStateItem>
                 </EndStateTop>
@@ -115,20 +128,20 @@ const CommunityDetail = () => {
           </StateBox>
           <CertifyContentBox>
             <CertifyContent>
-              {certify.map((v) => <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}><img src={v.img[0].imgUrl} alt='proofImg' /></CertifyItem>)}
+              {certify.map((v) => (
+                <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}>
+                  <img src={v.img[0].imgUrl} alt="proofImg" />
+                </CertifyItem>
+              ))}
             </CertifyContent>
           </CertifyContentBox>
-          {getCookie('mycookie') === undefined ?
-            null
-            :
-            (communityDetail.participant ?
-              (communityDetail.dateStatus ?
-                <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`)}><Edit /></CertifyContentIcon>
-                :
-                null)
-              :
-              null)
-          }
+          {getCookie("mycookie") === undefined ? null : communityDetail.participant ? (
+            communityDetail.dateStatus ? (
+              <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`)}>
+                <Edit />
+              </CertifyContentIcon>
+            ) : null
+          ) : null}
           <div ref={ref}></div>
         </Container>
       </CommunityDetailWrap>
@@ -164,8 +177,8 @@ const ContentItem = styled.div`
   font: ${(props) => props.font};
   margin-bottom: ${(props) => props.marginBottom};
   word-break: break-all;
-  img{
-    width:100%;
+  img {
+    width: 100%;
   }
 `;
 
@@ -190,7 +203,7 @@ const StateItem = styled.span`
 `;
 const StateBottom = styled.div`
   width: 100%;
-  font: 18px/27px "Arial", "sana-serif";
+  font: 18px/27px "Noto Sans KR", "sana-serif";
   text-align: center;
   padding: 11px 0;
   background-color: #424242;
@@ -205,7 +218,7 @@ const OnGoingState = styled.div`
   padding: 35px 0;
   border-radius: 12px;
   p {
-    font: 600 30px/40px "Noto Sans", "Arial", "sans-serif";
+    font: 600 30px/40px "Noto Sans KR", "sans-serif";
     text-align: center;
   }
   p:nth-child(1) {
@@ -248,27 +261,27 @@ const EndStateItem = styled.div`
     font-size: 30px;
   }
   span:nth-of-type(2) {
-    font: 18px/25px "Noto Sans", "Arial", "sans-serif";
+    font: 18px/25px "Noto Sans KR", "sans-serif";
     color: #9e9e9e;
   }
 `;
 const EndStateBottom = styled.div`
   width: 100%;
-  margin:10px 0;
-  
-  progress{
+  margin: 10px 0;
+
+  progress {
     appearance: none;
-    width:100%;
-    height:20px;
+    width: 100%;
+    height: 20px;
   }
   progress::-webkit-progress-bar {
-    background:transparent;
-    border-radius:10px;
-    box-shadow: 1px 1px 1px 0px rgba(0,0,0,0.2);
+    background: transparent;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.2);
   }
   progress::-webkit-progress-value {
-    border-radius:10px;
-    background:linear-gradient(to right, ${colors.green89}, ${colors.green28});
+    border-radius: 10px;
+    background: linear-gradient(to right, ${colors.green89}, ${colors.green28});
   }
 `;
 // const ProgressBar = styled.progress`
@@ -288,22 +301,23 @@ const CertifyContent = styled.div`
   justify-items: center;
   grid-template-columns: repeat(auto-fill, minmax(33%, auto));
   gap: 1px;
-  img{
-    width:100%;
-    height:100%;
+  img {
+    width: 100%;
+    height: 100%;
   }
 `;
 const CertifyContentIcon = styled.div`
-  position:absolute;
-  bottom:80px;right:17px;
-  width:71px;
-  height:71px;
-  background-color:#515151;
-  border-radius:50%;
-  
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  position: absolute;
+  bottom: 80px;
+  right: 17px;
+  width: 71px;
+  height: 71px;
+  background-color: #515151;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const CertifyItem = styled.div`
   width: 128px;

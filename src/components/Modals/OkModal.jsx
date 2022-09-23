@@ -69,6 +69,6 @@ const AttendBox = styled.div`
 
 const AttendItem = styled.div`
   width: 50%;
-  font: 600 22px/30px "arial", "sans-serif";
+  font: 600 22px/30px "Noto Sans KR", "sans-serif";
   padding: 19px 0;
 `;

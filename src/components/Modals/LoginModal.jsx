@@ -86,6 +86,6 @@ const ConfirmItem = styled.div`
   width: 50%;
   border-right: 1px solid #d9d9d9;
   border-left: 1px solid #d9d9d9;
-  font: 600 22px/30px "arial", "sans-serif";
+  font: 600 22px/30px "Noto Sans KR", "sans-serif";
   padding: 19px 0;
 `;
