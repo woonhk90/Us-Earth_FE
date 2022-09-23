@@ -16,7 +16,7 @@ const ChartComponents = () => {
       <ChartWrap>
         <ChartBox>
           {infoEnvironment.map((v) =>
-            <ChartItem>
+            <ChartItem key={v.category}>
               <ChartItemTitle>{v.category}</ChartItemTitle>
               <ChartItemContent><Chart chartInfo={v} /></ChartItemContent>
             </ChartItem>
