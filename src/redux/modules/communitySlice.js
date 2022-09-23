@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { instance,tokenInstance } from "../../api/axios";
 
 const cookies = new Cookies();
 const API_URL = process.env.REACT_APP_API_URL;
@@ -12,7 +13,7 @@ export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (
     if (payload.page === '0' || payload.page === 0) {
       thunkAPI.dispatch(clearVal());
     }
-    const data = await axios.get(`${API_URL}/community?page=${payload.page}&size=10`);
+    const data = await instance.get(`${API_URL}/community?page=${payload.page}&size=10`);
     console.log('전체커뮤니티=>', data);
 
     /* ---------------------------- 해당 페이지에 값이 있는지 확인 --------------------------- */
@@ -35,12 +36,9 @@ export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (
 export const __getCommunityDetail = createAsyncThunk("usearth/__getCommunityDetail", async (payload, thunkAPI) => {
   try {
     console.log('__getCommunityDetail=>', payload);
-    const authorization_token = cookies.get("mycookie");
-    const data = await axios.get(`${API_URL}/community/${payload.communityId}`, {
-      headers: {
-        Authorization: authorization_token
-      },
-    });
+
+    const data = await tokenInstance.get(`/community/${payload.communityId}`);
+
     console.log('상세커뮤니티=>', data);
 
     return thunkAPI.fulfillWithValue(data.data);
@@ -56,14 +54,9 @@ export const __getCommunityDetail = createAsyncThunk("usearth/__getCommunityDeta
 export const __updateCommunityJoin = createAsyncThunk("usearth/__updateCommunityJoin", async (payload, thunkAPI) => {
   try {
     console.log('__updateCommunityJoin=>', payload);
-    const authorization_token = cookies.get("mycookie");
-    const data = await axios.patch(`${API_URL}/join/${payload.communityId}`, payload, {
-      headers: {
-        Authorization: authorization_token
-      },
-    });
+    
+    const data = await tokenInstance.patch(`/join/${payload.communityId}`,payload);
 
-    // thunkAPI.dispatch(__getCommunityDetail({ communityId: payload.communityId }))
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
@@ -80,7 +73,7 @@ export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCer
     if (payload.page === '0' || payload.page === 0) {
       thunkAPI.dispatch(certifyReset());
     }
-    const data = await axios.get(`${API_URL}/community/${payload.communityId}/proof?page=${payload.page}&size=3`);
+    const data = await instance.get(`/community/${payload.communityId}/proof?page=${payload.page}&size=3`);
     console.log('인증게시글=>', data);
 
     return thunkAPI.fulfillWithValue(data.data);
@@ -95,7 +88,8 @@ export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCer
 /* -------------------------------- 활발 그룹 출력 -------------------------------- */
 export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularGroupItemList", async (payload, thunkAPI) => {
   try {
-    const data = await axios.get(`${API_URL}/community/active`);
+    const data = await instance.get('/community/active');
+
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("활발 그룹 정보를 불러올 수 없습니다.");
@@ -106,7 +100,8 @@ export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularG
 /* ------------------------------- 마감임박 그룹 출력 ------------------------------- */
 export const __getNewGroupItemList = createAsyncThunk("usearth/__getNewGroupItemList", async (payload, thunkAPI) => {
   try {
-    const data = await axios.get(`${API_URL}/community/nearDone`);
+    const data = await instance.get('/community/nearDone');
+    
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("마감임박 그룹 정보를 불러올 수 없습니다.");
@@ -211,14 +206,7 @@ export const communitySlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
       state.statusCode = Number(action.payload.errorCode);
-
     }
-
-
-
-
-
-
   },
 });
 

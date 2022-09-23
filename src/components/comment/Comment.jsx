@@ -145,16 +145,6 @@ const Comment = ({userToken,editMode}) => {
 
 export default Comment;
 
-
-const CommentInputWrap = styled.div`
-  width: 100%;
-  position: fixed;
-  /* top: 0; */
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 99;
-`;
 const CommentContainer = styled.div`
 padding-bottom: 5px;
   max-height: 546px;
@@ -230,31 +220,9 @@ const Nickname = styled.p`
 `;
 
 /* -------------------------------- selectBox ------------------------------- */
-const IconDiv = styled.div`
-  width: 4px;
-  padding: 10px;
-`;
+
 const ModalIcon = styled.div`
   width: 18px;
   margin-right: 18px;
 `;
 
-const ModalButton = styled.div`
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  margin-right: 18px;
-`;
-
-const ButtonInModal = styled.button`
-  width: 100%;
-  ${flexRow}
-  font-size: 18px;
-  font-weight: 300;
-  float: left;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  padding: 12px 0;
-  background-color: transparent;
-`;

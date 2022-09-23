@@ -37,14 +37,14 @@ const UserMissionWeek = () => {
     if (cookies.get("mycookie") === undefined) {
       navigate("/login");
     }
-    dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
+    // dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
     dispatch(
       getPeriodMissionStats({
         startDate: dayjs().startOf("week").format("YYYY-MM-DD"),
         endDate: dayjs().endOf("week").format("YYYY-MM-DD"),
       })
     );
-  }, [dispatch, startDate]);
+  }, []);
 
   const prevWeek = () => {
     setStartDate(dayjs(startDate).day(-7).format(format));

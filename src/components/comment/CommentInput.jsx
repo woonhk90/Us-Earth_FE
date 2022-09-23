@@ -33,7 +33,7 @@ const CommentInput = ({ userToken }) => {
     window.addEventListener("mousedown", clickInputOutside);
     return () => {
       window.removeEventListener("mousedown", clickInputOutside);
-      // imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
+      
     };
   }, [inputOn]);
   console.log(inputOn);

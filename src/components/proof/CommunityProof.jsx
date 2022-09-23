@@ -11,22 +11,23 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { deleteProof, getProofs } from "../../redux/modules/proofsSlice";
-import ConfirmModal from "../Modals/ConfirmModal";
-import { ReactComponent as VerticalDot } from "../../assets/verticalDot.svg";
 import icons from "../../assets";
+import ConfirmModal from "../Modals/ConfirmModal";
+import Loading from "../etc/Loading";
+import ErrorModal from "../Modals/ErrorModal";
 
 const CommunityProof = () => {
   const { VerticalDot, Delete, Report, Edit } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const dispatch = useDispatch();
   const param = useParams();
   const [modalOpen, setModalOpen] = useState(false);
-  const { proofs } = useSelector((state) => state.proofs);
+  const { proofs,isLoading, error } = useSelector((state) => state.proofs);
 
   useEffect(() => {
     dispatch(getProofs(param.proofId));
-  }, []);
+
+  }, [dispatch]);
 
   const openModal = () => {
     setModalOpen(true);
@@ -36,12 +37,7 @@ const CommunityProof = () => {
     setModalOpen(false);
   };
 
-  const onClickDelete = () => {
-    if (window.confirm("삭제하시겠습니까?")) {
-    } else {
-      return;
-    }
-  };
+
 
   const onClickEdit = () => {
     navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`);
@@ -66,8 +62,24 @@ const CommunityProof = () => {
     setModal(!modal);
   };
 
+  if(isLoading){
+    return (
+      <><Loading/>
+    </>
+    )
+  }
+
+  // setError(error.response.data.message);
+if(error){
+  return (
+    <><ErrorModal error={error}  /></>
+    // 
+  )
+}
+
   return (
     <>
+    {modal && <ConfirmModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} modalOnOff={modalOnOff}/>}
       <FirstWrap>
         <Swiper modules={[Navigation, Pagination, Scrollbar]} spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
           {proofs.img?.map((img) => {
@@ -84,7 +96,7 @@ const CommunityProof = () => {
       </FirstWrap>
       <UserInfoFirstWrap>
         <UserInfoWrap>
-          <UserInfoImg imgUrl={proofs.profileImage}/>
+          <UserInfoImg referrerPolicy="no-referrer"  src={proofs.profileImage}/>
           <UerInpo>
             <Username>{proofs.nickname}</Username>
             <CreatAt>{proofs.creatAt}</CreatAt>
@@ -153,8 +165,8 @@ const UerInpo = styled.div`
   padding: 0;
 `;
 
-const UserInfoImg = styled.div`
- background-image: url(${(props) => props.imgUrl});
+const UserInfoImg = styled.img`
+ /* background-image: url(${(props) => props.imgUrl}); */
   width: 37px;
   height: 37px;
   background-position: center;
@@ -199,7 +211,6 @@ const ContentContent = styled.div`
 `;
 
 //스와이퍼
-
 const FirstWrap = styled.div`
   width: 100%;
   aspect-ratio: 1 / 1;

@@ -37,7 +37,7 @@ const LineChart = ({ startDate, endDate }) => {
   let week = [];
   const weekMissionDataCheck = () => {
     for (let i = 0; i < 7; i++) {
-      let finding = periodMissionData.find((item) => item.createdAt === dayjs(startDate).add(i, "day").format("YYYY-MM-DD"));
+      let finding = periodMissionData.find((item) => item.clearTime === dayjs(startDate).add(i, "day").format("YYYY-MM-DD"));
       if (finding !== undefined) {
         stats.push(finding.count);
       } else {

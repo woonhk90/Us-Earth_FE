@@ -48,32 +48,29 @@ const PopularGroupItemList = () => {
 
   return (
     <>
-      {isLoading ? <Loading />
-        :
-        (
-          <CommunityGroup>
-            <CommunityGroupTop>
-              <CommunityGroupTitle>전체 그룹</CommunityGroupTitle>
-            </CommunityGroupTop>
-            <CommunityBox>
 
-              {community?.map((v) => (
-                <CommunityItem key={v.communityId} onClick={() => { dispatch(certifyReset()); navigate(`/community/detail/${v.communityId}`); }}>
-                  <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
-                    {v.secret ? <Lock /> : null}
-                    <div>
-                      <p>{states(v.dateStatus)}</p>
-                      <p>{Math.ceil(v.dateStatus === 'before' ? v.currentPercent : v.successPercent)}%</p>
-                      <progress value={v.dateStatus === 'before' ? v.currentPercent : v.successPercent} max="100"></progress>
-                    </div>
-                  </ItemImg>
-                  <ItemTitle>{v.title}</ItemTitle>
-                </CommunityItem>
-              ))}
+      <CommunityGroup>
+        <CommunityGroupTop>
+          <CommunityGroupTitle>전체 그룹</CommunityGroupTitle>
+        </CommunityGroupTop>
+        <CommunityBox>
 
-            </CommunityBox>
-          </CommunityGroup>
-        )}
+          {community?.map((v) => (
+            <CommunityItem key={v.communityId} onClick={() => { dispatch(certifyReset()); navigate(`/community/detail/${v.communityId}`); }}>
+              <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
+                {v.secret ? <Lock /> : null}
+                <div>
+                  <p>{states(v.dateStatus)}</p>
+                  <p>{Math.ceil(v.dateStatus === 'before' ? v.currentPercent : v.successPercent)}%</p>
+                  <progress value={v.dateStatus === 'before' ? v.currentPercent : v.successPercent} max="100"></progress>
+                </div>
+              </ItemImg>
+              <ItemTitle>{v.title}</ItemTitle>
+            </CommunityItem>
+          ))}
+
+        </CommunityBox>
+      </CommunityGroup>
 
       {hasMore ? (isLoading ? null : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'그룹 항목의 마지막 입니다.'} />}
     </>

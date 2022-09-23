@@ -9,15 +9,15 @@ import { colors } from '../../styles/color';
 const MyPageTodayMission = ({ userInfo }) => {
   const { level_01, level_02, level_03, level_04, level_05 } = icons;
   let imgUrl = null;
-  if (userInfo.level === 1) {
+  if (userInfo.level >= 1 && userInfo.level <= 2) {
     imgUrl = level_01;
-  } else if (userInfo.level === 2) {
+  } else if (userInfo.level >= 3 && userInfo.level <= 4) {
     imgUrl = level_02;
-  } else if (userInfo.level === 3) {
+  } else if (userInfo.level >= 5 && userInfo.level <= 7) {
     imgUrl = level_03;
-  } else if (userInfo.level === 4) {
+  } else if (userInfo.level >= 8 && userInfo.level <= 10) {
     imgUrl = level_04;
-  } else if (userInfo.level === 5) {
+  } else if (userInfo.level >= 11) {
     imgUrl = level_05;
   }
 
@@ -29,6 +29,7 @@ const MyPageTodayMission = ({ userInfo }) => {
   const { todayMission } = useSelector((state) => state.mypage);
   console.log(todayMission);
 
+  /* ------------------------------- 오늘의 미션 가져오기 ------------------------------ */
   const onClickTodayMission = () => {
     dispatch(__getTodayMission());
     setMissionFlag(!missionFlag);
