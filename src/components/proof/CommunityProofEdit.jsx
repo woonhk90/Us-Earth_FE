@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { patchProof, postProof } from "../../redux/modules/proofsSlice";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,6 +12,8 @@ import Cookies from "universal-cookie";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../../pages/IsLoginModal";
 import imageCompression from "browser-image-compression";
+import Loading from "../etc/Loading";
+import ErrorModal from "../Modals/ErrorModal";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -20,6 +22,7 @@ const CommunityProofEdit = () => {
   const dispatch = useDispatch();
   const cookies = new Cookies();
   const param = useParams();
+  const { isLoading, error } = useSelector((state) => state.proofs);
 
   /* -------------------------------- axios get ------------------------------- */
   const getProofs = async (proofId) => {
@@ -177,7 +180,7 @@ const CommunityProofEdit = () => {
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       console.log(dataSet);
-      dispatch(patchProof({ proofId: param.proofId, formData: formData }));
+      await dispatch(patchProof({ proofId: param.proofId, formData: formData }));
       navigate(`/community/detail/${param.communityId}`);
     }
   };
@@ -198,6 +201,20 @@ const CommunityProofEdit = () => {
     okModalTitle: okModalTitle,
     okModalOnOff: okModalOnOff,
   };
+  if(isLoading){
+    return (
+      <><Loading/>
+    </>
+    )
+  }
+console.log(error)
+  // setError(error.response.data.message);
+if(error){
+  return (
+    <><ErrorModal error={error}  /></>
+    // 
+  )
+}
 
   return (
     <>

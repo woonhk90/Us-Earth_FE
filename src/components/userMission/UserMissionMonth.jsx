@@ -24,7 +24,7 @@ console.log(dailyMissionData)
     if (cookies.get("mycookie") === undefined) {
       navigate("/login");
     }
-    dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
+    // dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
   }, []);
 
   return (
