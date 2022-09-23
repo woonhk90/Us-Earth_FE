@@ -156,19 +156,19 @@ const CommentInputWrap = styled.div`
   z-index: 99;
 `;
 const CommentContainer = styled.div`
-padding-bottom: 75px;
-  /* max-height: 546px; */
+padding-bottom: 5px;
   max-height: 546px;
+  /* max-height: 346px; */
   width: 100%;
   overflow: auto;
   &::-webkit-scrollbar {
     display: none;
   }
   @media (min-height: 600px) and (max-height: 700px) {
-    max-height: 400px;
+    max-height: 270px;
   }
   @media (min-height: 300px) and (max-height: 556px) {
-    max-height: 300px;
+    max-height: 150px;
   }
 
 `;

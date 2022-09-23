@@ -34,9 +34,7 @@ export default CommunityProofTop;
 
 const HeaderWrap = styled.div`
   position: relative;
-  top: 0;
-  left: 0;
-  width: 100vw;
+  width: 100%;
   height: 48px;
   display: flex;
   align-items: center;

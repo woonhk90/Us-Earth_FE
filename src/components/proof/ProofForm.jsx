@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
-import cameraWh from "../../assets/cameraWh.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import { ReactComponent as CameraWh } from "../../assets/cameraWh.svg";
 import cancelWh from "../../assets/cancelWh.svg";
-import Input from "../elements/Input";
 import Textarea from "../elements/Textarea";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../Header";
 import { useRef } from "react";
+import ImageLoading from "../etc/ImageLoading";
+import OkModal from "../Modals/OkModal";
 
 const ProofForm = ({ ProofFormData }) => {
   const navigate = useNavigate();
@@ -33,11 +33,16 @@ const ProofForm = ({ ProofFormData }) => {
     deleteImageFile: deleteImageFile,
     addImageFile: addImageFile,
     submitButton: submitButton,
+    upLoading: upLoading,
+    okModal: okModal,
+    okModalTitle: okModalTitle,
+    okModalOnOff: okModalOnOff,
   } = ProofFormData;
-
+  console.log(title.length > 0 && content.length > 0 && files.length > 0);
   return (
     <>
       <>
+        {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
         <Header>
           <HeaderWrap>
             <IconDiv>
@@ -47,7 +52,9 @@ const ProofForm = ({ ProofFormData }) => {
                 }}
               />
             </IconDiv>
-            <HeaderP onClick={submitHandler}>{submitButton}</HeaderP>
+            <HeaderP disabled={!(title.length > 0 && content.length > 0 && files.length > 0)} onClick={submitHandler}>
+              {submitButton}
+            </HeaderP>
           </HeaderWrap>
         </Header>
       </>
@@ -56,29 +63,37 @@ const ProofForm = ({ ProofFormData }) => {
           <AddPhotoWrap>
             <Stform encType="multipart/form-data">
               <Container>
-                <label htmlFor="file">
+                <label htmlFor={upLoading < 100 ? null : "file"}>
                   <StIcon>
                     <CameraIcon>
                       <CameraWh />
                     </CameraIcon>
                   </StIcon>
-                  <ImageLength>({previewImg.length}/5)</ImageLength>
+                  <ImageLength>{`(${previewImg.length}/5)`}</ImageLength>
                 </label>
                 <StImageInput multiple type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
               </Container>
             </Stform>
             {previewImg?.map((image, index) => {
               return (
-                <ImageContainer key={index}>
-                  <Container>
-                    <StButton onClick={() => deleteImageFile(image, index)}>
-                      <CancelIcon>{/* <Cancel/> */}</CancelIcon>
-                    </StButton>
-                    <Thumb src={image.imgUrl} alt="img" />
-                  </Container>
-                </ImageContainer>
+                <Container key={index}>
+                  <StButton onClick={() => deleteImageFile(image, index)}>
+                    <CancelIcon>{/* <Cancel/> */}</CancelIcon>
+                  </StButton>
+                  <Thumb src={image.imgUrl} alt="img" />
+                </Container>
               );
             })}
+
+            {upLoading < 100 ? (
+              <Container>
+                <LoadingWrap>
+                  <LoadingPosition>
+                    <ImageLoading />
+                  </LoadingPosition>
+                </LoadingWrap>
+              </Container>
+            ) : null}
           </AddPhotoWrap>
           <ErrorMessage>{isPhotoMessage}</ErrorMessage>
         </Test>
@@ -140,14 +155,25 @@ const Container = styled.div`
   margin: 9px;
 `;
 
-const Stform = styled.form`
+const LoadingWrap = styled.div`
   display: flex;
+  width: 100px;
+  height: 100px;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+`;
+const LoadingPosition = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+const Stform = styled.form`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
-
-const ImageContainer = styled.div``;
 
 const BottomWrap = styled.div`
   width: 100%;
@@ -222,10 +248,10 @@ const Thumb = styled.img`
   height: 100px;
 `;
 const HeaderWrap = styled.div`
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 48px;
   display: flex;
   justify-content: space-between;
@@ -241,12 +267,17 @@ const IconDiv = styled.div`
   height: 21px;
 `;
 
-const HeaderP = styled.p`
+const HeaderP = styled.button`
   cursor: pointer;
+  border: none;
+  background-color: transparent;
   font-weight: 600;
   font-size: 20px;
   letter-spacing: -0.03em;
   color: #222222;
+  :disabled{
+    color: #cdcdcd;
+  }
 `;
 
 const ErrorMessage = styled.div`

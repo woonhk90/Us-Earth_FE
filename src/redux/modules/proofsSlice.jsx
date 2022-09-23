@@ -96,7 +96,7 @@ export const getHeartCommentCnt = createAsyncThunk("proof/heartComment", async (
     return thunkAPI.rejectWithValue(error);
   }
 });
-/* ------------------------ paych heart ----------------------- */
+/* ------------------------ patch heart ----------------------- */
 export const patchHeartCnt = createAsyncThunk("proof/Heart", async (proofId, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");

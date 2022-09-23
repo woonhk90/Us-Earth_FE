@@ -25,10 +25,10 @@ const EarthLogin = () => {
 export default EarthLogin;
 
 const LoginBox = styled.div`
-  width:100%;
-  height:100%;
-  overflow:auto;
-  position:absolute;
-  top:48px;
-  left:0;
+height: 100%;
+width: 390px;
+overflow: auto;
+  @media (max-width: 540px) {
+    width: 100%;
+  }
 `;
