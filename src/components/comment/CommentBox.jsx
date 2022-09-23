@@ -156,10 +156,8 @@ const StHeader = styled.header`
 
 const CommentContainer = styled.div`
  width: 100%;
-  /* width: 100%;
-  position: relative;
-  bottom: 0px;*/
 `;
+
 const IconContainer = styled.div`
   ${flexRow}
   padding: 10px;

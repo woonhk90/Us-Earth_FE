@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import CommunityFormEdit from "../components/community/CommunityFormEdit";
 import CommunityFormTop from "../components/community/CommunityFormTop";
+import SeceletonFormEdit from "../components/community/SceletonFormEdit";
 import Header from "../components/Header";
 import Layout from "../components/layout/Layout";
 

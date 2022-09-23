@@ -60,6 +60,7 @@ export const patchCommunityDetail = createAsyncThunk("comment/patch", async (pay
     return data;
   } catch (err) {
     console.log(err);
+    console.log(err.response.data.message)
   }
 });
 

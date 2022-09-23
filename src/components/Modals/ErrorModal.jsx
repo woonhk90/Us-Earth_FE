@@ -2,14 +2,14 @@ import Cookies from "universal-cookie";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Route, Navigate, Routes, useNavigate } from "react-router-dom";
-import OkModal from "../components/Modals/OkModal";
+import OkModal from "./OkModal";
 import styled, { css } from "styled-components";
 const cookies = new Cookies();
 
-const ErrorModal = ({error}) => {
+const ErrorModal = ({ error }) => {
   const [okModal, setOkModal] = useState(false);
   const navigate = useNavigate();
-    
+
   const okModalOnOff = () => {
     setOkModal(!okModal);
     navigate("/login");

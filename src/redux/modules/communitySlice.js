@@ -211,14 +211,7 @@ export const communitySlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
       state.statusCode = Number(action.payload.errorCode);
-
     }
-
-
-
-
-
-
   },
 });
 
