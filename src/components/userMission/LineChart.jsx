@@ -1,37 +1,27 @@
 import React from "react";
 import dayjs from "dayjs";
-import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { getDailyMissionStats, getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
+import { getDailyMissionStats} from "../../redux/modules/userMissonSlice";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export const graphClickEvent = (event, array) => {
-  console.log("legend onClick", event);
-  console.log("legd item", array);
-};
 const LineChart = ({ startDate, endDate }) => {
   const dispatch = useDispatch();
   const [data, setData] = useState({
     labels: [],
-    datasets: [
-      {
-        label: "success",
-        data: [],
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-    ],
+    datasets: [],
   });
+
   const { periodMissionData } = useSelector((state) => state.userMission);
   const [weekMissionDate, setWeekMissionDate] = useState([]);
+
   useEffect(() => {
     weekMissionDataCheck();
-  }, [startDate, periodMissionData]);
+  }, [ periodMissionData]);
 
   let stats = [];
   let week = [];
@@ -66,24 +56,13 @@ const LineChart = ({ startDate, endDate }) => {
     responsive: true,
     plugins: {
       tooltip: {
-        backgroundColor:'rgba(206, 243, 119, 0.486)',
-        displayColors:false,
-        bodyColor:`#000000`,
-        titleColor:`#000000`,
-
-        // callbacks: {
-        //     label: function(context) {
-        //         let label = context.dataset.label || '';
-        //         console.log(context)
-        //         return label;
-        //     },
-        //   },
-        // family :"Noto Sans",
-        },
+        backgroundColor: "rgba(206, 243, 119, 0.486)",
+        displayColors: false,
+        bodyColor: `#000000`,
+        titleColor: `#000000`,
+      },
       legend: {
         display: false,
-        
-        
       },
       title: {
         display: false,
@@ -93,7 +72,7 @@ const LineChart = ({ startDate, endDate }) => {
       mode: "index",
       intersect: false,
     },
-    
+
     onClick: (event, array) => {
       let index = array[0].index;
       let day = weekMissionDate[index];
@@ -119,16 +98,15 @@ const LineChart = ({ startDate, endDate }) => {
           font: {
             size: 14,
           },
-          // color: green,
         },
         grid: {
-          display: false, //뒷배경 라인 없애기
+          display: false,
         },
       },
       x: {
-        display: false, //하단 라인을 없애기
+        display: false,
         ticks: {
-          display: false, //새로운tick을 만들었으니 기존의 tick을 제거
+          display: false,
         },
       },
 
@@ -139,15 +117,13 @@ const LineChart = ({ startDate, endDate }) => {
           font: {
             size: 14,
           },
-          
           stepSize: 1,
-          // color: green,
         },
-        
+
         min: 0,
         max: 6,
         grid: {
-          display: true, //뒷배경 라인 없애기
+          display: true,
         },
       },
       y: {

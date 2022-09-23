@@ -4,15 +4,12 @@ import Calendar from "react-calendar";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { flexBetween, flexColumn, flexRow } from "../../styles/Flex";
-// import calendarRightArrow from "../../assets/calendarRightArrow.svg";
 import { ReactComponent as CalendarRightArrow } from "../../assets/calendarRightArrow.svg";
 import { ReactComponent as CalendarLeftArrow } from "../../assets/calendarLeftArrow.svg";
-// import calendarLeftArrow from "../../assets/calendarLeftArrow.svg";
-import MyResponsiveLine from "./UserMissionWeekLine";
 import Button from "../elements/Button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getDailyMissionStats, getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
+import {  getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { colors } from "../../styles/color";
@@ -30,8 +27,8 @@ const UserMissionWeek = () => {
   const dispatch = useDispatch();
   const { periodMissionData, dailyMissionData } = useSelector((state) => state.userMission);
 
-  console.log("나", periodMissionData);
-  console.log(dailyMissionData);
+  console.log("기간조회", periodMissionData);
+  console.log("당일조회",dailyMissionData);
 
   useEffect(() => {
     if (cookies.get("mycookie") === undefined) {

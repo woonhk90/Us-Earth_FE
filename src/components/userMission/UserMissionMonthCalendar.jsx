@@ -15,7 +15,7 @@ import { colors } from "../../styles/color";
 
 const UserMissionMonthCalendar = () => {
   const dispatch = useDispatch();
-  const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
+  const {  periodMissionData } = useSelector((state) => state.userMission);
 
 
   useEffect(() => {

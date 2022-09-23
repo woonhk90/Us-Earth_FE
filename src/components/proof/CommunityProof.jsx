@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import { Navigation, Pagination, Scrollbar } from "swiper";
 import EditModal from "../Modals/EditModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -76,8 +76,7 @@ if(error){
     // 
   )
 }
-
-  return (
+return (
     <>
     {modal && <ConfirmModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} modalOnOff={modalOnOff}/>}
       <FirstWrap>

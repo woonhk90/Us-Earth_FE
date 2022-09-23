@@ -1,5 +1,4 @@
 import React from "react";
-import Community from "../components/Community";
 import Layout from "../components/layout/Layout";
 import styled from "styled-components";
 import Footer from "../components/Footer";
@@ -7,7 +6,6 @@ import Header from "../components/Header";
 import CommunityBottom from "../components/CommunityBottom";
 import UserMissionMonth from "../components/userMission/UserMissionMonth";
 import UserMissionTop from "../components/userMission/UserMissionTop";
-import { flexColumn } from "../styles/Flex";
 
 const EarthMyPageMissonMonth = () => {
   return (

@@ -130,7 +130,7 @@ const CommunityDetail = () => {
             <CertifyContent>
               {certify.map((v) => (
                 <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}>
-                  <img src={v.img[0].imgUrl} alt="proofImg" />
+                  <img src={v.img[0]?.imgUrl} alt="proofImg" />
                 </CertifyItem>
               ))}
             </CertifyContent>

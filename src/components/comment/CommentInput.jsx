@@ -17,8 +17,9 @@ const CommentInput = ({ userToken }) => {
   const inputRef = useRef();
   const param = useParams();
   const [content, commentOnChange, commentReset] = useInput("");
-  const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
+  const { dateStatus} = useSelector((state) => state.community.communityDetail);
   const [inputOn, setInputOn] = useState(false);
+  const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
 
   const textRef = useRef();
   const handleResizeHeight = useCallback(() => {
@@ -46,6 +47,7 @@ const CommentInput = ({ userToken }) => {
   const okModalOnOff = () => {
     setOkModal(!okModal);
   };
+
 
   // user check
   const canWriteCheck = () => {
@@ -170,6 +172,7 @@ const CommentInput = ({ userToken }) => {
               </>
             )}
             <CommentTextarea
+            disabled={!participant || dateStatus === "end"}
               img={previewImg}
               rows="1"
               inputOn={inputOn}

@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
 import { certifyReset } from "../../redux/modules/communitySlice";
 import isLogin from "../../lib/isLogin";
-import IsLoginModal from "../../pages/IsLoginModal";
+import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
 
 const CommunityProofForm = () => {
