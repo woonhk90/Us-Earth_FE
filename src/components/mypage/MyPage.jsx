@@ -26,11 +26,11 @@ const MyPage = () => {
               <div>{userInfo?.nickname}</div>
               <div>LV.{userInfo?.level}</div>
             </MyPageInfoBox>
-            <MyPageProFile><img src={userInfo?.profileImage} alt='profileImage' /></MyPageProFile>
+            <MyPageProFile><img src={userInfo?.profileImage} alt='profileImage' referrerPolicy="no-referrer" /></MyPageProFile>
           </MyPageInfo>
 
 
-          <MyPageTodayMission userInfo={userInfo}/>
+          <MyPageTodayMission userInfo={userInfo} />
 
 
           <MyPageMissionList>
