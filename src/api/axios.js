@@ -48,19 +48,20 @@ tokenInstance.interceptors.response.use(
 
       // ACCESSTOKEN FAILED : 401
       // REFRESHTOKEN FAILED : ???
-      if (message === "Network Error" || response.data.errorCode === "401") {
+      if (message === "만료된 토큰입니다." || response.data.code === "401") {
         const refreshToken = getCookie("refreshToken");
         /* GET : NEW ACCESSTOKEN ---------------------------------------------------- */
         try {
           const response = await axios({
             method: "get",
-            url: `${process.env.REACT_APP_API_URL}/user/reissue`,
+            url: `${process.env.REACT_APP_API_URL_NOT_AIP}/user/reissue`,
             headers: {
               "Content-Type": "application/json",
               refreshToken: refreshToken,
             },
           });
           /* CHANGE ACCESSTOKEN ------------------------------------------------------- */
+          console.log("RESPONSE=>",response);
           console.log(
             "NEW ACCESSTOKEN AUTHORIZATION",
             response.headers.authorization

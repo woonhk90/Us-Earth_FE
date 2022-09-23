@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { __getPopularGroupItemList } from "../../redux/modules/communitySlice";
-// import { getPopularGroupItemList } from "../../api/communityApi";
-// import { instance } from "../../api/axios";
+import { getPopularGroupItemList } from "../../api/communityApi";
+import { instance } from "../../api/axios";
 
 const PopularGroupItemList = () => {
   const dispatch = useDispatch();
@@ -15,16 +15,23 @@ const PopularGroupItemList = () => {
     dispatch(__getPopularGroupItemList());
   }, [])
 
+
   /*
   const [list, setList] = React.useState([]);
-  const getPopularGroupItemList = async () => {
-    const response = await instance.get("/community/active");
-    setList(response.data);
-  }
+  // const getPopularGroupItemList = async () => {
+  //   const response = await instance.get("/community/active");
+    // setList(response.data);
+  // }
   React.useEffect(() => {
-    getPopularGroupItemList();
+    const response = getPopularGroupItemList();
+    setList(response);
   }, [])
-  */
+  // console.log(list);
+  list.then((value) => {
+    console.log(value);
+    });
+    */
+
 
   return (
     <>
