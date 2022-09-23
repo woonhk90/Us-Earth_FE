@@ -4,12 +4,12 @@ import { instance } from "./axios";
 //     const response = await instance.get("/community/active");
 //     console.log(response);
 //     try {
-        
+
 //     } catch (error) {
-        
+
 //     }
 
 //     // response.then((value) => {
 //     //     return value;
 //     // });
-// } 
+// }

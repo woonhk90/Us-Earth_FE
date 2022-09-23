@@ -52,40 +52,37 @@ const Info = () => {
         </Container>
       </InfoWrap>
     </>
-  )
-}
+  );
+};
 export default Info;
 
-const InfoWrap = styled.div`width:100%`;
-const Container = styled.div`width:100%`;
+const InfoWrap = styled.div`
+  width: 100%;
+`;
+const Container = styled.div`
+  width: 100%;
+`;
 const InfoTop = styled.div`
-  width:100%;
-  padding:40px 16px;
-  box-sizing:border-box;
+  width: 100%;
+  padding: 40px 16px;
+  box-sizing: border-box;
 `;
 const TopTitle = styled.div`
-  font:600 26px/1 'Noto Sans','Arial','sans-serif';
-  padding:0 0 22px;
+  font: 600 26px/1 "Noto Sans","sans-serif";
+  padding: 0 0 22px;
 `;
-
-
-
-
 
 
 
 const InfoBottom = styled.div`
-  width:100%;
-  padding:0 16px;
-  box-sizing:border-box;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
 `;
 const BottomTitle = styled.div`
-  font:600 26px/1 'Noto Sans','Arial','sans-serif';
-  padding:0 0 22px;
+  font: 600 26px/1 "Noto Sans", "sans-serif";
+  padding: 0 0 22px;
 `;
-
-
-
 
 const StGoBack = styled.div`
   position: fixed;
@@ -95,5 +92,5 @@ const StGoBack = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   width: 50px;
   height: 50px;
-  border:2px solid red;
+  border: 2px solid red;
 `;
