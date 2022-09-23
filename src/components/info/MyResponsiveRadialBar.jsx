@@ -37,5 +37,5 @@ export default MyResponsiveRadialBar;
 
 // const ResponsiveRadialBar = styled(ResponsiveRadialBar)``;
 const ChartBox = styled.div`
-font:700 100px/1 'Noto sans','Arial','sans-serif';
+  font: 700 100px/1 "Noto sans","sans-serif";
 `;

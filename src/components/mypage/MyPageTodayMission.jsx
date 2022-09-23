@@ -1,10 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 import icons from "../../assets/index";
 import { useDispatch, useSelector } from "react-redux";
-import { __getTodayMission, __updateMissionFlag } from '../../redux/modules/mypageSlice';
-import { colors } from '../../styles/color';
-
+import { __getTodayMission, __updateMissionFlag } from "../../redux/modules/mypageSlice";
+import { colors } from "../../styles/color";
 
 const MyPageTodayMission = ({ userInfo }) => {
   const { level_01, level_02, level_03, level_04, level_05 } = icons;
@@ -21,7 +20,6 @@ const MyPageTodayMission = ({ userInfo }) => {
     imgUrl = level_05;
   }
 
-
   /* --------------------------- 나무 성장모습 & 미션 리스트 토글 -------------------------- */
   const [missionFlag, setMissionFlag] = React.useState(false);
   const dispatch = useDispatch();
@@ -33,15 +31,15 @@ const MyPageTodayMission = ({ userInfo }) => {
   const onClickTodayMission = () => {
     dispatch(__getTodayMission());
     setMissionFlag(!missionFlag);
-  }
+  };
   React.useEffect(() => {
     dispatch(__getTodayMission());
-  }, [])
+  }, []);
 
   /* -------------------------------- 일일 미션 누르면 ------------------------------- */
   const missionFlagChange = (key) => {
     dispatch(__updateMissionFlag({ missionName: key }));
-  }
+  };
 
   return (
     <>
@@ -76,107 +74,125 @@ const MyPageTodayMission = ({ userInfo }) => {
 export default MyPageTodayMission;
 
 const MyPageMission = styled.div`
-  width:100%;
-  min-height:50vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:space-between;
-  padding:20px 15px 0;
-  box-sizing:border-box;
+  width: 100%;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 15px 0;
+  box-sizing: border-box;
 
   background: url(${(props) => props.imgUrl}) no-repeat 50% 80%;
-  background-size:cover;
+  background-size: cover;
 `;
 const MissionTop = styled.div`
-  width:100%;
-  background-color:#fff;
-  border-radius:12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:25px 15px;
-  box-sizing:border-box;
-  p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
-  p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
+  width: 100%;
+  background-color: #fff;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 15px;
+  box-sizing: border-box;
+  p:nth-child(1) {
+    font: 600 24px/1 "Noto Sans","sans-serif";
+  }
+  p:nth-child(2) {
+    font: 500 20px/1 "Noto Sans", "sans-serif";
+    color: #9b9b9b;
+  }
   @media (max-width: 370px) {
-    p:nth-child(1){font:600 23px/1 'Noto Sans','Arial','sans-serif';}
-    p:nth-child(2){font:500 19px/1 'Noto Sans','Arial','sans-serif';}
+    p:nth-child(1) {
+      font: 600 23px/1 "Noto Sans",  "sans-serif";
+    }
+    p:nth-child(2) {
+      font: 500 19px/1 "Noto Sans", "sans-serif";
+    }
   }
 `;
 const MissionBottom = styled.div`
-  width:100%;
-  padding:0 35px 8px;
-  box-sizing:border-box;
-  position:relative;
-  p{
-    position:absolute;
-    top:0;left:50%;
+  width: 100%;
+  padding: 0 35px 8px;
+  box-sizing: border-box;
+  position: relative;
+  p {
+    position: absolute;
+    top: 0;
+    left: 50%;
     transform: translate(-50%, 0);
     letter-spacing: 5px;
-    color:${colors.white};
+    color: ${colors.white};
   }
-  progress{
+  progress {
     appearance: none;
-    width:100%;
-    height:18px;
+    width: 100%;
+    height: 18px;
   }
   progress::-webkit-progress-bar {
-    background:rgba(255,255,255,0.25);
-    border-radius:10px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
   }
   progress::-webkit-progress-value {
-    border-radius:10px;
-    background:linear-gradient(to right, ${colors.green89}, ${colors.green28});
+    border-radius: 10px;
+    background: linear-gradient(to right, ${colors.green89}, ${colors.green28});
   }
 `;
 
 const TodayMission = styled.div`
-  width:100%;
-  background-color:#fff;
-  border-radius:12px;
-  padding:25px 15px 15px;
-  box-sizing:border-box;
-  margin-bottom:20px;
-  `;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 25px 15px 15px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+`;
 const TodayMissionBox = styled.div`
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 0 20px 0;
-    box-sizing:border-box;
-    p:nth-child(1){font:600 24px/1 'Noto Sans','Arial','sans-serif';}
-    p:nth-child(2){font:500 20px/1 'Noto Sans','Arial','sans-serif';color: #9b9b9b;}
-    @media (max-width: 370px) {
-      p:nth-child(1){font:600 23px/1 'Noto Sans','Arial','sans-serif';}
-      p:nth-child(2){font:500 19px/1 'Noto Sans','Arial','sans-serif';}
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 20px 0;
+  box-sizing: border-box;
+  p:nth-child(1) {
+    font: 600 24px/1 "Noto Sans", "sans-serif";
+  }
+  p:nth-child(2) {
+    font: 500 20px/1 "Noto Sans","sans-serif";
+    color: #9b9b9b;
+  }
+  @media (max-width: 370px) {
+    p:nth-child(1) {
+      font: 600 23px/1 "Noto Sans", "sans-serif";
+    }
+    p:nth-child(2) {
+      font: 500 19px/1 "Noto Sans", "sans-serif";
+    }
   }
 `;
 const MissionBox = styled.div`
-  display:flex;
+  display: flex;
   flex-direction: column;
-  justify-content:center;
-  align-items:center;
-  gap:5px;
-  text-align:center;
-  `;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+`;
 
 const MissionItem = styled.span`
-  border-radius:50px;
-  display:inline-block;
-  width:100%;
-  color:#2c2c2c;
-  padding:18px 0;
-  box-sizing:border-box;
-  color:${(props) => props.background ? `${colors.grayCF}` : `${colors.white}`};
-  background-color:${(props) => props.background ? `${colors.grayF9}` : `${colors.green77}`};
-  
+  border-radius: 50px;
+  display: inline-block;
+  width: 100%;
+  color: #2c2c2c;
+  padding: 18px 0;
+  box-sizing: border-box;
+  color: ${(props) => (props.background ? `${colors.grayCF}` : `${colors.white}`)};
+  background-color: ${(props) => (props.background ? `${colors.grayF9}` : `${colors.green77}`)};
 `;
 const ItemTitle = styled.span`
-  display:block;
-  text-decoration:${(props) => props.background ? 'line-through' : 'blue'};
-  font:500 18px/1 'Noto Sans','Arial','sans-serif';
+  display: block;
+  text-decoration: ${(props) => (props.background ? "line-through" : "blue")};
+  font: 500 18px/1 "Noto Sans", "sans-serif";
   @media (max-width: 370px) {
-    font:500 16px/1 'Noto Sans','Arial','sans-serif';
+    font: 500 16px/1 "Noto Sans", "sans-serif";
   }
 `;

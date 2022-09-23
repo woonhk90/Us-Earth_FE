@@ -47,10 +47,9 @@ const ModalBody = styled.div`
   border-radius: 12px;
 `;
 
-
 const AttendWrap = styled.div``;
 const AttendTitle = styled.p`
-  font: 22px/30px "arial", "sans-serif";
+  font: 22px/30px "Noto Sans KR", "sans-serif";
   text-align: center;
   padding: 50px 0;
 `;
@@ -63,6 +62,6 @@ const AttendBox = styled.div`
 `;
 const AttendItem = styled.div`
   width: 50%;
-  font: 600 22px/30px "arial", "sans-serif";
+  font: 600 22px/30px "Noto Sans KR", "sans-serif";
   padding: 19px 0;
 `;

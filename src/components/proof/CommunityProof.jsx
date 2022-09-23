@@ -23,7 +23,7 @@ const CommunityProof = () => {
   const param = useParams();
   const [modalOpen, setModalOpen] = useState(false);
   const { proofs,isLoading, error } = useSelector((state) => state.proofs);
-
+console.log(proofs,"인증글")
   useEffect(() => {
     dispatch(getProofs(param.proofId));
 

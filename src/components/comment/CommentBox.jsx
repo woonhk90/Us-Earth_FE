@@ -9,7 +9,7 @@ import CommentInput from "./CommentInput";
 import CommentInputEdit from "./CommentInputEdit";
 import { commentEditChange } from "../../redux/modules/commentsSlice";
 import ConfirmModal from "../Modals/ConfirmModal";
-import { getHeartCommentCnt, patchHeartCnt } from "../../redux/modules/proofsSlice";
+import { getHeartCommentCnt, patchHeartCnt } from "../../redux/modules/heartCommentSlice";
 import { ReactComponent as Heart } from "../../assets/heart.svg";
 import { ReactComponent as HeartGy } from "../../assets/heartGy.svg";
 import { ReactComponent as CommentIcon } from "../../assets/commentIcon.svg";
@@ -20,12 +20,14 @@ const CommentBox = () => {
   const cookies = new Cookies();
   const param = useParams();
   const dispatch = useDispatch();
-  const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
-  const { userHeart, heartCommentCnt } = useSelector((state) => state.proofs);
+  const { dateStatus } = useSelector((state) => state.community.communityDetail);
+  const { heartCommentCnt } = useSelector((state) => state.heartComment);
+  const { userHeart } = useSelector((state) => state.proofs);
   const { comments, commentEdit } = useSelector((state) => state.comments);
-  
-  const data = useSelector((state) => state.proofs);
-  console.log(data)
+  console.log(heartCommentCnt);
+  const participant = heartCommentCnt.participant;
+  const {proofs} = useSelector((state) => state.proofs);
+  console.log(userHeart);
   const editMode = commentEdit.editMode;
 
   const [userToken, setUserToken] = useState(false);
@@ -84,6 +86,7 @@ const CommentBox = () => {
   const loginModalOnOff = () => {
     setLoginModal(!loginModal);
   };
+
   const loginCheck = () => {
     if (!userToken) setLoginModal(true);
   };
@@ -94,23 +97,9 @@ const CommentBox = () => {
       <IconContainer>
         <IconWrap>
           <div onClick={onClickHeart}>
-            {userHeart ? (
-              <>
-                <HeartButtonWrap isHeart={!participant || !userToken}>
-                  <BottomIcon>
-                    <HeartGy />
-                  </BottomIcon>
-                </HeartButtonWrap>
-              </>
-            ) : (
-              <>
-                <HeartButtonWrap isHeart={!participant || !userToken}>
-                  <BottomIcon>
-                    <Heart />
-                  </BottomIcon>
-                </HeartButtonWrap>
-              </>
-            )}
+            <HeartButtonWrap isHeart={!participant || !userToken}>
+              <BottomIcon>{userHeart ? <HeartGy /> : <Heart />}</BottomIcon>
+            </HeartButtonWrap>
           </div>
           <IconP>{heartCommentCnt.heartCnt}</IconP>
         </IconWrap>
@@ -127,10 +116,9 @@ const CommentBox = () => {
           <StHeader>
             <HeaderP>댓글 {comments.commentResponseDtoList?.length}</HeaderP>
           </StHeader>
-            <Comment userToken={userToken} />
+          <Comment userToken={userToken} />
           <CommentContainer>
-          <CommentContainer onClick={loginCheck}>
-          </CommentContainer>
+            <CommentContainer onClick={loginCheck}></CommentContainer>
             {editMode ? <CommentInputEdit userToken={userToken} /> : <CommentInput userToken={userToken} />}
           </CommentContainer>
         </ButtonInModalWrap>
@@ -151,11 +139,10 @@ const StHeader = styled.header`
   width: 100%;
   padding: 28px 0 10px 28px;
   font-weight: 800;
-  
 `;
 
 const CommentContainer = styled.div`
- width: 100%;
+  width: 100%;
 `;
 
 const IconContainer = styled.div`
@@ -163,7 +150,6 @@ const IconContainer = styled.div`
   padding: 10px;
   gap: 10px;
 `;
-
 
 const BottomIcon = styled.div`
   width: 23px;

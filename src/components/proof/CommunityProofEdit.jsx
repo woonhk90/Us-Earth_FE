@@ -34,6 +34,9 @@ const CommunityProofEdit = () => {
         },
       });
       console.log(data);
+      if(!data.writer){
+        navigate(`/community/${param.communityId}/proof/${param.proofId}`)
+      }
       const { img, title, content } = data;
       img.map((imgdata) => {
         setPreviewImg((previewImg) => [

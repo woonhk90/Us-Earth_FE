@@ -68,7 +68,6 @@ const PopularGroupItemList = () => {
               <ItemTitle>{v.title}</ItemTitle>
             </CommunityItem>
           ))}
-
         </CommunityBox>
       </CommunityGroup>
 
@@ -85,7 +84,7 @@ const CommunityGroupTop = styled.div`
   padding: 0 15px;
 `;
 const CommunityGroupTitle = styled.span`
-  font: bold 26px/50px 'Noto sans', "Arial", "sans-serif";
+  font: bold 26px/50px "Noto Sans KR", "sans-serif";
 `;
 const CommunityBox = styled.div`
   display: grid;
@@ -105,7 +104,7 @@ const CommunityItem = styled.div`
 `;
 const ItemImg = styled.div`
   width: 100%;
-  height:215px;
+  height: 215px;
   @media (max-width: 370px) {
     height: 175px;
   }
@@ -114,43 +113,43 @@ const ItemImg = styled.div`
   background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg}) no-repeat center center;
   background-size: cover;
   color: #fff;
-  margin-bottom:10px;
-  svg{
-    display:inline-block;
-    position:absolute;
-    top:5px;right:5px;
+  margin-bottom: 10px;
+  svg {
+    display: inline-block;
+    position: absolute;
+    top: 5px;
+    right: 5px;
   }
-  div{
-    position:absolute;
-    width:100%;
-    bottom:0;
-    padding:6px;
-    box-sizing:border-box;
+  div {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    padding: 6px;
+    box-sizing: border-box;
 
-    text-align:center;
-    p{
-      text-align:right;
+    text-align: center;
+    p {
+      text-align: right;
     }
 
-    progress{
+    progress {
       appearance: none;
-      width:100%;
-      height:15px;
+      width: 100%;
+      height: 15px;
     }
     progress::-webkit-progress-bar {
-      background:#fff;
-      border-radius:10px;
+      background: #fff;
+      border-radius: 10px;
       box-shadow: 0px 0px 1px 0px gray;
-      
     }
     progress::-webkit-progress-value {
-      border-radius:10px;
-      background: linear-gradient(to right, #AEDC89, #80BC28);
+      border-radius: 10px;
+      background: linear-gradient(to right, #aedc89, #80bc28);
     }
   }
 `;
 const ItemTitle = styled.div`
-  font: bold 20px/1 "Arial", "sans-serif";
+  font: bold 20px/1 "Noto Sans KR", "sans-serif";
   /* 말줄임 */
   /* white-space:nowrap; */
   overflow: hidden;
