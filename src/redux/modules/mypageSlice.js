@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { instance, tokenInstance } from "../../api/axios";
 
 const cookies = new Cookies();
 const API_URL = process.env.REACT_APP_API_URL;
@@ -9,13 +10,16 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const __getMyInfo = createAsyncThunk("usearth/__getMyInfo", async (payload, thunkAPI) => {
   try {
     console.log('__getMyInfo=>', payload);
-    const authorization_token = cookies.get("mycookie");
-    const data = await axios.get(`${API_URL}/mypage`, {
-      headers: {
-        Authorization: authorization_token
-      },
-    });
-    console.log('MHPAGE=>', data);
+    // const authorization_token = cookies.get("mycookie");
+    // const data = await tokenInstance.get(`${API_URL}/mypage`, {
+    //   headers: {
+    //     Authorization: authorization_token
+    //   },
+    // });
+    // console.log('MHPAGE=>', data);
+
+    const data = await tokenInstance.get('/mypage');
+    console.log("DATA=>", data);
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
@@ -90,12 +94,16 @@ export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubm
 export const __getTodayMission = createAsyncThunk("usearth/__getTodayMission", async (payload, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    const data = await axios.get(`${API_URL}/missions`, {
-      headers: {
-        Authorization: authorization_token
-      },
-    });
+    // const data = await tokenInstance.get(`${API_URL}/missions`, {
+    //   headers: {
+    //     Authorization: authorization_token
+    //   },
+    // });
+    // console.log("DATA=>", data);
+
+    const data = await tokenInstance.get('/missions');
     console.log("DATA=>", data);
+
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("오늘의 미션 정보를 불러올 수 없습니다.");

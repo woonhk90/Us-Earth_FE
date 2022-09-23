@@ -13,7 +13,7 @@ export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (
     if (payload.page === '0' || payload.page === 0) {
       thunkAPI.dispatch(clearVal());
     }
-    const data = await axios.get(`${API_URL}/community?page=${payload.page}&size=10`);
+    const data = await instance.get(`${API_URL}/community?page=${payload.page}&size=10`);
     console.log('전체커뮤니티=>', data);
 
     /* ---------------------------- 해당 페이지에 값이 있는지 확인 --------------------------- */
