@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import LoadingMain from "../../assets/loading-main.gif";
+import { flexRow } from "../../styles/Flex";
 
 const Layout = (props) => {
   return (
@@ -33,17 +34,19 @@ const ChildrenWrap = styled.div`
   background-color: white;
   position: relative;
   height: 100%;
-  width: 390px;
   display: flex;
   flex-direction: column;
   box-shadow: 1px 3px 5px 3px #cecece33;
+  width: 390px;
   @media (max-width: 540px) {
     width: 100%;
   }
 `;
 
 const MainLoading = styled.div`
-  width: 250px;
+/* position: relative; */
+width: 250px;
+  max-width: 250px;
   height: 250px;  
   margin-right: 5%;
   @media (max-width: 540px) {

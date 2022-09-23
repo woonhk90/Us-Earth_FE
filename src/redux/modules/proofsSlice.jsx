@@ -44,7 +44,7 @@ export const getProofs = createAsyncThunk("proof/get", async (proofId, thunkAPI)
     console.log("갯요청다시~");
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    return thunkAPI.rejected(error);
+    return thunkAPI.rejectWithValue(error.response.data.message);
   }
 });
 
@@ -61,8 +61,9 @@ export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkA
     });
     console.log(data);
     return data;
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error.response.data.msg);
+    return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 });
 
@@ -77,7 +78,7 @@ export const deleteProof = createAsyncThunk("proof/delete", async (proofId, thun
     });
     console.log(data);
   } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+    return thunkAPI.rejectWithValue(error.response.data.message);
   }
 });
 
@@ -93,7 +94,7 @@ export const getHeartCommentCnt = createAsyncThunk("proof/heartComment", async (
     console.log("하트댓글갯수", data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+    return thunkAPI.rejectWithValue(error.response.data.message);
   }
 });
 /* ------------------------ patch heart ----------------------- */
@@ -110,7 +111,7 @@ export const patchHeartCnt = createAsyncThunk("proof/Heart", async (proofId, thu
     thunkAPI.dispatch(getHeartCommentCnt(proofId));
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+    return thunkAPI.rejectWithValue(error.response.data.message);
   }
 });
 // export const postCommunityFormData = async (formData) => {

@@ -27,18 +27,19 @@ export default ConfirmModal;
 
 const ModalWrap = styled.div`
 position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  padding: 0 15px;
-  box-sizing: border-box;
+bottom: 0;
+left: 0;
+width: 100%;
+height: 100vh;
+background-color: rgba(0, 0, 0, 0.4);
+display: flex;
+justify-content: center;
+align-items: center;
+z-index: 999;
+padding: 0 15px;
+box-sizing: border-box;
 `;
+
 const ModalBody = styled.div`
   width: 100%;
 

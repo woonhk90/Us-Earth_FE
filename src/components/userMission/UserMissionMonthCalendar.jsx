@@ -4,7 +4,6 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css"; // css import
 import dayjs from "dayjs";
 import { useState } from "react";
-import { flexRow } from "../../styles/Flex";
 import { useDispatch, useSelector } from "react-redux";
 import { getDailyMissionStats, getOnClickDate, getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
 import calendarRightDoubleArrow from "../../assets/calendarRightDoubleArrow.svg";
@@ -68,7 +67,7 @@ const UserMissionMonthCalendar = () => {
           tileContent={({ date, view }) => {
             let html = [];
             periodMissionData?.map((item, index) => {
-              if (item.createdAt === dayjs(date).format("YYYY-MM-DD")) {
+              if (item.clearTime === dayjs(date).format("YYYY-MM-DD")) {
                 [...Array(item.count)].map((e, i) => html.push(<div className="dot" key={i}></div>));
               }
             });

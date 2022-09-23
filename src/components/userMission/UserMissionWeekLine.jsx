@@ -11,16 +11,16 @@ const MyResponsiveLine = ({ startDate, endDate }) => {
   const dispatch = useDispatch();
   const { periodMissionData, dailyMissionData } = useSelector((state) => state.userMission);
   const [weekMissionData, setWeekMissionData] = useState([]);
-
+console.log(periodMissionData)
   useEffect(() => {
     weekMissionDataCheck();
-  }, [startDate, periodMissionData]);
+  }, [startDate]);
 
   let arry = [];
   const weekMissionDataCheck = () => {
     for (let i = 0; i < 7; i++) {
       console.log("추가", i);
-      let finding = periodMissionData.find((item) => item.createdAt === dayjs(startDate).add(i, "day").format("YYYY-MM-DD"));
+      let finding = periodMissionData.find((item) => item.clearTime === dayjs(startDate).add(i, "day").format("YYYY-MM-DD"));
       if (finding === undefined) finding = { count: "" };
       console.log(finding);
       arry.push({

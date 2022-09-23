@@ -46,8 +46,19 @@ const Login = () => {
 
   return (
     <>
-      <Layout>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</Layout>
+      <Layout>
+        <CommunityBox>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</CommunityBox>
+      </Layout>
     </>
   );
 };
 export default Login;
+
+const CommunityBox = styled.div`
+  height: 100%;
+  width: 390px;
+  overflow: auto;
+  @media (max-width: 540px) {
+    width: 100%;
+  }
+`;

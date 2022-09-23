@@ -16,7 +16,9 @@ import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../../pages/IsLoginModal";
 import imageCompression from "browser-image-compression";
 import ImageLoading from "../etc/ImageLoading";
-
+import Loading from "../etc/Loading";
+import ErrorModal from "../Modals/ErrorModal";
+import SeceletonFormEdit from "./SceletonFormEdit";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -27,8 +29,13 @@ const CommunityFormEdit = () => {
   const param = useParams();
 
   /* -------------------------------- axios get ------------------------------- */
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const getCommunityDetail = async (communityId) => {
     try {
+      setError(null);
+      setIsLoading(true);
       const authorization_token = cookies.get("mycookie");
       const { data } = await axios.get(`${API_URL}/community/${communityId}`, {
         headers: {
@@ -36,6 +43,7 @@ const CommunityFormEdit = () => {
         },
       });
       console.log(data);
+      if (!data.writer) navigate("/community");
       setSecret(data.secret);
       setPassword(data.password);
       setForm({
@@ -53,15 +61,18 @@ const CommunityFormEdit = () => {
       setPreviewImg([data.img]);
       setIsPassword(data.secret);
     } catch (error) {
-      return error;
+      console.log(error);
+      setError(error.response.data.message);
     }
+    setIsLoading(false);
   };
+
+
 
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
   const [secret, setSecret] = useState(false);
-  const [files, setFiles] = useState([]);
   const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmit, setForm] = useInputs({
     limitScore: "",
     limitParticipants: "",
@@ -75,13 +86,6 @@ const CommunityFormEdit = () => {
   const inputValid = Object.values(isForm);
   const result = inputValid.find((word) => word === false);
   console.log(inputData);
-  useEffect(() => {
-    getCommunityDetail(param.id);
-    return () => {
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
-      inputReset();
-    };
-  }, []);
 
   /* ------------------------------ photo upload ------------------------------ */
   const [imageFile, setImageFile] = useState([]);
@@ -133,6 +137,29 @@ const CommunityFormEdit = () => {
     setDeleteImage(true);
   };
 
+  useEffect(() => {
+    getCommunityDetail(param.id);
+    return () => {
+      imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
+      inputReset();
+    };
+  }, []);
+
+  if(isLoading){
+    return (
+      <>
+      <SeceletonFormEdit/>
+    </>
+    )
+  }
+
+  // setError(error.response.data.message);
+if(error){
+  return (
+    <ErrorModal error={error}  />
+  )
+}
+
   /* --------------------------- password validation -------------------------- */
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
@@ -145,7 +172,7 @@ const CommunityFormEdit = () => {
       setPasswordMessage("");
       setIsPassword(true);
     }
-  }
+  };
 
   /* -------------------------- secret switch button -------------------------- */
   const secretSwitchButtonHandler = () => {
@@ -171,7 +198,7 @@ const CommunityFormEdit = () => {
       endDate: end,
       delete: deleteImage,
     };
-    console.log(dataSet)
+    console.log(dataSet);
     formData.append("multipartFile", imageFile);
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     dispatch(patchCommunityDetail({ communityId: param.id, formData }));
@@ -186,8 +213,7 @@ const CommunityFormEdit = () => {
           <ImageForm encType="multipart/form-data">
             <label htmlFor={upLoading < 100 ? null : "file"}>
               <ImageIcon>
-                
-              {upLoading < 100 ? (
+                {upLoading < 100 ? (
                   <Container>
                     <LoadingWrap>
                       <LoadingPosition>
@@ -202,10 +228,15 @@ const CommunityFormEdit = () => {
                 </BottonTextWrap>
               </ImageIcon>
             </label>
-            <ImageInput type="file" id="file" accept="image/*" onChange={(e) => {
+            <ImageInput
+              type="file"
+              id="file"
+              accept="image/*"
+              onChange={(e) => {
                 addImageFile(e);
                 e.target.value = "";
-              }} />
+              }}
+            />
           </ImageForm>
           <TextWrap>
             <DeleteImage onClick={OnClickDeleteImage}>기본 이미지로 변경</DeleteImage>
@@ -256,7 +287,7 @@ const CommunityFormEdit = () => {
           onChange={inputOnChangeHandler}
         ></Input>
         <P>목표달성갯수*</P>
-        <Input inputype="basic" maxLength="3" type="tel"  name="limitScore" value={limitScore} onChange={inputOnChangeHandler}></Input>
+        <Input inputype="basic" maxLength="3" type="tel" name="limitScore" value={limitScore} onChange={inputOnChangeHandler}></Input>
         <P>그룹소개*</P>
         <Textarea
           placeholder="소개글을 입력해 주세요"
@@ -299,7 +330,7 @@ const CommunityFormEdit = () => {
 export default CommunityFormEdit;
 
 const CommunityFormWrap = styled.div`
-margin: 53px 16px 60px 16px;
+  margin: 53px 16px 60px 16px;
 `;
 
 /* ------------------------------ switch button ----------------------------- */
@@ -365,11 +396,11 @@ const ImageBoxWrap = styled.div`
 const ErrorMessage = styled.p`
   position: absolute;
   bottom: 3px;
-font-weight: 200;
-font-size: 14px;
-line-height: 19px;
-letter-spacing: -0.02em;
-color: #FF0000;
+  font-weight: 200;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #ff0000;
 `;
 const TextWrap = styled.div`
   position: relative;
@@ -380,12 +411,12 @@ const TextWrap = styled.div`
   align-items: center;
 `;
 const ImageForm = styled.form`
-width: 206px;
-height: 206px;
-justify-content: center;
-align-items: center;
-display: flex;
-margin-bottom: 12px;
+  width: 206px;
+  height: 206px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-bottom: 12px;
 `;
 
 const ImageInput = styled.input`
@@ -450,10 +481,10 @@ const BottonTextWrap = styled.div`
 `;
 
 const BottomText = styled.p`
-width: 100%;
-font-size: 20px;
-font-weight: 500;
-letter-spacing: -0.03em;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
 `;
 
 const DeleteImage = styled.button`
@@ -495,9 +526,9 @@ const LoadingPosition = styled.div`
 `;
 /* ------------------------------ bottom button ----------------------------- */
 const BottomWrap = styled.div`
-position: absolute;
-bottom:0;
-height: 56px;
+  position: absolute;
+  bottom: 0;
+  height: 56px;
   width: 100%;
   display: flex;
   text-align: center;
@@ -524,7 +555,6 @@ const P = styled.p`
   letter-spacing: -0.03em;
   margin-top: 26px;
 `;
-
 
 const DateP = styled.p`
   box-sizing: content-box;
