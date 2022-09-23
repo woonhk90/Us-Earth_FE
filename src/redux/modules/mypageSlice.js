@@ -1,24 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import Cookies from "universal-cookie";
-import { instance, tokenInstance } from "../../api/axios";
+import { tokenInstance } from "../../api/axios";
 
-const cookies = new Cookies();
-const API_URL = process.env.REACT_APP_API_URL;
 
 /* -------------------------------- 내 정보 가져오기 ------------------------------- */
 export const __getMyInfo = createAsyncThunk("usearth/__getMyInfo", async (payload, thunkAPI) => {
   try {
-    console.log('__getMyInfo=>', payload);
-    // const authorization_token = cookies.get("mycookie");
-    // const data = await tokenInstance.get(`${API_URL}/mypage`, {
-    //   headers: {
-    //     Authorization: authorization_token
-    //   },
-    // });
-    // console.log('MHPAGE=>', data);
+    console.log('__getMyInfo=>');
 
     const data = await tokenInstance.get('/mypage');
+
     console.log("DATA=>", data);
 
     return thunkAPI.fulfillWithValue(data.data);
@@ -34,16 +24,14 @@ export const __getMyInfo = createAsyncThunk("usearth/__getMyInfo", async (payloa
 export const __updateMyInfoStatus = createAsyncThunk("usearch/__updateMyInfoStatus", async (payload, thunkAPI) => {
   try {
     console.log('__updateMyInfoStatus=>', payload);
-    const authorization_token = cookies.get("mycookie");
-    const data = await axios.patch(`${API_URL}/mypage/secret`, payload, {
-      headers: {
-        Authorization: authorization_token
-      },
-    });
+
+    const data = await tokenInstance.patch('/mypage/secret', payload);
+
     console.log(data);
+
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("정보공개 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -54,16 +42,13 @@ export const __updateMyInfoStatus = createAsyncThunk("usearch/__updateMyInfoStat
 export const __postNickNameOverlap = createAsyncThunk("usearth/__postNickNameOverlap", async (payload, thunkAPI) => {
   try {
     console.log('__postNickNameOverlap=>', payload);
-    const authorization_token = cookies.get("mycookie");
-    const data = await axios.post(`${API_URL}/mypage/nickname`, payload, {
-      headers: {
-        Authorization: authorization_token
-      },
-    });
+
+    const data = await tokenInstance.post('/mypage/nickname', payload);
+
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("정보를 불러올 수 없습니다.");
+    window.alert("닉네임 중복확인을 할 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -74,12 +59,9 @@ export const __postNickNameOverlap = createAsyncThunk("usearth/__postNickNameOve
 export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubmit", async (payload, thunkAPI) => {
   try {
     console.log('__postNickNameSubmit=>', payload);
-    const authorization_token = cookies.get("mycookie");
-    const data = await axios.patch(`${API_URL}/mypage/nickname`, payload, {
-      headers: {
-        Authorization: authorization_token
-      },
-    });
+
+    const data = await tokenInstance.patch('/mypage/nickname', payload);
+
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
@@ -93,15 +75,10 @@ export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubm
 /* ------------------------------ 오늘의 미션 가지고 오기 ----------------------------- */
 export const __getTodayMission = createAsyncThunk("usearth/__getTodayMission", async (payload, thunkAPI) => {
   try {
-    const authorization_token = cookies.get("mycookie");
-    // const data = await tokenInstance.get(`${API_URL}/missions`, {
-    //   headers: {
-    //     Authorization: authorization_token
-    //   },
-    // });
-    // console.log("DATA=>", data);
+    console.log('__getTodayMission=>');
 
     const data = await tokenInstance.get('/missions');
+
     console.log("DATA=>", data);
 
     return thunkAPI.fulfillWithValue(data.data);
@@ -117,12 +94,9 @@ export const __getTodayMission = createAsyncThunk("usearth/__getTodayMission", a
 export const __updateMissionFlag = createAsyncThunk("usearth/__updateMissionFlag", async (payload, thunkAPI) => {
   try {
     console.log('__updateMissionFlag=>', payload);
-    const authorization_token = cookies.get("mycookie");
-    const data = await axios.patch(`${API_URL}/missions`, payload, {
-      headers: {
-        Authorization: authorization_token
-      },
-    });
+
+    const data = await tokenInstance.patch('/missions', payload);
+
     console.log("DATA=>", data);
     await thunkAPI.dispatch(__getTodayMission());
     await thunkAPI.dispatch(__getMyInfo());
@@ -138,12 +112,10 @@ export const __updateMissionFlag = createAsyncThunk("usearth/__updateMissionFlag
 /* ----------------------------- 마이페이지 내가 속한 그룹미션 가져오기 ---------------------------- */
 export const __getMyPageMissionGroup = createAsyncThunk("usearth/__getMyPageMissionGroup", async (payload, thunkAPI) => {
   try {
-    const authorization_token = cookies.get("mycookie");
-    const data = await axios.get(`${API_URL}/mypage/groupmission`, {
-      headers: {
-        Authorization: authorization_token
-      },
-    });
+    console.log('__getMyPageMissionGroup=>');
+
+    const data = await tokenInstance.get('/mypage/groupmission');
+
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {

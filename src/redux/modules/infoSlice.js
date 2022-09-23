@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-// import Cookies from "universal-cookie";
-
-// const cookies = new Cookies();
-const API_URL = process.env.REACT_APP_API_URL;
+import { instance } from '../../api/axios';
 
 /* ------------------------------- 소식시 캠페인 리스트 ------------------------------ */
 export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, thunkAPI) => {
@@ -12,7 +9,8 @@ export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, t
     if (payload.page === '0' || payload.page === 0) {
       thunkAPI.dispatch(clearVal());
     }
-    const data = await axios.get(`${API_URL}/campaigns?page=${payload.page}&size=5`);
+    const data = await instance.get(`/campaigns?page=${payload.page}&size=5`);
+
     console.log('전체캠페인=>', data);
 
     return thunkAPI.fulfillWithValue(data.data);
@@ -23,8 +21,6 @@ export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, t
     return;
   }
 });
-
-
 
 const initialState = {
   infoList: [],
