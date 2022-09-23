@@ -7,6 +7,7 @@ const initialState = {
   heartCnt: {},
   isLoading: false,
   error: null,
+  userHeart:false,
 };
 
 /* -------------------------- post proof (Create) ------------------------- */
@@ -88,6 +89,7 @@ export const proofsSlice = createSlice({
     [getProofs.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.proofs = action.payload;
+      console.log(action.payload,"겟인즈글")
       state.userHeart = action.payload.heart;
     },
     [getProofs.rejected]: (state, action) => {

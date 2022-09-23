@@ -43,74 +43,76 @@ const MyPage = () => {
         </Container>
       </MyPageWrap>
     </>
-  )
-}
+  );
+};
 export default MyPage;
 
-const MyPageWrap = styled.div`width:100%;height:100%;letter-spacing:-0.1em;`;
+const MyPageWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  letter-spacing: -0.1em;
+`;
 const Container = styled.div`
-  width:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-content:center;
-  background-color:rgb(245,245,245);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  background-color: rgb(245, 245, 245);
 `;
 const MyPageInfo = styled.div`
-  background-color:#fff;
-  width:100%;
-  padding:0 25px;
-  box-sizing:border-box;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  background-color: #fff;
+  width: 100%;
+  padding: 0 25px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 const MyPageInfoBox = styled.div`
-  display:flex;
-  flex-direction:column;
-  div:nth-child(1){
-    font:600 24px/32px 'Noto Sans','Arial','sans-serif';
+  display: flex;
+  flex-direction: column;
+  div:nth-child(1) {
+    font: 600 24px/32px "Noto Sans", "sans-serif";
   }
-  div:nth-child(2){
-    font:500 20px/28px 'Noto Sans','Arial','sans-serif';
-    color:#9B9B9B;
+  div:nth-child(2) {
+    font: 500 20px/28px "Noto Sans", "sans-serif";
+    color: #9b9b9b;
   }
 `;
 const MyPageProFile = styled.div`
-  width:74px;height:74px;
-  padding:27px 0;
-  border-radius:50%;
-  img{
-    border-radius:50%;
-    width:100%;
-    height:100%;
+  width: 74px;
+  height: 74px;
+  padding: 27px 0;
+  border-radius: 50%;
+  img {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
   }
 `;
-
-
-
-
 
 const MyPageMissionList = styled.div`
-  background-color:#fff;
-  padding:25px 26px;
+  background-color: #fff;
+  padding: 25px 26px;
 `;
 const MyPageMissionListBox = styled.div`
-  display:flex;
-  flex-direction:column;
-  gap:25px;
-  div:nth-child(1){
-    font:600 24px/35px 'Noto sans','Arial','sans-serif';
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  div:nth-child(1) {
+    font: 600 24px/35px "Noto sans", "sans-serif";
   }
-  div:nth-child(2), div:nth-child(3){
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font:18px/25px 'Noto sans','Arial','sans-serif';
-    span > span{
+  div:nth-child(2),
+  div:nth-child(3) {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font: 18px/25px "Noto sans", "sans-serif";
+    span > span {
       display: inline-block;
-      padding:0 15px;
+      padding: 0 15px;
     }
   }
 `;

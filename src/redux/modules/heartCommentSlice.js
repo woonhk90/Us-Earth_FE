@@ -66,6 +66,7 @@ export const heartCommentSlice = createSlice({
     [patchHeartCnt.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.heartCnt = action.payload;
+      console.log(action.payload)
       state.userHeart = action.payload.heart;
     },
     [patchHeartCnt.rejected]: (state, action) => {

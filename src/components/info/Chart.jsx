@@ -53,5 +53,5 @@ const ProgressWrap = styled.div`
 `;
 
 const ChartFlag = styled.div`
-  font:600 12px/20px 'Noto Sans','Arial','sans-serif';
+  font: 600 12px/20px "Noto Sans","sans-serif";
 `;

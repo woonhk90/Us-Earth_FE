@@ -20,12 +20,13 @@ const CommentBox = () => {
   const cookies = new Cookies();
   const param = useParams();
   const dispatch = useDispatch();
-  const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
-  const { userHeart, heartCommentCnt } = useSelector((state) => state.heartComment);
-  // const { userHeart, heartCommentCnt } = useSelector((state) => state.proofs);
+  const { dateStatus } = useSelector((state) => state.community.communityDetail);
+  const { heartCommentCnt } = useSelector((state) => state.heartComment);
+  const { userHeart } = useSelector((state) => state.proofs);
   const { comments, commentEdit } = useSelector((state) => state.comments);
-
-  const data = useSelector((state) => state.proofs);
+  console.log(heartCommentCnt);
+  const participant = heartCommentCnt.participant;
+  const {proofs} = useSelector((state) => state.proofs);
   console.log(userHeart);
   const editMode = commentEdit.editMode;
 
