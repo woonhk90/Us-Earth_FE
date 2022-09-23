@@ -22,9 +22,28 @@ export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, t
   }
 });
 
+/* ---------------------------------- 환경 지수 --------------------------------- */
+export const __getEnvironment = createAsyncThunk("usearth/__getEnvironment", async (payload, thunkAPI) => {
+  try {
+    console.log('__getEnvironment=>');
+
+    const data = await instance.get('/community/airquality');
+
+    console.log('환경지수=>', data);
+
+    return thunkAPI.fulfillWithValue(data.data);
+  } catch (error) {
+    window.alert("환경지수 정보를 불러올 수 없습니다.");
+    console.log(error);
+    console.log(error.response.data.errorMessage);
+    return;
+  }
+});
+
 const initialState = {
   infoList: [],
   isLoading: false,
+  infoEnvironment:[],
 }
 
 export const infoSlice = createSlice({
@@ -45,6 +64,17 @@ export const infoSlice = createSlice({
     [__getInfo.rejected]: (state, action) => {
       state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+    },
+    [__getEnvironment.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getEnvironment.fulfilled]: (state, action) => {
+      console.log('action=>', action);
+      state.isLoading = false;
+      state.infoEnvironment = action.payload;
+    },
+    [__getEnvironment.rejected]: (state, action) => {
+      state.isLoading = false;
     }
   },
 });

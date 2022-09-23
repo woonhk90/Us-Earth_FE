@@ -115,7 +115,7 @@ const CommunityDetail = () => {
           </StateBox>
           <CertifyContentBox>
             <CertifyContent>
-              {certify.map((v) => <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}><img src={v.img[0].imgUrl} alt='proofImg' /></CertifyItem>)}
+              {certify.map((v) => <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}><img src={v.img[0]?.imgUrl} alt='proofImg' /></CertifyItem>)}
             </CertifyContent>
           </CertifyContentBox>
           {getCookie('mycookie') === undefined ?
