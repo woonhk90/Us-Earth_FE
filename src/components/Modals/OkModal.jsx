@@ -29,11 +29,11 @@ console.log(title,modalOnOff)
 export default OkModal;
 
 const ModalWrap = styled.div`
-  position: fixed;
-  top: 0;
+  position: absolute;
+  bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;

@@ -59,10 +59,11 @@ const CommunityModal = (props) => {
 export default CommunityModal;
 
 const ModalWrap = styled.div`
-  position: fixed;
+position: absolute;
   top: 0;
   left: 0;
   width: 100%;
+  height: 100vh;
   height: calc(100% - 62px);
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;

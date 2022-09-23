@@ -58,10 +58,8 @@ const CommunityBottom = () => {
 export default CommunityBottom;
 
 const FooterWrap = styled.div`
-  position:fixed;
   bottom:0;
   left:0;
-
   width:100%;
   height:62px;
   display:flex;

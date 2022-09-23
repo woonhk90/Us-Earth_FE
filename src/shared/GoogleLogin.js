@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import Layout from "../components/layout/Layout";
+import axios from "axios";
 import { setCookie } from "./cookie";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../components/Modals/AlertModal";
@@ -15,17 +17,17 @@ const Login = () => {
   };
   const goAction = () => {
     /* 값이 있으면 그 값으로 페이지 이동 없으면 -1(뒤로가기) */
-    const pathname = localStorage.getItem('pathname');
-    localStorage.removeItem('pathname');
-    pathname ? navigate(pathname, { replace: true }) : navigate('/mypage', { replace: true });
-  }
+    const pathname = localStorage.getItem("pathname");
+    localStorage.removeItem("pathname");
+    pathname ? navigate(pathname, { replace: true }) : navigate("/mypage", { replace: true });
+  };
 
   const navigate = useNavigate();
   let code = new URL(window.location.href).searchParams.get("code");
   const getGoogleToken = async () => {
     try {
       const data = await axios.get(`${process.env.REACT_APP_SERVER_API_GOOGLE}?code=${code}`);
-      console.log('로그인리턴=>', data);
+      console.log("로그인리턴=>", data);
 
       if (await data.headers.authorization) {
         setCookie("mycookie", data.headers.authorization);
@@ -33,20 +35,19 @@ const Login = () => {
       }
 
       modalOnOff();
-
     } catch (error) {
       window.alert("로그인 실패 ");
       console.log(error);
     }
-  }
+  };
   useEffect(() => {
     getGoogleToken();
-  }, [])
+  }, []);
 
   return (
     <>
-      <div>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</div>
+      <Layout>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</Layout>
     </>
-  )
-}
+  );
+};
 export default Login;

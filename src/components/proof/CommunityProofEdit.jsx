@@ -30,7 +30,7 @@ const CommunityProofEdit = () => {
           Authorization: authorization_token,
         },
       });
-      console.log(data)
+      console.log(data);
       const { img, title, content } = data;
       img.map((imgdata) => {
         setPreviewImg((previewImg) => [
@@ -79,7 +79,7 @@ const CommunityProofEdit = () => {
 
   console.log(files);
   console.log(previewImg);
-  
+
   const addImageFile = async (e) => {
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     let arry = [];
@@ -92,9 +92,9 @@ const CommunityProofEdit = () => {
               maxSizeMB: 1,
               maxWidthOrHeight: 1920,
               useWebWorker: true,
-              onProgress: (data)=>{
-                console.log(data)
-                setUploading(data)
+              onProgress: (data) => {
+                console.log(data);
+                setUploading(data);
               },
             };
             try {
@@ -138,25 +138,25 @@ const CommunityProofEdit = () => {
     if (img.imgId !== undefined) setDeleteImgId((deleteImgId) => [...deleteImgId, img.imgId]);
   };
   console.log(deleteImgId);
-/* -------------------------------- 빈값 확인 모달 -------------------------------- */
-const [okModal, setOkModal] = useState(false);
-const [okModalTitle, setOkModalTitle] = useState("");
+  /* -------------------------------- 빈값 확인 모달 -------------------------------- */
+  const [okModal, setOkModal] = useState(false);
+  const [okModalTitle, setOkModalTitle] = useState("");
 
-const okModalOnOff = () => {
-  setOkModal(!okModal);
-};
+  const okModalOnOff = () => {
+    setOkModal(!okModal);
+  };
 
-const submitHandler = async () => {
-  let formData = new FormData();
-  if (title === "") {
-    setOkModalTitle("제목을 입력해 주세요");
-    okModalOnOff();
-  } else if (content === "") {
-    setOkModalTitle("내용을 입력해 주세요");
-    okModalOnOff();
-  } else if (files.length === 0) {
-    setOkModalTitle("사진을 추가해 주세요");
-    okModalOnOff();
+  const submitHandler = async () => {
+    let formData = new FormData();
+    if (title === "") {
+      setOkModalTitle("제목을 입력해 주세요");
+      okModalOnOff();
+    } else if (content === "") {
+      setOkModalTitle("내용을 입력해 주세요");
+      okModalOnOff();
+    } else if (files.length === 0) {
+      setOkModalTitle("사진을 추가해 주세요");
+      okModalOnOff();
     } else {
       const dataSet = {
         ...inputData,
@@ -192,7 +192,7 @@ const submitHandler = async () => {
     submitHandler: submitHandler,
     deleteImageFile: deleteImageFile,
     addImageFile: addImageFile,
-    submitButton:"수정",
+    submitButton: "수정",
     upLoading: upLoading,
     okModal: okModal,
     okModalTitle: okModalTitle,
@@ -201,7 +201,7 @@ const submitHandler = async () => {
 
   return (
     <>
-        {isLogin() ? null : <IsLoginModal />}
+      {isLogin() ? null : <IsLoginModal />}
       <ProofForm ProofFormData={ProofFormData} />
     </>
   );

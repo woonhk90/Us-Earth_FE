@@ -42,6 +42,7 @@ const Info = () => {
           );
         })}
       </CampaignBox>
+      {/* <Loading /> */}
       {isLoading ? <Loading /> : <div ref={ref}></div>}
     </>
   );

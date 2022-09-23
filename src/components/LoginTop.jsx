@@ -16,7 +16,7 @@ const CommunityTop = () => {
 export default CommunityTop;
 
 const HeaderWrap = styled.div`
-  position:fixed;
+  position:relative;
   top:0;
   left:0;
   width:100%;
