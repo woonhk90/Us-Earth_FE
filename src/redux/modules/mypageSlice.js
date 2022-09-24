@@ -13,7 +13,7 @@ export const __getMyInfo = createAsyncThunk("usearth/__getMyInfo", async (payloa
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("내 정보를 불러올 수 없습니다.");
+    // window.alert("내 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -31,7 +31,7 @@ export const __updateMyInfoStatus = createAsyncThunk("usearch/__updateMyInfoStat
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("정보공개 정보를 불러올 수 없습니다.");
+    // window.alert("정보공개 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -48,7 +48,7 @@ export const __postNickNameOverlap = createAsyncThunk("usearth/__postNickNameOve
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("닉네임 중복확인을 할 수 없습니다.");
+    // window.alert("닉네임 중복확인을 할 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -65,7 +65,7 @@ export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubm
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("닉네임 변경에 실패 하였습니다.");
+    // window.alert("닉네임 변경에 실패 하였습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -83,7 +83,7 @@ export const __getTodayMission = createAsyncThunk("usearth/__getTodayMission", a
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("오늘의 미션 정보를 불러올 수 없습니다.");
+    // window.alert("오늘의 미션 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -101,7 +101,7 @@ export const __updateMissionFlag = createAsyncThunk("usearth/__updateMissionFlag
     await thunkAPI.dispatch(__getTodayMission());
     await thunkAPI.dispatch(__getMyInfo());
   } catch (error) {
-    window.alert("오늘의 미션을 완료처리 할 수 없습니다.");
+    // window.alert("오늘의 미션을 완료처리 할 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
@@ -119,7 +119,7 @@ export const __getMyPageMissionGroup = createAsyncThunk("usearth/__getMyPageMiss
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("그룹미션 정보를 불러올 수 없습니다.");
+    // window.alert("그룹미션 정보를 불러올 수 없습니다.");
     console.log(error);
     console.log(error.response.data.errorMessage);
     return;
