@@ -24,6 +24,7 @@ tokenInstance.interceptors.request.use(
   // 요청이 전달되기 전에 작업 수행
   (config) => {
     const accessToken = getCookie("mycookie");
+    console.log("쿠키가있나", accessToken);
     config.headers.Authorization = `${accessToken}`;
     return config;
   },
@@ -43,12 +44,18 @@ tokenInstance.interceptors.response.use(
     // 응답 오류가 있는 작업 수행 : STATUS CODE WITHOUT 2XX
     console.log("RESPONSE INTERCEPTORS : FAILED", error);
     try {
+      console.log("AAAAAAAAAAAAAAAA");
+      console.log("AAAAAAAAAAAAAAAA");
+      console.log("AAAAAAAAAAAAAAAA");
       const { message, response, config } = error;
       const originalRequest = config;
 
       // ACCESSTOKEN FAILED : 401
       // REFRESHTOKEN FAILED : ???
-      if (message === "만료된 토큰입니다." || response.data.code === "401") {
+      if (message === "만료된 토큰입니다." || response.data.code === "401" || response.data.msg === "만료된 토큰입니다." || response.data.errorCode === "401") {
+        console.log("ccccccccccccccccccccc");
+        console.log("ccccccccccccccccccccc");
+        console.log("ccccccccccccccccccccc");
         const refreshToken = getCookie("refreshToken");
         /* GET : NEW ACCESSTOKEN ---------------------------------------------------- */
         try {
@@ -61,7 +68,7 @@ tokenInstance.interceptors.response.use(
             },
           });
           /* CHANGE ACCESSTOKEN ------------------------------------------------------- */
-          console.log("RESPONSE=>",response);
+          console.log("RESPONSE=>", response);
           console.log(
             "NEW ACCESSTOKEN AUTHORIZATION",
             response.headers.authorization
@@ -78,7 +85,13 @@ tokenInstance.interceptors.response.use(
           removeCookie("refreshToken");
         }
       }
+      console.log("dddddddddddddddddd");
+      console.log("dddddddddddddddddd");
+      console.log("dddddddddddddddddd");
     } catch (error) {
+      console.log("BBBBBBBBBBBBBB");
+      console.log("BBBBBBBBBBBBBB");
+      console.log("BBBBBBBBBBBBBB");
       console.log("GET NEW ACCESSTOKEN : FAIL", error);
       removeCookie("mycookie");
       removeCookie("refreshToken");
