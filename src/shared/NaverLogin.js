@@ -5,9 +5,11 @@ import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../components/Modals/AlertModal";
 import Layout from '../components/layout/Layout';
+import ErrorModal from '../components/Modals/ErrorModal';
+import { useState } from "react";
 
 const Login = () => {
-
+  const [error, setError] = useState("");
   const [modal, setModal] = React.useState(false);
   const alertModalData = {
     title: "환영합니다",
@@ -39,17 +41,24 @@ const Login = () => {
       modalOnOff();
 
     } catch (error) {
-      window.alert("로그인 실패");
+      setError(error);
       console.log(error);
+
     }
   }
-
+    
   useEffect(() => {
     getNaverToken();
   }, [])
+
+  // if (error) return <ErrorModal error="로그인 실패" />;
+
   return (
     <>
-      <Layout>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</Layout>
+      <Layout>
+        {error && <ErrorModal error="로그인 실패" navigation="/login"/>}
+        
+        {modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</Layout>
     </>
   )
 }

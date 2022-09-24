@@ -5,9 +5,13 @@ import axios from "axios";
 import { setCookie } from "./cookie";
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../components/Modals/AlertModal";
+import ErrorModal from "../components/Modals/ErrorModal";
+import { useState } from "react";
 
 const Login = () => {
   const [modal, setModal] = React.useState(false);
+  const [error, setError] = useState("");
+
   const alertModalData = {
     title: "환영합니다",
     btn1: "확인",
@@ -36,17 +40,20 @@ const Login = () => {
 
       modalOnOff();
     } catch (error) {
-      window.alert("로그인 실패 ");
-      console.log(error);
+      setError(error);
     }
   };
   useEffect(() => {
     getGoogleToken();
   }, []);
 
+  // if (error) return <ErrorModal error="로그인 실패" />;
+
   return (
     <>
       <Layout>
+        {error && <ErrorModal error="로그인 실패" navigation="/login"/>}
+        
         <CommunityBox>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</CommunityBox>
       </Layout>
     </>

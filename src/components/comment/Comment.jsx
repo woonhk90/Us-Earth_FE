@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import CustomSelect from "./CustomSelect";
@@ -8,16 +8,12 @@ import { commentEditChange, deleteComments, getComments } from "../../redux/modu
 import ConfirmModal from "../Modals/ConfirmModal";
 import icons from "../../assets";
 import OkModal from "../Modals/OkModal";
-import CommentInput from "./CommentInput";
-import CommentInputEdit from "./CommentInputEdit";
-
-import LoginModal from "../Modals/LoginModal";
-const Comment = ({userToken,editMode}) => {
+const Comment = ({ userToken, editMode }) => {
+  const { isLoading } = useSelector((state) => state.comments);
   const { Delete, Report, Edit } = icons;
   const dispatch = useDispatch();
   const param = useParams();
-  const { dateStatus } = useSelector((state) => state.community.communityDetail);
-  const { commentResponseDtoList, commentEdit } = useSelector((state) => state.comments.comments);
+  const { dateStatus, commentResponseDtoList, commentEdit } = useSelector((state) => state.comments.comments);
 
   useEffect(() => {
     dispatch(getComments(param.proofId));
@@ -79,15 +75,15 @@ const Comment = ({userToken,editMode}) => {
         </ModalIcon>,
       ],
     },
-    {
-      id: 3,
-      selectName: "신고하기",
-      icon: [
-        <ModalIcon key={3}>
-          <Report />
-        </ModalIcon>,
-      ],
-    },
+    // {
+    //   id: 3,
+    //   selectName: "신고하기",
+    //   icon: [
+    //     <ModalIcon key={3}>
+    //       <Report />
+    //     </ModalIcon>,
+    //   ],
+    // },
   ];
 
   /* -------------------------------- delete modal ------------------------------- */
@@ -121,6 +117,7 @@ const Comment = ({userToken,editMode}) => {
   return (
     <>
       {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
+      {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmModal>}
       <CommentContainer>
         {commentResponseDtoList?.map((comment) => (
           <CommentBox key={comment.commentId}>
@@ -131,13 +128,13 @@ const Comment = ({userToken,editMode}) => {
                   <CreatAt>{comment.creatAt}</CreatAt>
                 </CommentText>
                 {comment.writer ? <CustomSelect clickDispatch={clickDispatch} contentId={comment.commentId} selectBoxData={selectBoxData} /> : null}
-                {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmModal>}
               </CommentTop>
               {comment.img !== null ? <CommentImg src={comment.img} alt="img" /> : null}
             </CommentWrap>
             <StSpan>{comment.content}</StSpan>
           </CommentBox>
         ))}
+        {/* {getIsLoading &&  <CommentBox>vsvv</CommentBox>} */}
       </CommentContainer>
     </>
   );
@@ -146,9 +143,8 @@ const Comment = ({userToken,editMode}) => {
 export default Comment;
 
 const CommentContainer = styled.div`
-padding-bottom: 5px;
-  max-height: 546px;
-  /* max-height: 346px; */
+  padding-bottom: 5px;
+  max-height: 360px;
   width: 100%;
   overflow: auto;
   &::-webkit-scrollbar {
@@ -160,7 +156,6 @@ padding-bottom: 5px;
   @media (min-height: 300px) and (max-height: 556px) {
     max-height: 150px;
   }
-
 `;
 //700부터는 450으로 하기
 /* --------------------------------- Top div -------------------------------- */
@@ -225,4 +220,3 @@ const ModalIcon = styled.div`
   width: 18px;
   margin-right: 18px;
 `;
-

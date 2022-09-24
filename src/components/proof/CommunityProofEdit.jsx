@@ -19,12 +19,10 @@ const CommunityProofEdit = () => {
   const dispatch = useDispatch();
   const param = useParams();
   const { isLoading, error } = useSelector((state) => state.proofs);
-
   /* -------------------------------- axios get ------------------------------- */
   const getProofs = async (proofId) => {
     try {
       const { data } = await tokenInstance.get(`/proof/${proofId}`);
-      console.log(data);
       if(!data.writer){
         navigate(`/community/${param.communityId}/proof/${param.proofId}`)
       }
@@ -143,6 +141,7 @@ const CommunityProofEdit = () => {
     setOkModal(!okModal);
   };
 
+  const [block, setBlock] = useState(false);
   const submitHandler = async () => {
     let formData = new FormData();
     if (title === "") {
@@ -195,17 +194,11 @@ const CommunityProofEdit = () => {
     okModalTitle: okModalTitle,
     okModalOnOff: okModalOnOff,
   };
-  if(isLoading){
-    return (
-      <><Loading/>
-    </>
-    )
-  }
-console.log(error)
+  
   // setError(error.response.data.message);
 if(error){
   return (
-    <><ErrorModal error={error}  /></>
+    <><ErrorModal error={error} /></>
     // 
   )
 }
@@ -213,7 +206,8 @@ if(error){
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
-      <ProofForm ProofFormData={ProofFormData} />
+      {isLoading ? <>작성중 이미지</>:  <ProofForm ProofFormData={ProofFormData} />}
+     
     </>
   );
 };
