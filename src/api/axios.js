@@ -90,6 +90,7 @@ tokenInstance.interceptors.response.use(
           /* console.log("REFRESHTOKEN FAILED", error.response); */
           removeCookie("mycookie");
           removeCookie("refreshToken");
+          window.location.replace('/');
         }
       }
     } catch (error) {
@@ -102,3 +103,4 @@ tokenInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+// Bearer%20eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwibWVtYmVyTmlja25hbWUiOiLsnZHqsIAiLCJleHAiOjE2NjQwMTU4OTB9.V2h94GmXpKd9UJvejDDW7RS77blC7wnnmuta42FU8a5qKjuL06BcivDzvIPOddU4R3TpjFbVO2S_CX9CxsQrxA
