@@ -6,6 +6,7 @@ import { ReactComponent as CameraWh } from "../../assets/cameraWh.svg";
 import cancelWh from "../../assets/cancelWh.svg";
 import Textarea from "../elements/Textarea";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../Header";
 import { useRef } from "react";
 import ImageLoading from "../etc/ImageLoading";
@@ -15,6 +16,7 @@ const ProofForm = ({ ProofFormData }) => {
   const navigate = useNavigate();
   const textRef = useRef();
   const param = useParams();
+  
   const handleResizeHeight = useCallback(() => {
     if (textRef.current.scrollHeight < 250) {
       textRef.current.style.height = `64px`;
@@ -37,8 +39,10 @@ const ProofForm = ({ ProofFormData }) => {
     okModal: okModal,
     okModalTitle: okModalTitle,
     okModalOnOff: okModalOnOff,
+    block: block,
   } = ProofFormData;
   console.log(title.length > 0 && content.length > 0 && files.length > 0);
+
   return (
     <>
       <>
@@ -275,7 +279,7 @@ const HeaderP = styled.button`
   font-size: 20px;
   letter-spacing: -0.03em;
   color: #222222;
-  :disabled{
+  :disabled {
     color: #cdcdcd;
   }
 `;

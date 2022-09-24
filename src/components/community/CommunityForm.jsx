@@ -11,7 +11,6 @@ import { addDates, postCommunityDetail } from "../../redux/modules/communityForm
 import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
 import { clearVal } from "../../redux/modules/communitySlice";
-import Cookies from "universal-cookie";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
@@ -20,6 +19,7 @@ import ImageLoading from "../etc/ImageLoading";
 const CommunityForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {isLoading} = useSelector((state)=> state.communityForm)
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
@@ -145,6 +145,8 @@ const CommunityForm = () => {
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
+      {isLoading ? <>작성중 이미지</>: 
+      <>
       <CommunityFormWrap>
         <ImageBoxWrap>
           <ImageForm encType="multipart/form-data">
@@ -261,6 +263,7 @@ const CommunityForm = () => {
           </BottomButton>
         )}
       </BottomWrap>
+      </>}
     </>
   );
 };

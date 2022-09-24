@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { tokenInstance } from "../../api/axios";
+import { __getCommunityDetail } from "./communitySlice";
 
 const initialState = {
   proofs: [],
@@ -20,7 +21,8 @@ export const postProof = createAsyncThunk("proof/post", async (payload, thunkAPI
       },
     });
     console.log(data);
-    return data;
+   
+    return thunkAPI.fulfillWithValue(data);
   } catch (err) {
     console.log(err);
   }
@@ -47,7 +49,8 @@ export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkA
       },
     });
     console.log(data);
-    return data;
+   
+    return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error.response.data.msg);
     return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -58,7 +61,8 @@ export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkA
 export const deleteProof = createAsyncThunk("proof/delete", async (proofId, thunkAPI) => {
   try {
     const { data } = await tokenInstance.delete(`/proof/${proofId}`);
-    console.log(data);
+    
+    return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.message);
   }
@@ -73,6 +77,7 @@ export const proofsSlice = createSlice({
     /* -------------------------- post proof (Create) ------------------------- */
     [postProof.pending]: (state) => {
       state.isLoading = true;
+      state.error = null;
     },
     [postProof.fulfilled]: (state, action) => {
       state.isLoading = false;
@@ -84,6 +89,7 @@ export const proofsSlice = createSlice({
     },
     /* --------------------------- get proof (Read) --------------------------- */
     [getProofs.pending]: (state) => {
+      state.error = null;
       state.isLoading = true;
     },
     [getProofs.fulfilled]: (state, action) => {
@@ -99,6 +105,7 @@ export const proofsSlice = createSlice({
     /* ------------------------- patch proof (Update) ------------------------- */
     [patchProof.pending]: (state) => {
       state.isLoading = true;
+      state.error = null;
     },
     [patchProof.fulfilled]: (state, action) => {
       state.isLoading = false;
@@ -111,6 +118,7 @@ export const proofsSlice = createSlice({
     /* ------------------------- delete proof (Delete) ------------------------ */
     [deleteProof.pending]: (state) => {
       state.isLoading = true;
+      state.error = null;
     },
     [deleteProof.fulfilled]: (state, action) => {
       state.isLoading = false;

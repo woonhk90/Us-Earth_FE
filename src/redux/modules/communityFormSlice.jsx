@@ -19,7 +19,7 @@ export const postCommunityDetail = createAsyncThunk("community/postform", async 
       },
     });
     console.log(data);
-    return data;
+    return thunkAPI.fulfillWithValue(data);
   } catch (err) {
     console.log(err);
   }
@@ -35,7 +35,7 @@ export const patchCommunityDetail = createAsyncThunk("comment/patch", async (pay
       },
     });
     console.log(data);
-    return data;
+    return thunkAPI.fulfillWithValue(data);
   } catch (err) {
     console.log(err);
     console.log(err.response.data.message);
