@@ -1,9 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
-const API_URL = process.env.REACT_APP_API_URL;
+import { tokenInstance } from "../../api/axios";
 
 const initialState = {
   dailyMissionData: {},
@@ -16,13 +12,9 @@ const initialState = {
 /* ---------------------- get daily mission data (Read) --------------------- */
 export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (targetDay, thunkAPI) => {
   try {
-    const authorization_token = cookies.get("mycookie");
+    
     console.log(targetDay);
-    const { data } = await axios.get(`${API_URL}/mypage/stats/day?targetDay=${targetDay}`, {
-      headers: {
-        Authorization: authorization_token,
-      },
-    });
+    const { data } = await tokenInstance.get(`/mypage/stats/day?targetDay=${targetDay}`);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
@@ -33,13 +25,10 @@ export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (
 /* ----------------- get monthly weekly mission data (Read) ----------------- */
 export const getPeriodMissionStats = createAsyncThunk("periodMission/get", async (targetPeriod, thunkAPI) => {
   try {
-    const authorization_token = cookies.get("mycookie");
+    
     // console.log(targetPeriod);
-    const { data } = await axios.get(`${API_URL}/mypage/stats`, {
+    const { data } = await tokenInstance.get(`/mypage/stats`, {
       params: targetPeriod,
-      headers: {
-        Authorization: authorization_token,
-      },
     });
     // console.log(data);
     return thunkAPI.fulfillWithValue(data);
@@ -55,28 +44,20 @@ export const userMissionSlice = createSlice({
   reducers: {
     getOnClickDate: (state, action) => {
       console.log("슬라이스에서 바뀜!", action.payload);
-      // adNumber이라는 명령(?)
-      state.clickDate = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
-      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
+      state.clickDate = action.payload; 
     },
-    // commentEditChange: (state, action) => {
-    //   console.log(action.payload);
-    //   // adNumber이라는 명령(?)
-    //   state.commentEdit = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
-    //   // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
-    // },
   },
   extraReducers: {
     [getDailyMissionStats.pending]: (state) => {
-      state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+      state.isLoading = true; 
     },
     [getDailyMissionStats.fulfilled]: (state, action) => {
       state.dailyMissionData = action.payload;
-      state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+      state.isLoading = false; 
     },
     [getDailyMissionStats.rejected]: (state, action) => {
-      state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
-      state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+      state.isLoading = false;
+      state.error = action.payload; 
     },
     /* -------------------------- get mission stats (Create) ------------------------- */
     [getPeriodMissionStats.pending]: (state) => {

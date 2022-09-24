@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
 import { useDispatch, useSelector } from "react-redux";
 import { __getInfo } from "../../redux/modules/infoSlice";
-import Loading from '../etc/Loading';
+import Loading from "../etc/Loading";
 
 const Info = () => {
   const { infoList, isLoading } = useSelector((state) => state.info);
@@ -31,7 +31,7 @@ const Info = () => {
     <>
       <CampaignBox>
         {infoList.map((v) => {
-          console.log(v)
+
           return (
             <CampaignItem key={v.campaignId} onClick={() => window.open(`${v.thumbnailUrl}`, "_blank")}>
               <CampaignItemPoster>
@@ -63,7 +63,7 @@ const CampaignItemPoster = styled.div`
   }
 `;
 const CampaignItemTitle = styled.div`
-  font: 600 20px/28px "Noto Sans", "Arial", "sans-serif";
+  font: 600 20px/28px "Noto Sans KR", "sans-serif";
   margin-bottom: 15px;
 
   /* 말줄임 */

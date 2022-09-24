@@ -7,7 +7,7 @@ import { ingVal } from "../redux/modules/communitySlice";
 import icons from "../assets";
 
 const CommunityModal = (props) => {
-  const {Cancel}=icons;
+  const { Cancel } = icons;
   /* ---------------------------------- 모달 닫기 --------------------------------- */
   const closeModal = () => {
     props.closeModal();
@@ -59,7 +59,7 @@ const CommunityModal = (props) => {
 export default CommunityModal;
 
 const ModalWrap = styled.div`
-position: absolute;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -118,7 +118,7 @@ const SuggestWrap = styled.div`
   box-sizing: border-box;
 `;
 const SuggestTitle = styled.div`
-  font: bold 22px/1 "Arial", "sans-serif";
+  font: bold 22px/1 "Noto Sans KR", "sans-serif";
   margin-bottom: 13px;
 `;
 const SuggestBox = styled.div`
@@ -129,7 +129,7 @@ const SuggestBox = styled.div`
 `;
 const SuggestItem = styled.span`
   display: inline-block;
-  font: 18px/1 "Arial", "sans-serif";
+  font: 18px/1 "Noto Sans KR", "sans-serif";
   border: 1px solid #000;
   padding: 10px 20px;
   margin: 6px 4px;

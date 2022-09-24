@@ -6,6 +6,7 @@ import comments from "../modules/commentsSlice";
 import proofs from "../modules/proofsSlice";
 import userMission from "../modules/userMissonSlice";
 import info from "../modules/infoSlice";
+import heartComment from "../modules/heartCommentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     proofs,
     userMission,
     info,
+    heartComment,
   },
 });

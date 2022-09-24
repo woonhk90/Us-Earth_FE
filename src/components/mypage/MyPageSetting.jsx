@@ -114,73 +114,61 @@ const Container = styled.div`
 `;
 
 const LoginInfo = styled.div`
-  width:100%;
-  border-bottom:1px solid rgba(0,0,0,0.14);
-  margin-bottom:32px;
-  `;
-const LoginInfoTitle = styled.h2`
-  font:500 18px/1 'Noto sans','Arial','sans-serif';
-  `;
-const LoginInfoContent = styled.p`
-  font:16px/1 'Noto sans','Arial','sans-serif';
-  color:#7b7b7b;
-  padding:20px 0 28px;
-  box-sizing:border-box;
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  margin-bottom: 32px;
 `;
-
-
-
-
+const LoginInfoTitle = styled.h2`
+  font: 500 18px/1 "Noto sans", "sans-serif";
+`;
+const LoginInfoContent = styled.p`
+  font: 16px/1 "Noto sans", "sans-serif";
+  color: #7b7b7b;
+  padding: 20px 0 28px;
+  box-sizing: border-box;
+`;
 
 const NickInfo = styled.div`
-  width:100%;
-  border-bottom:1px solid rgba(0,0,0,0.14);
-  margin-bottom:32px;
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  margin-bottom: 32px;
 `;
 const NickInfoTitle = styled.div`
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font:500 18px/1 'Noto sans','Arial','sans-serif';
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font: 500 18px/1 "Noto sans", "sans-serif";
 `;
 const NickInfoContent = styled.p`
-  font:700 22px/1 'Noto sans','Arial','sans-serif';
-  padding:20px 0 28px;
-  box-sizing:border-box;
+  font: 700 22px/1 "Noto sans", "sans-serif";
+  padding: 20px 0 28px;
+  box-sizing: border-box;
 `;
 const OverlapFlagBox = styled.div`
-  text-align:right;
+  text-align: right;
 `;
 const OverlapFlagContent = styled.span`
-  font-size:10px;
-  color:${(props) => props.color}
+  font-size: 10px;
+  color: ${(props) => props.color};
 `;
-
-
-
-
 
 const MyPageFlag = styled.div`
-  width:100%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:60px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
 `;
 const MyPageFlagTitle = styled.h2`
-  font:500 18px/24px 'Noto Sans','Arial','sans-serif';
+  font: 500 18px/24px "Noto Sans","sans-serif";
 `;
 const LogoutBtn = styled.button`
-  width:100%;
-  font:500 18px/60px 'Noto Sans','Arial','sans-serif';
-  background:transparent;
-  border:1px solid #b5b5b5;
-  color:#424242;
+  width: 100%;
+  font: 500 18px/60px "Noto Sans","sans-serif";
+  background: transparent;
+  border: 1px solid #b5b5b5;
+  color: #424242;
 `;
-
-
-
-
 
 /* ------------------------------ switch button ----------------------------- */
 const CheckBoxWrapper = styled.div`
@@ -214,13 +202,13 @@ const CheckBoxLabel = styled.label`
     box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
     transition: 0.2s;
     ${(props) =>
-    !props.secret
-      ? css`
+      !props.secret
+        ? css`
             margin: 1px;
             box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
             transition: 0.2s;
           `
-      : css`
+        : css`
             margin: 1px 0 0 20px;
           `}
   }
@@ -235,8 +223,8 @@ const CheckBox = styled.input`
   height: 26px;
   &:checked {
     ${(props) =>
-    props.secret &&
-    css`
+      props.secret &&
+      css`
         background: #35bd47;
         &::after {
           content: "";

@@ -1,10 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import Cookies from "universal-cookie";
-import { getHeartCommentCnt } from "./proofsSlice";
-
-const cookies = new Cookies();
-const API_URL = process.env.REACT_APP_API_URL;
+import { tokenInstance } from "../../api/axios";
+import { getHeartCommentCnt } from "./heartCommentSlice";
 
 const initialState = {
   comments: [],
@@ -22,12 +18,10 @@ const initialState = {
 /* -------------------------- post comment (Create) ------------------------- */
 export const postComment = createAsyncThunk("comment/post", async (payload, thunkAPI) => {
   try {
-    const authorization_token = cookies.get("mycookie");
-    const { data } = await axios.post(`${API_URL}/comments/${payload.proofId}`, payload.formData, {
+    const { data } = await tokenInstance.post(`/comments/${payload.proofId}`, payload.formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
-        Authorization: authorization_token,
       },
     });
     thunkAPI.dispatch(getComments(payload.proofId));
@@ -42,12 +36,7 @@ export const postComment = createAsyncThunk("comment/post", async (payload, thun
 /* --------------------------- get comment (Read) --------------------------- */
 export const getComments = createAsyncThunk("comment/get", async (proofId, thunkAPI) => {
   try {
-    const authorization_token = cookies.get("mycookie");
-    const { data } = await axios.get(`${API_URL}/comments/${proofId}`, {
-      headers: {
-        Authorization: authorization_token,
-      },
-    });
+    const { data } = await tokenInstance.get(`/comments/${proofId}`);
     console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
@@ -58,12 +47,10 @@ export const getComments = createAsyncThunk("comment/get", async (proofId, thunk
 /* ------------------------- patch comment (Update) ------------------------- */
 export const patchComment = createAsyncThunk("comment/patch", async (payload, thunkAPI) => {
   try {
-    const authorization_token = cookies.get("mycookie");
-    const { data } = await axios.patch(`${API_URL}/comments/${payload.commentId}`, payload.formData, {
+    const { data } = await tokenInstance.patch(`/comments/${payload.commentId}`, payload.formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         responseType: "blob",
-        Authorization: authorization_token,
       },
     });
     console.log(data);
@@ -79,12 +66,7 @@ export const patchComment = createAsyncThunk("comment/patch", async (payload, th
 /* ------------------------- delete comment (Delete) ------------------------ */
 export const deleteComments = createAsyncThunk("comment/delete", async (payload, thunkAPI) => {
   try {
-    const authorization_token = cookies.get("mycookie");
-    const data = await axios.delete(`${API_URL}/comments/${payload.commentId}`, {
-      headers: {
-        Authorization: authorization_token,
-      },
-    });
+    const data = await tokenInstance.delete(`/comments/${payload.commentId}`);
     thunkAPI.dispatch(getComments(payload.proofId));
     thunkAPI.dispatch(getHeartCommentCnt(payload.proofId));
     console.log(data);
@@ -93,22 +75,6 @@ export const deleteComments = createAsyncThunk("comment/delete", async (payload,
     return thunkAPI.rejectWithValue(error);
   }
 });
-// export const postCommunityFormData = async (formData) => {
-//   try {
-//     const token = localStorage.getItem("token");
-//     const { data } = await axios.patch(`${process.env.REACT_APP_API_URL}/articles`, formData, {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//         responseType: "blob",
-//         Authorization: token,
-//       },
-//     });
-//     console.log(data);
-//     return data;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
 
 export const commentsSlice = createSlice({
   name: "comments",
@@ -116,15 +82,11 @@ export const commentsSlice = createSlice({
   reducers: {
     commentSelectBox: (state, action) => {
       console.log("슬라이스에서 바뀜!", action.payload);
-      // adNumber이라는 명령(?)
-      state.commentSelectBoxId = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
-      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
+      state.commentSelectBoxId = action.payload; 
     },
     commentEditChange: (state, action) => {
       console.log(action.payload);
-      // adNumber이라는 명령(?)
-      state.commentEdit = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
-      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
+      state.commentEdit = action.payload;
     },
   },
   extraReducers: {

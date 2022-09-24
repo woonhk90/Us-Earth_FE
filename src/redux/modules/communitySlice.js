@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "universal-cookie";
-import { instance,tokenInstance } from "../../api/axios";
+import { instance, tokenInstance } from "../../api/axios";
 
 const cookies = new Cookies();
 const API_URL = process.env.REACT_APP_API_URL;
@@ -50,12 +50,12 @@ export const __getCommunityDetail = createAsyncThunk("usearth/__getCommunityDeta
   }
 });
 
-/* --------------------------- 커뮤니티 참여하기 버튼 눌렀을 때 --------------------------- */
+/* --------------------------- 커뮤니티 참여하기(가입) 버튼 눌렀을 때 --------------------------- */
 export const __updateCommunityJoin = createAsyncThunk("usearth/__updateCommunityJoin", async (payload, thunkAPI) => {
   try {
     console.log('__updateCommunityJoin=>', payload);
-    
-    const data = await tokenInstance.patch(`/join/${payload.communityId}`,payload);
+
+    const data = await tokenInstance.patch(`/join/${payload.communityId}`, payload);
 
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
@@ -101,7 +101,7 @@ export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularG
 export const __getNewGroupItemList = createAsyncThunk("usearth/__getNewGroupItemList", async (payload, thunkAPI) => {
   try {
     const data = await instance.get('/community/nearDone');
-    
+
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("마감임박 그룹 정보를 불러올 수 없습니다.");
@@ -128,6 +128,7 @@ export const communitySlice = createSlice({
     clearVal: (state) => { state.community = [] },
     certifyReset: (state) => { state.certify = [] },
     errorReset: (state) => { state.error = []; },
+    statusCodeReset: (state) => { state.statusCode = 0; },
     hasMoreFn: (state, action) => { state.hasMore = action.payload; },
     ingVal: (state, action) => { console.log(action); console.log(action); console.log(action); console.log(action); console.log(action); /* state.community = []  */ }
   },
@@ -210,5 +211,5 @@ export const communitySlice = createSlice({
   },
 });
 
-export const { clearVal, ingVal, certifyReset, errorReset, hasMoreFn } = communitySlice.actions;
+export const { clearVal, ingVal, certifyReset, errorReset, hasMoreFn, statusCodeReset } = communitySlice.actions;
 export default communitySlice.reducer;

@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     margin:0;
     padding:0;
-    font-family:'Noto Sans';
+    font-family: 'Noto Sans KR', sans-serif;
     
 &::-webkit-scrollbar {
     display: none;

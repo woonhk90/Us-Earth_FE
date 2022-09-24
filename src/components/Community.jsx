@@ -74,7 +74,7 @@ const PopularGroupTop = styled.div`
   padding: 0 15px;
 `;
 const PopularGroupTitle = styled.span`
-  font: bold 26px/50px "Arial", "sans-serif";
+  font: bold 26px/50px "Noto Sans KR", "sans-serif";
 `;
 const PopularGroupBox = styled.div`
   padding: 0 4.5px;
@@ -97,7 +97,9 @@ const NewGroupTop = styled.div`
   padding: 0 15px;
 `;
 const NewGroupTitle = styled.span`
-  font: bold 26px/50px "Arial", "sans-serif";
+  font: bold 26px/50px "Noto Sans KR", "sans-serif";
+  
+  /* font-family: 'Noto Sans KR', sans-serif; */
 `;
 const NewGroupBox = styled.div`
   padding: 0 4.5px;
