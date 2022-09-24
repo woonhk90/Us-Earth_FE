@@ -3,29 +3,24 @@ import styled from 'styled-components';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-const Chart = ({ val }) => {
+const Chart = ({ chartInfo }) => {
   const [chartFlag, setChartFlag] = React.useState('좋음');
   const [colorFlag, setColorFlag] = React.useState('0000ff');
   React.useEffect(() => {
-    if (val > 0 && val <= 25) {
-      setChartFlag('좋음');
+    if (chartInfo.risk === '좋음') {
       setColorFlag('0000ff');
-    } else if (val > 25 && val <= 50) {
-      setChartFlag('보통');
-      setColorFlag('008000');
-    } else if (val > 50 && val <= 75) {
-      setChartFlag('나쁨');
-      setColorFlag('ffff00');
-    } else if (val > 75) {
-      setChartFlag('매우나쁨');
-      setColorFlag('ff0000');
+    } else if (chartInfo.risk === '보통') {
+      setColorFlag('00FF00');
+    } else if (chartInfo.risk === '나쁨') {
+      setColorFlag('FFFF00');
+    } else if (chartInfo.risk === '매우나쁨') {
+      setColorFlag('FF0000');
     }
   }, [])
-  console.log(chartFlag);
   return (
     <>
       <ProgressWrap>
-        <CircularProgressbarWithChildren value={val} strokeWidth={10} styles={{
+        <CircularProgressbarWithChildren value={chartInfo.amount / chartInfo.maxAmount * 100} strokeWidth={10} styles={{
           root: { height: "100%" },
           path: {
             stroke: `#${colorFlag}`,
@@ -39,8 +34,8 @@ const Chart = ({ val }) => {
             fill: "#3e98c7",
           }
         }}>
-          <ChartFlag>{val}</ChartFlag>
-          <ChartFlag>{chartFlag}</ChartFlag>
+          <ChartFlag>{chartInfo.amount}</ChartFlag>
+          <ChartFlag>{chartInfo.risk}</ChartFlag>
         </CircularProgressbarWithChildren>
       </ProgressWrap>
     </>
@@ -50,8 +45,9 @@ export default Chart;
 
 const ProgressWrap = styled.div`
   width:100%;
+  margin:0 auto;
 `;
 
 const ChartFlag = styled.div`
-  font: 600 12px/20px "Noto Sans","sans-serif";
+  font:600 14px/20px 'Noto Sans KR','sans-serif';
 `;
