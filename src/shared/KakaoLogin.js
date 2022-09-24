@@ -4,11 +4,14 @@ import { setCookie } from "./cookie";
 import Swal from 'sweetalert2';
 import { useNavigate } from "react-router-dom";
 import AlertModal from "../components/Modals/AlertModal";
+import ErrorModal from "../components/Modals/ErrorModal";
 import Layout from '../components/layout/Layout';
+import { useState } from "react";
 
 
 const Login = () => {
   const [modal, setModal] = React.useState(false);
+  const [error, setError] = useState("");
   const alertModalData = {
     title: "환영합니다",
     btn1: "확인",
@@ -38,14 +41,18 @@ const Login = () => {
       modalOnOff();
 
     } catch (error) {
-      window.alert("로그인 실패");
+      setError(error);
       console.log(error);
     }
   }
 
+  
   useEffect(() => {
     getKakaoToken();
   }, [])
+  
+  if (error) return <ErrorModal error="로그인 실패" navigation="/login"/>;
+
   return (
     <>
       <Layout>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</Layout>

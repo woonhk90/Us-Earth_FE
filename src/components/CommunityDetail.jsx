@@ -40,7 +40,6 @@ const CommunityDetail = () => {
   }, [inView]);
   console.log("inView=>", inView);
 
-  /* --------------------------------- 참여하기 버튼 -------------------------------- */
   /* ----------------------------------- 로그인 ---------------------------------- */
   const [loginModal, setLoginModal] = useState(false);
   const loginModalOnOff = () => {

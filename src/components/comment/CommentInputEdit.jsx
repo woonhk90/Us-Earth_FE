@@ -19,6 +19,7 @@ const CommentInputEdit = ({ userToken }) => {
   const cookies = new Cookies();
   const dispatch = useDispatch();
   const API_URL = process.env.REACT_APP_API_URL;
+  const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
 
   // find commentId of edit(*)
   const { commentEdit } = useSelector((state) => state.comments);
@@ -31,7 +32,7 @@ const CommentInputEdit = ({ userToken }) => {
 
   const textRef = useRef();
   const handleResizeHeight = useCallback(() => {
-    if (textRef.current.scrollHeight < 150) {
+    if (textRef.current.scrollHeight < 100) {
       textRef.current.style.height = `auto`;
       textRef.current.style.height = textRef.current.scrollHeight + "px";
     }
@@ -95,6 +96,7 @@ const CommentInputEdit = ({ userToken }) => {
   const [upLoading, setUploading] = useState(100);
 
   const addImageFile = async (e) => {
+    setIsPhotoMessage("");
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
     // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
@@ -160,13 +162,11 @@ const CommentInputEdit = ({ userToken }) => {
     // data reset function
   };
 
-
   return (
     <>
       <CommentInputContainer ref={inputRef}>
         <CommentInputWrap>
           <InputWrap inputOn={inputOn}>
-            {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
             {upLoading < 100 ? (
               <Container>
                 <LoadingContainer>
@@ -191,6 +191,7 @@ const CommentInputEdit = ({ userToken }) => {
                     <Thumb src={previewImg} alt="img" />
                   </Container>
                 )}
+                {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
               </>
             )}
             <CommentTextarea
@@ -199,33 +200,40 @@ const CommentInputEdit = ({ userToken }) => {
               inputOn={inputOn}
               emptyCheck={inputOn || content.length || previewImg.length}
               maxLength="100"
-              textareaType="comment"
               value={content}
-              onChange={commentOnChange}
+              onChange={(e) => {
+                setIsPhotoMessage("");
+                commentOnChange(e);
+              }}
               placeholder="댓글을 입력해주세요"
               ref={textRef}
               onInput={handleResizeHeight}
               disabled={!userToken}
             />
           </InputWrap>
-          <StImageInput type="file" id="file" accept="image/jpg, image/jpeg, image/png" 
+          <StImageInput
+            type="file"
+            id="file"
+            accept="image/jpg, image/jpeg, image/png"
             onChange={(e) => {
               addImageFile(e);
               e.target.value = "";
-            }} />
-          <form onClick={inputOnButton} encType="multipart/form-data">
-            <StLabel htmlFor={!userToken ? null : "file"}>
+            }}
+          />
+          {/* <form onClick={inputOnButton} encType="multipart/form-data"> */}
+          <form encType="multipart/form-data">
+            <StLabel htmlFor={!participant || upLoading < 100 ? null : "file"}>
               <CameraIcon>
                 <Camera height="25" />
               </CameraIcon>
             </StLabel>
           </form>
           {/* <SubmitButtonWrap> */}
-            <WriteIcon>
-              <Edit height="25" onClick={onClickSubmit} />
-            </WriteIcon>
+          <WriteIcon>
+            <Edit height="25" onClick={onClickSubmit} />
+          </WriteIcon>
           {/* </SubmitButtonWrap> */}
-          </CommentInputWrap>
+        </CommentInputWrap>
       </CommentInputContainer>
     </>
   );
@@ -288,36 +296,37 @@ const WriteIcon = styled.div`
   padding: 21px 15px 0px 15px;
 `;
 const Thumb = styled.img`
-position: absolute;
-top: 0;
-background-size: 100px;
-width: 100px;
-height: 100px;
-box-sizing: border-box;
-border-radius: 6px;
+  position: absolute;
+  top: 0;
+  background-size: 100px;
+  width: 100px;
+  height: 100px;
+  box-sizing: border-box;
+  border-radius: 6px;
 `;
 
 const DeleteButton = styled.button`
-cursor: pointer;
-width: 26px;
-height: 26px;
-border-radius: 50%;
-position: absolute;
-z-index: 1;
-top: -10px;
-left: 90px;
-background-color: #525252;
-border: none;
+  cursor: pointer;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 1;
+  top: -6px;
+  left: 90px;
+  background-color: #525252;
+  border: none;
 `;
 
 const Container = styled.section`
-position: relative;
-align-items: center;
-display: flex;
-flex-direction: row;
-margin: 15px;
-width: 100px;
-height: 100px;
+  position: relative;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin: 11px;
+  margin-bottom: 5px;
+  width: 100px;
+  height: 100px;
 `;
 
 const CancelIcon = styled.div`
@@ -325,7 +334,7 @@ const CancelIcon = styled.div`
   height: 12px;
   position: absolute;
   right: 0px;
-  top: -3px;
+  top: -4px;
   z-index: 100;
 `;
 
@@ -340,7 +349,7 @@ const CancelIconWrap = styled.div`
 `;
 
 const ErrorMessageP = styled.p`
-  padding: 10px 10px 5px 10px;
+  padding: 5px 10px 5px 10px;
   font-weight: 200;
   font-size: 14px;
   letter-spacing: -0.02em;
@@ -360,10 +369,11 @@ const CommentTextarea = styled.textarea`
   width: 100%;
   outline: none;
   color: #222222;
-  height: 44px;
-  max-height: ${(props) => (props.inputOn ? "150px" : "44px")};
+  height: 40px;
+  max-height: ${(props) => (props.inputOn ? "100px" : "40px")};
   border: none;
   padding: 11px;
+  padding-bottom:6px;
   font-weight: 400;
   font-size: 16px;
   border-radius: 6px;
@@ -372,9 +382,9 @@ const CommentTextarea = styled.textarea`
     color: #939393;
   }
 
-@media (max-width: 390px) {
-  font-size: 14px;
-}
+  @media (max-width: 390px) {
+    font-size: 14px;
+  }
 `;
 const LoadingContainer = styled.div`
   position: absolute;

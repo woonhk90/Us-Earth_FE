@@ -15,6 +15,7 @@ import icons from "../../assets";
 import ConfirmModal from "../Modals/ConfirmModal";
 import Loading from "../etc/Loading";
 import ErrorModal from "../Modals/ErrorModal";
+import { __getCommunityDetail } from "../../redux/modules/communitySlice";
 
 const CommunityProof = () => {
   const { VerticalDot, Delete, Report, Edit } = icons;
@@ -22,11 +23,10 @@ const CommunityProof = () => {
   const dispatch = useDispatch();
   const param = useParams();
   const [modalOpen, setModalOpen] = useState(false);
-  const { proofs,isLoading, error } = useSelector((state) => state.proofs);
-console.log(proofs,"인증글")
+  const { proofs, isLoading, error } = useSelector((state) => state.proofs);
+  console.log(proofs, "인증글");
   useEffect(() => {
     dispatch(getProofs(param.proofId));
-
   }, [dispatch]);
 
   const openModal = () => {
@@ -36,8 +36,6 @@ console.log(proofs,"인증글")
   const closeModal = () => {
     setModalOpen(false);
   };
-
-
 
   const onClickEdit = () => {
     navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`);
@@ -62,24 +60,17 @@ console.log(proofs,"인증글")
     setModal(!modal);
   };
 
-  if(isLoading){
+  if (isLoading) {
     return (
-      <><Loading/>
-    </>
-    )
+      <>
+        <Loading />
+      </>
+    );
   }
 
-  // setError(error.response.data.message);
-if(error){
   return (
-    <><ErrorModal error={error}  /></>
-    // 
-  )
-}
-
-  return (
-    <>
-    {modal && <ConfirmModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} modalOnOff={modalOnOff}/>}
+    <>{error && <ErrorModal error={error} />}
+      {modal && <ConfirmModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
       <FirstWrap>
         <Swiper modules={[Navigation, Pagination, Scrollbar]} spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
           {proofs.img?.map((img) => {
@@ -96,7 +87,7 @@ if(error){
       </FirstWrap>
       <UserInfoFirstWrap>
         <UserInfoWrap>
-          <UserInfoImg referrerPolicy="no-referrer"  src={proofs.profileImage}/>
+          <UserInfoImg referrerPolicy="no-referrer" src={proofs.profileImage} />
           <UerInpo>
             <Username>{proofs.nickname}</Username>
             <CreatAt>{proofs.creatAt}</CreatAt>
@@ -122,12 +113,12 @@ if(error){
                 </ModalIcon>
                 삭제하기
               </ButtonInModal>
-              <ButtonInModal>
+              {/* <ButtonInModal>
                 <ModalIcon>
                   <Report />
                 </ModalIcon>
                 신고하기
-              </ButtonInModal>
+              </ButtonInModal> */}
             </EditModal>
           </>
         ) : null}
@@ -166,7 +157,7 @@ const UerInpo = styled.div`
 `;
 
 const UserInfoImg = styled.img`
- /* background-image: url(${(props) => props.imgUrl}); */
+  /* background-image: url(${(props) => props.imgUrl}); */
   width: 37px;
   height: 37px;
   background-position: center;
@@ -237,7 +228,7 @@ const FirstWrap = styled.div`
     height: 30px;
     background-color: gray;
   }
-  
+
   .swiper-button-next::after,
   .swiper-button-prev::after {
     display: none;

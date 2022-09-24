@@ -9,16 +9,13 @@ import UserMissionMonthCalendar from "./UserMissionMonthCalendar";
 import { getDailyMissionStats, getOnClickDate } from "../../redux/modules/userMissonSlice";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
 import { colors } from "../../styles/color";
 
 const UserMissionBottom = () => {
-  const cookies = new Cookies();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { clickDate } = useSelector((state) => state.userMission);
-  const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
-  console.log(dailyMissionData);
+  
+  const { dailyMissionData} = useSelector((state) => state.userMission);
+
   useEffect(() => {
     dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
   }, []);
@@ -26,8 +23,7 @@ const UserMissionBottom = () => {
   return (
     <>
       <SelectDateWrap>
-        {/* <SelectDateP>{dayjs(clickDate).format("YYYY년 MM월 DD일")}</SelectDateP> */}
-        <SelectDateP>{dayjs(dailyMissionData.createdAt).format("YYYY년 MM월 DD일")}</SelectDateP>
+        <SelectDateP>{dayjs(dailyMissionData.clearTime).format("YYYY년 MM월 DD일")}</SelectDateP>
         <SuccessMissionP>{dailyMissionData.count}개 완료</SuccessMissionP>
       </SelectDateWrap>
       <SelectDateMissionListWrap>

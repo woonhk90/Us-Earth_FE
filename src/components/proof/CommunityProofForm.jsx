@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postProof } from "../../redux/modules/proofsSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
-import { certifyReset } from "../../redux/modules/communitySlice";
+import { certifyReset, __getCommunityDetail } from "../../redux/modules/communitySlice";
 import isLogin from "../../lib/isLogin";
-import IsLoginModal from "../../pages/IsLoginModal";
+import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
 
 const CommunityProofForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
+  const {isLoading} = useSelector((state)=> state.proofs)
+
   const [inputData, inputOnChangeHandler, inputReset] = useInputs({
     title: "",
     content: "",
@@ -95,6 +97,7 @@ const CommunityProofForm = () => {
     setOkModal(!okModal);
   };
 
+  const [block, setBlock] = useState(false);
   const submitHandler = async () => {
     let formData = new FormData();
     if (title !== "" && content !== "" && files.length !== 0) {
@@ -111,8 +114,9 @@ const CommunityProofForm = () => {
       dispatch(certifyReset());
       navigate(`/community/detail/${param.communityId}`);
     }
+    setBlock(false)
   };
-
+  
   const ProofFormData = {
     files: files,
     previewImg: previewImg,
@@ -128,12 +132,15 @@ const CommunityProofForm = () => {
     okModal: okModal,
     okModalTitle: okModalTitle,
     okModalOnOff: okModalOnOff,
+    block,block
   };
+
+
 
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
-      <ProofForm ProofFormData={ProofFormData} />
+      {isLoading ? <>작성중 이미지</>: <ProofForm ProofFormData={ProofFormData} />}
     </>
   );
 };

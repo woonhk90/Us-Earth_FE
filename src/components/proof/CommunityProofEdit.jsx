@@ -1,39 +1,28 @@
 import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
 import { useDispatch, useSelector } from "react-redux";
-import { postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { patchProof, postProof } from "../../redux/modules/proofsSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
-import axios from "axios";
 import Cookies from "universal-cookie";
 import isLogin from "../../lib/isLogin";
-import IsLoginModal from "../../pages/IsLoginModal";
+import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
 import Loading from "../etc/Loading";
 import ErrorModal from "../Modals/ErrorModal";
+import { tokenInstance } from "../../api/axios";
 
-const API_URL = process.env.REACT_APP_API_URL;
 
 const CommunityProofEdit = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cookies = new Cookies();
   const param = useParams();
   const { isLoading, error } = useSelector((state) => state.proofs);
-
   /* -------------------------------- axios get ------------------------------- */
   const getProofs = async (proofId) => {
     try {
-      const authorization_token = cookies.get("mycookie");
-      const { data } = await axios.get(`${API_URL}/proof/${proofId}`, {
-        headers: {
-          Authorization: authorization_token,
-        },
-      });
-      console.log(data);
+      const { data } = await tokenInstance.get(`/proof/${proofId}`);
       if(!data.writer){
         navigate(`/community/${param.communityId}/proof/${param.proofId}`)
       }
@@ -152,6 +141,7 @@ const CommunityProofEdit = () => {
     setOkModal(!okModal);
   };
 
+  const [block, setBlock] = useState(false);
   const submitHandler = async () => {
     let formData = new FormData();
     if (title === "") {
@@ -204,17 +194,11 @@ const CommunityProofEdit = () => {
     okModalTitle: okModalTitle,
     okModalOnOff: okModalOnOff,
   };
-  if(isLoading){
-    return (
-      <><Loading/>
-    </>
-    )
-  }
-console.log(error)
+  
   // setError(error.response.data.message);
 if(error){
   return (
-    <><ErrorModal error={error}  /></>
+    <><ErrorModal error={error} /></>
     // 
   )
 }
@@ -222,7 +206,8 @@ if(error){
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
-      <ProofForm ProofFormData={ProofFormData} />
+      {isLoading ? <>작성중 이미지</>:  <ProofForm ProofFormData={ProofFormData} />}
+     
     </>
   );
 };
