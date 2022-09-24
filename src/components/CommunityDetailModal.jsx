@@ -3,15 +3,21 @@ import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie } from "../shared/cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { __updateCommunityJoin, __getCommunityDetail } from "../redux/modules/communitySlice";
+import { __updateCommunityJoin, __getCommunityDetail, errorReset, statusCodeReset } from "../redux/modules/communitySlice";
 
 const CommunityModal = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  /* -------------------------------- 모달 닫기 버튼 -------------------------------- */
   const closeModal = () => {
     if (statusCode === 200) {
       onClickResetInfo(props.communityId);
     }
+    
+    dispatch(errorReset());
+    dispatch(statusCodeReset());
+
     props.closeModal();
   };
 
@@ -20,7 +26,7 @@ const CommunityModal = (props) => {
   const [msg, setMsg] = React.useState("aa");
   console.log("ERROR=>", error, isLoading, statusCode);
 
-  /* ------------------------------- 참여하기 버튼 누름 ------------------------------- */
+  /* ------------------------------- 참여하기(가입) 버튼 누름 ------------------------------- */
   const onViewFlagHandler = async (id) => {
     await dispatch(__updateCommunityJoin({ communityId: id }));
   };
