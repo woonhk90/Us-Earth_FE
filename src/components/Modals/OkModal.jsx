@@ -1,7 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 
 const OkModal = (props) => {
   const { title, modalOnOff } = props;

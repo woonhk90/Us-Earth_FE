@@ -13,12 +13,12 @@ import cameraWh from "../../assets/cameraWh.svg";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import isLogin from "../../lib/isLogin";
-import IsLoginModal from "../../pages/IsLoginModal";
+import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
 import ImageLoading from "../etc/ImageLoading";
-import Loading from "../etc/Loading";
 import ErrorModal from "../Modals/ErrorModal";
 import SeceletonFormEdit from "./SceletonFormEdit";
+import { tokenInstance } from "../../api/axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -36,12 +36,7 @@ const CommunityFormEdit = () => {
     try {
       setError(null);
       setIsLoading(true);
-      const authorization_token = cookies.get("mycookie");
-      const { data } = await axios.get(`${API_URL}/community/${communityId}`, {
-        headers: {
-          Authorization: authorization_token,
-        },
-      });
+      const { data } = await tokenInstance.get(`/community/${communityId}`);
       console.log(data);
       if (!data.writer) navigate("/community");
       setSecret(data.secret);
@@ -95,9 +90,10 @@ const CommunityFormEdit = () => {
   const [deleteImage, setDeleteImage] = useState(false);
 
   const addImageFile = async (e) => {
+    setIsPhotoMessage("")
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
-    // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
         const options = {
@@ -111,7 +107,7 @@ const CommunityFormEdit = () => {
         };
         try {
           const compressedFile = await imageCompression(imageFile, options);
-          // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+        
           console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
           let reader = new FileReader();
           reader.readAsDataURL(compressedFile);
@@ -122,9 +118,9 @@ const CommunityFormEdit = () => {
           };
           const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
           setImageFile(convertedBlobFile);
-          // await ; // write your own logic
+
         } catch (error) {
-          console.log(error);
+          setIsPhotoMessage("오류가 발생했습니다. 다시 업로드해주세요.");
         }
       } else setIsPhotoMessage("20mb이상의 이미지만 가능합니다.");
     } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");

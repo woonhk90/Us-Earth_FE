@@ -2,10 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { tokenInstance } from "../../api/axios";
 
 const initialState = {
-  proofs: [],
   heartCommentCnt: {},
   heartCnt: {},
-  userHeart: false,
   isLoading: false,
   error: null,
 };
@@ -38,12 +36,6 @@ export const heartCommentSlice = createSlice({
   name: "heartComment",
   initialState,
   reducers: {
-    clickHerat: (state, action) => {
-      console.log("슬라이스에서 바뀜!", action.payload);
-      // adNumber이라는 명령(?)
-      state.userHeart = action.payload; // action creator함수를 생성하지 않고도 바로 payload를 사용할 수 있게 됩니다.
-      // Action Value 까지 함수의 이름을 따서 자동으로 만들어진다.
-    },
   },
   extraReducers: {
     /* ------------------------ get heartCnt & commentCnt ----------------------- */
@@ -52,7 +44,6 @@ export const heartCommentSlice = createSlice({
     },
     [getHeartCommentCnt.fulfilled]: (state, action) => {
       state.isLoading = false;
-      console.log(action.payload);
       state.heartCommentCnt = action.payload;
     },
     [getHeartCommentCnt.rejected]: (state, action) => {
@@ -66,8 +57,6 @@ export const heartCommentSlice = createSlice({
     [patchHeartCnt.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.heartCnt = action.payload;
-      console.log(action.payload)
-      state.userHeart = action.payload.heart;
     },
     [patchHeartCnt.rejected]: (state, action) => {
       state.isLoading = false;

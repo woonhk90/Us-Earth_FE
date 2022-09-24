@@ -2,8 +2,9 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 const Textarea = (props) => {
-  const { textareaRef, onInput, onFocus, textareaType, margin, weight, autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } = props;
-console.log(props.ref)
+  const { textareaRef, onInput, onFocus, textareaType, margin, weight, autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } =
+    props;
+  console.log(props.ref);
   return (
     <TextareaWrap>
       <StTextarea
@@ -84,10 +85,10 @@ const StTextarea = styled.textarea`
         margin: 0;
         padding: 14px 30px;
         font-size: 24px;
-        height:64px;
+        height: 64px;
         font-weight: 600;
-        
-  /* @media (max-width: 390px) {
+
+        /* @media (max-width: 390px) {
     font-size: 18px;
   } */
       `
@@ -101,6 +102,7 @@ const StTextarea = styled.textarea`
         padding: 10px 10px 0 10px;
         font-weight: 400;
         font-size: 16px;
+        line-height: 22px;
         border-radius: 6px;
         letter-spacing: -0.03em;
         ::placeholder {

@@ -24,7 +24,6 @@ const CommentBox = () => {
   const { heartCommentCnt } = useSelector((state) => state.heartComment);
   const { userHeart } = useSelector((state) => state.proofs);
   const { comments, commentEdit } = useSelector((state) => state.comments);
-  console.log(heartCommentCnt);
   const participant = heartCommentCnt.participant;
   const {proofs} = useSelector((state) => state.proofs);
   console.log(userHeart);
@@ -98,7 +97,7 @@ const CommentBox = () => {
         <IconWrap>
           <div onClick={onClickHeart}>
             <HeartButtonWrap isHeart={!participant || !userToken}>
-              <BottomIcon>{userHeart ? <HeartGy /> : <Heart />}</BottomIcon>
+              <BottomIcon>{heartCommentCnt.heart ? <HeartGy /> : <Heart />}</BottomIcon>
             </HeartButtonWrap>
           </div>
           <IconP>{heartCommentCnt.heartCnt}</IconP>

@@ -6,7 +6,6 @@ const Sceleton = ({width,height,margin}) => {
     <>
       <Box width={width}>
         <PlaceHolder height={height} margin={margin}/>
-        {/* <PlaceHolder /> */}
       </Box>
     </>
   );

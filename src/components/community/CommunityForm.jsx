@@ -11,15 +11,15 @@ import { addDates, postCommunityDetail } from "../../redux/modules/communityForm
 import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
 import { clearVal } from "../../redux/modules/communitySlice";
-import Cookies from "universal-cookie";
 import isLogin from "../../lib/isLogin";
-import IsLoginModal from "../../pages/IsLoginModal";
+import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
 import ImageLoading from "../etc/ImageLoading";
 
 const CommunityForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {isLoading} = useSelector((state)=> state.communityForm)
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
@@ -53,6 +53,7 @@ const CommunityForm = () => {
   const [upLoading, setUploading] = useState(100);
 
   const addImageFile = async (e) => {
+    setIsPhotoMessage("")
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
     // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
@@ -82,7 +83,7 @@ const CommunityForm = () => {
           setImageFile(convertedBlobFile);
           // await ; // write your own logic
         } catch (error) {
-          console.log(error);
+          setIsPhotoMessage("오류가 발생했습니다. 다시 업로드해주세요.");
         }
       } else setIsPhotoMessage("20mb이상의 이미지만 가능합니다.");
     } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
@@ -144,6 +145,8 @@ const CommunityForm = () => {
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
+      {isLoading ? <>작성중 이미지</>: 
+      <>
       <CommunityFormWrap>
         <ImageBoxWrap>
           <ImageForm encType="multipart/form-data">
@@ -260,6 +263,7 @@ const CommunityForm = () => {
           </BottomButton>
         )}
       </BottomWrap>
+      </>}
     </>
   );
 };
@@ -324,7 +328,7 @@ const ImageBoxWrap = styled.div`
 
 const ErrorMessage = styled.p`
   position: absolute;
-  bottom: 3px;
+  bottom: 0px;
 font-weight: 200;
 font-size: 14px;
 line-height: 19px;
@@ -432,7 +436,7 @@ const DeleteImage = styled.button`
 `;
 
 const Container = styled.div`
-  position: fixed;
+  position: absolute;
   background-size: contain;
   background-position: center;
   width: 206px;

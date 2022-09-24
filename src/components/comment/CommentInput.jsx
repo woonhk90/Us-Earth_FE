@@ -17,13 +17,15 @@ const CommentInput = ({ userToken }) => {
   const inputRef = useRef();
   const param = useParams();
   const [content, commentOnChange, commentReset] = useInput("");
-  const { dateStatus, participant } = useSelector((state) => state.community.communityDetail);
+  const { dateStatus } = useSelector((state) => state.comments.comments);
+  console.log(dateStatus)
   const [inputOn, setInputOn] = useState(false);
+  const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
 
   const textRef = useRef();
   const handleResizeHeight = useCallback(() => {
     console.log(textRef.current.style.height);
-    if (textRef.current.scrollHeight < 150) {
+    if (textRef.current.scrollHeight < 100) {
       textRef.current.style.height = `auto`;
       textRef.current.style.height = textRef.current.scrollHeight + "px";
     }
@@ -33,7 +35,6 @@ const CommentInput = ({ userToken }) => {
     window.addEventListener("mousedown", clickInputOutside);
     return () => {
       window.removeEventListener("mousedown", clickInputOutside);
-      
     };
   }, [inputOn]);
   console.log(inputOn);
@@ -49,7 +50,7 @@ const CommentInput = ({ userToken }) => {
 
   // user check
   const canWriteCheck = () => {
-    if(!isLogin()){
+    if (!isLogin()) {
       setOkModalTitle(`로그인을 해주세요.`);
       setOkModal(true);
     }
@@ -74,6 +75,7 @@ const CommentInput = ({ userToken }) => {
   const [upLoading, setUploading] = useState(100);
 
   const addImageFile = async (e) => {
+    setIsPhotoMessage("");
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
     // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
@@ -117,7 +119,11 @@ const CommentInput = ({ userToken }) => {
   };
   /* ---------------------------------- submit ---------------------------------- */
   const onClickSubmit = () => {
+    console.log("?");
+    console.log(participant);
+    console.log(dateStatus);
     if (participant && dateStatus === "ongoing") {
+      console.log("?");
       let formData = new FormData();
       if (content === "") {
         alert("내용을 입력해 주세요");
@@ -141,8 +147,14 @@ const CommentInput = ({ userToken }) => {
       {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
       <CommentInputContainer ref={inputRef} onClick={canWriteCheck}>
         <CommentInputWrap>
+          <form encType="multipart/form-data">
+            <StLabel htmlFor={!participant || upLoading < 100 ? null : "file"}>
+              <CameraIcon>
+                <Camera height="25" />
+              </CameraIcon>
+            </StLabel>
+          </form>
           <InputWrap inputOn={inputOn}>
-            {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
             {upLoading < 100 ? (
               <Container>
                 <LoadingContainer>
@@ -167,17 +179,21 @@ const CommentInput = ({ userToken }) => {
                     <Thumb src={previewImg} alt="img" />
                   </Container>
                 )}
+                {isPhotoMessage ? <ErrorMessageP>{isPhotoMessage}</ErrorMessageP> : null}
               </>
             )}
             <CommentTextarea
+              disabled={!participant || dateStatus === "end"}
               img={previewImg}
               rows="1"
               inputOn={inputOn}
               emptyCheck={inputOn || content.length || previewImg.length}
               maxLength="100"
-              textareaType="comment"
               value={content}
-              onChange={commentOnChange}
+              onChange={(e) => {
+                setIsPhotoMessage("");
+                commentOnChange(e);
+              }}
               placeholder="댓글을 입력해주세요"
               ref={textRef}
               onInput={handleResizeHeight}
@@ -192,16 +208,8 @@ const CommentInput = ({ userToken }) => {
               e.target.value = "";
             }}
           />
-          {/* </Column> */}
-          <form encType="multipart/form-data">
-            <StLabel htmlFor={!participant || upLoading < 100 ? null : "file"}>
-              <CameraIcon>
-                <Camera height="25" />
-              </CameraIcon>
-            </StLabel>
-          </form>
-          <WriteIcon>
-            <Edit height="25" onClick={onClickSubmit} />
+          <WriteIcon onClick={onClickSubmit}>
+            등록
           </WriteIcon>
         </CommentInputWrap>
       </CommentInputContainer>
@@ -231,7 +239,7 @@ const CommentInputWrap = styled.div`
 
 const InputWrap = styled.div`
   position: relative;
-  margin: 9px 0px 9px 16px;
+  margin: 9px 0px 9px 0px;
   width: 100%;
   background-color: white;
   border: 1px solid #ececec;
@@ -257,14 +265,23 @@ const CameraIcon = styled.div`
   cursor: pointer;
   width: 30px;
   background-color: transparent;
-  padding: 21px 0px 0px 15px;
+  padding: 20px 12px 0px 12px;
 `;
 
 const WriteIcon = styled.div`
   cursor: pointer;
   background-color: transparent;
-  height: 30px;
-  padding: 21px 15px 0px 15px;
+margin:20px 10px 0px 10px; 
+width: 59px;
+font-weight: 600;
+font-size: 18px;
+line-height: 25px;
+/* identical to box height */
+
+text-align: center;
+letter-spacing: -0.03em;
+
+color: #9B9B9B;
 `;
 
 const Thumb = styled.img`
@@ -284,7 +301,7 @@ const DeleteButton = styled.button`
   border-radius: 50%;
   position: absolute;
   z-index: 1;
-  top: -10px;
+  top: -6px;
   left: 90px;
   background-color: #525252;
   border: none;
@@ -295,7 +312,8 @@ const Container = styled.div`
   align-items: center;
   display: flex;
   flex-direction: row;
-  margin: 15px;
+  margin: 11px;
+  margin-bottom: 5px;
   width: 100px;
   height: 100px;
 `;
@@ -305,7 +323,7 @@ const CancelIcon = styled.div`
   height: 12px;
   position: absolute;
   right: 0px;
-  top: -3px;
+  top: -4px;
   z-index: 100;
 `;
 const CancelIconWrap = styled.div`
@@ -319,7 +337,7 @@ const CancelIconWrap = styled.div`
 `;
 
 const ErrorMessageP = styled.p`
-  padding: 10px 10px 5px 10px;
+  padding: 5px 10px 5px 10px;
   font-weight: 200;
   font-size: 14px;
   letter-spacing: -0.02em;
@@ -335,10 +353,11 @@ const CommentTextarea = styled.textarea`
   width: 100%;
   outline: none;
   color: #222222;
-  height: 44px;
-  max-height: ${(props) => (props.inputOn ? "150px" : "44px")};
+  height: 40px;
+  max-height: ${(props) => (props.inputOn ? "100px" : "40px")};
   border: none;
   padding: 11px;
+  padding-bottom:6px;
   font-weight: 400;
   font-size: 16px;
   border-radius: 6px;

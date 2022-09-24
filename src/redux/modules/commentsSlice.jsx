@@ -12,6 +12,7 @@ const initialState = {
     commentId: "",
   },
   isLoading: false,
+  getIsLoading: false,
   error: null,
 };
 
@@ -24,12 +25,12 @@ export const postComment = createAsyncThunk("comment/post", async (payload, thun
         responseType: "blob",
       },
     });
-    thunkAPI.dispatch(getComments(payload.proofId));
+    // thunkAPI.dispatch(getComments(payload.proofId));
     thunkAPI.dispatch(getHeartCommentCnt(payload.proofId));
     console.log(data);
-    return data;
-  } catch (err) {
-    console.log(err);
+    return thunkAPI.fulfillWithValue(data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
   }
 });
 
@@ -40,7 +41,7 @@ export const getComments = createAsyncThunk("comment/get", async (proofId, thunk
     console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    return thunkAPI.rejected(error);
+    return thunkAPI.rejectWithValue(error);
   }
 });
 
@@ -54,12 +55,14 @@ export const patchComment = createAsyncThunk("comment/patch", async (payload, th
       },
     });
     console.log(data);
-    thunkAPI.dispatch(getComments(payload.proofId));
+    // thunkAPI.dispatch(getComments(payload.proofId));
     thunkAPI.dispatch(commentEditChange({}));
-    return data;
-  } catch (err) {
-    console.log(err);
+
+    return thunkAPI.fulfillWithValue(data);
+  } catch (error) {
+    console.log(error);
     thunkAPI.dispatch(commentEditChange({}));
+    return thunkAPI.rejectWithValue(error);
   }
 });
 
@@ -67,10 +70,10 @@ export const patchComment = createAsyncThunk("comment/patch", async (payload, th
 export const deleteComments = createAsyncThunk("comment/delete", async (payload, thunkAPI) => {
   try {
     const data = await tokenInstance.delete(`/comments/${payload.commentId}`);
-    thunkAPI.dispatch(getComments(payload.proofId));
+    // thunkAPI.dispatch(getComments(payload.proofId));
     thunkAPI.dispatch(getHeartCommentCnt(payload.proofId));
     console.log(data);
-    return thunkAPI.fulfillWithValue(payload);
+    return thunkAPI.fulfillWithValue(payload.commentId);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -82,7 +85,7 @@ export const commentsSlice = createSlice({
   reducers: {
     commentSelectBox: (state, action) => {
       console.log("슬라이스에서 바뀜!", action.payload);
-      state.commentSelectBoxId = action.payload; 
+      state.commentSelectBoxId = action.payload;
     },
     commentEditChange: (state, action) => {
       console.log(action.payload);
@@ -95,8 +98,13 @@ export const commentsSlice = createSlice({
       state.isLoading = true;
     },
     [postComment.fulfilled]: (state, action) => {
+      console.log(action.payload);
       state.isLoading = false;
-      state.communityform = action.payload;
+      // state.comments.commentResponseDtoList
+      // = [...state.comments.commentResponseDtoList, action.payload];
+
+      // state.comments.commentResponseDtoList = state.comments.commentResponseDtoList.concat(action.payload)
+      state.comments.commentResponseDtoList.push(action.payload);
     },
     [postComment.rejected]: (state, action) => {
       state.isLoading = false;
@@ -104,14 +112,14 @@ export const commentsSlice = createSlice({
     },
     /* --------------------------- get comment (Read) --------------------------- */
     [getComments.pending]: (state) => {
-      state.isLoading = true;
+      state.getIsLoading = true;
     },
     [getComments.fulfilled]: (state, action) => {
-      state.isLoading = false;
+      state.getIsLoading = false;
       state.comments = action.payload;
     },
     [getComments.rejected]: (state, action) => {
-      state.isLoading = false;
+      state.getIsLoading = false;
       state.error = action.payload;
     },
     /* ------------------------- patch comment (Update) ------------------------- */
@@ -120,7 +128,9 @@ export const commentsSlice = createSlice({
     },
     [patchComment.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.communityform = action.payload;
+      state.comments.commentResponseDtoList = state.comments.commentResponseDtoList.map((comment) =>
+        comment.commentId === action.payload.commentId ? { ...comment, content: action.payload.content, img: action.payload.img } : comment
+      );
     },
     [patchComment.rejected]: (state, action) => {
       state.isLoading = false;
@@ -132,6 +142,8 @@ export const commentsSlice = createSlice({
     },
     [deleteComments.fulfilled]: (state, action) => {
       state.isLoading = false;
+      console.log(action.payload);
+      state.comments.commentResponseDtoList = state.comments.commentResponseDtoList.filter((v) => v.commentId !== action.payload);
     },
     [deleteComments.rejected]: (state, action) => {
       state.isLoading = false;

@@ -1,34 +1,25 @@
 import React from "react";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import dayjs from "dayjs";
+import {  useSelector } from "react-redux";
 import styled from "styled-components";
 import { flexBetween, flexColumn, flexRow } from "../../styles/Flex";
 import Button from "../elements/Button";
 import UserMissionMonthCalendar from "./UserMissionMonthCalendar";
-import { getDailyMissionStats, getOnClickDate } from "../../redux/modules/userMissonSlice";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
 import { colors } from "../../styles/color";
 import UserMissionBottom from "./UserMissionBottom";
+import isLogin from "../../lib/isLogin";
+import IsLoginModal from "../Modals/IsLoginModal";
 
 const UserMissionMonth = () => {
-  const cookies = new Cookies();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { clickDate } = useSelector((state) => state.userMission);
-  const { dailyMissionData, periodMissionData } = useSelector((state) => state.userMission);
-console.log(dailyMissionData)
+
   useEffect(() => {
-    if (cookies.get("mycookie") === undefined) {
-      navigate("/login");
-    }
-    // dispatch(getDailyMissionStats(dayjs().format("YYYY-MM-DD")));
   }, []);
 
   return (
     <>
+    {isLogin() ? null : <IsLoginModal />}
       <MissionStatsButtonWrap>
         <Button
           onClick={() => {
