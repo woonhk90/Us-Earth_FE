@@ -1,6 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+  :root{
+    --vh: 100%;
+  }
   
   * {
     font-size: 14px;
