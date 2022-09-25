@@ -7,11 +7,9 @@ import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
 import { flexBetween, flexColumn } from "../../styles/Flex";
-import { addDates, getCommunityDetail, patchCommunityDetail, postCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { addDates, communityFormCleanUp, communityFormcleanUp, patchCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
-import axios from "axios";
-import Cookies from "universal-cookie";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
@@ -20,22 +18,20 @@ import ErrorModal from "../Modals/ErrorModal";
 import SeceletonFormEdit from "./SceletonFormEdit";
 import { tokenInstance } from "../../api/axios";
 
-const API_URL = process.env.REACT_APP_API_URL;
-
 const CommunityFormEdit = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const cookies = new Cookies();
   const param = useParams();
+  const { isLoading, error } = useSelector((state) => state.communityForm);
 
   /* -------------------------------- axios get ------------------------------- */
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [isGetLoading, setIsGetLoading] = useState(false);
+  const [getError, setGetError] = useState(null);
   const getCommunityDetail = async (communityId) => {
     try {
-      setError(null);
-      setIsLoading(true);
+      setGetError(null);
+      setIsGetLoading(true);
       const { data } = await tokenInstance.get(`/community/${communityId}`);
       console.log(data);
       if (!data.writer) navigate("/community");
@@ -57,17 +53,21 @@ const CommunityFormEdit = () => {
       setIsPassword(data.secret);
     } catch (error) {
       console.log(error);
-      setError(error.response.data.message);
+      setGetError(error.response.data.message);
     }
-    setIsLoading(false);
+    setIsGetLoading(false);
   };
-
-
 
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
   const [secret, setSecret] = useState(false);
+
+  const [isLimitScore, setIsLimitScore] = useState("");
+  const [isLimitParticipants, setLimitParticipants] = useState("");
+  const [isTitle, setIsTitle] = useState("");
+  const [isContent, setIsContent] = useState("");
+  const [isdate, setIsDate] = useState("");
   const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmit, setForm] = useInputs({
     limitScore: "",
     limitParticipants: "",
@@ -78,9 +78,29 @@ const CommunityFormEdit = () => {
   const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
   const { limitScore, limitParticipants, title, content } = inputData;
-  const inputValid = Object.values(isForm);
-  const result = inputValid.find((word) => word === false);
-  console.log(inputData);
+  const realLimitScore = +limitScore.toString().replace(/ /g, "").replace(/(^0+)/g, "");
+  const realLimitParticipants = +limitParticipants.toString().replace(/ /g, "").replace(/(^0+)/g, "");
+
+  const validation = () => {
+    if (!/^([0-9]){4}$/.test(password)) {
+      setPasswordMessage("비밀번호 숫자 4자리");
+    } else setPasswordMessage("");
+    {
+      !/^([1-9]|10)$/.test(realLimitParticipants) ? setLimitParticipants("참가인원을 입력해 주세요(10명 이내)") : setLimitParticipants("");
+    }
+    if (!/^[1-9][0-9]?$|^100/.test(realLimitScore) || realLimitScore < realLimitParticipants) {
+      setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
+    } else setIsLimitScore("");
+    if (!dates.start?.length && !dates.end?.length) {
+      setIsDate("진행기간을 선택해 주세요.");
+    } else setIsDate("");
+    if (!title.trim().length) {
+      setIsTitle("그룹명을 입력해 주세요");
+    } else setIsTitle("");
+    if (!content.trim().length) {
+      setIsContent("그룹 소개를 입력해주세요");
+    } else setIsContent("");
+  };
 
   /* ------------------------------ photo upload ------------------------------ */
   const [imageFile, setImageFile] = useState([]);
@@ -90,10 +110,9 @@ const CommunityFormEdit = () => {
   const [deleteImage, setDeleteImage] = useState(false);
 
   const addImageFile = async (e) => {
-    setIsPhotoMessage("")
+    setIsPhotoMessage("");
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
-
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
         const options = {
@@ -107,7 +126,7 @@ const CommunityFormEdit = () => {
         };
         try {
           const compressedFile = await imageCompression(imageFile, options);
-        
+
           console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
           let reader = new FileReader();
           reader.readAsDataURL(compressedFile);
@@ -118,7 +137,6 @@ const CommunityFormEdit = () => {
           };
           const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
           setImageFile(convertedBlobFile);
-
         } catch (error) {
           setIsPhotoMessage("오류가 발생했습니다. 다시 업로드해주세요.");
         }
@@ -136,26 +154,31 @@ const CommunityFormEdit = () => {
   useEffect(() => {
     getCommunityDetail(param.id);
     return () => {
+      dispatch(communityFormCleanUp());
       imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
     };
   }, []);
 
-  if(isLoading){
+  if (isGetLoading) {
     return (
       <>
-      <SeceletonFormEdit/>
-    </>
-    )
+        <SeceletonFormEdit />
+      </>
+    );
   }
 
-  // setError(error.response.data.message);
-if(error){
-  return (
-    <ErrorModal error={error}  />
-  )
-}
+  if (getError) {
+    return <ErrorModal error={error} />;
+  }
 
+  if (isLoading) {
+    return <>작성중 이미지</>;
+  }
+
+  if (error) {
+    return <ErrorModal error={error} />;
+  }
   /* --------------------------- password validation -------------------------- */
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
@@ -187,14 +210,16 @@ if(error){
   const submitHandler = () => {
     let formData = new FormData();
     const dataSet = {
-      ...inputData,
+      title: title.trim(),
+      content: content.trim(),
+      limitParticipants: realLimitParticipants,
+      limitScore: realLimitScore,
       password: password,
       secret: secret,
       startDate: start,
       endDate: end,
       delete: deleteImage,
     };
-    console.log(dataSet);
     formData.append("multipartFile", imageFile);
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     dispatch(patchCommunityDetail({ communityId: param.id, formData }));
@@ -211,11 +236,9 @@ if(error){
               <ImageIcon>
                 {upLoading < 100 ? (
                   <Container>
-                    <LoadingWrap>
-                      <LoadingPosition>
-                        <ImageLoading />
-                      </LoadingPosition>
-                    </LoadingWrap>
+                    <LoadingPosition>
+                      <ImageLoading />
+                    </LoadingPosition>
                   </Container>
                 ) : null}
                 {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <CameraIcon />}
@@ -247,17 +270,27 @@ if(error){
             <CheckBoxLabel secret={secret} htmlFor="checkbox" />
           </CheckBoxWrapper>
         </TopTextWrap>
-        <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
+        <InputWrap>
+          <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
+          <MessageP>{isTitle}</MessageP>
+        </InputWrap>
         {secret ? (
           <>
-            <PasswordWrap>
-              <P>비밀번호</P>
-              {password.length > 0 && <MessageP>{passwordMessage}</MessageP>}
-            </PasswordWrap>
-            <Input inputype="basic" placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
+            <P>비밀번호</P>
+            <InputWrap>
+              <Input
+                inputype="basic"
+                placeholder="비밀번호를 입력해 주세요"
+                maxLength="4"
+                value={password}
+                onChange={pwOnChangeHandler}
+                type="password"
+              ></Input>
+              <MessageP>{passwordMessage}</MessageP>
+            </InputWrap>{" "}
           </>
         ) : null}
-        <DateSpan
+        <div
           onClick={() => {
             setModal(!modal);
           }}
@@ -270,38 +303,56 @@ if(error){
           ) : (
             <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
           )}
-        </DateSpan>
+        </div>
         {modal && <CalendarModal closeModal={() => setModal(!modal)}></CalendarModal>}
         <P>참여인원*</P>
-        <Input
-          inputype="basic"
-          maxLength="2"
-          placeholder="인원을 입력해주세요(최대 10명)"
-          type="tel"
-          name="limitParticipants"
-          value={limitParticipants}
-          onChange={inputOnChangeHandler}
-        ></Input>
-        <P>목표달성갯수*</P>
-        <Input inputype="basic" maxLength="3" type="tel" name="limitScore" value={limitScore} onChange={inputOnChangeHandler}></Input>
+        <InputWrap>
+          <Input
+            inputype="basic"
+            maxLength="2"
+            placeholder="인원을 입력해 주세요(최대 10명)"
+            type="tel"
+            name="limitParticipants"
+            value={limitParticipants}
+            onChange={inputOnChangeHandler}
+          ></Input>
+          <MessageP>{isLimitParticipants}</MessageP>
+        </InputWrap>
+        <P>목표달성 수*</P>
+        <InputWrap>
+          <Input
+            inputype="basic"
+            maxLength="3"
+            type="tel"
+            name="limitScore"
+            placeholder="목표달성 수를 입력해주세요(최대 100)"
+            value={limitScore}
+            onChange={inputOnChangeHandler}
+          ></Input>
+          <MessageP limitScore={true}>{isLimitScore}</MessageP>
+        </InputWrap>
         <P>그룹소개*</P>
-        <Textarea
-          placeholder="소개글을 입력해 주세요"
-          cols="50"
-          rows="8"
-          maxLength="500"
-          name="content"
-          textareaType="basic"
-          value={content}
-          onChange={inputOnChangeHandler}
-        ></Textarea>
+        <InputWrap>
+          <Textarea
+            placeholder="소개글을 입력해 주세요"
+            cols="50"
+            rows="8"
+            maxLength="500"
+            name="content"
+            textareaType="basic"
+            value={content}
+            onChange={inputOnChangeHandler}
+          ></Textarea>
+          <MessageP bottom={true}>{isContent}</MessageP>
+        </InputWrap>
       </CommunityFormWrap>
       <BottomWrap>
-        {/^([1-9]|10)$/.test(limitParticipants) &&
-        /^[1-9][0-9]?$|^100/.test(limitScore) &&
-        result === undefined &&
-        dates.start?.length &&
-        dates.end?.length &&
+        {/^([1-9]|10)$/.test(realLimitParticipants) &&
+        /^[1-9][0-9]?$|^100/.test(realLimitScore) &&
+        realLimitScore >= realLimitParticipants &&
+        title.trim().length &&
+        content.trim().length &&
+        dates.end?.length > 0 &&
         secret === isPassword ? (
           <BottomButton
             style={{
@@ -314,7 +365,7 @@ if(error){
             그룹 등록
           </BottomButton>
         ) : (
-          <BottomButton disabled={true} bgColor={"#EDEDED"} color={"#BEBEBE"}>
+          <BottomButton onClick={validation} bgColor={"#EDEDED"} color={"#BEBEBE"}>
             그룹 등록
           </BottomButton>
         )}
@@ -369,11 +420,6 @@ const CheckBoxLabel = styled.label`
           `}
   }
   background: ${(props) => (props.secret ? `#80bc28` : null)};
-`;
-
-const StartEndDate = styled.div`
-  font-size: 22px;
-  color: ${(props) => props.color};
 `;
 
 const CheckBox = styled.input`
@@ -510,9 +556,6 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const LoadingWrap = styled.div`
-  /* align-items: center; */
-`;
 const LoadingPosition = styled.div`
   display: flex;
   position: absolute;
@@ -541,15 +584,12 @@ const BottomButton = styled.button`
 `;
 
 /* -------------------------------- font & div -------------------------------- */
-const DateSpan = styled.div`
-  margin: 30px 0;
-`;
 
 const P = styled.p`
   font-size: 20px;
   font-weight: 500;
   letter-spacing: -0.03em;
-  margin-top: 26px;
+  margin-top: 20px;
 `;
 
 const DateP = styled.p`
@@ -557,19 +597,21 @@ const DateP = styled.p`
   height: 35px;
   margin: 0;
   font-size: 22px;
-  padding: 10px 0 26px 0;
+  padding: 5px 0 26px 0;
   font-weight: 700;
   border-bottom: 1px solid rgba(0, 0, 0, 0.14);
   color: ${(props) => props.color};
 
-  @media (max-width: 390px) {
+  @media (min-width: 281px) and (max-width: 389px) {
     font-size: 16px;
   }
+  @media (max-width: 280px) {
+    font-size: 14px;
+  }
 `;
-
 const SelectDateP = styled.p`
   box-sizing: content-box;
-  height: 35px;
+  height: 32px;
   margin: 0;
   font-size: 22px;
   padding: 10px 0 26px 0;
@@ -585,6 +627,8 @@ const SelectDateP = styled.p`
 const RightText = styled.p`
   font-size: 18px;
   text-align: right;
+  font-weight: 500;
+  letter-spacing: -0.03em;
 `;
 
 const TopTextWrap = styled.div`
@@ -595,14 +639,30 @@ const MessageP = styled.p`
   font-weight: 200;
   font-size: 14px;
   line-height: 19px;
+  position: absolute;
+  right: 0;
+  bottom: ${(props) => (props.bottom ? "10px" : "5px")};
   display: flex;
   align-items: center;
   text-align: right;
   letter-spacing: -0.02em;
   color: #ff0000;
+
+  @media (max-width: 389px) {
+    ${(props) =>
+      props.limitScore &&
+      css`
+        font-size: 12px;
+        bottom: 3px;
+        line-height: 14px;
+      `}/* font-size: ${(props) => props.limitScore && "12px"};
+    bottom: ${(props) => props.limitScore && "3px"};
+    line-height: ${(props) => props.limitScore && "14px"}; */
+  }
 `;
-const PasswordWrap = styled.div`
-  ${flexBetween}
-  text-align: end;
-  align-items: flex-end;
+
+const InputWrap = styled.div`
+  position: relative;
+  /* text-align: end;
+  align-items: flex-end; */
 `;

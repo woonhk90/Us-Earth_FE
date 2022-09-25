@@ -8,13 +8,18 @@ import { commentEditChange, deleteComments, getComments } from "../../redux/modu
 import ConfirmModal from "../Modals/ConfirmModal";
 import icons from "../../assets";
 import OkModal from "../Modals/OkModal";
+import Loading from "../etc/Loading";
+import ErrorModal from "../Modals/ErrorModal";
+import ImageLoading from "../etc/ImageLoading";
 const Comment = ({ userToken, editMode }) => {
-  const { isLoading } = useSelector((state) => state.comments);
+  const { getIsLoading, error, commentEdit } = useSelector((state) => state.comments);
   const { Delete, Report, Edit } = icons;
   const dispatch = useDispatch();
   const param = useParams();
-  const { dateStatus, commentResponseDtoList, commentEdit } = useSelector((state) => state.comments.comments);
+  const { dateStatus, commentResponseDtoList } = useSelector((state) => state.comments.comments);
+  console.log(commentEdit);
 
+  console.log(getIsLoading);
   useEffect(() => {
     dispatch(getComments(param.proofId));
   }, []);
@@ -37,13 +42,10 @@ const Comment = ({ userToken, editMode }) => {
     if (payload.selectName === "수정하기") {
       if (dateStatus === "ongoing") {
         if (commentEdit?.editMode !== true) {
-          const commentList = commentResponseDtoList.find((comment) => comment.commentId === payload.contentId);
           dispatch(commentEditChange({}));
           dispatch(
             commentEditChange({
               editMode: true,
-              comment: commentList.content,
-              commentImg: commentList.img?.imgUrl,
               commentId: payload.contentId,
             })
           );
@@ -113,6 +115,19 @@ const Comment = ({ userToken, editMode }) => {
   const closeModal = () => {
     setModal(!modal);
   };
+  if (getIsLoading) {
+    return (
+      <ImageLoadingWrap>
+        <ImageLoadingCenter>
+          <ImageLoading color="rgba(0, 0, 0, 0.13)" />
+        </ImageLoadingCenter>
+      </ImageLoadingWrap>
+    );
+  }
+
+  if (error) {
+    return <ErrorModal error={error} />;
+  }
 
   return (
     <>
@@ -134,7 +149,6 @@ const Comment = ({ userToken, editMode }) => {
             <StSpan>{comment.content}</StSpan>
           </CommentBox>
         ))}
-        {/* {getIsLoading &&  <CommentBox>vsvv</CommentBox>} */}
       </CommentContainer>
     </>
   );
@@ -219,4 +233,19 @@ const Nickname = styled.p`
 const ModalIcon = styled.div`
   width: 18px;
   margin-right: 18px;
+`;
+
+const ImageLoadingWrap = styled.div`
+  width: 100%;
+  height: 100px;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  display: flex;
+`;
+const ImageLoadingCenter = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;

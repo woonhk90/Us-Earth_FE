@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { clearVal } from "../../redux/modules/communitySlice";
 import { ReactComponent as Cancel } from "../../assets/Cancel.svg";
 
-const CommunityFormTop = () => {
+const CommunityFormTop = ({title}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   React.useEffect(() => {
@@ -25,7 +25,7 @@ const CommunityFormTop = () => {
         </IconDiv>
       </HeaderWrap>
       <HeaderFlex>
-        <P>그룹 만들기</P>
+        <P>{title}</P>
       </HeaderFlex>
     </>
   );

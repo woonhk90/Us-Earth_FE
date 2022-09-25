@@ -8,7 +8,6 @@ const initialState = {
   error: null,
 };
 
-
 /* ------------------------ get heartCnt & commentCnt ----------------------- */
 export const getHeartCommentCnt = createAsyncThunk("proof/heartComment", async (proofId, thunkAPI) => {
   try {
@@ -24,18 +23,23 @@ export const patchHeartCnt = createAsyncThunk("proof/Heart", async (proofId, thu
   try {
     const { data } = await tokenInstance.patch(`/proof/heart/${proofId}`);
     console.log(data);
-    thunkAPI.dispatch(getHeartCommentCnt(proofId));
+    // thunkAPI.dispatch(getHeartCommentCnt(proofId));
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.message);
   }
 });
 
-
 export const heartCommentSlice = createSlice({
   name: "heartComment",
   initialState,
   reducers: {
+    heartCommentCleanUp: (state, action) => {
+      state.heartCommentCnt = {};
+      state.heartCnt = {};
+      state.isLoading = false;
+      state.error = null;
+    },
   },
   extraReducers: {
     /* ------------------------ get heartCnt & commentCnt ----------------------- */
@@ -56,7 +60,8 @@ export const heartCommentSlice = createSlice({
     },
     [patchHeartCnt.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.heartCnt = action.payload;
+      state.heartCommentCnt.heart = action.payload.heart;
+      state.heartCommentCnt.heartCnt = action.payload.heartCnt;
     },
     [patchHeartCnt.rejected]: (state, action) => {
       state.isLoading = false;
@@ -65,5 +70,5 @@ export const heartCommentSlice = createSlice({
   },
 });
 
-export const { clickHerat } = heartCommentSlice.actions;
+export const { heartCommentCleanUp } = heartCommentSlice.actions;
 export default heartCommentSlice.reducer;
