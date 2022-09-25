@@ -77,7 +77,7 @@ const PopularGroupTitle = styled.span`
   font: bold 26px/50px "Noto Sans KR", "sans-serif";
 `;
 const PopularGroupBox = styled.div`
-  padding: 0 4.5px;
+  /* padding: 0 4.5px; */
   display: flex;
   overflow-x: scroll;
   &::-webkit-scrollbar {
@@ -102,7 +102,7 @@ const NewGroupTitle = styled.span`
   /* font-family: 'Noto Sans KR', sans-serif; */
 `;
 const NewGroupBox = styled.div`
-  padding: 0 4.5px;
+  /* padding: 0 4.5px; */
   display: flex;
   overflow-x: scroll;
   &::-webkit-scrollbar {

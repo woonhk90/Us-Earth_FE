@@ -3,6 +3,11 @@ import styled from "styled-components";
 import Modal from "./CommunityDetailModal";
 import { ReactComponent as Edit } from "../assets/Edit.svg";
 import forest from "../assets/Forest.jpg";
+import forest1 from "../assets/forest_01.gif";
+import forest2 from "../assets/forest_02.gif";
+import forest3 from "../assets/forest_03.gif";
+import forest4 from "../assets/forest_04.gif";
+import forest5 from "../assets/forest_05.gif";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { __getCommunityDetail, __getCommunityCertify, errorReset } from "../redux/modules/communitySlice";
@@ -54,12 +59,28 @@ const CommunityDetail = () => {
       setModal(!modal);
     }
   };
+
+  /* ------------------------------ 단계별 숲 이미지 띄우기 ----------------------------- */
+  // const [forest, setForest] = useState();
+  let gifUrl;
+  if (communityDetail.successPercent <= 20) {
+    gifUrl = forest1;
+  }else if(Number(communityDetail.successPercent)>21 && Number(communityDetail.successPercent)<=40){
+    gifUrl = forest2;
+  }else if(Number(communityDetail.successPercent)>41 && Number(communityDetail.successPercent)<=60){
+    gifUrl = forest3;
+  }else if(Number(communityDetail.successPercent)>61 && Number(communityDetail.successPercent)<=80){
+    gifUrl = forest4;
+  }else if(Number(communityDetail.successPercent)>81 && Number(communityDetail.successPercent)<=100){
+    gifUrl = forest5;
+  }
+
   return (
     <>
       {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
       <CommunityDetailWrap>
         <Container>
-          <Forest imgUrl={forest}></Forest>
+          <Forest imgUrl={gifUrl}></Forest>
           <Content>
             <ContentItem font={"16px/22px 'Noto Sans KR', 'sans-serif'"} marginBottom={"10px"}>
               {communityDetail.startDate} - {communityDetail.endDate}
@@ -135,7 +156,7 @@ const CommunityDetail = () => {
             </CertifyContent>
           </CertifyContentBox>
           {getCookie("mycookie") === undefined ? null : communityDetail.participant ? (
-            communityDetail.dateStatus ? (
+            communityDetail.dateStatus === 'ongoing' ? (
               <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`)}>
                 <Edit />
               </CertifyContentIcon>
