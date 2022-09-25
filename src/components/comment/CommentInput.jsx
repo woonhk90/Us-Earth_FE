@@ -18,7 +18,7 @@ const CommentInput = ({ userToken }) => {
   const param = useParams();
   const [content, commentOnChange, commentReset] = useInput("");
   const { dateStatus } = useSelector((state) => state.comments.comments);
-  console.log(dateStatus)
+  console.log(dateStatus);
   const [inputOn, setInputOn] = useState(false);
   const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
 
@@ -154,15 +154,13 @@ const CommentInput = ({ userToken }) => {
               </CameraIcon>
             </StLabel>
           </form>
-          <InputWrap inputOn={inputOn}>
+          <InputWrap color={!participant} inputOn={inputOn}>
             {upLoading < 100 ? (
               <Container>
                 <LoadingContainer>
-                  <LoadingWrap>
-                    <LoadingPosition>
-                      <ImageLoading />
-                    </LoadingPosition>
-                  </LoadingWrap>
+                  <LoadingPosition>
+                    <ImageLoading />
+                  </LoadingPosition>
                 </LoadingContainer>
               </Container>
             ) : (
@@ -208,9 +206,7 @@ const CommentInput = ({ userToken }) => {
               e.target.value = "";
             }}
           />
-          <WriteIcon onClick={onClickSubmit}>
-            등록
-          </WriteIcon>
+          <WriteIcon onClick={onClickSubmit}>등록</WriteIcon>
         </CommentInputWrap>
       </CommentInputContainer>
     </>
@@ -221,12 +217,6 @@ export default CommentInput;
 
 const CommentInputContainer = styled.div`
   width: 100%;
-  .edit2-1 {
-    fill: #cbcbcb;
-  }
-  .camera-1 {
-    fill: #cbcbcb;
-  }
 `;
 
 const CommentInputWrap = styled.div`
@@ -235,13 +225,14 @@ const CommentInputWrap = styled.div`
   align-items: flex-start;
   box-sizing: border-box;
   background-color: #f9f9f9;
+  
 `;
 
 const InputWrap = styled.div`
   position: relative;
   margin: 9px 0px 9px 0px;
   width: 100%;
-  background-color: white;
+  background-color: ${(props)=>props.color ? "#f9f9f9": "white"};
   border: 1px solid #ececec;
   border-radius: 6px;
 `;
@@ -271,17 +262,14 @@ const CameraIcon = styled.div`
 const WriteIcon = styled.div`
   cursor: pointer;
   background-color: transparent;
-margin:20px 10px 0px 10px; 
-width: 59px;
-font-weight: 600;
-font-size: 18px;
-line-height: 25px;
-/* identical to box height */
-
-text-align: center;
-letter-spacing: -0.03em;
-
-color: #9B9B9B;
+  margin: 20px 8px 0px 8px;
+  width: 54px;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: center;
+  letter-spacing: -0.03em;
+  color: #9b9b9b;
 `;
 
 const Thumb = styled.img`
@@ -357,7 +345,7 @@ const CommentTextarea = styled.textarea`
   max-height: ${(props) => (props.inputOn ? "100px" : "40px")};
   border: none;
   padding: 11px;
-  padding-bottom:6px;
+  padding-bottom: 6px;
   font-weight: 400;
   font-size: 16px;
   border-radius: 6px;
@@ -368,6 +356,8 @@ const CommentTextarea = styled.textarea`
 
   @media (max-width: 390px) {
     font-size: 14px;
+    height: 37px;
+    max-height: ${(props) => (props.inputOn ? "100px" : "37px")};
   }
 `;
 
@@ -385,9 +375,6 @@ const LoadingContainer = styled.div`
   border-radius: 6px;
 `;
 
-const LoadingWrap = styled.div`
-  /* align-items: center; */
-`;
 const LoadingPosition = styled.div`
   display: flex;
   position: absolute;

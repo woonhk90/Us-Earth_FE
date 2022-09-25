@@ -10,7 +10,7 @@ const EarthCommunityForm = () => {
     <>
       <Layout>
         <Header>
-          <CommunityFormTop />
+          <CommunityFormTop title="그룹 만들기"/>
         </Header>
         <CommunityBox>
           <CommunityForm />

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_2" data-name="레이어 2" xmlns="http://www.w3.org/2000/svg" width="12.63" height="22" viewBox="0 0 12.63 22">
+  <defs>
+    <style>
+      .rightWh-1 {
+        fill: #fff;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+      }
+    </style>
+  </defs>
+  <g id="_최종" data-name="최종">
+    <path class="rightWh-1" d="M1.66,.5c.3,0,.59,.11,.82,.34L11.79,10.16c.22,.22,.34,.51,.34,.82v.05c0,.31-.12,.6-.34,.82L2.47,21.16c-.45,.45-1.18,.45-1.64,0-.45-.45-.45-1.18,0-1.64L9.36,11,.84,2.47c-.45-.45-.45-1.18,0-1.64,.23-.23,.52-.34,.82-.34Z"/>
+  </g>
+</svg>

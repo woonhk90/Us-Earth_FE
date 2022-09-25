@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AlertModal from "../components/Modals/AlertModal";
 import ErrorModal from "../components/Modals/ErrorModal";
 import { useState } from "react";
+import ImageLoading from "../components/etc/ImageLoading";
 
 const Login = () => {
   const [modal, setModal] = React.useState(false);
@@ -47,13 +48,13 @@ const Login = () => {
     getGoogleToken();
   }, []);
 
-  // if (error) return <ErrorModal error="로그인 실패" />;
-
   return (
     <>
       <Layout>
-        {error && <ErrorModal error="로그인 실패" navigation="/login"/>}
-        
+        {error && <ErrorModal error="로그인 실패" navigation="/login" />}
+        <ImageLoadingWrap>
+          <ImageLoading color="rgba(0, 0, 0, 0.13)" />
+        </ImageLoadingWrap>
         <CommunityBox>{modal && <AlertModal alertModalData={alertModalData} closeModal={modalOnOff} goAction={goAction}></AlertModal>}</CommunityBox>
       </Layout>
     </>
@@ -68,4 +69,14 @@ const CommunityBox = styled.div`
   @media (max-width: 540px) {
     width: 100%;
   }
+`;
+
+const ImageLoadingWrap = styled.div`
+  align-items: center;
+  align-content: center;
+  position: absolute;
+  display: flex;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;

@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 const Input = (props) => {
-  const { onInput,inputype, fontWeight, maxLength, pattern, title, size, id, type, value, name, onChange, placeholder, margin } = props;
+  const { onInput, inputype, fontWeight, maxLength, pattern, title, size, id, type, value, name, onChange, placeholder, margin } = props;
   return (
     <InputWrap>
       <StInput
@@ -48,14 +48,19 @@ const StInput = styled.input`
         box-sizing: border-box;
         margin: 0;
         font-size: 22px;
-        padding: 10px 0 26px 0;
+        padding: 5px 0 26px 0;
         font-weight: 700;
-            
-    @media (max-width: 390px) {
-      ::placeholder{
-        font-size: 16px;
-      }
-    }
+        @media (min-width: 281px) and (max-width: 389px) {
+          ::placeholder {
+            font-size: 16px;
+          }
+        }
+
+        @media (max-width: 280px) {
+          ::placeholder {
+            font-size: 14px;
+          }
+        }
       `
     );
   }}

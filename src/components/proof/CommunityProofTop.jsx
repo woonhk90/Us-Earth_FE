@@ -25,7 +25,6 @@ const CommunityProofTop = () => {
         <WriteIcon>
           <Write />
         </WriteIcon>
-        <PTag>그룹 투두 제목</PTag>
       </HeaderWrap>
     </>
   );
@@ -43,15 +42,6 @@ const HeaderWrap = styled.div`
   padding: 16px;
   box-sizing: border-box;
   z-index: 1;
-`;
-
-const PTag = styled.p`
-font-size: 20px;
-font-weight: 600;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 `;
 
 const IconDiv = styled.div`

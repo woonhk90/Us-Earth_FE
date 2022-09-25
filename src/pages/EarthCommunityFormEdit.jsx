@@ -11,7 +11,7 @@ const EarthCommunityFormEdit = () => {
     <>
       <Layout>
         <Header>
-          <CommunityFormTop />
+          <CommunityFormTop  title="그룹 정보 수정"/>
         </Header>
         <CommunityBox>
           <CommunityFormEdit />
