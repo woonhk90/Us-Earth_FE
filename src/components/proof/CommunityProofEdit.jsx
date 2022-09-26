@@ -12,6 +12,7 @@ import imageCompression from "browser-image-compression";
 import Loading from "../etc/Loading";
 import ErrorModal from "../Modals/ErrorModal";
 import { tokenInstance } from "../../api/axios";
+import SceletonProofEdit from "./SceletonProofEdit";
 
 const CommunityProofEdit = () => {
   const navigate = useNavigate();
@@ -20,13 +21,13 @@ const CommunityProofEdit = () => {
   const { isLoading, error } = useSelector((state) => state.proofs);
 
   /* -------------------------------- axios get ------------------------------- */
-  const [isGetLoading, setIsGetLoading] = useState(false);
+  const [getIsLoading, setGetIsLoading] = useState(false);
   const [getError, setGetError] = useState(null);
 
   const getProofs = async (proofId) => {
     try {
       setGetError(null);
-      setIsGetLoading(true);
+      setGetIsLoading(true);
       const { data } = await tokenInstance.get(`/proof/${proofId}`);
       if (!data.writer) {
         navigate(`/community/${param.communityId}/proof/${param.proofId}`);
@@ -56,7 +57,7 @@ const CommunityProofEdit = () => {
       console.log(error);
       setGetError(error.response.data.message);
     }
-    setIsGetLoading(false);
+    setGetIsLoading(false);
   };
   const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmit, setUseInputs] = useInputs({
     title: "",
@@ -191,12 +192,8 @@ const CommunityProofEdit = () => {
   };
 
   // setError(error.response.data.message);
-  if (isGetLoading) {
-    return (
-      <>
-        <>로딩중 이미지</>
-      </>
-    );
+  if (getIsLoading) {
+    return <SceletonProofEdit />;
   }
 
   if (getError) {
