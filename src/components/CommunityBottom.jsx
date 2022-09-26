@@ -46,10 +46,10 @@ const CommunityBottom = () => {
   return (
     <>
       <FooterWrap>
-        <FooterMenus onClick={() => { onActionPage('btn1') }}>{pathFlag === 'root' ? <Community_On /> : <Community_Off />}<span>커뮤니티</span></FooterMenus>
-        <FooterMenus onClick={() => { onActionPage('btn2') }}>{pathFlag === 'info' ? <Info_On /> : <Info_Off />}<span>소식지</span></FooterMenus>
-        <FooterMenus >{pathFlag === 'chat' ? <Chat_On /> : <Chat_Off />}<span>채팅</span></FooterMenus>
-        <FooterMenus onClick={() => { onActionPage('btn4') }}>{pathFlag === 'mypage' ? <Mypage_On /> : <Mypage_Off />}<span>{usercookie === undefined ? '로그인' : '내정보'}</span></FooterMenus>
+        <FooterMenus onClick={() => { onActionPage('btn1') }} style={{color: pathFlag === 'root' ? '#94DA76' : '#DDDDDD'}}>{pathFlag === 'root' ? <Community_On /> : <Community_Off />}<span>커뮤니티</span></FooterMenus>
+        <FooterMenus onClick={() => { onActionPage('btn2') }} style={{color: pathFlag === 'info' ? '#94DA76' : '#DDDDDD'}}>{pathFlag === 'info' ? <Info_On /> : <Info_Off />}<span>소식지</span></FooterMenus>
+        <FooterMenus  style={{color: pathFlag === 'chat' ? '#94DA76' : '#DDDDDD'}}>{pathFlag === 'chat' ? <Chat_On /> : <Chat_Off />}<span>채팅</span></FooterMenus>
+        <FooterMenus onClick={() => { onActionPage('btn4') }} style={{color: pathFlag === 'mypage' ? '#94DA76' : '#DDDDDD'}}>{pathFlag === 'mypage' ? <Mypage_On /> : <Mypage_Off />}<span>{usercookie === undefined ? '로그인' : '내정보'}</span></FooterMenus>
       </FooterWrap>
     </>
   )
@@ -70,13 +70,11 @@ const FooterWrap = styled.div`
 
 const FooterMenus = styled.div`
   width:100%;
-  
-  
-  /* background-color:${(props) => props.bgColor}; */
   display:flex;
   flex-direction:column;
   justify-content: center;
   align-items: center;
+  color:${(props)=>props.color};
   span{
     font-size:10px;
     line-height:20px;

@@ -101,7 +101,7 @@ const MyPageMissionListBox = styled.div`
   flex-direction: column;
   gap: 25px;
   div:nth-child(1) {
-    font: 600 24px/35px "Noto sans", "sans-serif";
+    font: 600 24px/35px "Noto sans KR", "sans-serif";
   }
   div:nth-child(2),
   div:nth-child(3) {
@@ -109,7 +109,7 @@ const MyPageMissionListBox = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font: 18px/25px "Noto sans", "sans-serif";
+    font: 18px/25px "Noto sans KR", "sans-serif";
     span > span {
       display: inline-block;
       padding: 0 15px;
