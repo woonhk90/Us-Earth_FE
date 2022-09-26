@@ -6,53 +6,48 @@ import Header from "../Header";
 import "react-datepicker/dist/react-datepicker.css";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import { ReactComponent as CameraWh } from "../../assets/cameraWh.svg";
-import Textarea from "../elements/Textarea";
-import ImageLoading from "../etc/ImageLoading";
-import { Thumbs } from "swiper";
 
 const SceletonProofEdit = () => {
   const navigate = useNavigate();
   const param = useParams();
   return (
     <>
-        <Header>
-          <HeaderWrap>
-            <IconDiv>
-              <Back
-                onClick={() => {
-                  navigate(`/community/detail/${param.communityId}`);
-                }}
-                />
-            </IconDiv>
-            <HeaderP>
-              수정
-            </HeaderP>
-          </HeaderWrap>
-        </Header>
+      <Header>
+        <HeaderWrap>
+          <IconDiv>
+            <Back
+              onClick={() => {
+                navigate(`/community/detail/${param.communityId}`);
+              }}
+            />
+          </IconDiv>
+          <HeaderP>수정</HeaderP>
+        </HeaderWrap>
+      </Header>
       <CommunityFormWrap>
-          <AddPhotoWrap>
-            <Stform>
-              <Container>
-                <div >
-                  <StIcon>
-                    <CameraIcon>
-                      <CameraWh />
-                    </CameraIcon>
-                  </StIcon>
-                  <ImageLength>(0/5)</ImageLength>
-                </div>
-              </Container>
-            </Stform>
-              <Container>
-                <Sceleton margin="0" height="100px" width="100px" />
-              </Container>
-          </AddPhotoWrap>
+        <AddPhotoWrap>
+          <Stform>
+            <Container>
+              <div>
+                <StIcon>
+                  <CameraIcon>
+                    <CameraWh />
+                  </CameraIcon>
+                </StIcon>
+                <ImageLength>(0/5)</ImageLength>
+              </div>
+            </Container>
+          </Stform>
+          <Container>
+            <Sceleton margin="0" height="100px" width="100px" />
+          </Container>
+        </AddPhotoWrap>
         <BottomWrap>
           <Bottom>
-                <Sceleton margin="0" height="35px" width="50%" />
-                </Bottom>
-                <Sceleton margin="15px 30px 0 30px" height="25px" width="80%" />
-                <Sceleton margin="15px 30px 0 30px" height="25px" width="60%" />
+            <Sceleton margin="0" height="35px" width="50%" />
+          </Bottom>
+          <Sceleton margin="15px 30px 0 30px" height="25px" width="80%" />
+          <Sceleton margin="15px 30px 0 30px" height="25px" width="60%" />
         </BottomWrap>
       </CommunityFormWrap>
     </>
@@ -65,7 +60,6 @@ const CommunityFormWrap = styled.div`
   width: 100%;
   position: relative;
 `;
-
 
 const AddPhotoWrap = styled.div`
   display: grid;
@@ -98,13 +92,13 @@ const BottomWrap = styled.div`
 `;
 
 const Bottom = styled.div`
-border-bottom: 2px solid rgba(217, 217, 217, 0.3);
-        box-sizing: border-box;
-        margin: 0;
-        padding: 14px 30px;
-        font-size: 24px;
-        height: 64px;
-        font-weight: 600;
+  border-bottom: 2px solid rgba(217, 217, 217, 0.3);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 14px 30px;
+  font-size: 24px;
+  height: 64px;
+  font-weight: 600;
 `;
 
 const ImageLength = styled.div`
@@ -156,8 +150,8 @@ const IconDiv = styled.div`
 `;
 
 const HeaderP = styled.button`
-display: flex;
-align-items: center;
+  display: flex;
+  align-items: center;
   cursor: pointer;
   border: none;
   background-color: transparent;

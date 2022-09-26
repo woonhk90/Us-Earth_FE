@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
 import { useDispatch, useSelector } from "react-redux";
-import { postProof } from "../../redux/modules/proofsSlice";
+import { postProof, proofsCleanUp } from "../../redux/modules/proofsSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
 import styled, { css } from "styled-components";
@@ -28,6 +28,7 @@ const CommunityProofForm = () => {
   useEffect(() => {
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
+      dispatch(proofsCleanUp());
     };
   }, []);
 
@@ -101,16 +102,17 @@ const CommunityProofForm = () => {
 
   const [block, setBlock] = useState(false);
   const submitHandler = async () => {
+    console.log(title,content,)
     let formData = new FormData();
     if (title.trim() !== "" && content.trim() !== "" && files.length !== 0) {
       const dataSet = {
         title: title.trim(),
         content: content.trim(),
       };
-      // if (files.length > 0) {
-      //   console.log(files);
-      //   files.map((file) => formData.append("multipartFile", file));
-      // }
+      if (files.length > 0) {
+        console.log(files);
+        files.map((file) => formData.append("multipartFile", file));
+      }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       console.log(dataSet);
       await dispatch(postProof({ communityId: param.communityId, formData: formData })).then((response) => {
