@@ -71,7 +71,7 @@ const PopularGroupItemList = () => {
         </CommunityBox>
       </CommunityGroup>
 
-      {hasMore ? (isLoading ? null : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'그룹 항목의 마지막 입니다.'} />}
+      {hasMore ? (isLoading ? null : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'맨 하단 페이지 입니다.'} />}
     </>
   )
 }

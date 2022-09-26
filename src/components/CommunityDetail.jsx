@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "./CommunityDetailModal";
 import { ReactComponent as Edit } from "../assets/Edit.svg";
-import forest from "../assets/Forest.jpg";
 import forest1 from "../assets/forest_01.gif";
 import forest2 from "../assets/forest_02.gif";
 import forest3 from "../assets/forest_03.gif";
@@ -15,8 +14,12 @@ import { useInView } from "react-intersection-observer";
 import { colors } from "../styles/color";
 import { getCookie } from "../shared/cookie";
 import LoginModal from "./Modals/LoginModal";
+import { replace } from "lodash";
+
+import icons from "../assets";
 
 const CommunityDetail = () => {
+  const { CommunityNewProof } = icons;
   const navigate = useNavigate();
   const [modal, setModal] = React.useState(false);
   const param = useParams();
@@ -65,13 +68,13 @@ const CommunityDetail = () => {
   let gifUrl;
   if (communityDetail.successPercent <= 20) {
     gifUrl = forest1;
-  }else if(Number(communityDetail.successPercent)>21 && Number(communityDetail.successPercent)<=40){
+  } else if (Number(communityDetail.successPercent) > 21 && Number(communityDetail.successPercent) <= 40) {
     gifUrl = forest2;
-  }else if(Number(communityDetail.successPercent)>41 && Number(communityDetail.successPercent)<=60){
+  } else if (Number(communityDetail.successPercent) > 41 && Number(communityDetail.successPercent) <= 60) {
     gifUrl = forest3;
-  }else if(Number(communityDetail.successPercent)>61 && Number(communityDetail.successPercent)<=80){
+  } else if (Number(communityDetail.successPercent) > 61 && Number(communityDetail.successPercent) <= 80) {
     gifUrl = forest4;
-  }else if(Number(communityDetail.successPercent)>81 && Number(communityDetail.successPercent)<=100){
+  } else if (Number(communityDetail.successPercent) > 81) {
     gifUrl = forest5;
   }
 
@@ -157,8 +160,8 @@ const CommunityDetail = () => {
           </CertifyContentBox>
           {getCookie("mycookie") === undefined ? null : communityDetail.participant ? (
             communityDetail.dateStatus === 'ongoing' ? (
-              <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`)}>
-                <Edit />
+              <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`, { replace: true })}>
+                <CommunityNewProof />
               </CertifyContentIcon>
             ) : null
           ) : null}
@@ -330,10 +333,6 @@ const CertifyContentIcon = styled.div`
   position: absolute;
   bottom: 80px;
   right: 17px;
-  width: 71px;
-  height: 71px;
-  background-color: #515151;
-  border-radius: 50%;
 
   display: flex;
   justify-content: center;

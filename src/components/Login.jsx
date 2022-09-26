@@ -21,9 +21,9 @@ const Login = () => {
       <LoginWrap>
         <Container>
           <Logo></Logo>
-          <div className='item' onClick={() => onClickHandler('k')}><img src={kakao} alt='kakao_img'/><span>카카오 로그인</span></div>
-          <div className='item' onClick={() => onClickHandler('n')}><img src={naver} alt='naver_img'/><span>네이버 로그인</span></div>
-          <div className='item' onClick={() => onClickHandler('g')}><img src={google} alt='google_img'/><span>구글 로그인</span></div>
+          <div className='item' onClick={() => onClickHandler('k')}><div><img src={kakao} alt='kakao_img' /></div><span>카카오 로그인</span></div>
+          <div className='item' onClick={() => onClickHandler('n')}><div><img src={naver} alt='naver_img' /></div><span>네이버 로그인</span></div>
+          <div className='item' onClick={() => onClickHandler('g')}><div><img src={google} alt='google_img' /></div><span>구글 로그인</span></div>
         </Container>
       </LoginWrap>
     </>
@@ -45,8 +45,8 @@ const Logo = styled.div`
   justify-content:center;
   align-items:center;
   height: 150px;
-  width: 80%;
-  margin-bottom:25px;
+  width: 50%;
+  margin-bottom:100px;
   
   background:url(${LogoImg}) no-repeat center center;
   background-size: contain;
@@ -62,23 +62,35 @@ const Container = styled.div`
   box-sizing:border-box;
   padding:0 20px;
   text-align:center;
-  .item{
+  div.item{
     width:100%;
-    height:25px;
+    height:60px;
     padding:15px 0;
     border:1px solid black;
-    text-align:center;
+    box-sizing:border-box;
+    
 
-    font:500 18px/1 'Noto Sans','sean-serif';
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    span{
+      display:block;
+      font-size:16px;
+      height:16px;
+      line-height: 0.9;
+    }
 
     position:relative;
-    img{
+    div{
       position:absolute;
-      top:0;
-      left:0;
-      height:100%;
-      padding:10px 0 10px 15px;
-      box-sizing:border-box;
+      top:50%;
+      left:15px;
+      transform: translate(0, -50%);
+      width:28px;
+      height:28px;
+      img{
+        width:100%;
+      }
     }
   }
 `;

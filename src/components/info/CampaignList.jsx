@@ -4,9 +4,10 @@ import { useInView } from "react-intersection-observer";
 import { useDispatch, useSelector } from "react-redux";
 import { __getInfo } from "../../redux/modules/infoSlice";
 import Loading from "../etc/Loading";
+import HashMore from '../etc/HasMore';
 
 const Info = () => {
-  const { infoList, isLoading } = useSelector((state) => state.info);
+  const { infoList, isLoading, hasMore } = useSelector((state) => state.info);
   console.log(infoList);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
@@ -43,7 +44,7 @@ const Info = () => {
         })}
       </CampaignBox>
       {/* <Loading /> */}
-      {isLoading ? <Loading /> : <div ref={ref} style={{ border: "1px solid white" }}></div>}
+      {hasMore ? (isLoading ? <Loading /> : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'맨 하단 페이지 입니다.'} />}
     </>
   );
 };

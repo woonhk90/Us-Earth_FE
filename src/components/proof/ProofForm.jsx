@@ -52,7 +52,7 @@ const ProofForm = ({ ProofFormData }) => {
             <IconDiv>
               <Back
                 onClick={() => {
-                  navigate(`/community/detail/${param.communityId}`);
+                  navigate(`/community/detail/${param.communityId}`,{replace:true});
                 }}
               />
             </IconDiv>
