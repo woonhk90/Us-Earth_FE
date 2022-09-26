@@ -16,9 +16,6 @@ const CommunityTop = () => {
       dispatch(clearVal());
     };
   }, [])
-  const onClickHandler = () => {
-    navigate(-1);
-  }
   return (
     <>
       <HeaderWrap>
@@ -41,5 +38,9 @@ const HeaderWrap = styled.div`
   border-bottom:1px solid rgba(0,0,0,0.14);
   box-sizing:border-box;
   z-index:1;
-  color:${colors.black22}
+  color:${colors.black22};
+  p{
+    font-weight: 600;
+    font-size: 20px;
+  }
 `;

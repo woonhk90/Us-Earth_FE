@@ -7,18 +7,22 @@ import styled, { css } from "styled-components";
 import Layout from "../layout/Layout";
 const cookies = new Cookies();
 
-const ErrorModal = ({ error, navigation }) => {
-  const [okModal, setOkModal] = useState(false);
+const ErrorModal = ({ error, notGo }) => {
+  const [okModal, setOkModal] = useState(true);
   const navigate = useNavigate();
 
   const okModalOnOff = () => {
-    setOkModal(!okModal);
-    navigation ? navigate(navigation) : navigate("/");
+    if (notGo) {
+      setOkModal(false);
+    } else {
+      setOkModal(false);
+      navigate("/");
+    }
   };
 
   return (
     <>
-      <OkModal title={error} modalOnOff={okModalOnOff}></OkModal>
+      {okModal && <OkModal title={error} modalOnOff={okModalOnOff}></OkModal>}
     </>
   );
 };

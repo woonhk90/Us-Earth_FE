@@ -13,8 +13,8 @@ const CommunityTop = () => {
     <>
       <HeaderWrap>
         <div onClick={() => { setModal(!modal) }}><Search /></div>
-        <div onClick={() => { navigate('/community/form') }}><Plus /></div>
-        {modal && (<Modal closeModal={() => setModal(!modal)}></Modal>)}
+        <p>커뮤니티</p>
+        <div></div>
       </HeaderWrap>
     </>
   )
@@ -23,9 +23,6 @@ const CommunityTop = () => {
 export default CommunityTop;
 
 const HeaderWrap = styled.div`
-/* position: absolute; */
-  top:0;
-  left:0;
   width: 100%;
   height:48px;
   display:flex;
@@ -34,5 +31,16 @@ const HeaderWrap = styled.div`
   padding:10px;
   box-sizing:border-box;
   z-index:1;
-  color:${colors.black22}
+  color:${colors.black22};
+  div{
+    width:100%;
+    display:flex;
+    align-items:center;
+  }
+  p{
+    width:100%;
+    text-align:center;
+    font-weight: 600;
+    font-size: 20px;
+  }
 `;
