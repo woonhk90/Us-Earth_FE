@@ -28,7 +28,10 @@ export const postComment = createAsyncThunk("comment/post", async (payload, thun
     console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+    console.log(error);
+    if(!error.response.data.msg){
+      return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
+    } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 });
 
@@ -39,7 +42,10 @@ export const getComments = createAsyncThunk("comment/get", async (proofId, thunk
     console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+    console.log(error);
+    if(!error.response.data.msg){
+      return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
+    } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 });
 
@@ -60,7 +66,9 @@ export const patchComment = createAsyncThunk("comment/patch", async (payload, th
   } catch (error) {
     console.log(error);
     thunkAPI.dispatch(commentEditChange({}));
-    return thunkAPI.rejectWithValue(error);
+    if(!error.response.data.msg){
+      return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
+    } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 });
 
@@ -73,7 +81,10 @@ export const deleteComments = createAsyncThunk("comment/delete", async (payload,
     console.log(data);
     return thunkAPI.fulfillWithValue(payload.commentId);
   } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+    console.log(error);
+    if(!error.response.data.msg){
+      return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
+    } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 });
 

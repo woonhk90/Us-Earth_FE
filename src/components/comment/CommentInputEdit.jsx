@@ -4,14 +4,12 @@ import useInput from "../../hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
 import { patchComment, postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import Cookies from "universal-cookie";
 import { ReactComponent as Camera } from "../../assets/camera.svg";
 import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
-import { flexColumn } from "../../styles/Flex";
-import { ReactComponent as Edit } from "../../assets/Edit2.svg";
 import imageCompression from "browser-image-compression";
 import ImageLoading from "../etc/ImageLoading";
+import { tokenInstance } from "../../api/axios";
 
 const CommentInputEdit = ({ userToken }) => {
   const inputRef = useRef();
@@ -33,10 +31,11 @@ const CommentInputEdit = ({ userToken }) => {
 
   const textRef = useRef();
   const handleResizeHeight = useCallback(() => {
+    textRef.current.style.height = `40px`;
     if (textRef.current.scrollHeight < 100) {
       textRef.current.style.height = `auto`;
       textRef.current.style.height = textRef.current.scrollHeight + "px";
-    }
+    } else textRef.current.style.height = `100px`;
   }, []);
 
   const clickInputOutside = (event) => {
@@ -47,15 +46,11 @@ const CommentInputEdit = ({ userToken }) => {
 
   const getComments = async (payload) => {
     try {
-      const authorization_token = cookies.get("mycookie");
-      const { data } = await axios.get(`${API_URL}/comments/${payload.proofId}`, {
-        Authorization: authorization_token,
-      });
-
+      const { data } = await tokenInstance.get(`/comments/${payload.proofId}`);
+      setInputOn(true)
       // find data & into input
       const commentList = data.commentResponseDtoList.find((comment) => comment.commentId === payload.commentId);
-      setInputOn(true);
-      setContent(commentList.content);
+      setContent(commentList.content)
       if (commentList.img === null) {
         setImageFile([]);
         setPreviewImg([]);
@@ -65,7 +60,7 @@ const CommentInputEdit = ({ userToken }) => {
       }
     } catch (error) {}
   };
-
+console.log(inputOn)
   /* ----------------------------- useEffect(*) ---------------------------- */
   useEffect(() => {
     window.addEventListener("mousedown", clickInputOutside);
@@ -80,6 +75,11 @@ const CommentInputEdit = ({ userToken }) => {
     };
   }, [commentEdit.commentId]);
 
+  useEffect(()=>{
+    handleResizeHeight();
+
+  },[inputOn])
+
   /* ---------------------------------- photo upload ---------------------------------- */
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
@@ -91,7 +91,6 @@ const CommentInputEdit = ({ userToken }) => {
     setIsPhotoMessage("");
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
-    // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
         const options = {
@@ -104,7 +103,6 @@ const CommentInputEdit = ({ userToken }) => {
         };
         try {
           const compressedFile = await imageCompression(imageFile, options);
-          // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
           console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
           let reader = new FileReader();
           reader.readAsDataURL(compressedFile);
@@ -115,7 +113,6 @@ const CommentInputEdit = ({ userToken }) => {
           };
           const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
           setImageFile(convertedBlobFile);
-          // await ; // write your own logic
         } catch (error) {
           setIsPhotoMessage("오류가 발생했습니다. 다시 업로드해주세요.");
         }
@@ -128,16 +125,17 @@ const CommentInputEdit = ({ userToken }) => {
     setImageFile([]);
     setPreviewImg([]);
     setDeleteImg(true);
+    setIsPhotoMessage("")
   };
 
   /* ---------------------------------- submit(*) ---------------------------------- */
   const onClickSubmit = () => {
     let formData = new FormData();
-
     // validation
-    if (content === "") {
-      alert("내용을 입력해 주세요");
-    } else {
+    if (upLoading === 100) {
+      if(content.trim() === ""){
+       return setIsPhotoMessage("내용을 입력해주세요.")
+      }
       formData.append("multipartFile", imageFile);
       formData.append("dto", new Blob([JSON.stringify({ content: content, delete: deleteImg })], { type: "application/json" }));
 
@@ -149,13 +147,11 @@ const CommentInputEdit = ({ userToken }) => {
       setPreviewImg([]);
       textRef.current.style.height = `auto`;
     }
-
-    // data reset function
   };
 
   return (
     <>
-    <CommentInputContainer ref={inputRef} >
+      <CommentInputContainer ref={inputRef}>
         <CommentInputWrap>
           <form encType="multipart/form-data">
             <StLabel htmlFor={!participant || upLoading < 100 ? null : "file"}>
@@ -164,13 +160,13 @@ const CommentInputEdit = ({ userToken }) => {
               </CameraIcon>
             </StLabel>
           </form>
-          <InputWrap color={!participant}  inputOn={inputOn}>
+          <InputWrap participant={!participant} inputOn={inputOn}>
             {upLoading < 100 ? (
               <Container>
                 <LoadingContainer>
-                    <LoadingPosition>
-                      <ImageLoading />
-                    </LoadingPosition>
+                  <LoadingPosition>
+                    <ImageLoading />
+                  </LoadingPosition>
                 </LoadingContainer>
               </Container>
             ) : (
@@ -216,9 +212,7 @@ const CommentInputEdit = ({ userToken }) => {
               e.target.value = "";
             }}
           />
-          <WriteIcon onClick={onClickSubmit}>
-            등록
-          </WriteIcon>
+          <WriteIcon onClick={onClickSubmit}>등록</WriteIcon>
         </CommentInputWrap>
       </CommentInputContainer>
     </>
@@ -243,7 +237,7 @@ const InputWrap = styled.div`
   position: relative;
   margin: 9px 0px 9px 0px;
   width: 100%;
-  background-color: ${(props)=>props.color ? "#f9f9f9": "white"};
+  background-color: ${(props) => (props.participant ? "#f9f9f9" : "white")};
   border: 1px solid #ececec;
   border-radius: 6px;
 `;
@@ -273,14 +267,14 @@ const CameraIcon = styled.div`
 const WriteIcon = styled.div`
   cursor: pointer;
   background-color: transparent;
-margin:20px 8px 0px 8px; 
-width: 54px;
-font-weight: 600;
-font-size: 18px;
-line-height: 25px;
-text-align: center;
-letter-spacing: -0.03em;
-color: #9B9B9B;
+  margin: 20px 8px 0px 8px;
+  width: 54px;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  text-align: center;
+  letter-spacing: -0.03em;
+  color: #9b9b9b;
 `;
 
 const Thumb = styled.img`
@@ -356,7 +350,7 @@ const CommentTextarea = styled.textarea`
   max-height: ${(props) => (props.inputOn ? "100px" : "40px")};
   border: none;
   padding: 11px;
-  padding-bottom:6px;
+  padding-bottom: 6px;
   font-weight: 400;
   font-size: 16px;
   border-radius: 6px;
