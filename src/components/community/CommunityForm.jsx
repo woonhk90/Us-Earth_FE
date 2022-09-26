@@ -181,13 +181,10 @@ const CommunityForm = () => {
     );
   }
 
-  if (error) {
-    return <ErrorModal error={error} />;
-  }
-
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
+      {error && <ErrorModal notGo={true} error={error} />}
       <>
         <CommunityFormWrap>
           <ImageBoxWrap>
@@ -231,7 +228,6 @@ const CommunityForm = () => {
               <CheckBoxLabel htmlFor="checkbox" />
             </CheckBoxWrapper>
           </TopTextWrap>
-
           <InputWrap>
             <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
             <MessageP>{isTitle}</MessageP>

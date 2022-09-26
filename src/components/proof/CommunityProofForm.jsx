@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
 import { useDispatch, useSelector } from "react-redux";
-import { postProof } from "../../redux/modules/proofsSlice";
+import { postProof, proofsCleanUp } from "../../redux/modules/proofsSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
+import styled, { css } from "styled-components";
 import { certifyReset, __getCommunityDetail } from "../../redux/modules/communitySlice";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
 import ErrorModal from "../Modals/ErrorModal";
+import ImageLoading from "../etc/ImageLoading";
 
 const CommunityProofForm = () => {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ const CommunityProofForm = () => {
   useEffect(() => {
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
+      dispatch(proofsCleanUp());
     };
   }, []);
 
@@ -99,16 +102,17 @@ const CommunityProofForm = () => {
 
   const [block, setBlock] = useState(false);
   const submitHandler = async () => {
+    console.log(title,content,)
     let formData = new FormData();
     if (title.trim() !== "" && content.trim() !== "" && files.length !== 0) {
       const dataSet = {
         title: title.trim(),
         content: content.trim(),
       };
-      // if (files.length > 0) {
-      //   console.log(files);
-      //   files.map((file) => formData.append("multipartFile", file));
-      // }
+      if (files.length > 0) {
+        console.log(files);
+        files.map((file) => formData.append("multipartFile", file));
+      }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       console.log(dataSet);
       await dispatch(postProof({ communityId: param.communityId, formData: formData })).then((response) => {
@@ -142,15 +146,17 @@ const CommunityProofForm = () => {
   };
 
   if (isLoading) {
-    return <>작성중 이미지</>;
+    return (
+      <>
+        <ImageLoadingWrap>
+          <ImageLoading color="rgba(0, 0, 0, 0.13)" />
+        </ImageLoadingWrap>
+      </>
+    );
   }
-
-  if (error) {
-    return <ErrorModal error={error} />;
-  }
-
   return (
     <>
+    {error && <ErrorModal notGo={true} error={error} />}
       {isLogin() ? null : <IsLoginModal />}
       <ProofForm ProofFormData={ProofFormData} />
     </>
@@ -158,3 +164,18 @@ const CommunityProofForm = () => {
 };
 
 export default CommunityProofForm;
+
+const ImageLoadingWrap = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 0 15px;
+  box-sizing: border-box;
+`;

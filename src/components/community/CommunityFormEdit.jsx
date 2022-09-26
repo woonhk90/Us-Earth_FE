@@ -182,13 +182,13 @@ const CommunityFormEdit = () => {
     );
   }
 
-  if (error) {
-    return (
-      <ImageLoadingWrap>
-        <ErrorModal error={error} />
-      </ImageLoadingWrap>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <ImageLoadingWrap>
+  //       <ErrorModal error={error} />
+  //     </ImageLoadingWrap>
+  //   );
+  // }
   /* --------------------------- password validation -------------------------- */
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
@@ -242,6 +242,7 @@ const CommunityFormEdit = () => {
 
   return (
     <>
+      {error && <ErrorModal notGo={true} error={error} />}
       {isLogin() ? null : <IsLoginModal />}
       <CommunityFormWrap>
         <ImageBoxWrap>

@@ -124,7 +124,6 @@ const CommunityDetail = () => {
                 </OnGoingState>
               )
             ) : null}
-
             {communityDetail.dateStatus === "ongoing" ? (
               <EndState>
                 <EndStateTop>
