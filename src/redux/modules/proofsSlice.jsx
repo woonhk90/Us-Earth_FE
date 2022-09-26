@@ -84,7 +84,6 @@ export const proofsSlice = createSlice({
       state.proofs = [];
       state.heartCommentCnt = {};
       state.heartCnt = {};
-      state.isLoading = false;
       state.error = null;
       state.userHeart = false;
     },

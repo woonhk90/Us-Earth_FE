@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
 import { useDispatch, useSelector } from "react-redux";
-import { patchProof, postProof } from "../../redux/modules/proofsSlice";
+import { patchProof, postProof, proofsCleanUp } from "../../redux/modules/proofsSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
-import Cookies from "universal-cookie";
+import styled, { css } from "styled-components";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
-import Loading from "../etc/Loading";
+import ImageLoading from "../etc/ImageLoading";
 import ErrorModal from "../Modals/ErrorModal";
 import { tokenInstance } from "../../api/axios";
 import SceletonProofEdit from "./SceletonProofEdit";
@@ -69,6 +69,7 @@ const CommunityProofEdit = () => {
     getProofs(param.proofId);
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
+      dispatch(proofsCleanUp());
     };
   }, []);
 
@@ -191,7 +192,6 @@ const CommunityProofEdit = () => {
     okModalOnOff: okModalOnOff,
   };
 
-  // setError(error.response.data.message);
   if (getIsLoading) {
     return <SceletonProofEdit />;
   }
@@ -201,15 +201,18 @@ const CommunityProofEdit = () => {
   }
 
   if (isLoading) {
-    return <>작성중 이미지</>;
-  }
-
-  if (error) {
-    return <ErrorModal error={error} />;
+    return (
+      <>
+        <ImageLoadingWrap>
+          <ImageLoading color="rgba(0, 0, 0, 0.13)" />
+        </ImageLoadingWrap>
+      </>
+    );
   }
 
   return (
     <>
+      {error && <ErrorModal notGo={true} error={error} />}
       {isLogin() ? null : <IsLoginModal />}
       <ProofForm ProofFormData={ProofFormData} />
     </>
@@ -217,3 +220,18 @@ const CommunityProofEdit = () => {
 };
 
 export default CommunityProofEdit;
+
+const ImageLoadingWrap = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 0 15px;
+  box-sizing: border-box;
+`;
