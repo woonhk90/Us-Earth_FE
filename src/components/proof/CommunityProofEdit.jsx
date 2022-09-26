@@ -164,8 +164,12 @@ const CommunityProofEdit = () => {
         imgLists.map((file) => formData.append("multipartFile", file));
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-      await dispatch(patchProof({ proofId: param.proofId, formData: formData }));
-      navigate(`/community/detail/${param.communityId}`);
+      await dispatch(patchProof({ proofId: param.proofId, formData: formData })).then((response) => {
+        console.log(response);
+        if (!response.error) {
+          navigate(`/community/detail/${param.communityId}`);
+        }
+      });
     }
   };
 
