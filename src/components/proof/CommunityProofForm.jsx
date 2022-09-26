@@ -9,12 +9,13 @@ import { certifyReset, __getCommunityDetail } from "../../redux/modules/communit
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
+import ErrorModal from "../Modals/ErrorModal";
 
 const CommunityProofForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
-  const {isLoading} = useSelector((state)=> state.proofs)
+  const { isLoading,error } = useSelector((state) => state.proofs);
 
   const [inputData, inputOnChangeHandler, inputReset] = useInputs({
     title: "",
@@ -25,7 +26,6 @@ const CommunityProofForm = () => {
   useEffect(() => {
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
-      inputReset();
     };
   }, []);
 
@@ -74,7 +74,7 @@ const CommunityProofForm = () => {
         }
       }
     } else {
-      setIsPhotoMessage("사진은 5장까지만 등록 가능합니다.");
+      setIsPhotoMessage("최대 5장까지 등록 가능합니다.");
       setIsPhoto(false);
     }
     if (arry?.length > 0) {
@@ -100,9 +100,10 @@ const CommunityProofForm = () => {
   const [block, setBlock] = useState(false);
   const submitHandler = async () => {
     let formData = new FormData();
-    if (title !== "" && content !== "" && files.length !== 0) {
+    if (title.trim() !== "" && content.trim() !== "" && files.length !== 0) {
       const dataSet = {
-        ...inputData,
+        title: title.trim(),
+        content: content.trim(),
       };
       if (files.length > 0) {
         console.log(files);
@@ -114,9 +115,9 @@ const CommunityProofForm = () => {
       dispatch(certifyReset());
       navigate(`/community/detail/${param.communityId}`);
     }
-    setBlock(false)
+    setBlock(false);
   };
-  
+
   const ProofFormData = {
     files: files,
     previewImg: previewImg,
@@ -132,15 +133,22 @@ const CommunityProofForm = () => {
     okModal: okModal,
     okModalTitle: okModalTitle,
     okModalOnOff: okModalOnOff,
-    block,block
+    block,
+    block,
   };
 
+  if (isLoading) {
+    return <>작성중 이미지</>;
+  }
 
+  if (error) {
+    return <ErrorModal error={error} />;
+  }
 
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
-      {isLoading ? <>작성중 이미지</>: <ProofForm ProofFormData={ProofFormData} />}
+      <ProofForm ProofFormData={ProofFormData} />
     </>
   );
 };

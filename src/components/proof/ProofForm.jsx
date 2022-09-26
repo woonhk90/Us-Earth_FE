@@ -56,7 +56,7 @@ const ProofForm = ({ ProofFormData }) => {
                 }}
               />
             </IconDiv>
-            <HeaderP disabled={!(title.length > 0 && content.length > 0 && files.length > 0)} onClick={submitHandler}>
+            <HeaderP disabled={!(title.trim() !== "" && content.trim() !== "" && files.length > 0 && upLoading === 100 )} onClick={submitHandler}>
               {submitButton}
             </HeaderP>
           </HeaderWrap>

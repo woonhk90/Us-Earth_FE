@@ -102,9 +102,6 @@ const AttendTitle = styled.p`
   text-align: center;
   padding: 50px 0;
 `;
-const AttendTitleSpan = styled.span`
-  font: 700 22px/30px "Noto Sans KR", "sans-serif";
-`;
 const AttendBox = styled.div`
   width: 100%;
   display: flex;

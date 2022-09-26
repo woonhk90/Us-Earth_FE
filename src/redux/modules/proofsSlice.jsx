@@ -4,11 +4,8 @@ import { __getCommunityDetail } from "./communitySlice";
 
 const initialState = {
   proofs: [],
-  heartCommentCnt: {},
-  heartCnt: {},
   isLoading: false,
   error: null,
-  userHeart:false,
 };
 
 /* -------------------------- post proof (Create) ------------------------- */
@@ -21,10 +18,11 @@ export const postProof = createAsyncThunk("proof/post", async (payload, thunkAPI
       },
     });
     console.log(data);
-   
+
     return thunkAPI.fulfillWithValue(data);
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
+    return thunkAPI.rejectWithValue(error.response.data.message);
   }
 });
 
@@ -35,6 +33,7 @@ export const getProofs = createAsyncThunk("proof/get", async (proofId, thunkAPI)
     console.log("갯요청다시~");
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
+    console.log(error);
     return thunkAPI.rejectWithValue(error.response.data.message);
   }
 });
@@ -49,9 +48,10 @@ export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkA
       },
     });
     console.log(data);
-   
+
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
+    console.log(error);
     console.log(error.response.data.msg);
     return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -61,9 +61,10 @@ export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkA
 export const deleteProof = createAsyncThunk("proof/delete", async (proofId, thunkAPI) => {
   try {
     const { data } = await tokenInstance.delete(`/proof/${proofId}`);
-    
+
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
+    console.log(error);
     return thunkAPI.rejectWithValue(error.response.data.message);
   }
 });
@@ -72,16 +73,22 @@ export const proofsSlice = createSlice({
   name: "proofs",
   initialState,
   reducers: {
+    proofsCleanUp: (state, action) => {
+      state.proofs = [];
+      state.heartCommentCnt = {};
+      state.heartCnt = {};
+      state.isLoading = false;
+      state.error = null;
+      state.userHeart = false;
+    },
   },
   extraReducers: {
     /* -------------------------- post proof (Create) ------------------------- */
     [postProof.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [postProof.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.communityform = action.payload;
     },
     [postProof.rejected]: (state, action) => {
       state.isLoading = false;
@@ -89,14 +96,11 @@ export const proofsSlice = createSlice({
     },
     /* --------------------------- get proof (Read) --------------------------- */
     [getProofs.pending]: (state) => {
-      state.error = null;
       state.isLoading = true;
     },
     [getProofs.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.proofs = action.payload;
-      console.log(action.payload,"겟인즈글")
-      state.userHeart = action.payload.heart;
     },
     [getProofs.rejected]: (state, action) => {
       state.isLoading = false;
@@ -105,11 +109,9 @@ export const proofsSlice = createSlice({
     /* ------------------------- patch proof (Update) ------------------------- */
     [patchProof.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [patchProof.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.communityform = action.payload;
     },
     [patchProof.rejected]: (state, action) => {
       state.isLoading = false;
@@ -118,7 +120,6 @@ export const proofsSlice = createSlice({
     /* ------------------------- delete proof (Delete) ------------------------ */
     [deleteProof.pending]: (state) => {
       state.isLoading = true;
-      state.error = null;
     },
     [deleteProof.fulfilled]: (state, action) => {
       state.isLoading = false;
@@ -130,5 +131,5 @@ export const proofsSlice = createSlice({
   },
 });
 
-export const { } = proofsSlice.actions;
+export const {proofsCleanUp} = proofsSlice.actions;
 export default proofsSlice.reducer;

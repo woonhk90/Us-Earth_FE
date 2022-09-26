@@ -13,18 +13,23 @@ import Loading from "../etc/Loading";
 import ErrorModal from "../Modals/ErrorModal";
 import { tokenInstance } from "../../api/axios";
 
-
 const CommunityProofEdit = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
   const { isLoading, error } = useSelector((state) => state.proofs);
+
   /* -------------------------------- axios get ------------------------------- */
+  const [isGetLoading, setIsGetLoading] = useState(false);
+  const [getError, setGetError] = useState(null);
+
   const getProofs = async (proofId) => {
     try {
+      setGetError(null);
+      setIsGetLoading(true);
       const { data } = await tokenInstance.get(`/proof/${proofId}`);
-      if(!data.writer){
-        navigate(`/community/${param.communityId}/proof/${param.proofId}`)
+      if (!data.writer) {
+        navigate(`/community/${param.communityId}/proof/${param.proofId}`);
       }
       const { img, title, content } = data;
       img.map((imgdata) => {
@@ -48,8 +53,10 @@ const CommunityProofEdit = () => {
         content: content,
       });
     } catch (error) {
-      return error;
+      console.log(error);
+      setGetError(error.response.data.message);
     }
+    setIsGetLoading(false);
   };
   const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmit, setUseInputs] = useInputs({
     title: "",
@@ -61,9 +68,9 @@ const CommunityProofEdit = () => {
     getProofs(param.proofId);
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
-      inputReset();
     };
   }, []);
+
   /* ---------------------------------- 사진 업로드 ---------------------------------- */
   const [files, setFiles] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
@@ -71,9 +78,6 @@ const CommunityProofEdit = () => {
   const [isPhoto, setIsPhoto] = useState(true);
   const [deleteImgId, setDeleteImgId] = useState([]);
   const [upLoading, setUploading] = useState(100);
-
-  console.log(files);
-  console.log(previewImg);
 
   const addImageFile = async (e) => {
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
@@ -104,6 +108,7 @@ const CommunityProofEdit = () => {
               setFiles((files) => [...files, convertedBlobFile]);
             } catch (error) {
               console.log(error);
+              setIsPhotoMessage("업로드에 실패하였습니다. 다시 업로드해주세요.");
             }
           } else {
             arry.push(`${i + 1}`);
@@ -113,7 +118,7 @@ const CommunityProofEdit = () => {
         }
       }
     } else {
-      setIsPhotoMessage("사진은 5장까지만 등록 가능합니다.");
+      setIsPhotoMessage("최대 5장까지 등록 가능합니다.");
       setIsPhoto(false);
     }
     if (arry?.length > 0) {
@@ -127,12 +132,9 @@ const CommunityProofEdit = () => {
     setIsPhotoMessage("");
     setPreviewImg(previewImg.filter((file, id) => id !== index));
     setFiles(files.filter((file, id) => id !== index));
-
-    // setFiles(files.filter((file, id) => 0id !== 2index - 2previewImg.length));
-    console.log(previewImg.length);
     if (img.imgId !== undefined) setDeleteImgId((deleteImgId) => [...deleteImgId, img.imgId]);
   };
-  console.log(deleteImgId);
+
   /* -------------------------------- 빈값 확인 모달 -------------------------------- */
   const [okModal, setOkModal] = useState(false);
   const [okModalTitle, setOkModalTitle] = useState("");
@@ -141,26 +143,16 @@ const CommunityProofEdit = () => {
     setOkModal(!okModal);
   };
 
-  const [block, setBlock] = useState(false);
   const submitHandler = async () => {
     let formData = new FormData();
-    if (title === "") {
-      setOkModalTitle("제목을 입력해 주세요");
-      okModalOnOff();
-    } else if (content === "") {
-      setOkModalTitle("내용을 입력해 주세요");
-      okModalOnOff();
-    } else if (files.length === 0) {
-      setOkModalTitle("사진을 추가해 주세요");
-      okModalOnOff();
-    } else {
+    if (title.trim() !== "" && content.trim() !== "" && files.length !== 0) {
       const dataSet = {
-        ...inputData,
+        title: title.trim(),
+        content: content.trim(),
         imgIdList: deleteImgId,
       };
       console.log(files.length);
       if (files.length > 0) {
-        console.log(files);
         let imgLists = [];
         for (let i = 0; i < files.length; i++) {
           console.log(files[i].imgId);
@@ -172,7 +164,6 @@ const CommunityProofEdit = () => {
         imgLists.map((file) => formData.append("multipartFile", file));
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-      console.log(dataSet);
       await dispatch(patchProof({ proofId: param.proofId, formData: formData }));
       navigate(`/community/detail/${param.communityId}`);
     }
@@ -194,20 +185,32 @@ const CommunityProofEdit = () => {
     okModalTitle: okModalTitle,
     okModalOnOff: okModalOnOff,
   };
-  
+
   // setError(error.response.data.message);
-if(error){
-  return (
-    <><ErrorModal error={error} /></>
-    // 
-  )
-}
+  if (isGetLoading) {
+    return (
+      <>
+        <>로딩중 이미지</>
+      </>
+    );
+  }
+
+  if (getError) {
+    return <ErrorModal error={error} />;
+  }
+
+  if (isLoading) {
+    return <>작성중 이미지</>;
+  }
+
+  if (error) {
+    return <ErrorModal error={error} />;
+  }
 
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
-      {isLoading ? <>작성중 이미지</>:  <ProofForm ProofFormData={ProofFormData} />}
-     
+      <ProofForm ProofFormData={ProofFormData} />
     </>
   );
 };

@@ -117,12 +117,12 @@ const ConfirmWrap = styled.div`
   display: ${(props) => (!props.viewFlag ? "block" : "none")};
 `;
 const ConfirmTitle = styled.p`
-  font: 22px/30px,"Noto Sans KR", "sans-serif";
+  font: 22px/30px "Noto Sans KR", "sans-serif";
   text-align: center;
   padding: 50px 0;
 `;
 const ConfirmTitleSpan = styled.span`
-  font: 700 22px/30px, "Noto Sans KR", "sans-serif";
+  font: 700 22px/30px "Noto Sans KR", "sans-serif";
 `;
 const ConfirmBox = styled.div`
   width: 100%;
@@ -135,7 +135,7 @@ const ConfirmItem = styled.div`
   width: 50%;
   border-right: ${(props) => props.borderRight};
   border-left: ${(props) => props.borderLeft};
-  font: 600 22px/30px,"Noto Sans KR", "sans-serif";
+  font: 600 22px/30px "Noto Sans KR", "sans-serif";
   padding: 19px 0;
 `;
 
@@ -143,12 +143,12 @@ const AttendWrap = styled.div`
   display: ${(props) => (!props.viewFlag ? "none" : "block")};
 `;
 const AttendTitle = styled.p`
-  font: 22px/30px,"Noto Sans KR", "sans-serif";
+  font: 22px/30px "Noto Sans KR", "sans-serif";
   text-align: center;
   padding: 50px 0;
 `;
 const AttendTitleSpan = styled.span`
-  font: 700 22px/30px, "Noto Sans KR", "sans-serif";
+  font: 700 22px/30px "Noto Sans KR", "sans-serif";
 `;
 const AttendBox = styled.div`
   width: 100%;
@@ -159,6 +159,6 @@ const AttendBox = styled.div`
 `;
 const AttendItem = styled.div`
   width: 50%;
-  font: 600 22px/30px,"Noto Sans KR", "sans-serif";
+  font: 600 22px/30px "Noto Sans KR", "sans-serif";
   padding: 19px 0;
 `;

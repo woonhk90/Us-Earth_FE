@@ -7,26 +7,24 @@ import { flexColumn, flexRow } from "../../styles/Flex";
 import Comment from "./Comment";
 import CommentInput from "./CommentInput";
 import CommentInputEdit from "./CommentInputEdit";
-import { commentEditChange } from "../../redux/modules/commentsSlice";
+import { commentClearUp, commentEditChange } from "../../redux/modules/commentsSlice";
 import ConfirmModal from "../Modals/ConfirmModal";
-import { getHeartCommentCnt, patchHeartCnt } from "../../redux/modules/heartCommentSlice";
+import { getHeartCommentCnt, heartCommentCleanUp, patchHeartCnt } from "../../redux/modules/heartCommentSlice";
 import { ReactComponent as Heart } from "../../assets/heart.svg";
 import { ReactComponent as HeartGy } from "../../assets/heartGy.svg";
 import { ReactComponent as CommentIcon } from "../../assets/commentIcon.svg";
 import Cookies from "universal-cookie";
 import LoginModal from "../Modals/LoginModal";
+import ErrorModal from "../Modals/ErrorModal";
+import Loading from "../etc/Loading";
 
 const CommentBox = () => {
   const cookies = new Cookies();
   const param = useParams();
   const dispatch = useDispatch();
-  const { dateStatus } = useSelector((state) => state.community.communityDetail);
-  const { heartCommentCnt } = useSelector((state) => state.heartComment);
-  const { userHeart } = useSelector((state) => state.proofs);
+  const { heartCommentCnt, error } = useSelector((state) => state.heartComment);
   const { comments, commentEdit } = useSelector((state) => state.comments);
   const participant = heartCommentCnt.participant;
-  const {proofs} = useSelector((state) => state.proofs);
-  console.log(userHeart);
   const editMode = commentEdit.editMode;
 
   const [userToken, setUserToken] = useState(false);
@@ -42,6 +40,10 @@ const CommentBox = () => {
       setUserToken(true);
     } else setUserToken(false);
     dispatch(getHeartCommentCnt(param.proofId));
+    return () => {
+      dispatch(heartCommentCleanUp());
+      dispatch(commentClearUp());
+    };
   }, []);
 
   const commentModalClose = () => {
@@ -89,6 +91,10 @@ const CommentBox = () => {
   const loginCheck = () => {
     if (!userToken) setLoginModal(true);
   };
+
+  if (error) {
+    return <ErrorModal error={error} />;
+  }
 
   return (
     <>
