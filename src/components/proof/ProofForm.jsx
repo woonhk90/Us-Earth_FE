@@ -63,7 +63,6 @@ const ProofForm = ({ ProofFormData }) => {
         </Header>
       </>
       <CommunityFormWrap>
-        <Test>
           <AddPhotoWrap>
             <Stform encType="multipart/form-data">
               <Container>
@@ -88,7 +87,6 @@ const ProofForm = ({ ProofFormData }) => {
                 </Container>
               );
             })}
-
             {upLoading < 100 ? (
               <Container>
                 <LoadingWrap>
@@ -100,7 +98,6 @@ const ProofForm = ({ ProofFormData }) => {
             ) : null}
           </AddPhotoWrap>
           <ErrorMessage>{isPhotoMessage}</ErrorMessage>
-        </Test>
         <BottomWrap>
           <Textarea
             textareaRef={textRef}
@@ -132,13 +129,9 @@ export default ProofForm;
 
 const CommunityFormWrap = styled.div`
   width: 100%;
-  height: 100%;
   position: relative;
 `;
 
-const Test = styled.div`
-  border-bottom: 2px solid rgba(217, 217, 217, 0.3);
-`;
 
 const AddPhotoWrap = styled.div`
   display: grid;
@@ -150,6 +143,7 @@ const AddPhotoWrap = styled.div`
   flex-wrap: wrap;
   padding: 20px 15px 13px 15px;
   justify-items: center;
+  border-bottom: 2px solid rgba(217, 217, 217, 0.3);
 `;
 
 const Container = styled.div`
@@ -272,6 +266,8 @@ const IconDiv = styled.div`
 `;
 
 const HeaderP = styled.button`
+display: flex;
+align-items: center;
   cursor: pointer;
   border: none;
   background-color: transparent;
