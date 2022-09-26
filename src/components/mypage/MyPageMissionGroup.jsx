@@ -42,7 +42,10 @@ const MyPageMissionGroup = () => {
                     <p>{v.title}</p>
                     <p>{v.startDate} - {v.endDate}</p>
                   </div>
-                  <div><progress value='40' max='100'></progress><span>40%</span></div>
+                  <div>
+                    <progress value={v.dateStatus === "before" ? v.currentPercent : v.successPercent} max='100'></progress>
+                    <span>{Math.ceil(v.dateStatus === "before" ? v.currentPercent : v.successPercent)}%</span>
+                  </div>
                 </div>
               </ListBox>
             )}
@@ -70,9 +73,12 @@ const CategoryBox = styled.div`
   div {
     width: 33.33333%;
     text-align: center;
-    font: 600 20px/28px "Noto sans", "sans-serif";
     padding: 26px 0 16px;
     box-sizing: border-box;
+    font-weight: 600;
+    font-size:20px;
+    line-height:28px;
+    font-family: 'Noto Sans KR','sans-serif';
   }
 `;
 const ItemOnGoing = styled.div`
@@ -111,11 +117,27 @@ const ListBox = styled.div`
     width: 60%;
     div:nth-child(1) {
       width: 100%;
+      
       p:nth-child(1) {
-        font: 600 20px/30px "Noto Sans", "sans-serif";
+        font-weight:600;
+        font-size:20px;
+        line-height:30px;
       }
       p:nth-child(2) {
-        font: 300 16px/22px "Noto Sans", "sans-serif";
+        font-weight:300;
+        font-size:16px;
+        line-height:22px;
+      }
+      @media (max-width: 374px) {
+        p:nth-child(1) {
+          font-size:16px;
+        }
+        p:nth-child(2) {
+          font-size:12px;
+        }
+      }
+      p{
+        font-family: 'Noto Sans KR','sans-serif';
       }
     }
     div:nth-child(2) {

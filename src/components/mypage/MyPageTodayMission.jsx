@@ -96,18 +96,18 @@ const MissionTop = styled.div`
   padding: 25px 15px;
   box-sizing: border-box;
   p:nth-child(1) {
-    font: 600 24px/1 "Noto Sans","sans-serif";
+    font: 600 24px/1 "Noto Sans KR","sans-serif";
   }
   p:nth-child(2) {
-    font: 500 20px/1 "Noto Sans", "sans-serif";
+    font: 500 20px/1 "Noto Sans KR", "sans-serif";
     color: #9b9b9b;
   }
-  @media (max-width: 370px) {
+  @media (max-width: 374px) {
     p:nth-child(1) {
-      font: 600 23px/1 "Noto Sans",  "sans-serif";
+      font-size:22px;
     }
     p:nth-child(2) {
-      font: 500 19px/1 "Noto Sans", "sans-serif";
+      font-size:18px;
     }
   }
 `;
@@ -154,18 +154,18 @@ const TodayMissionBox = styled.div`
   padding: 0 0 20px 0;
   box-sizing: border-box;
   p:nth-child(1) {
-    font: 600 24px/1 "Noto Sans", "sans-serif";
+    font: 600 24px/1 "Noto Sans KR", "sans-serif";
   }
   p:nth-child(2) {
-    font: 500 20px/1 "Noto Sans","sans-serif";
+    font: 500 20px/1 "Noto Sans KR","sans-serif";
     color: #9b9b9b;
   }
-  @media (max-width: 370px) {
+  @media (max-width: 374px) {
     p:nth-child(1) {
-      font: 600 23px/1 "Noto Sans", "sans-serif";
+      font-size:22px;
     }
     p:nth-child(2) {
-      font: 500 19px/1 "Noto Sans", "sans-serif";
+      font-size:18px;
     }
   }
 `;
@@ -191,8 +191,11 @@ const MissionItem = styled.span`
 const ItemTitle = styled.span`
   display: block;
   text-decoration: ${(props) => (props.background ? "line-through" : "blue")};
-  font: 500 18px/1 "Noto Sans", "sans-serif";
-  @media (max-width: 370px) {
-    font: 500 16px/1 "Noto Sans", "sans-serif";
+  font-weight: 500;
+  font-size:18px;
+  line-height:1;
+  font-family:'Noto sans KR','sans-serif';
+  @media (max-width: 374px) {
+    font-size:16px;
   }
 `;

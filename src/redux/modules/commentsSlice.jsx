@@ -7,8 +7,6 @@ const initialState = {
   commentSelectBoxId: {},
   commentEdit: {
     editMode: false,
-    comment: "",
-    commentImg: "",
     commentId: "",
   },
   isLoading: false,
@@ -91,6 +89,17 @@ export const commentsSlice = createSlice({
       console.log(action.payload);
       state.commentEdit = action.payload;
     },
+    commentClearUp: (state) => {
+      state.comments = [];
+      state.commentSelectBoxId = {};
+      state.commentEdit = {
+        editMode: false,
+        commentId: "",
+      };
+      state.isLoading = false;
+      state.getIsLoading = false;
+      state.error = null;
+    },
   },
   extraReducers: {
     /* -------------------------- post comment (Create) ------------------------- */
@@ -100,10 +109,6 @@ export const commentsSlice = createSlice({
     [postComment.fulfilled]: (state, action) => {
       console.log(action.payload);
       state.isLoading = false;
-      // state.comments.commentResponseDtoList
-      // = [...state.comments.commentResponseDtoList, action.payload];
-
-      // state.comments.commentResponseDtoList = state.comments.commentResponseDtoList.concat(action.payload)
       state.comments.commentResponseDtoList.push(action.payload);
     },
     [postComment.rejected]: (state, action) => {
@@ -152,5 +157,5 @@ export const commentsSlice = createSlice({
   },
 });
 
-export const { commentSelectBox, commentEditChange } = commentsSlice.actions;
+export const { commentSelectBox, commentEditChange, commentClearUp } = commentsSlice.actions;
 export default commentsSlice.reducer;

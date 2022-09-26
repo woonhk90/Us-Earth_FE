@@ -19,6 +19,7 @@ const CommentInputEdit = ({ userToken }) => {
   const cookies = new Cookies();
   const dispatch = useDispatch();
   const API_URL = process.env.REACT_APP_API_URL;
+  const { dateStatus } = useSelector((state) => state.comments.comments);
   const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
 
   // find commentId of edit(*)
@@ -42,13 +43,6 @@ const CommentInputEdit = ({ userToken }) => {
     setInputOn(inputRef.current.contains(event.target));
   };
 
-  const inputOnButton = () => {
-    if (userToken) {
-      setInputOn(true);
-      textRef.current.focus();
-    }
-  };
-
   /* -------------------------------- axios get ------------------------------- */
 
   const getComments = async (payload) => {
@@ -61,7 +55,6 @@ const CommentInputEdit = ({ userToken }) => {
       // find data & into input
       const commentList = data.commentResponseDtoList.find((comment) => comment.commentId === payload.commentId);
       setInputOn(true);
-      console.log("겟요청");
       setContent(commentList.content);
       if (commentList.img === null) {
         setImageFile([]);
@@ -77,7 +70,6 @@ const CommentInputEdit = ({ userToken }) => {
   useEffect(() => {
     window.addEventListener("mousedown", clickInputOutside);
     if (commentEdit.editMode) {
-      console.log("아?");
       getComments({
         proofId: param.proofId,
         commentId: commentEdit.commentId,
@@ -107,7 +99,6 @@ const CommentInputEdit = ({ userToken }) => {
           maxWidthOrHeight: 1920,
           useWebWorker: true,
           onProgress: (data) => {
-            console.log(data);
             setUploading(data);
           },
         };
@@ -164,17 +155,22 @@ const CommentInputEdit = ({ userToken }) => {
 
   return (
     <>
-      <CommentInputContainer ref={inputRef}>
+    <CommentInputContainer ref={inputRef} >
         <CommentInputWrap>
-          <InputWrap inputOn={inputOn}>
+          <form encType="multipart/form-data">
+            <StLabel htmlFor={!participant || upLoading < 100 ? null : "file"}>
+              <CameraIcon>
+                <Camera height="25" />
+              </CameraIcon>
+            </StLabel>
+          </form>
+          <InputWrap color={!participant}  inputOn={inputOn}>
             {upLoading < 100 ? (
               <Container>
                 <LoadingContainer>
-                  <LoadingWrap>
                     <LoadingPosition>
                       <ImageLoading />
                     </LoadingPosition>
-                  </LoadingWrap>
                 </LoadingContainer>
               </Container>
             ) : (
@@ -195,6 +191,7 @@ const CommentInputEdit = ({ userToken }) => {
               </>
             )}
             <CommentTextarea
+              disabled={!participant || dateStatus === "end"}
               img={previewImg}
               rows="1"
               inputOn={inputOn}
@@ -208,7 +205,6 @@ const CommentInputEdit = ({ userToken }) => {
               placeholder="댓글을 입력해주세요"
               ref={textRef}
               onInput={handleResizeHeight}
-              disabled={!userToken}
             />
           </InputWrap>
           <StImageInput
@@ -220,19 +216,9 @@ const CommentInputEdit = ({ userToken }) => {
               e.target.value = "";
             }}
           />
-          {/* <form onClick={inputOnButton} encType="multipart/form-data"> */}
-          <form encType="multipart/form-data">
-            <StLabel htmlFor={!participant || upLoading < 100 ? null : "file"}>
-              <CameraIcon>
-                <Camera height="25" />
-              </CameraIcon>
-            </StLabel>
-          </form>
-          {/* <SubmitButtonWrap> */}
-          <WriteIcon>
-            <Edit height="25" onClick={onClickSubmit} />
+          <WriteIcon onClick={onClickSubmit}>
+            등록
           </WriteIcon>
-          {/* </SubmitButtonWrap> */}
         </CommentInputWrap>
       </CommentInputContainer>
     </>
@@ -243,26 +229,21 @@ export default CommentInputEdit;
 
 const CommentInputContainer = styled.div`
   width: 100%;
-  .edit2-1 {
-    fill: #cbcbcb;
-  }
-  .camera-1 {
-    fill: #cbcbcb;
-  }
 `;
 
 const CommentInputWrap = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   box-sizing: border-box;
   background-color: #f9f9f9;
 `;
 
 const InputWrap = styled.div`
-  margin: 9px 0px 9px 16px;
+  position: relative;
+  margin: 9px 0px 9px 0px;
   width: 100%;
-  background-color: white;
+  background-color: ${(props)=>props.color ? "#f9f9f9": "white"};
   border: 1px solid #ececec;
   border-radius: 6px;
 `;
@@ -286,15 +267,22 @@ const CameraIcon = styled.div`
   cursor: pointer;
   width: 30px;
   background-color: transparent;
-  padding: 21px 0px 0px 15px;
+  padding: 20px 12px 0px 12px;
 `;
 
 const WriteIcon = styled.div`
   cursor: pointer;
   background-color: transparent;
-  height: 30px;
-  padding: 21px 15px 0px 15px;
+margin:20px 8px 0px 8px; 
+width: 54px;
+font-weight: 600;
+font-size: 18px;
+line-height: 25px;
+text-align: center;
+letter-spacing: -0.03em;
+color: #9B9B9B;
 `;
+
 const Thumb = styled.img`
   position: absolute;
   top: 0;
@@ -318,7 +306,7 @@ const DeleteButton = styled.button`
   border: none;
 `;
 
-const Container = styled.section`
+const Container = styled.div`
   position: relative;
   align-items: center;
   display: flex;
@@ -337,7 +325,6 @@ const CancelIcon = styled.div`
   top: -4px;
   z-index: 100;
 `;
-
 const CancelIconWrap = styled.div`
   width: 12px;
   height: 12px;
@@ -345,7 +332,7 @@ const CancelIconWrap = styled.div`
   right: 7px;
   top: 5px;
   border-radius: 50%;
-  z-index: 0;
+  z-index: 99;
 `;
 
 const ErrorMessageP = styled.p`
@@ -354,10 +341,6 @@ const ErrorMessageP = styled.p`
   font-size: 14px;
   letter-spacing: -0.02em;
   color: #ff0000;
-`;
-
-const SubmitButtonWrap = styled.div`
-  ${flexColumn}
 `;
 
 const CommentTextarea = styled.textarea`
@@ -386,6 +369,7 @@ const CommentTextarea = styled.textarea`
     font-size: 14px;
   }
 `;
+
 const LoadingContainer = styled.div`
   position: absolute;
   top: 0;
@@ -400,9 +384,6 @@ const LoadingContainer = styled.div`
   border-radius: 6px;
 `;
 
-const LoadingWrap = styled.div`
-  /* align-items: center; */
-`;
 const LoadingPosition = styled.div`
   display: flex;
   position: absolute;

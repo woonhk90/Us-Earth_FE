@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import React, {  useEffect, useState } from "react";
+import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addDates, addDateLists } from "../../redux/modules/communityFormSlice";
-import { ReactComponent as CalendarLeftArrow } from "../../assets/calendarLeftArrow.svg";
+import { addDates } from "../../redux/modules/communityFormSlice";
 import { ReactComponent as CalendarRightArrowBk } from "../../assets/calendarRightArrowBk.svg";
 import dayjs from "dayjs";
 
@@ -205,6 +204,13 @@ const StInput = styled.div`
     margin-top: 20px;
     width: 100%;
   }
+  /* .react-datepicker__day--range-start, */
+  .react-datepicker__day--disabled {
+::after{
+  
+  opacity: 0.5 !important;
+}
+  }
 
   .react-datepicker__day--disabled {
     color: #000000;
@@ -286,7 +292,9 @@ const StInput = styled.div`
       height: 100%;
       position: absolute;
       right: 0;
+      opacity: 1;
     }
+    opacity: 1;
   }
 
   .react-datepicker__day--range-end {

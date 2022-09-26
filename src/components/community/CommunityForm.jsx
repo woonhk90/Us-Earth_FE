@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
@@ -6,8 +6,8 @@ import Input from "../elements/Input";
 import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
-import { flexBetween, flexColumn, flexRow } from "../../styles/Flex";
-import { addDates, postCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { flexBetween, flexColumn} from "../../styles/Flex";
+import { addDates, communityFormCleanUp, postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
 import { clearVal } from "../../redux/modules/communitySlice";
@@ -15,32 +15,60 @@ import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
 import ImageLoading from "../etc/ImageLoading";
+import ErrorModal from "../Modals/ErrorModal";
 
 const CommunityForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {isLoading} = useSelector((state)=> state.communityForm)
+  const { isLoading, error } = useSelector((state) => state.communityForm);
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
   const [secret, setSecret] = useState(false);
-  const [files, setFiles] = useState([]);
-  const [inputData, inputOnChangeHandler, inputReset, isForm] = useInputs({
+
+  const [isLimitScore, setIsLimitScore] = useState("");
+  const [isLimitParticipants, setLimitParticipants] = useState("");
+  const [isTitle, setIsTitle] = useState("");
+  const [isContent, setIsContent] = useState("");
+  const [isdate, setIsDate] = useState("");
+  const [inputData, inputOnChangeHandler, inputReset] = useInputs({
     limitScore: "",
     limitParticipants: "",
     title: "",
     content: "",
   });
-  const inputValid = Object.values(isForm);
-  const result = inputValid.filter((word) => word !== true);
   const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
   const { limitScore, limitParticipants, title, content } = inputData;
+  const realLimitScore = +limitScore.replace(/ /g, "").replace(/(^0+)/g, "");
+  const realLimitParticipants = +limitParticipants.replace(/ /g, "").replace(/(^0+)/g, "");
+
+  const validation = () => {
+    if (!/^([0-9]){4}$/.test(password)) {
+      setPasswordMessage("비밀번호 숫자 4자리");
+    } else setPasswordMessage("");
+    {
+      !/^([1-9]|10)$/.test(realLimitParticipants) ? setLimitParticipants("참가인원을 입력해 주세요(10명 이내)") : setLimitParticipants("");
+    }
+    if (!/^[1-9][0-9]?$|^100/.test(realLimitScore) || realLimitScore < realLimitParticipants) {
+      setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
+    } else setIsLimitScore("");
+    if (!dates.start?.length && !dates.end?.length) {
+      setIsDate("진행기간을 선택해 주세요.");
+    } else setIsDate("");
+    if (!title.trim().length) {
+      setIsTitle("그룹명을 입력해 주세요");
+    } else setIsTitle("");
+    if (!content.trim().length) {
+      setIsContent("그룹 소개를 입력해주세요");
+    } else setIsContent("");
+  };
 
   useEffect(() => {
     return () => {
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
+      dispatch(communityFormCleanUp());
+      imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
       inputReset();
       dispatch(addDates({}));
     };
@@ -53,10 +81,9 @@ const CommunityForm = () => {
   const [upLoading, setUploading] = useState(100);
 
   const addImageFile = async (e) => {
-    setIsPhotoMessage("")
+    setIsPhotoMessage("");
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
-    // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
         const options = {
@@ -70,7 +97,6 @@ const CommunityForm = () => {
         };
         try {
           const compressedFile = await imageCompression(imageFile, options);
-          // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
           console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
           let reader = new FileReader();
           reader.readAsDataURL(compressedFile);
@@ -81,7 +107,6 @@ const CommunityForm = () => {
           };
           const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
           setImageFile(convertedBlobFile);
-          // await ; // write your own logic
         } catch (error) {
           setIsPhotoMessage("오류가 발생했습니다. 다시 업로드해주세요.");
         }
@@ -95,7 +120,7 @@ const CommunityForm = () => {
     setImageFile([]);
   };
 
-  /* --------------- password validation & secret switch button --------------- */
+  /* --------------------------- password validation -------------------------- */
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
     const passwordCurrent = e.target.value;
@@ -110,6 +135,7 @@ const CommunityForm = () => {
     }
   };
 
+  /* -------------------------- secret switch button -------------------------- */
   const secretSwitchButtonHandler = () => {
     if (secret === false) {
       setPassword("");
@@ -123,11 +149,14 @@ const CommunityForm = () => {
   };
 
   /* ---------------------------------- submit ---------------------------------- */
+
   const submitHandler = async () => {
-    console.log(/^\d{1,10}$/.test(limitParticipants));
     let formData = new FormData();
     const dataSet = {
-      ...inputData,
+      title: title.trim(),
+      content: content.trim(),
+      limitParticipants: realLimitParticipants,
+      limitScore: realLimitScore,
       password: password,
       secret: secret,
       startDate: start,
@@ -135,135 +164,169 @@ const CommunityForm = () => {
     };
     formData.append("multipartFile", imageFile);
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-    console.log(dataSet);
-    console.log(imageFile);
     await dispatch(postCommunityDetail(formData));
     await dispatch(clearVal());
     navigate("/");
   };
+  if (isLoading) {
+    return <>작성중 이미지</>;
+  }
+
+  if (error) {
+    return <ErrorModal error={error} />;
+  }
 
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
-      {isLoading ? <>작성중 이미지</>: 
       <>
-      <CommunityFormWrap>
-        <ImageBoxWrap>
-          <ImageForm encType="multipart/form-data">
-            <label htmlFor={upLoading < 100 ? null : "file"}>
-              <ImageIcon>
-                {upLoading < 100 ? (
-                  <Container>
-                    <LoadingWrap>
-                      <LoadingPosition>
-                        <ImageLoading />
-                      </LoadingPosition>
-                    </LoadingWrap>
-                  </Container>
-                ) : null}
-                {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <CameraIcon />}
-                <BottonTextWrap>
-                  <BottomText>대표이미지</BottomText>
-                </BottonTextWrap>
-              </ImageIcon>
-            </label>
-            <ImageInput
-              multiple
-              type="file"
-              id="file"
-              accept="image/*"
-              onChange={(e) => {
-                addImageFile(e);
-                e.target.value = "";
-              }}
-            />
-          </ImageForm>
-          <TextWrap>
-            <DeleteImage onClick={OnClickDeleteImage}>기본 이미지로 변경</DeleteImage>
-            <ErrorMessage>{isPhotoMessage}</ErrorMessage>
-          </TextWrap>
-        </ImageBoxWrap>
-        <RightText>비공개</RightText>
-        <TopTextWrap>
-          <P>그룹명*</P>
-          <CheckBoxWrapper>
-            <CheckBox onClick={secretSwitchButtonHandler} id="checkbox" type="checkbox" />
-            <CheckBoxLabel htmlFor="checkbox" />
-          </CheckBoxWrapper>
-        </TopTextWrap>
-        <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
-        {secret ? (
-          <>
-            <PasswordWrap>
+        <CommunityFormWrap>
+          <ImageBoxWrap>
+            <ImageForm encType="multipart/form-data">
+              <label htmlFor={upLoading < 100 ? null : "file"}>
+                <ImageIcon>
+                  {upLoading < 100 ? (
+                    <Container>
+                        <LoadingPosition>
+                          <ImageLoading />
+                        </LoadingPosition>
+                    </Container>
+                  ) : null}
+                  {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <CameraIcon />}
+                  <BottonTextWrap>
+                    <BottomText>대표이미지</BottomText>
+                  </BottonTextWrap>
+                </ImageIcon>
+              </label>
+              <ImageInput
+                multiple
+                type="file"
+                id="file"
+                accept="image/*"
+                onChange={(e) => {
+                  addImageFile(e);
+                  e.target.value = "";
+                }}
+              />
+            </ImageForm>
+            <TextWrap>
+              <DeleteImage onClick={OnClickDeleteImage}>기본 이미지로 변경</DeleteImage>
+              <ErrorMessage>{isPhotoMessage}</ErrorMessage>
+            </TextWrap>
+          </ImageBoxWrap>
+          <RightText>비공개</RightText>
+          <TopTextWrap>
+            <P>그룹명*</P>
+            <CheckBoxWrapper>
+              <CheckBox onClick={secretSwitchButtonHandler} id="checkbox" type="checkbox" />
+              <CheckBoxLabel htmlFor="checkbox" />
+            </CheckBoxWrapper>
+          </TopTextWrap>
+
+          <InputWrap>
+            <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
+            <MessageP>{isTitle}</MessageP>
+          </InputWrap>
+          {secret ? (
+            <>
               <P>비밀번호</P>
-              {password.length > 0 && <MessageP>{passwordMessage}</MessageP>}
-            </PasswordWrap>
-            <Input inputype="basic" placeholder="비밀번호를 입력해 주세요" maxLength="4" value={password} onChange={pwOnChangeHandler} type="password"></Input>
-          </>
-        ) : null}
-        <DateSpan
-          onClick={() => {
-            setModal(!modal);
-          }}
-        >
-          <P>진행 기간*</P>
-          {dates.start?.length > 0 && dates.end?.length > 0 ? (
-            <SelectDateP color={"#222222"}>
-              {dates.start}-{dates.end}
-            </SelectDateP>
-          ) : (
-            <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
-          )}
-        </DateSpan>
-        {modal && <CalendarModal closeModal={() => setModal(!modal)}></CalendarModal>}
-        <P>참여인원*</P>
-        <Input
-          inputype="basic"
-          maxLength="2"
-          placeholder="인원을 입력해 주세요(최대 10명)"
-          type="tel"
-          name="limitParticipants"
-          value={limitParticipants}
-          onChange={inputOnChangeHandler}
-        ></Input>
-        <P>목표달성갯수*</P>
-        <Input inputype="basic" maxLength="3" type="tel" name="limitScore" placeholder="최대 100개" value={limitScore} onChange={inputOnChangeHandler}></Input>
-        <P>그룹소개*</P>
-        <Textarea
-          placeholder="소개글을 입력해 주세요"
-          cols="50"
-          rows="8"
-          maxLength="500"
-          name="content"
-          textareaType="basic"
-          value={content}
-          onChange={inputOnChangeHandler}
-        ></Textarea>
-      </CommunityFormWrap>
-      <BottomWrap>
-        {/^([1-9]|10)$/.test(limitParticipants) &&
-          /^[1-9][0-9]?$|^100/.test(limitScore) &&
-          result.length === 0 &&
-          dates.start?.length > 0 &&
+              <InputWrap>
+                <Input
+                  inputype="basic"
+                  placeholder="비밀번호를 입력해 주세요"
+                  maxLength="4"
+                  value={password}
+                  onChange={pwOnChangeHandler}
+                  type="password"
+                ></Input>
+                <MessageP>{passwordMessage}</MessageP>
+              </InputWrap>
+            </>
+          ) : null}
+          <div
+            onClick={() => {
+              setModal(!modal);
+            }}
+          >
+            <P>진행 기간*</P>
+            <InputWrap>
+              {dates.start?.length > 0 && dates.end?.length > 0 ? (
+                <SelectDateP color={"#222222"}>
+                  {dates.start}-{dates.end}
+                </SelectDateP>
+              ) : (
+                <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
+              )}
+              <MessageP>{isdate}</MessageP>
+            </InputWrap>
+          </div>
+          {modal && <CalendarModal closeModal={() => setModal(!modal)}></CalendarModal>}
+          <P>참여인원*</P>
+          <InputWrap>
+            <Input
+              inputype="basic"
+              maxLength="2"
+              placeholder="인원을 입력해 주세요(최대 10명)"
+              type="tel"
+              name="limitParticipants"
+              value={limitParticipants}
+              onChange={inputOnChangeHandler}
+            ></Input>
+            <MessageP>{isLimitParticipants}</MessageP>
+          </InputWrap>
+          <P>목표달성 수*</P>
+          <InputWrap>
+            <Input
+              inputype="basic"
+              maxLength="3"
+              type="tel"
+              name="limitScore"
+              placeholder="목표달성 수를 입력해주세요(최대 100)"
+              value={limitScore}
+              onChange={inputOnChangeHandler}
+            ></Input>
+            <MessageP limitScore={true}>{isLimitScore}</MessageP>
+          </InputWrap>
+          <P>그룹소개*</P>
+          <InputWrap>
+            <Textarea
+              placeholder="소개글을 입력해 주세요"
+              cols="50"
+              rows="8"
+              maxLength="500"
+              name="content"
+              textareaType="basic"
+              value={content}
+              onChange={inputOnChangeHandler}
+            ></Textarea>
+            <MessageP bottom={true}>{isContent}</MessageP>
+          </InputWrap>
+        </CommunityFormWrap>
+        <BottomWrap>
+          {/^([1-9]|10)$/.test(realLimitParticipants) &&
+          /^[1-9][0-9]?$|^100/.test(realLimitScore) &&
+          realLimitScore >= realLimitParticipants &&
+          title.trim().length &&
+          content.trim().length &&
           dates.end?.length > 0 &&
           secret === isPassword ? (
-          <BottomButton
-            style={{
-              cursor: "pointer",
-            }}
-            onClick={submitHandler}
-            bgColor={"#315300"}
-            color={"white"}
-          >
-            그룹 등록
-          </BottomButton>
-        ) : (
-          <BottomButton disabled={true} bgColor={"#EDEDED"} color={"#BEBEBE"}>
-            그룹 등록
-          </BottomButton>
-        )}
-      </BottomWrap>
-      </>}
+            <BottomButton
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={submitHandler}
+              bgColor={"#315300"}
+              color={"white"}
+            >
+              그룹 등록
+            </BottomButton>
+          ) : (
+            <BottomButton onClick={validation} bgColor={"#EDEDED"} color={"#BEBEBE"}>
+              그룹 등록
+            </BottomButton>
+          )}
+        </BottomWrap>
+      </>
     </>
   );
 };
@@ -271,7 +334,7 @@ const CommunityForm = () => {
 export default CommunityForm;
 
 const CommunityFormWrap = styled.div`
-  margin: 53px 16px 60px 16px;
+  margin: 51px 16px 60px 16px;
 `;
 
 /* ------------------------------ switch button ----------------------------- */
@@ -329,11 +392,11 @@ const ImageBoxWrap = styled.div`
 const ErrorMessage = styled.p`
   position: absolute;
   bottom: 0px;
-font-weight: 200;
-font-size: 14px;
-line-height: 19px;
-letter-spacing: -0.02em;
-color: #FF0000;
+  font-weight: 200;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #ff0000;
 `;
 const TextWrap = styled.div`
   position: relative;
@@ -447,9 +510,6 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const LoadingWrap = styled.div`
-  /* align-items: center; */
-`;
 const LoadingPosition = styled.div`
   display: flex;
   position: absolute;
@@ -459,9 +519,9 @@ const LoadingPosition = styled.div`
 `;
 /* ------------------------------ bottom button ----------------------------- */
 const BottomWrap = styled.div`
-position: absolute;
-bottom:0;
-height: 56px;
+  position: absolute;
+  bottom: 0;
+  height: 56px;
   width: 100%;
   display: flex;
   text-align: center;
@@ -478,15 +538,13 @@ const BottomButton = styled.button`
 `;
 
 /* ---------------------------------- form font ---------------------------------- */
-const DateSpan = styled.div`
-  margin: 30px 0;
-`;
+
 
 const P = styled.p`
   font-size: 20px;
   font-weight: 500;
   letter-spacing: -0.03em;
-  margin-top: 26px;
+  margin-top: 20px;
 `;
 
 const DateP = styled.p`
@@ -494,18 +552,21 @@ const DateP = styled.p`
   height: 35px;
   margin: 0;
   font-size: 22px;
-  padding: 10px 0 26px 0;
+  padding: 5px 0 26px 0;
   font-weight: 700;
   border-bottom: 1px solid rgba(0, 0, 0, 0.14);
   color: ${(props) => props.color};
 
-  @media (max-width: 390px) {
+  @media (min-width: 281px) and (max-width: 389px) {
     font-size: 16px;
+  }
+  @media (max-width: 280px) {
+    font-size: 14px;
   }
 `;
 const SelectDateP = styled.p`
   box-sizing: content-box;
-  height: 35px;
+  height: 32px;
   margin: 0;
   font-size: 22px;
   padding: 10px 0 26px 0;
@@ -533,14 +594,30 @@ const MessageP = styled.p`
   font-weight: 200;
   font-size: 14px;
   line-height: 19px;
+  position: absolute;
+  right: 0;
+  bottom: ${(props) => (props.bottom ? "10px" : "5px")};
   display: flex;
   align-items: center;
   text-align: right;
   letter-spacing: -0.02em;
   color: #ff0000;
+
+  @media (max-width: 389px) {
+    ${(props) =>
+      props.limitScore &&
+      css`
+        font-size: 12px;
+        bottom: 3px;
+        line-height: 14px;
+      `}/* font-size: ${(props) => props.limitScore && "12px"};
+    bottom: ${(props) => props.limitScore && "3px"};
+    line-height: ${(props) => props.limitScore && "14px"}; */
+  }
 `;
-const PasswordWrap = styled.div`
-  ${flexBetween}
-  text-align: end;
-  align-items: flex-end;
+
+const InputWrap = styled.div`
+  position: relative;
+  /* text-align: end;
+  align-items: flex-end; */
 `;
