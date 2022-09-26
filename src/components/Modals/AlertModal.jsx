@@ -6,7 +6,7 @@ const ConfirmModal = (props) => {
   const { title, btn1 } = props.alertModalData;
   return (
     <>
-      <ModalWrap onClick={closeModal}>
+      <ModalWrap onClick={props.goAction}>
         <ModalBody
           onClick={(e) => {
             e.stopPropagation();

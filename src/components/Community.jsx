@@ -6,7 +6,14 @@ import PopularGroupItemList from './community/PopularGroupItemList';
 import NewGroupItemList from './community/NewGroupItemList';
 import CommunityItemList from './community/CommunityItemList';
 
+import icons from "../assets";
+import Modal from "./CommunityModal";
+import { useNavigate } from "react-router-dom"
+
 const Community = () => {
+  const { CommunityNewGroup } = icons;
+  const navigate = useNavigate();
+  const [modal, setModal] = React.useState(false);
   return (
     <>
       <CommunityWrap>
@@ -38,6 +45,10 @@ const Community = () => {
           {/* 전체그룹 */}
           <CommunityItemList />
 
+          <IconCommunityWriteBtn onClick={() => { navigate('/community/form') }}>
+            <CommunityNewGroup />
+          </IconCommunityWriteBtn>
+          {modal && (<Modal closeModal={() => setModal(!modal)}></Modal>)}
         </Container>
       </CommunityWrap>
     </>
@@ -47,9 +58,10 @@ export default Community;
 
 const CommunityWrap = styled.div`
 width:100%;
-
 `;
-const Container = styled.div`width:100%;`;
+const Container = styled.div`
+  width:100%;
+`;
 
 const Banner = styled.div`
   width: 100%;
@@ -113,3 +125,13 @@ const NewGroupBox = styled.div`
 
 
 
+
+const IconCommunityWriteBtn = styled.div`
+  position:absolute;
+  bottom:70px;right:10px;
+  z-index:999;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+`;

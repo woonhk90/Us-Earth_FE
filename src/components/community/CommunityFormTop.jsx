@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { clearVal } from "../../redux/modules/communitySlice";
-import { ReactComponent as Cancel } from "../../assets/Cancel.svg";
+import icons from "../../assets";
 
-const CommunityFormTop = ({title}) => {
+const CommunityFormTop = ({ title }) => {
+  const { Cancel } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   React.useEffect(() => {
@@ -19,7 +20,7 @@ const CommunityFormTop = ({title}) => {
         <IconDiv>
           <Cancel
             onClick={() => {
-              navigate("/community");
+              navigate("/community", { replace: true });
             }}
           />
         </IconDiv>
