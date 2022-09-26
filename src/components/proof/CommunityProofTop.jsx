@@ -18,7 +18,7 @@ const CommunityProofTop = () => {
           <Back
             onClick={() => {
               dispatch(certifyReset());
-              navigate(`/community/detail/${param.communityId}`);
+              navigate(`/community/detail/${param.communityId}`,{replace:true});
             }}
           />
         </IconDiv>
