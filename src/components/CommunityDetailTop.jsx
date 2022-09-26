@@ -6,17 +6,19 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearVal } from '../redux/modules/communitySlice';
 import { colors } from '../styles/color';
+import icons from '../assets';
 
 const CommunityTop = () => {
+  const { Back } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onClickHandler = () => {
     const url = localStorage.getItem('pathname');
     localStorage.removeItem('pathname');
-    if(url){
+    if (url) {
       navigate('/');
-    }else{
+    } else {
       navigate(-1);
     }
   }
@@ -28,7 +30,9 @@ const CommunityTop = () => {
   return (
     <>
       <HeaderWrap>
-        <div onClick={onClickHandler}><LeftArrow /></div>
+        <IconDiv onClick={onClickHandler}>
+          <Back />
+        </IconDiv>
         <div><UserPlus /></div>
       </HeaderWrap>
     </>
@@ -42,8 +46,15 @@ const HeaderWrap = styled.div`
   height:48px;
   display:flex;
   justify-content:space-between;
+  align-items:center;
   padding:10px;
   box-sizing:border-box;
   z-index:1;
-  color:${colors.black22}
+  color:${colors.black22};
+`;
+
+const IconDiv = styled.div`
+  cursor: pointer;
+  width: 12px;
+  height: 21px;
 `;

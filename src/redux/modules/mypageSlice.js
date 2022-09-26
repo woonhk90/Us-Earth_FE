@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import { tokenInstance } from "../../api/axios";
+import { getCookie, removeCookie, setCookie, setCookieTimeZero } from "../../shared/cookie";
 
 
 /* -------------------------------- 내 정보 가져오기 ------------------------------- */
@@ -61,6 +63,17 @@ export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubm
     console.log('__postNickNameSubmit=>', payload);
 
     const data = await tokenInstance.patch('/mypage/nickname', payload);
+
+    if (data.data.success) {
+      const returnData = await axios.get(`${process.env.REACT_APP_API_URL_NOT_AIP}/user/reissue`, {
+        headers: {
+          refreshToken: getCookie('refreshToken'),
+          memberid: getCookie('memberid'),
+        },
+      });
+      removeCookie("mycookie");
+      setCookie("mycookie", returnData.headers.authorization);
+    }
 
     console.log("DATA=>", data);
     return thunkAPI.fulfillWithValue(data.data);

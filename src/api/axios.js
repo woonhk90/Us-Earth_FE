@@ -52,17 +52,20 @@ tokenInstance.interceptors.response.use(
       if (response.data.code === "403" || response.data.errorCode === "403") {
         returnRemoveCookie('mycookie');
         returnRemoveCookie('refreshToken');
+        returnRemoveCookie('memberid');
         window.location.replace('/login');
       }
       //402변조된 코드
       if (response.data.code === "402" || response.data.errorCode === "402") {
         returnRemoveCookie('mycookie');
         returnRemoveCookie('refreshToken');
+        returnRemoveCookie('memberid');
         window.location.replace('/');
       }
       //401만료된 코드
       if (response.data.code === "401" || response.data.errorCode === "401") {
         const refreshToken = getCookie("refreshToken");
+        const memberid = getCookie("memberid");
         /* GET : NEW ACCESSTOKEN ---------------------------------------------------- */
         try {
           const response = await axios({
@@ -71,6 +74,7 @@ tokenInstance.interceptors.response.use(
             headers: {
               "Content-Type": "application/json",
               refreshToken: refreshToken,
+              memberid: memberid,
             },
           });
           /* CHANGE ACCESSTOKEN ------------------------------------------------------- */
@@ -90,6 +94,7 @@ tokenInstance.interceptors.response.use(
           /* console.log("REFRESHTOKEN FAILED", error.response); */
           removeCookie("mycookie");
           removeCookie("refreshToken");
+          removeCookie('memberid');
           window.location.replace('/');
         }
       }
@@ -98,6 +103,7 @@ tokenInstance.interceptors.response.use(
       /* console.log("GET NEW ACCESSTOKEN : FAIL", error); */
       removeCookie("mycookie");
       removeCookie("refreshToken");
+      removeCookie('memberid');
       return false;
     }
     return Promise.reject(error);

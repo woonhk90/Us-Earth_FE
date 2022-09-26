@@ -13,6 +13,13 @@ export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, t
 
     console.log('전체캠페인=>', data);
 
+    /* ---------------------------- 해당 페이지에 값이 있는지 확인 --------------------------- */
+    if (data.data.content.length > 0) {
+      thunkAPI.dispatch(hasMoreFn(true));
+    } else {
+      thunkAPI.dispatch(hasMoreFn(false));
+    }
+
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("전체 캠페인 정보를 불러올 수 없습니다.");
@@ -43,14 +50,16 @@ export const __getEnvironment = createAsyncThunk("usearth/__getEnvironment", asy
 const initialState = {
   infoList: [],
   isLoading: false,
-  infoEnvironment:[],
+  infoEnvironment: [],
+  hasMore: true,/* 무한스크롤 값이 더 있는지 확인 */
 }
 
 export const infoSlice = createSlice({
   name: "info",
   initialState,
   reducers: {
-    clearVal: (state) => { state.infoList = [] }
+    clearVal: (state) => { state.infoList = [] },
+    hasMoreFn: (state, action) => { state.hasMore = action.payload; },
   },
   extraReducers: {
     [__getInfo.pending]: (state) => {
@@ -79,5 +88,5 @@ export const infoSlice = createSlice({
   },
 });
 
-export const { clearVal } = infoSlice.actions;
+export const { clearVal, hasMoreFn } = infoSlice.actions;
 export default infoSlice.reducer;

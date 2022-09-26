@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
 import { useNavigate } from 'react-router-dom';
 import { colors } from '../../styles/color';
+import icons from '../../assets';
 
 const CommunityTop = () => {
+  const { Back, LeftArrow } = icons;
   const navigate = useNavigate();
   const onClickHandler = () => {
     navigate(-1);
@@ -12,9 +13,11 @@ const CommunityTop = () => {
   return (
     <>
       <HeaderWrap>
-        <div><LeftArrow onClick={() => onClickHandler()} /></div>
+        <IconDiv>
+          <Back onClick={() => onClickHandler()} />
+        </IconDiv>
         <p>설정</p>
-        <p></p>
+        <div></div>
       </HeaderWrap>
     </>
   )
@@ -27,9 +30,21 @@ const HeaderWrap = styled.div`
   height:48px;
   display:flex;
   justify-content:space-between;
+  align-items:center;
   padding:10px;
   border-bottom:1px solid rgba(0,0,0,0.14);
   box-sizing:border-box;
   z-index:1;
-  color:${colors.black22}
+  color:${colors.black22};
+  p:nth-child(2){
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    text-align:center;
+  }
+`;
+const IconDiv = styled.div`
+  cursor: pointer;
+  width: 12px;
+  height: 21px;
 `;

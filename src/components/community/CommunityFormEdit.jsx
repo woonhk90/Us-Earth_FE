@@ -23,7 +23,7 @@ const CommunityFormEdit = () => {
   const dispatch = useDispatch();
   const param = useParams();
   const { isLoading, error } = useSelector((state) => state.communityForm);
-
+  console.log(isLoading);
   /* -------------------------------- axios get ------------------------------- */
 
   const [isGetLoading, setIsGetLoading] = useState(false);
@@ -173,12 +173,22 @@ const CommunityFormEdit = () => {
   }
 
   if (isLoading) {
-    return <>작성중 이미지</>;
+    return (
+      <>
+        <ImageLoadingWrap>
+          <ImageLoading color="rgba(0, 0, 0, 0.13)" />
+        </ImageLoadingWrap>
+      </>
+    );
   }
 
-  if (error) {
-    return <ErrorModal error={error} />;
-  }
+  // if (error) {
+  //   return (
+  //     <ImageLoadingWrap>
+  //       <ErrorModal error={error} />
+  //     </ImageLoadingWrap>
+  //   );
+  // }
   /* --------------------------- password validation -------------------------- */
   const pwOnChangeHandler = (e) => {
     const passwordRegex = /^([0-9]){4}$/;
@@ -207,7 +217,7 @@ const CommunityFormEdit = () => {
   };
 
   /* ---------------------------------- submit ---------------------------------- */
-  const submitHandler = () => {
+  const submitHandler = async () => {
     let formData = new FormData();
     const dataSet = {
       title: title.trim(),
@@ -222,12 +232,17 @@ const CommunityFormEdit = () => {
     };
     formData.append("multipartFile", imageFile);
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-    dispatch(patchCommunityDetail({ communityId: param.id, formData }));
-    navigate(`/community/detail/${param.id}`);
+    await dispatch(patchCommunityDetail({ communityId: param.id, formData })).then((response) => {
+      console.log(response);
+      if (!response.error) {
+        navigate(`/community/detail/${param.id}`);
+      }
+    });
   };
 
   return (
     <>
+      {error && <ErrorModal notGo={true} error={error} />}
       {isLogin() ? null : <IsLoginModal />}
       <CommunityFormWrap>
         <ImageBoxWrap>
@@ -665,4 +680,19 @@ const InputWrap = styled.div`
   position: relative;
   /* text-align: end;
   align-items: flex-end; */
+`;
+
+const ImageLoadingWrap = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 0 15px;
+  box-sizing: border-box;
 `;

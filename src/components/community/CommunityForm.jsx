@@ -6,7 +6,7 @@ import Input from "../elements/Input";
 import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
 import { useDispatch, useSelector } from "react-redux";
-import { flexBetween, flexColumn} from "../../styles/Flex";
+import { flexBetween, flexColumn } from "../../styles/Flex";
 import { addDates, communityFormCleanUp, postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate } from "react-router-dom";
 import cameraWh from "../../assets/cameraWh.svg";
@@ -25,7 +25,6 @@ const CommunityForm = () => {
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
   const [secret, setSecret] = useState(false);
-
   const [isLimitScore, setIsLimitScore] = useState("");
   const [isLimitParticipants, setLimitParticipants] = useState("");
   const [isTitle, setIsTitle] = useState("");
@@ -164,21 +163,28 @@ const CommunityForm = () => {
     };
     formData.append("multipartFile", imageFile);
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-    await dispatch(postCommunityDetail(formData));
+    await dispatch(postCommunityDetail(formData)).then((response) => {
+      console.log(response);
+      if (!response.error) {
+        navigate(`/`);
+      }
+    });
     await dispatch(clearVal());
-    navigate("/");
   };
   if (isLoading) {
-    return <>작성중 이미지</>;
-  }
-
-  if (error) {
-    return <ErrorModal error={error} />;
+    return (
+      <>
+        <ImageLoadingWrap>
+          <ImageLoading color="rgba(0, 0, 0, 0.13)" />
+        </ImageLoadingWrap>
+      </>
+    );
   }
 
   return (
     <>
       {isLogin() ? null : <IsLoginModal />}
+      {error && <ErrorModal notGo={true} error={error} />}
       <>
         <CommunityFormWrap>
           <ImageBoxWrap>
@@ -187,9 +193,9 @@ const CommunityForm = () => {
                 <ImageIcon>
                   {upLoading < 100 ? (
                     <Container>
-                        <LoadingPosition>
-                          <ImageLoading />
-                        </LoadingPosition>
+                      <LoadingPosition>
+                        <ImageLoading />
+                      </LoadingPosition>
                     </Container>
                   ) : null}
                   {previewImg.length > 0 ? <Thumb src={previewImg} alt="img" /> : <CameraIcon />}
@@ -222,7 +228,6 @@ const CommunityForm = () => {
               <CheckBoxLabel htmlFor="checkbox" />
             </CheckBoxWrapper>
           </TopTextWrap>
-
           <InputWrap>
             <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
             <MessageP>{isTitle}</MessageP>
@@ -539,7 +544,6 @@ const BottomButton = styled.button`
 
 /* ---------------------------------- form font ---------------------------------- */
 
-
 const P = styled.p`
   font-size: 20px;
   font-weight: 500;
@@ -620,4 +624,19 @@ const InputWrap = styled.div`
   position: relative;
   /* text-align: end;
   align-items: flex-end; */
+`;
+
+const ImageLoadingWrap = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 0 15px;
+  box-sizing: border-box;
 `;

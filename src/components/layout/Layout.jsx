@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import LoadingMain from "../../assets/loading-main.gif";
+import background from "../../assets/jpg/background.jpg";
 import { flexRow } from "../../styles/Flex";
 
 const Layout = (props) => {
   return (
     <LayoutWrap>
-      <SubWrap>
-        <MainLoading imgUrl={LoadingMain}></MainLoading>
+      <SubWrap imgUrl={background}>
         <ChildrenWrap>{props.children}</ChildrenWrap>
       </SubWrap>
     </LayoutWrap>
@@ -17,7 +17,8 @@ export default Layout;
 
 const LayoutWrap = styled.div`
   width: 100vw;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100vh;
+  background: #eaf7bf;
 `;
 
 const SubWrap = styled.div`
@@ -27,8 +28,14 @@ const SubWrap = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  background: linear-gradient(white 30%, #e4ffbc);
-  margin: 0 auto;
+  position: fixed;
+  background-image: url(${(props) => props.imgUrl});
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: auto 100vh;
+  @media (min-width: 541px) and (max-width: 900px) {
+  justify-content: flex-end;
+  }
 `;
 const ChildrenWrap = styled.div`
   background-color: white;
@@ -38,23 +45,15 @@ const ChildrenWrap = styled.div`
   flex-direction: column;
   box-shadow: 1px 3px 5px 3px #cecece33;
   width: 390px;
+  left: 240px;
+
+  @media (min-width: 541px) and (max-width: 900px) {
+    left: 0;
+  margin-right: 30px;
+  }
   @media (max-width: 540px) {
     width: 100%;
+    left: 0;
   }
 `;
 
-const MainLoading = styled.div`
-/* position: relative; */
-width: 250px;
-  max-width: 250px;
-  height: 250px;  
-  margin-right: 5%;
-  @media (max-width: 540px) {
-    margin-right: 0;
-  display: none;
-  }
-  background-image: url(${(props) => props.imgUrl});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-`;

@@ -12,6 +12,9 @@ import { ReactComponent as Plus } from "./Plus.svg";
 import { ReactComponent as Search } from "./Search.svg";
 import { ReactComponent as Cancel } from "./Cancel.svg";
 import { ReactComponent as Lock } from "./Lock.svg";
+import { ReactComponent as Back } from "./back.svg";
+import { ReactComponent as CommunityNewGroup } from "./community_new_group.svg";
+import { ReactComponent as CommunityNewProof } from "./community_new_proof.svg";
 
 import { ReactComponent as Community_On } from "./community_on.svg";
 import { ReactComponent as Community_Off } from "./community_off.svg";
@@ -70,6 +73,9 @@ const icons = {
   level_04,
   level_05,
   Lock,
+  Back,
+  CommunityNewGroup,
+  CommunityNewProof,
 };
 
 export default icons;

@@ -11,6 +11,7 @@ import OkModal from "../Modals/OkModal";
 import imageCompression from "browser-image-compression";
 import ImageLoading from "../etc/ImageLoading";
 import isLogin from "../../lib/isLogin";
+import ErrorModal from "../Modals/ErrorModal";
 
 const CommentInput = ({ userToken }) => {
   const dispatch = useDispatch();
@@ -18,17 +19,18 @@ const CommentInput = ({ userToken }) => {
   const param = useParams();
   const [content, commentOnChange, commentReset] = useInput("");
   const { dateStatus } = useSelector((state) => state.comments.comments);
+  const { error } = useSelector((state) => state.comments);
   console.log(dateStatus);
   const [inputOn, setInputOn] = useState(false);
   const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
 
   const textRef = useRef();
   const handleResizeHeight = useCallback(() => {
-    console.log(textRef.current.style.height);
+    textRef.current.style.height = `40px`;
     if (textRef.current.scrollHeight < 100) {
       textRef.current.style.height = `auto`;
       textRef.current.style.height = textRef.current.scrollHeight + "px";
-    }
+    } else textRef.current.style.height = `100px`;
   }, []);
 
   useEffect(() => {
@@ -115,32 +117,30 @@ const CommentInput = ({ userToken }) => {
   const deleteImageFile = () => {
     setImageFile([]);
     setPreviewImg([]);
+    setIsPhotoMessage("")
     // imageUrlLists.push(currentImageUrl);
   };
   /* ---------------------------------- submit ---------------------------------- */
   const onClickSubmit = () => {
-    console.log("?");
-    console.log(participant);
-    console.log(dateStatus);
-    if (participant && dateStatus === "ongoing") {
-      console.log("?");
-      let formData = new FormData();
-      if (content === "") {
-        alert("내용을 입력해 주세요");
-      } else {
-        formData.append("multipartFile", imageFile);
-        formData.append("dto", new Blob([JSON.stringify({ content: content })], { type: "application/json" }));
-        dispatch(postComment({ proofId: param.proofId, formData: formData }));
-        setInputOn(false);
-
-        // clear input
-        commentReset();
-        setImageFile([]);
-        setPreviewImg([]);
-        textRef.current.style.height = `auto`;
+    if (upLoading === 100) {
+      if(content.trim() === ""){
+       return setIsPhotoMessage("내용을 입력해주세요.")
+      }
+      if (participant && dateStatus === "ongoing") {
+        console.log("?");
+        let formData = new FormData();
+          formData.append("multipartFile", imageFile);
+          formData.append("dto", new Blob([JSON.stringify({ content: content.trim() })], { type: "application/json" }));
+          dispatch(postComment({ proofId: param.proofId, formData: formData }));
+          setInputOn(false);
+          commentReset();
+          setImageFile([]);
+          setPreviewImg([]);
+          textRef.current.style.height = `auto`;
       }
     }
   };
+
 
   return (
     <>
@@ -154,7 +154,7 @@ const CommentInput = ({ userToken }) => {
               </CameraIcon>
             </StLabel>
           </form>
-          <InputWrap color={!participant} inputOn={inputOn}>
+          <InputWrap participant={!participant} inputOn={inputOn}>
             {upLoading < 100 ? (
               <Container>
                 <LoadingContainer>
@@ -225,14 +225,13 @@ const CommentInputWrap = styled.div`
   align-items: flex-start;
   box-sizing: border-box;
   background-color: #f9f9f9;
-  
 `;
 
 const InputWrap = styled.div`
   position: relative;
   margin: 9px 0px 9px 0px;
   width: 100%;
-  background-color: ${(props)=>props.color ? "#f9f9f9": "white"};
+  background-color: ${(props) => (props.participant ? "#f9f9f9" : "white")};
   border: 1px solid #ececec;
   border-radius: 6px;
 `;

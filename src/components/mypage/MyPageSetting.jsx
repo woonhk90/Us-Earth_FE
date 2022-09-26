@@ -81,7 +81,7 @@ const MyPage = () => {
               </>) :
               (<>
                 <NickInfoTitle><span>닉네임 변경</span> <span onClick={() => { onNickNameSubmit() }}><Pen /></span></NickInfoTitle>
-                <Input type="text" placeholder={userInfo.nickname} onChange={onDebounceChange} maxLength='20' />
+                <Input type="text" placeholder={userInfo.nickname} onChange={onDebounceChange} maxLength='7' />
                 <OverlapFlagBox><OverlapFlagContent color={overlapFlag ? 'black' : 'red'}>사용{overlapFlag ? '가능한' : '불가능한'} 닉네임 입니다.</OverlapFlagContent></OverlapFlagBox>
               </>)}
           </NickInfo>
