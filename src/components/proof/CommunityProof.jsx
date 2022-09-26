@@ -5,12 +5,14 @@ import { Navigation, Pagination, Scrollbar } from "swiper";
 import EditModal from "../Modals/EditModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
+import rightWh from "../../assets/rightWh.svg";
+import leftWh from "../../assets/leftWh.svg";
 import { flexColumn, flexRow, flexBetween, Text } from "../../styles/Flex";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { deleteProof, getProofs } from "../../redux/modules/proofsSlice";
+import { deleteProof, getProofs, proofsCleanUp } from "../../redux/modules/proofsSlice";
 import icons from "../../assets";
 import ConfirmModal from "../Modals/ConfirmModal";
 import Loading from "../etc/Loading";
@@ -27,7 +29,10 @@ const CommunityProof = () => {
   console.log(proofs, "인증글");
   useEffect(() => {
     dispatch(getProofs(param.proofId));
-  }, [dispatch]);
+    return ()=> {
+      dispatch(proofsCleanUp());
+    }
+  }, []);
 
   const openModal = () => {
     setModalOpen(true);
@@ -68,8 +73,12 @@ const CommunityProof = () => {
     );
   }
 
+  if (error) {
+    return <ErrorModal error={error} />;
+  }
+
   return (
-    <>{error && <ErrorModal error={error} />}
+    <>
       {modal && <ConfirmModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
       <FirstWrap>
         <Swiper modules={[Navigation, Pagination, Scrollbar]} spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
@@ -219,14 +228,22 @@ const FirstWrap = styled.div`
     border-radius: 15px;
     width: 30px;
     height: 30px;
-    background-color: gray;
+    background: rgba(0, 0, 0, 0.5);
+    background-image: url("${rightWh}");
+    background-repeat: no-repeat;
+    background-position: 11px;
+    background-size: 10px;
   }
 
   .swiper-button-prev {
     border-radius: 15px;
     width: 30px;
     height: 30px;
-    background-color: gray;
+    background: rgba(0, 0, 0, 0.5);
+    background-image: url("${leftWh}");
+    background-repeat: no-repeat;
+    background-position: 9px;
+    background-size: 10px;
   }
 
   .swiper-button-next::after,
@@ -236,6 +253,7 @@ const FirstWrap = styled.div`
   .swiper-pagination-bullet,
   .swiper-pagination-bullet-active {
     background-color: #ffffff;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
   }
 `;
 

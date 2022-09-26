@@ -22,11 +22,12 @@ export const postCommunityDetail = createAsyncThunk("community/postform", async 
     return thunkAPI.fulfillWithValue(data);
   } catch (err) {
     console.log(err);
+    return thunkAPI.rejectWithValue(err.response.data.message);
   }
 });
 
 /* --------------------- patch community detail (Update) -------------------- */
-export const patchCommunityDetail = createAsyncThunk("comment/patch", async (payload, thunkAPI) => {
+export const patchCommunityDetail = createAsyncThunk("community/patch", async (payload, thunkAPI) => {
   try {
     const { data } = await tokenInstance.patch(`/community/${payload.communityId}`, payload.formData, {
       headers: {
@@ -38,17 +39,17 @@ export const patchCommunityDetail = createAsyncThunk("comment/patch", async (pay
     return thunkAPI.fulfillWithValue(data);
   } catch (err) {
     console.log(err);
-    console.log(err.response.data.message);
+    return thunkAPI.rejectWithValue(err.response.data.message);
   }
 });
 
 /* -------------------- delete community detail (Delete) -------------------- */
-export const deleteCommunityDetail = createAsyncThunk("comment/delete", async (payload, thunkAPI) => {
+export const deleteCommunityDetail = createAsyncThunk("community/delete", async (payload, thunkAPI) => {
   try {
     await tokenInstance.delete(`/proof/{proofId}`);
     return thunkAPI.fulfillWithValue(payload);
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response.data.message);
   }
 });
 
@@ -62,6 +63,13 @@ export const communityFormSlice = createSlice({
     },
     addDateLists: (state, action) => {
       state.dateLists = action.payload;
+    },
+    communityFormCleanUp: (state, action) => {
+      state.detail= {}
+      state.dates= {}
+      state.dateLists= []
+      state.isLoading= false
+      state.error = null
     },
   },
   extraReducers: {
@@ -82,7 +90,6 @@ export const communityFormSlice = createSlice({
     },
     [patchCommunityDetail.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.communityform = action.payload;
     },
     [patchCommunityDetail.rejected]: (state, action) => {
       state.isLoading = false;
@@ -102,5 +109,5 @@ export const communityFormSlice = createSlice({
   },
 });
 
-export const { addDates, addDateLists } = communityFormSlice.actions;
+export const { addDates, addDateLists,communityFormCleanUp } = communityFormSlice.actions;
 export default communityFormSlice.reducer;

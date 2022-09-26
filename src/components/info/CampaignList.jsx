@@ -43,7 +43,7 @@ const Info = () => {
         })}
       </CampaignBox>
       {/* <Loading /> */}
-      {isLoading ? <Loading /> : <div ref={ref}></div>}
+      {isLoading ? <Loading /> : <div ref={ref} style={{ border: "1px solid white" }}></div>}
     </>
   );
 };
