@@ -92,10 +92,6 @@ const CommentBox = () => {
     if (!userToken) setLoginModal(true);
   };
 
-  if (error) {
-    return <ErrorModal error={error} />;
-  }
-
   return (
     <>
       {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}

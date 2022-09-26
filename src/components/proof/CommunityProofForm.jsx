@@ -105,15 +105,19 @@ const CommunityProofForm = () => {
         title: title.trim(),
         content: content.trim(),
       };
-      if (files.length > 0) {
-        console.log(files);
-        files.map((file) => formData.append("multipartFile", file));
-      }
+      // if (files.length > 0) {
+      //   console.log(files);
+      //   files.map((file) => formData.append("multipartFile", file));
+      // }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       console.log(dataSet);
-      await dispatch(postProof({ communityId: param.communityId, formData: formData }));
-      dispatch(certifyReset());
-      navigate(`/community/detail/${param.communityId}`);
+      await dispatch(postProof({ communityId: param.communityId, formData: formData })).then((response) => {
+        console.log(response);
+        if (!response.error) {
+          navigate(`/community/detail/${param.communityId}`);
+        }
+      });
+      dispatch(certifyReset())
     }
     setBlock(false);
   };

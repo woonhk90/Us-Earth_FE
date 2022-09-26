@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import CustomSelect from "./CustomSelect";
 import { flexRow, flexBetween, flexColumnLeft } from "../../styles/Flex";
 import { useDispatch, useSelector } from "react-redux";
-import { commentEditChange, deleteComments, getComments } from "../../redux/modules/commentsSlice";
+import { commentClearUp, commentEditChange, deleteComments, getComments } from "../../redux/modules/commentsSlice";
 import ConfirmModal from "../Modals/ConfirmModal";
 import icons from "../../assets";
 import OkModal from "../Modals/OkModal";
@@ -22,6 +22,7 @@ const Comment = ({ userToken, editMode }) => {
   console.log(getIsLoading);
   useEffect(() => {
     dispatch(getComments(param.proofId));
+    return () => dispatch(commentClearUp());
   }, []);
 
   /* -------------------------- 캠페인 종료 시 댓글 수정 실패 모달 -------------------------- */
@@ -41,7 +42,7 @@ const Comment = ({ userToken, editMode }) => {
   const clickDispatch = (payload) => {
     if (payload.selectName === "수정하기") {
       if (dateStatus === "ongoing") {
-        if (commentEdit?.editMode !== true) {
+        // if (commentEdit?.editMode !== true) {
           dispatch(commentEditChange({}));
           dispatch(
             commentEditChange({
@@ -49,7 +50,7 @@ const Comment = ({ userToken, editMode }) => {
               commentId: payload.contentId,
             })
           );
-        }
+        // }
       } else setOkModal(true);
     } else if (payload.selectName === "삭제하기") {
       setModal(!modal);
@@ -109,6 +110,7 @@ const Comment = ({ userToken, editMode }) => {
         proofId: param.proofId,
       })
     );
+    dispatch(commentEditChange({}));
   };
 
   // close Modal
@@ -125,12 +127,9 @@ const Comment = ({ userToken, editMode }) => {
     );
   }
 
-  if (error) {
-    return <ErrorModal error={error} />;
-  }
-
   return (
     <>
+      {error && <ErrorModal notGo={true} error={error} />}
       {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
       {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmModal>}
       <CommentContainer>
