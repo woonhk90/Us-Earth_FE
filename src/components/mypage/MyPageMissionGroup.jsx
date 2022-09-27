@@ -34,9 +34,9 @@ const MyPageMissionGroup = () => {
           <CategoryInfoList>
             {myGroupList.filter((v) => v.dateStatus === saveCagegoryFlag).map((v) =>
               <ListBox key={v.communityId} onClick={() => navigate(`/community/detail/${v.communityId}`)}>
-                <div>
-                  <img src={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"} alt='GroupImg' />
-                </div>
+                <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
+                  {/* <img src={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"} alt='GroupImg' /> */}
+                </ItemImg>
                 <div>
                   <div>
                     <p>{v.title}</p>
@@ -97,6 +97,22 @@ const ItemEnd = styled.div`
 const CategoryInfoList = styled.div`
   width: 100%;
 `;
+
+const ItemImg = styled.div`
+  background:url(${(props) => props.bgImg}) no-repeat center center;
+  background-size:cover;
+  width: 150px;
+  height: 200px;
+  @media (max-width: 375px) {
+    width: 125px;
+    height: 150px;
+  }
+  @media (max-width: 299px) {
+    width: 100px;
+    height: 125px;
+  }
+`;
+
 const ListBox = styled.div`
   padding: 23px 16px;
   box-sizing: border-box;
@@ -105,14 +121,6 @@ const ListBox = styled.div`
   align-items: center;
   gap: 22px;
   border-bottom: 1px solid #f3f3f3;
-  div:nth-child(1) {
-    width: 100px;
-    height: 100px;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
   div:nth-child(2) {
     width: 60%;
     div:nth-child(1) {
@@ -122,6 +130,16 @@ const ListBox = styled.div`
         font-weight:600;
         font-size:20px;
         line-height:30px;
+        /* 말줄임 */
+        /* white-space:nowrap; */
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        /* 두줄 */
+        /* display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical; */
+        /* color:black; */
       }
       p:nth-child(2) {
         font-weight:300;

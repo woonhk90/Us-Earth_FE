@@ -24,21 +24,7 @@ const PopularGroupItemList = () => {
   }, [])
 
 
-  /*
-  const [list, setList] = React.useState([]);
-  // const getPopularGroupItemList = async () => {
-  //   const response = await instance.get("/community/active");
-    // setList(response.data);
-  // }
-  React.useEffect(() => {
-    const response = getPopularGroupItemList();
-    setList(response);
-  }, [])
-  // console.log(list);
-  list.then((value) => {
-    console.log(value);
-    });
-    */
+
 
 
   return (

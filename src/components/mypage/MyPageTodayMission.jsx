@@ -4,6 +4,7 @@ import icons from "../../assets/index";
 import { useDispatch, useSelector } from "react-redux";
 import { __getTodayMission, __updateMissionFlag } from "../../redux/modules/mypageSlice";
 import { colors } from "../../styles/color";
+import ConfirmTodayMissionModal from '../Modals/ConfirmTodayMissionModal';
 
 const MyPageTodayMission = ({ userInfo }) => {
   const { level_01, level_02, level_03, level_04, level_05 } = icons;
@@ -37,12 +38,39 @@ const MyPageTodayMission = ({ userInfo }) => {
   }, []);
 
   /* -------------------------------- 일일 미션 누르면 ------------------------------- */
-  const missionFlagChange = (key) => {
-    dispatch(__updateMissionFlag({ missionName: key }));
+  // const missionFlagChange = (key) => {
+  //   dispatch(__updateMissionFlag({ missionName: key }));
+  // };
+
+  /* -------------------------------- edit modal ------------------------------- */
+  const [modal, setModal] = React.useState(false);
+  const [missionId, setMissionId] = React.useState('');
+
+  const onMissionClick = (id, flag) => {
+    if (!flag) {
+      setMissionId(id);
+      setModal(!modal);
+    }
+  }
+
+  // modal text data
+  const confirmModalData = {
+    title: "미션을 완료 하겠습니까??",
+    cancel: "아니오",
+    submit: "예",
+  };
+
+  const modalOnOff = () => {
+    setModal(!modal);
+  };
+
+  const clickSubmit = () => {
+    dispatch(__updateMissionFlag({ missionName: missionId }));
   };
 
   return (
     <>
+      {modal && <ConfirmTodayMissionModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
       <MyPageMission imgUrl={imgUrl}>
         {
           missionFlag ?
@@ -53,7 +81,12 @@ const MyPageTodayMission = ({ userInfo }) => {
               </TodayMissionBox>
               <MissionBox>
                 {
-                  todayMission.map((v) => <MissionItem key={v.missionName} onClick={() => missionFlagChange(v.missionName)} background={v.complete}><ItemTitle background={v.complete}>{v.missionName}</ItemTitle></MissionItem>)
+                  todayMission.map(
+                    (v) =>
+                      <MissionItem key={v.missionName} onClick={() => { onMissionClick(v.missionName, v.complete) }} background={v.complete}>
+                        <ItemTitle background={v.complete}>{v.missionName}</ItemTitle>
+                      </MissionItem>
+                  )
                 }
               </MissionBox>
             </TodayMission>)
