@@ -176,7 +176,7 @@ const CommentInput = ({ userToken }) => {
               rows="1"
               inputOn={inputOn}
               emptyCheck={inputOn || content.length || previewImg.length}
-              maxLength="500"
+              maxLength="255"
               value={content}
               onChange={(e) => {
                 setIsPhotoMessage("");

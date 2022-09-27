@@ -115,7 +115,7 @@ const ProofForm = ({ ProofFormData }) => {
           <Textarea
             cols="50"
             rows="8"
-            maxLength="500"
+            maxLength="255"
             textareaType="proof"
             placeholder="내용을 입력해주세요"
             name="content"
