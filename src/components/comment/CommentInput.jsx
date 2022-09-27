@@ -21,7 +21,7 @@ const CommentInput = ({ userToken }) => {
   const { dateStatus } = useSelector((state) => state.comments.comments);
   const [inputOn, setInputOn] = useState(false);
   const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
-
+console.log(param.proofId)
   const textRef = useRef();
   const handleResizeHeight = useCallback(() => {
     textRef.current.style.height = `40px`;
