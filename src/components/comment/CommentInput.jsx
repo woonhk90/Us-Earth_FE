@@ -19,8 +19,6 @@ const CommentInput = ({ userToken }) => {
   const param = useParams();
   const [content, commentOnChange, commentReset] = useInput("");
   const { dateStatus } = useSelector((state) => state.comments.comments);
-  const { error } = useSelector((state) => state.comments);
-  console.log(dateStatus);
   const [inputOn, setInputOn] = useState(false);
   const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
 
@@ -39,7 +37,6 @@ const CommentInput = ({ userToken }) => {
       window.removeEventListener("mousedown", clickInputOutside);
     };
   }, [inputOn]);
-  console.log(inputOn);
 
   /* -------------------------- 댓글 작성 실패 모달 -------------------------- */
   const [okModal, setOkModal] = useState(false);
@@ -80,7 +77,6 @@ const CommentInput = ({ userToken }) => {
     setIsPhotoMessage("");
     const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
     const imageFile = e.target.files[0];
-    // console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
         const options = {
@@ -88,14 +84,11 @@ const CommentInput = ({ userToken }) => {
           maxWidthOrHeight: 1920,
           useWebWorker: true,
           onProgress: (data) => {
-            console.log(data);
             setUploading(data);
           },
         };
         try {
           const compressedFile = await imageCompression(imageFile, options);
-          // console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
-          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
           let reader = new FileReader();
           reader.readAsDataURL(compressedFile);
           setImageFile(compressedFile);
@@ -105,7 +98,6 @@ const CommentInput = ({ userToken }) => {
           };
           const convertedBlobFile = new File([compressedFile], imageFile.name, { type: imageFile.type, lastModified: Date.now() });
           setImageFile(convertedBlobFile);
-          // await ; // write your own logic
         } catch (error) {
           setIsPhotoMessage("오류가 발생했습니다. 다시 업로드해주세요.");
         }
@@ -118,7 +110,6 @@ const CommentInput = ({ userToken }) => {
     setImageFile([]);
     setPreviewImg([]);
     setIsPhotoMessage("")
-    // imageUrlLists.push(currentImageUrl);
   };
   /* ---------------------------------- submit ---------------------------------- */
   const onClickSubmit = () => {
@@ -127,7 +118,6 @@ const CommentInput = ({ userToken }) => {
        return setIsPhotoMessage("내용을 입력해주세요.")
       }
       if (participant && dateStatus === "ongoing") {
-        console.log("?");
         let formData = new FormData();
           formData.append("multipartFile", imageFile);
           formData.append("dto", new Blob([JSON.stringify({ content: content.trim() })], { type: "application/json" }));
@@ -186,7 +176,7 @@ const CommentInput = ({ userToken }) => {
               rows="1"
               inputOn={inputOn}
               emptyCheck={inputOn || content.length || previewImg.length}
-              maxLength="100"
+              maxLength="500"
               value={content}
               onChange={(e) => {
                 setIsPhotoMessage("");

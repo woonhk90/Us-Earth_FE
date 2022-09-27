@@ -2,9 +2,9 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 const Textarea = (props) => {
-  const { textareaRef, onInput, onFocus, textareaType, margin, weight, autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } =
+  const { onKeyPress,textareaRef, onInput, onFocus, textareaType, margin, weight, autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } =
     props;
-  console.log(props.ref);
+    
   return (
     <TextareaWrap>
       <StTextarea
@@ -25,6 +25,7 @@ const Textarea = (props) => {
         textareaType={textareaType}
         onInput={onInput}
         ref={textareaRef}
+        onKeyPress={onKeyPress}
       />
     </TextareaWrap>
   );
@@ -69,7 +70,8 @@ const StTextarea = styled.textarea`
         margin: 15px 0 0 0;
         padding: 0 30px;
         font-weight: 400;
-        height: 300px;
+        height: 280px;
+        max-height: 400px;
         font-size: 18px;
       `
     );
