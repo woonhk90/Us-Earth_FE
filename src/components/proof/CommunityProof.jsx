@@ -18,6 +18,7 @@ import ConfirmModal from "../Modals/ConfirmModal";
 import Loading from "../etc/Loading";
 import ErrorModal from "../Modals/ErrorModal";
 import { __getCommunityDetail } from "../../redux/modules/communitySlice";
+import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
 const CommunityProof = () => {
   const { VerticalDot, Delete, Report, Edit } = icons;
@@ -55,16 +56,22 @@ const CommunityProof = () => {
     submit: "예",
   };
 
+  console.log(param.proofId)
+  console.log(param)
   // editMode cancel function
   const clickSubmit = () => {
-    dispatch(deleteProof(param.proofId));
-    navigate(`/community/detail/${param.communityId}`);
+    console.log(param.proofId)
+    dispatch(deleteProof(param.proofId)).then((response) => {
+      if (!response.error) {
+        navigate(`/community/detail/${param.communityId}`);
+      }
+    });
   };
 
   const modalOnOff = () => {
     setModal(!modal);
   };
-
+console.log(isLoading)
   if (isLoading) {
     return (
       <>
@@ -79,7 +86,7 @@ const CommunityProof = () => {
 
   return (
     <>
-      {modal && <ConfirmModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
+      {modal && <ConfirmSingleModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
       <FirstWrap>
         <Swiper modules={[Navigation, Pagination, Scrollbar]} spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
           {proofs.img?.map((img) => {

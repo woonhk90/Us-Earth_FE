@@ -40,7 +40,7 @@ const CommunityProofForm = () => {
   const [upLoading, setUploading] = useState(100);
 
   const addImageFile = async (e) => {
-    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const acceptImageFiles = ["image/png", "image/jpeg","image/jpg"];
     let arry = [];
     setIsPhotoMessage("");
     if (e.target.files.length + previewImg.length < 6) {
