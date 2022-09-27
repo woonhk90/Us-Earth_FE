@@ -23,7 +23,7 @@ const CommunityFormEdit = () => {
   const dispatch = useDispatch();
   const param = useParams();
   const { isLoading, error } = useSelector((state) => state.communityForm);
-  console.log(isLoading);
+
   /* -------------------------------- axios get ------------------------------- */
 
   const [isGetLoading, setIsGetLoading] = useState(false);
@@ -33,16 +33,14 @@ const CommunityFormEdit = () => {
       setGetError(null);
       setIsGetLoading(true);
       const { data } = await tokenInstance.get(`/community/${communityId}`);
-      console.log(data);
-      if (!data.writer) navigate("/community");
+            if (!data.writer) navigate("/community");
       setSecret(data.secret);
       setPassword(data.password);
-      setForm({
-        limitScore: data.limitScore,
-        limitParticipants: data.limitParticipants,
-        title: data.title,
-        content: data.content,
-      });
+      setTitle(data.title)
+      setContent(data.content)
+      setLimitScore(data.limitScore)
+      setLimitParticipants(data.limitParticipants)
+
       dispatch(
         addDates({
           start: data.startDate,
@@ -58,37 +56,72 @@ const CommunityFormEdit = () => {
     setIsGetLoading(false);
   };
 
+  /* ----------------------------------- 달력 ----------------------------------- */
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
-  const [secret, setSecret] = useState(false);
 
+  /* ----------------------------------- 입력값 ---------------------------------- */
+  const [secret, setSecret] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [limitScore, setLimitScore] = useState("");
+  const [limitParticipants, setLimitParticipants] = useState("");
+  const [password, setPassword] = useState("");
+  
+  /* --------------------------------- 입력값 메세지 -------------------------------- */
   const [isLimitScore, setIsLimitScore] = useState("");
-  const [isLimitParticipants, setLimitParticipants] = useState("");
+  const [isLimitParticipants, setIsLimitParticipants] = useState("");
   const [isTitle, setIsTitle] = useState("");
   const [isContent, setIsContent] = useState("");
   const [isdate, setIsDate] = useState("");
-  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmit, setForm] = useInputs({
-    limitScore: "",
-    limitParticipants: "",
-    title: "",
-    content: "",
-  });
-  const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
-  const { limitScore, limitParticipants, title, content } = inputData;
-  const realLimitScore = +limitScore.toString().replace(/ /g, "").replace(/(^0+)/g, "");
-  const realLimitParticipants = +limitParticipants.toString().replace(/ /g, "").replace(/(^0+)/g, "");
+
+  /* ----------------------------- 입력값 할당 및 유효성 검사 ---------------------------- */
+  const onChangeTitle = (e) => {
+    setTitle(e.target.value);
+    if (e.target.value.trim() === "") {
+      setIsTitle("그룹명을 입력해주세요");
+    } else setIsTitle("");
+  };
+
+  const onChangeContent = (e) => {
+    setContent(e.target.value);
+    if (e.target.value.trim() === "") {
+      setIsContent("그룹 소개를 입력해주세요");
+    } else setIsContent("");
+  };
+
+  const onChangelimitScore = (e) => {
+    if (/^[1-9][0-9]?$|^100/.test(e.target.value) || e.target.value === "") {
+      setLimitScore(e.target.value);
+    }
+    if (e.target.value === "" || parseInt(e.target.value) < parseInt(limitParticipants)) {
+      setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
+    } else setIsLimitScore("");
+  };
+
+  const onChangelimitParticipants = (e) => {
+    if (/^([1-9]|10)$/.test(e.target.value) || e.target.value === "") {
+      setLimitParticipants(e.target.value);
+    }
+    if (e.target.value === "") {
+      setIsLimitParticipants("참가인원을 입력해 주세요(10명 이내)");
+    } else setIsLimitParticipants("");
+    if (parseInt(limitScore) < parseInt(e.target.value)) {
+      setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
+    } else setIsLimitScore("");
+  };
 
   const validation = () => {
     if (!/^([0-9]){4}$/.test(password)) {
       setPasswordMessage("비밀번호 숫자 4자리");
     } else setPasswordMessage("");
-    {
-      !/^([1-9]|10)$/.test(realLimitParticipants) ? setLimitParticipants("참가인원을 입력해 주세요(10명 이내)") : setLimitParticipants("");
-    }
-    if (!/^[1-9][0-9]?$|^100/.test(realLimitScore) || realLimitScore < realLimitParticipants) {
+    if (!/^([1-9]|10)$/.test(limitParticipants)) {
+      setIsLimitParticipants("참가인원을 입력해 주세요(10명 이내)");
+    } else setIsLimitParticipants("");
+    if (!/^[1-9][0-9]?$|^100/.test(limitScore) || parseInt(limitScore) < parseInt(limitParticipants)) {
       setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
     } else setIsLimitScore("");
     if (!dates.start?.length && !dates.end?.length) {
@@ -102,7 +135,8 @@ const CommunityFormEdit = () => {
     } else setIsContent("");
   };
 
-  /* ------------------------------ photo upload ------------------------------ */
+
+  /* --------------------------------- 사진 업로드 --------------------------------- */
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
@@ -111,7 +145,7 @@ const CommunityFormEdit = () => {
 
   const addImageFile = async (e) => {
     setIsPhotoMessage("");
-    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/jpg"];
     const imageFile = e.target.files[0];
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
@@ -120,14 +154,11 @@ const CommunityFormEdit = () => {
           maxWidthOrHeight: 1920,
           useWebWorker: true,
           onProgress: (data) => {
-            console.log(data);
             setUploading(data);
           },
         };
         try {
           const compressedFile = await imageCompression(imageFile, options);
-
-          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
           let reader = new FileReader();
           reader.readAsDataURL(compressedFile);
           setImageFile(compressedFile);
@@ -151,14 +182,66 @@ const CommunityFormEdit = () => {
     setDeleteImage(true);
   };
 
+  /* --------------------------- password validation -------------------------- */
+  // const pwOnChangeHandler = (e) => {
+  //   const passwordRegex = /^([0-9]){4}$/;
+  //   const passwordCurrent = e.target.value;
+  //   setPassword(e.target.value);
+  //   if (!passwordRegex.test(passwordCurrent)) {
+  //     setPasswordMessage("비밀번호 숫자 4자리");
+  //     setIsPassword(false);
+  //   } else {
+  //     setPasswordMessage("");
+  //     setIsPassword(true);
+  //   }
+  // };
+
+  /* -------------------------- secret switch button -------------------------- */
+  // const secretSwitchButtonHandler = () => {
+  //   if (secret === false) {
+  //     setPassword("");
+  //     setIsPassword(false);
+  //     setSecret(true);
+  //   } else {
+  //     setSecret(false);
+  //     setIsPassword(false);
+  //     setPassword("");
+  //   }
+  // };
+
+/* ----------------------------------- 제출 ----------------------------------- */
+  const submitHandler = async () => {
+    let formData = new FormData();
+    const dataSet = {
+      title: title.trim(),
+      content: content.trim(),
+      limitParticipants: limitParticipants,
+      limitScore: limitScore,
+      password: password,
+      secret: secret,
+      startDate: start,
+      endDate: end,
+      delete: deleteImage,
+    };
+    formData.append("multipartFile", imageFile);
+    formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
+    await dispatch(patchCommunityDetail({ communityId: param.id, formData })).then((response) => {
+      console.log(response);
+      if (!response.error) {
+        navigate(`/community/detail/${param.id}`);
+      }
+    });
+  };
+
   useEffect(() => {
     getCommunityDetail(param.id);
     return () => {
       dispatch(communityFormCleanUp());
       imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
-      inputReset();
     };
   }, []);
+
+/* --------------------------------- 로딩 & 에러 -------------------------------- */
 
   if (isGetLoading) {
     return (
@@ -181,64 +264,6 @@ const CommunityFormEdit = () => {
       </>
     );
   }
-
-  // if (error) {
-  //   return (
-  //     <ImageLoadingWrap>
-  //       <ErrorModal error={error} />
-  //     </ImageLoadingWrap>
-  //   );
-  // }
-  /* --------------------------- password validation -------------------------- */
-  const pwOnChangeHandler = (e) => {
-    const passwordRegex = /^([0-9]){4}$/;
-    const passwordCurrent = e.target.value;
-    setPassword(e.target.value);
-    if (!passwordRegex.test(passwordCurrent)) {
-      setPasswordMessage("비밀번호 숫자 4자리");
-      setIsPassword(false);
-    } else {
-      setPasswordMessage("");
-      setIsPassword(true);
-    }
-  };
-
-  /* -------------------------- secret switch button -------------------------- */
-  const secretSwitchButtonHandler = () => {
-    if (secret === false) {
-      setPassword("");
-      setIsPassword(false);
-      setSecret(true);
-    } else {
-      setSecret(false);
-      setIsPassword(false);
-      setPassword("");
-    }
-  };
-
-  /* ---------------------------------- submit ---------------------------------- */
-  const submitHandler = async () => {
-    let formData = new FormData();
-    const dataSet = {
-      title: title.trim(),
-      content: content.trim(),
-      limitParticipants: realLimitParticipants,
-      limitScore: realLimitScore,
-      password: password,
-      secret: secret,
-      startDate: start,
-      endDate: end,
-      delete: deleteImage,
-    };
-    formData.append("multipartFile", imageFile);
-    formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-    await dispatch(patchCommunityDetail({ communityId: param.id, formData })).then((response) => {
-      console.log(response);
-      if (!response.error) {
-        navigate(`/community/detail/${param.id}`);
-      }
-    });
-  };
 
   return (
     <>
@@ -277,19 +302,19 @@ const CommunityFormEdit = () => {
             <ErrorMessage>{isPhotoMessage}</ErrorMessage>
           </TextWrap>
         </ImageBoxWrap>
-        <RightText>비공개</RightText>
+        {/* <RightText>비공개</RightText> */}
         <TopTextWrap>
           <P>그룹명*</P>
-          <CheckBoxWrapper>
+          {/* <CheckBoxWrapper>
             <CheckBox secret={secret} onClick={secretSwitchButtonHandler} id="checkbox" type="checkbox" />
             <CheckBoxLabel secret={secret} htmlFor="checkbox" />
-          </CheckBoxWrapper>
+          </CheckBoxWrapper> */}
         </TopTextWrap>
         <InputWrap>
-          <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
+          <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={onChangeTitle}></Input>
           <MessageP>{isTitle}</MessageP>
         </InputWrap>
-        {secret ? (
+        {/* {secret ? (
           <>
             <P>비밀번호</P>
             <InputWrap>
@@ -304,7 +329,7 @@ const CommunityFormEdit = () => {
               <MessageP>{passwordMessage}</MessageP>
             </InputWrap>{" "}
           </>
-        ) : null}
+        ) : null} */}
         <div
           onClick={() => {
             setModal(!modal);
@@ -316,75 +341,78 @@ const CommunityFormEdit = () => {
               {dates.start}-{dates.end}
             </SelectDateP>
           ) : (
-            <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
+            <>
+              <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
+              <MessageP>{isdate}</MessageP>
+            </>
           )}
         </div>
         {modal && <CalendarModal closeModal={() => setModal(!modal)}></CalendarModal>}
         <P>참여인원*</P>
         <InputWrap>
-          <Input
-            inputype="basic"
-            maxLength="2"
-            placeholder="인원을 입력해 주세요(최대 10명)"
-            type="tel"
-            name="limitParticipants"
-            value={limitParticipants}
-            onChange={inputOnChangeHandler}
-          ></Input>
-          <MessageP>{isLimitParticipants}</MessageP>
-        </InputWrap>
-        <P>목표달성 수*</P>
-        <InputWrap>
-          <Input
-            inputype="basic"
-            maxLength="3"
-            type="tel"
-            name="limitScore"
-            placeholder="목표달성 수를 입력해주세요(최대 100)"
-            value={limitScore}
-            onChange={inputOnChangeHandler}
-          ></Input>
-          <MessageP limitScore={true}>{isLimitScore}</MessageP>
-        </InputWrap>
-        <P>그룹소개*</P>
-        <InputWrap>
-          <Textarea
-            placeholder="소개글을 입력해 주세요"
-            cols="50"
-            rows="8"
-            maxLength="500"
-            name="content"
-            textareaType="basic"
-            value={content}
-            onChange={inputOnChangeHandler}
-          ></Textarea>
-          <MessageP bottom={true}>{isContent}</MessageP>
-        </InputWrap>
-      </CommunityFormWrap>
-      <BottomWrap>
-        {/^([1-9]|10)$/.test(realLimitParticipants) &&
-        /^[1-9][0-9]?$|^100/.test(realLimitScore) &&
-        realLimitScore >= realLimitParticipants &&
-        title.trim().length &&
-        content.trim().length &&
-        dates.end?.length > 0 &&
-        secret === isPassword ? (
-          <BottomButton
-            style={{
-              cursor: "pointer",
-            }}
-            onClick={submitHandler}
-            bgColor={"#315300"}
-            color={"white"}
-          >
-            그룹 등록
-          </BottomButton>
-        ) : (
-          <BottomButton onClick={validation} bgColor={"#EDEDED"} color={"#BEBEBE"}>
-            그룹 등록
-          </BottomButton>
-        )}
-      </BottomWrap>
+            <Input
+              inputype="basic"
+              maxLength="2"
+              placeholder="인원을 입력해 주세요(최대 10명)"
+              type="tel"
+              name="limitParticipants"
+              value={limitParticipants}
+              onChange={onChangelimitParticipants}
+            ></Input>
+            <MessageP>{isLimitParticipants}</MessageP>
+          </InputWrap>
+          <P>목표달성 수*</P>
+          <InputWrap>
+            <Input
+              inputype="basic"
+              maxLength="3"
+              type="tel"
+              name="limitScore"
+              placeholder="목표달성 수를 입력해주세요(최대 100)"
+              value={limitScore}
+              onChange={onChangelimitScore}
+            ></Input>
+            <MessageP limitScore={true}>{isLimitScore}</MessageP>
+          </InputWrap>
+          <P>그룹소개*</P>
+          <InputWrap>
+            <Textarea
+              placeholder="소개글을 입력해 주세요"
+              cols="50"
+              rows="8"
+              maxLength="255"
+              name="content"
+              textareaType="basic"
+              value={content}
+              onChange={onChangeContent}
+            ></Textarea>
+            <MessageP bottom={true}>{isContent}</MessageP>
+          </InputWrap>
+        </CommunityFormWrap>
+        <BottomWrap>
+          {/^([1-9]|10)$/.test(limitParticipants) &&
+          /^[1-9][0-9]?$|^100/.test(limitScore) &&
+          parseInt(limitScore) >= parseInt(limitParticipants) &&
+          title.trim() !== "" &&
+          content.trim() !== "" &&
+          dates.end?.length > 0 &&
+          secret === isPassword ? (
+            <BottomButton
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={submitHandler}
+              bgColor={"#315300"}
+              color={"white"}
+            >
+              그룹 등록
+            </BottomButton>
+          ) : (
+            <BottomButton onClick={validation} bgColor={"#EDEDED"} color={"#BEBEBE"}>
+              그룹 등록
+            </BottomButton>
+          )}
+        </BottomWrap>
     </>
   );
 };
@@ -392,57 +420,7 @@ const CommunityFormEdit = () => {
 export default CommunityFormEdit;
 
 const CommunityFormWrap = styled.div`
-  margin: 53px 16px 60px 16px;
-`;
-
-/* ------------------------------ switch button ----------------------------- */
-const CheckBoxWrapper = styled.div`
-  position: relative;
-`;
-
-const CheckBoxLabel = styled.label`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 54px;
-  height: 29px;
-  border-radius: 15px;
-  ${(props) =>
-    !props.secret &&
-    css`
-      background: #cbcbcb;
-    `}
-
-  cursor: pointer;
-  &::after {
-    content: "";
-    background-color: white;
-    display: block;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    transition: 0.2s;
-
-    ${(props) =>
-      !props.secret
-        ? css`
-            margin: 2px 0px 0px 2px;
-            transition: 0.2s;
-          `
-        : css`
-            margin: 2px 0px 2px 27px;
-          `}
-  }
-  background: ${(props) => (props.secret ? `#80bc28` : null)};
-`;
-
-const CheckBox = styled.input`
-  opacity: 0;
-  z-index: 1;
-  border-radius: 15px;
-  width: 54px;
-  height: 29px;
+  margin: 51px 16px 60px 16px;
 `;
 
 /* ----------------------------------- image ---------------------------------- */
@@ -450,23 +428,6 @@ const ImageBoxWrap = styled.div`
   ${flexColumn}
 `;
 
-const ErrorMessage = styled.p`
-  position: absolute;
-  bottom: 3px;
-  font-weight: 200;
-  font-size: 14px;
-  line-height: 19px;
-  letter-spacing: -0.02em;
-  color: #ff0000;
-`;
-const TextWrap = styled.div`
-  position: relative;
-  width: 100%;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 const ImageForm = styled.form`
   width: 206px;
   height: 206px;
@@ -474,13 +435,6 @@ const ImageForm = styled.form`
   align-items: center;
   display: flex;
   margin-bottom: 12px;
-`;
-
-const ImageInput = styled.input`
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  cursor: pointer;
 `;
 
 const ImageIcon = styled.div`
@@ -491,6 +445,37 @@ const ImageIcon = styled.div`
   background-color: #f1f1f1;
   border-radius: 14px;
   position: relative;
+`;
+
+const Container = styled.div`
+  position: absolute;
+  background-size: contain;
+  background-position: center;
+  width: 206px;
+  height: 206px;
+  border-radius: 14px;
+  z-index: 999;
+  background-color: #cbcbcb;
+  align-items: center;
+`;
+
+const LoadingPosition = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const Thumb = styled.img`
+  background-size: contain;
+  background-position: center;
+  width: 206px;
+  height: 206px;
+  border-radius: 14px;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
 `;
 
 const CameraIcon = styled.div`
@@ -505,17 +490,6 @@ const CameraIcon = styled.div`
   top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-`;
-
-const Thumb = styled.img`
-  background-size: contain;
-  background-position: center;
-  width: 206px;
-  height: 206px;
-  border-radius: 14px;
-  position: absolute;
-  z-index: 1;
-  background-color: white;
 `;
 
 const BottonTextWrap = styled.div`
@@ -544,6 +518,22 @@ const BottomText = styled.p`
   letter-spacing: -0.03em;
 `;
 
+const ImageInput = styled.input`
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  cursor: pointer;
+`;
+
+const TextWrap = styled.div`
+  position: relative;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const DeleteImage = styled.button`
   cursor: pointer;
   border: none;
@@ -559,26 +549,75 @@ const DeleteImage = styled.button`
   margin-bottom: 28px;
 `;
 
-const Container = styled.div`
-  position: fixed;
-  background-size: contain;
-  background-position: center;
-  width: 206px;
-  height: 206px;
-  border-radius: 14px;
-  z-index: 999;
-  background-color: #cbcbcb;
-  align-items: center;
+const ErrorMessage = styled.p`
+  position: absolute;
+  bottom: 0px;
+  font-weight: 200;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #ff0000;
 `;
 
-const LoadingPosition = styled.div`
-  display: flex;
+/* -------------------------------- 비밀번호, 그룹명 ------------------------------- */
+
+const RightText = styled.p`
+  font-size: 18px;
+  text-align: right;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+`;
+
+const TopTextWrap = styled.div`
+  ${flexBetween}
+`;
+
+const CheckBoxWrapper = styled.div`
+  position: relative;
+`;
+
+const CheckBoxLabel = styled.label`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 54px;
+  height: 29px;
+  border-radius: 15px;
+  background: #cbcbcb;
+  cursor: pointer;
+  &::after {
+    content: "";
+    display: block;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    margin: 2px 0px 0px 2px;
+    background: #ffffff;
+    transition: 0.2s;
+  }
 `;
-/* ------------------------------ bottom button ----------------------------- */
+
+const CheckBox = styled.input`
+  opacity: 0;
+  z-index: 1;
+  border-radius: 15px;
+  width: 54px;
+  height: 29px;
+  &:checked + ${CheckBoxLabel} {
+    background: #80bc28;
+    &::after {
+      background-color: white;
+      display: block;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      margin: 2px 0px 2px 27px;
+      transition: 0.2s;
+    }
+  }
+`;
+
 const BottomWrap = styled.div`
   position: absolute;
   bottom: 0;
@@ -598,7 +637,7 @@ const BottomButton = styled.button`
   background-color: ${(props) => props.bgColor};
 `;
 
-/* -------------------------------- font & div -------------------------------- */
+/* ----------------------------------- 입력값 ---------------------------------- */
 
 const P = styled.p`
   font-size: 20px;
@@ -607,47 +646,8 @@ const P = styled.p`
   margin-top: 20px;
 `;
 
-const DateP = styled.p`
-  box-sizing: content-box;
-  height: 35px;
-  margin: 0;
-  font-size: 22px;
-  padding: 5px 0 26px 0;
-  font-weight: 700;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
-  color: ${(props) => props.color};
-
-  @media (min-width: 281px) and (max-width: 389px) {
-    font-size: 16px;
-  }
-  @media (max-width: 280px) {
-    font-size: 14px;
-  }
-`;
-const SelectDateP = styled.p`
-  box-sizing: content-box;
-  height: 32px;
-  margin: 0;
-  font-size: 22px;
-  padding: 10px 0 26px 0;
-  font-weight: 700;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
-  color: ${(props) => props.color};
-
-  @media (max-width: 390px) {
-    font-size: 20px;
-  }
-`;
-
-const RightText = styled.p`
-  font-size: 18px;
-  text-align: right;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-`;
-
-const TopTextWrap = styled.div`
-  ${flexBetween}
+const InputWrap = styled.div`
+  position: relative;
 `;
 
 const MessageP = styled.p`
@@ -670,17 +670,46 @@ const MessageP = styled.p`
         font-size: 12px;
         bottom: 3px;
         line-height: 14px;
-      `}/* font-size: ${(props) => props.limitScore && "12px"};
-    bottom: ${(props) => props.limitScore && "3px"};
-    line-height: ${(props) => props.limitScore && "14px"}; */
+      `}
   }
 `;
 
-const InputWrap = styled.div`
-  position: relative;
-  /* text-align: end;
-  align-items: flex-end; */
+/* ---------------------------------- 진행기간 ---------------------------------- */
+
+const SelectDateP = styled.p`
+  box-sizing: content-box;
+  height: 32px;
+  margin: 0;
+  font-size: 22px;
+  padding: 10px 0 26px 0;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  color: ${(props) => props.color};
+
+  @media (max-width: 390px) {
+    font-size: 20px;
+  }
 `;
+
+const DateP = styled.p`
+  box-sizing: content-box;
+  height: 35px;
+  margin: 0;
+  font-size: 22px;
+  padding: 5px 0 26px 0;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  color: ${(props) => props.color};
+
+  @media (min-width: 281px) and (max-width: 389px) {
+    font-size: 16px;
+  }
+  @media (max-width: 280px) {
+    font-size: 14px;
+  }
+`;
+
+/* ----------------------------------- 로딩 ----------------------------------- */
 
 const ImageLoadingWrap = styled.div`
   position: absolute;

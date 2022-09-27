@@ -3,16 +3,13 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
-const ConfirmModal = (props) => {
+const ConfirmSingleModal = (props) => {
   const { clickSubmit, closeModal } = props;
-  const { title, cancel, submit, submitReturn } = props.confirmModalData;
-
-  /* ---------------------------------- 2차 모달 ---------------------------------- */
-  const [viewFlag, setViewFlag] = React.useState(false);
-  console.log(viewFlag);
+  const { title, cancel, submit } = props.confirmModalData;
+  
   const submitonClick = (id) => {
     clickSubmit();
-    setViewFlag(!viewFlag);
+    closeModal();
   };
   
   return (
@@ -34,18 +31,12 @@ const ConfirmModal = (props) => {
               </ConfirmItem>
             </ConfirmBox>
           </ConfirmWrap>
-          <AttendWrap viewFlag={viewFlag}>
-            <AttendTitle>{submitReturn}</AttendTitle>
-            <AttendBox>
-              <AttendItem onClick={closeModal}>확인</AttendItem>
-            </AttendBox>
-          </AttendWrap>
         </ModalBody>
       </ModalWrap>
     </>
   );
 };
-export default ConfirmModal;
+export default ConfirmSingleModal;
 
 const ModalWrap = styled.div`
   position: absolute;

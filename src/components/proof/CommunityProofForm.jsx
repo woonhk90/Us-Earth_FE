@@ -40,7 +40,7 @@ const CommunityProofForm = () => {
   const [upLoading, setUploading] = useState(100);
 
   const addImageFile = async (e) => {
-    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const acceptImageFiles = ["image/png", "image/jpeg","image/jpg"];
     let arry = [];
     setIsPhotoMessage("");
     if (e.target.files.length + previewImg.length < 6) {
@@ -52,7 +52,6 @@ const CommunityProofForm = () => {
               maxWidthOrHeight: 1920,
               useWebWorker: true,
               onProgress: (data) => {
-                console.log(data);
                 setUploading(data);
               },
             };
@@ -102,7 +101,6 @@ const CommunityProofForm = () => {
 
   const [block, setBlock] = useState(false);
   const submitHandler = async () => {
-    console.log(title,content,)
     let formData = new FormData();
     if (title.trim() !== "" && content.trim() !== "" && files.length !== 0) {
       const dataSet = {
@@ -110,13 +108,10 @@ const CommunityProofForm = () => {
         content: content.trim(),
       };
       if (files.length > 0) {
-        console.log(files);
         files.map((file) => formData.append("multipartFile", file));
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
-      console.log(dataSet);
       await dispatch(postProof({ communityId: param.communityId, formData: formData })).then((response) => {
-        console.log(response);
         if (!response.error) {
           navigate(`/community/detail/${param.communityId}`);
         }

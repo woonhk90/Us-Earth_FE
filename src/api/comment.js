@@ -8,7 +8,6 @@ export const getHeartCommentCnt = createAsyncThunk("proof/heartComment", async (
         Authorization: authorization_token,
       },
     });
-    console.log("하트댓글갯수", data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
@@ -18,7 +17,6 @@ export const getHeartCommentCnt = createAsyncThunk("proof/heartComment", async (
 export const patchHeartCnt = createAsyncThunk("proof/Heart", async (proofId, thunkAPI) => {
   try {
     const authorization_token = cookies.get("mycookie");
-    console.log(authorization_token);
     const { data } = await axios.patch(`${API_URL}/proof/heart/${proofId}`, "", {
       headers: {
         Authorization: authorization_token,

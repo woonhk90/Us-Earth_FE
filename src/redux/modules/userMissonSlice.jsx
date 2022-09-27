@@ -12,9 +12,7 @@ const initialState = {
 /* ---------------------- get daily mission data (Read) --------------------- */
 export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (targetDay, thunkAPI) => {
   try {
-    
-    console.log(targetDay);
-    const { data } = await tokenInstance.get(`/mypage/stats/day?targetDay=${targetDay}`);
+        const { data } = await tokenInstance.get(`/mypage/stats/day?targetDay=${targetDay}`);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
@@ -26,11 +24,9 @@ export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (
 export const getPeriodMissionStats = createAsyncThunk("periodMission/get", async (targetPeriod, thunkAPI) => {
   try {
     
-    // console.log(targetPeriod);
     const { data } = await tokenInstance.get(`/mypage/stats`, {
       params: targetPeriod,
     });
-    // console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
@@ -43,7 +39,6 @@ export const userMissionSlice = createSlice({
   initialState,
   reducers: {
     getOnClickDate: (state, action) => {
-      console.log("슬라이스에서 바뀜!", action.payload);
       state.clickDate = action.payload; 
     },
   },

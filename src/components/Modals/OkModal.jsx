@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 const OkModal = (props) => {
   const { title, modalOnOff } = props;
-console.log(title,modalOnOff)
-console.log(props)
+  
   return (
     <>
       <ModalWrap onClick={modalOnOff}>

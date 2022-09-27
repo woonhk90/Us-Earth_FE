@@ -17,9 +17,7 @@ const Comment = ({ userToken, editMode }) => {
   const dispatch = useDispatch();
   const param = useParams();
   const { dateStatus, commentResponseDtoList } = useSelector((state) => state.comments.comments);
-  console.log(commentEdit);
-
-  console.log(getIsLoading);
+  
   useEffect(() => {
     dispatch(getComments(param.proofId));
     return () => dispatch(commentClearUp());
