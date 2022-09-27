@@ -81,7 +81,7 @@ const CommunityProofEdit = () => {
   const [upLoading, setUploading] = useState(100);
 
   const addImageFile = async (e) => {
-    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/jpg"];
     let arry = [];
     setIsPhotoMessage("");
     if (e.target.files.length + previewImg.length < 6) {
@@ -162,7 +162,7 @@ const CommunityProofEdit = () => {
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       await dispatch(patchProof({ proofId: param.proofId, formData: formData })).then((response) => {
         if (!response.error) {
-          navigate(`/community/detail/${param.communityId}`);
+          navigate(`/community/${param.communityId}/proof/${param.proofId}`);
         }
       });
     }

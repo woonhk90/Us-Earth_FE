@@ -89,7 +89,7 @@ const CommentInputEdit = ({ userToken }) => {
 
   const addImageFile = async (e) => {
     setIsPhotoMessage("");
-    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const acceptImageFiles = ["image/png", "image/jpeg","image/jpg"];
     const imageFile = e.target.files[0];
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
