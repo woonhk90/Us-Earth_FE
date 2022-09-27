@@ -27,9 +27,6 @@ const UserMissionWeek = () => {
   const dispatch = useDispatch();
   const { periodMissionData, dailyMissionData } = useSelector((state) => state.userMission);
 
-  console.log("기간조회", periodMissionData);
-  console.log("당일조회",dailyMissionData);
-
   useEffect(() => {
     if (cookies.get("mycookie") === undefined) {
       navigate("/login");

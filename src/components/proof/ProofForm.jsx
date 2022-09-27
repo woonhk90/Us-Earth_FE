@@ -39,9 +39,7 @@ const ProofForm = ({ ProofFormData }) => {
     okModal: okModal,
     okModalTitle: okModalTitle,
     okModalOnOff: okModalOnOff,
-    block: block,
   } = ProofFormData;
-  console.log(title.length > 0 && content.length > 0 && files.length > 0);
 
   return (
     <>
@@ -96,23 +94,28 @@ const ProofForm = ({ ProofFormData }) => {
                 </LoadingWrap>
               </Container>
             ) : null}
-          </AddPhotoWrap>
           <ErrorMessage>{isPhotoMessage}</ErrorMessage>
+          </AddPhotoWrap>
         <BottomWrap>
           <Textarea
             textareaRef={textRef}
             onInput={handleResizeHeight}
+            onKeyPress={e => {
+              if(e.key === 'Enter')
+                 e.preventDefault()
+              }}
             textareaType="proofTop"
             maxLength="30"
             placeholder="제목"
             name="title"
             value={title}
             onChange={inputOnChangeHandler}
+            
           ></Textarea>
           <Textarea
             cols="50"
             rows="8"
-            maxLength="500"
+            maxLength="255"
             textareaType="proof"
             placeholder="내용을 입력해주세요"
             name="content"
@@ -134,6 +137,7 @@ const CommunityFormWrap = styled.div`
 
 
 const AddPhotoWrap = styled.div`
+position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 
@@ -141,7 +145,7 @@ const AddPhotoWrap = styled.div`
     grid-template-columns: 1fr 1fr;
   }
   flex-wrap: wrap;
-  padding: 20px 15px 13px 15px;
+  padding: 20px 15px 20px 15px;
   justify-items: center;
   border-bottom: 2px solid rgba(217, 217, 217, 0.3);
 `;
@@ -176,6 +180,7 @@ const Stform = styled.form`
 const BottomWrap = styled.div`
   width: 100%;
   box-sizing: border-box;
+  /* position: relative; */
 `;
 
 const StImageInput = styled.input`
@@ -281,7 +286,9 @@ align-items: center;
 `;
 
 const ErrorMessage = styled.div`
-  display: absolute;
+  position: absolute;
+  bottom:-15px;
+  left: 0;
   font-weight: 200;
   font-size: 14px;
   line-height: 19px;

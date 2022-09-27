@@ -60,7 +60,7 @@ const CommentInputEdit = ({ userToken }) => {
       }
     } catch (error) {}
   };
-console.log(inputOn)
+  
   /* ----------------------------- useEffect(*) ---------------------------- */
   useEffect(() => {
     window.addEventListener("mousedown", clickInputOutside);
@@ -103,7 +103,6 @@ console.log(inputOn)
         };
         try {
           const compressedFile = await imageCompression(imageFile, options);
-          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
           let reader = new FileReader();
           reader.readAsDataURL(compressedFile);
           setImageFile(compressedFile);

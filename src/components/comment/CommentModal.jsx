@@ -5,9 +5,7 @@ import styled, { css, keyframes } from "styled-components";
 const EditModal = (props) => {
   const { open, close } = props;
   const [isOpen, setIsOpen] = useState(false);
-
-  console.log(isOpen);
-
+  
   let timeoutId;
   useEffect(() => {
     if (open) {

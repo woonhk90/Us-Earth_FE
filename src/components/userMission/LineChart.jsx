@@ -76,9 +76,6 @@ const LineChart = ({ startDate, endDate }) => {
     onClick: (event, array) => {
       let index = array[0].index;
       let day = weekMissionDate[index];
-      console.log(index);
-      console.log(week);
-      console.log(day);
       let year = dayjs(startDate).format("YYYY-");
       dispatch(getDailyMissionStats(`${year}${dayjs(day).format("MM-DD")}`));
     },

@@ -26,7 +26,7 @@ const CommunityProof = () => {
   const param = useParams();
   const [modalOpen, setModalOpen] = useState(false);
   const { proofs, isLoading, error } = useSelector((state) => state.proofs);
-  console.log(proofs, "인증글");
+
   useEffect(() => {
     dispatch(getProofs(param.proofId));
     return ()=> {
@@ -83,8 +83,7 @@ const CommunityProof = () => {
       <FirstWrap>
         <Swiper modules={[Navigation, Pagination, Scrollbar]} spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
           {proofs.img?.map((img) => {
-            console.log(img.imgUrl);
-            return (
+                        return (
               <SwiperSlide key={img.id}>
                 <StDiv>
                   <ItemImg imgUrl={img.imgUrl}></ItemImg>

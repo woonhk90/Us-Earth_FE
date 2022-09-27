@@ -1,56 +1,92 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
-import "react-datepicker/dist/react-datepicker.css";
-import useInputs from "../../hooks/useInputs";
+import cameraWh from "../../assets/cameraWh.svg";
+import { flexBetween, flexColumn } from "../../styles/Flex";
 import Input from "../elements/Input";
 import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
-import { useDispatch, useSelector } from "react-redux";
-import { flexBetween, flexColumn } from "../../styles/Flex";
-import { addDates, communityFormCleanUp, postCommunityDetail } from "../../redux/modules/communityFormSlice";
-import { useNavigate } from "react-router-dom";
-import cameraWh from "../../assets/cameraWh.svg";
+import ErrorModal from "../Modals/ErrorModal";
+import IsLoginModal from "../Modals/IsLoginModal";
+import ImageLoading from "../etc/ImageLoading";
+import imageCompression from "browser-image-compression";
+import "react-datepicker/dist/react-datepicker.css";
+import { addDates, postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { clearVal } from "../../redux/modules/communitySlice";
 import isLogin from "../../lib/isLogin";
-import IsLoginModal from "../Modals/IsLoginModal";
-import imageCompression from "browser-image-compression";
-import ImageLoading from "../etc/ImageLoading";
-import ErrorModal from "../Modals/ErrorModal";
 
 const CommunityForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state) => state.communityForm);
+
+  /* ----------------------------------- 달력 ----------------------------------- */
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
+
+  /* ----------------------------------- 입력값 ---------------------------------- */
   const [secret, setSecret] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [limitScore, setLimitScore] = useState("");
+  const [limitParticipants, setLimitParticipants] = useState("");
+  const [password, setPassword] = useState("");
+  
+  /* --------------------------------- 입력값 메세지 -------------------------------- */
   const [isLimitScore, setIsLimitScore] = useState("");
-  const [isLimitParticipants, setLimitParticipants] = useState("");
+  const [isLimitParticipants, setIsLimitParticipants] = useState("");
   const [isTitle, setIsTitle] = useState("");
   const [isContent, setIsContent] = useState("");
   const [isdate, setIsDate] = useState("");
-  const [inputData, inputOnChangeHandler, inputReset] = useInputs({
-    limitScore: "",
-    limitParticipants: "",
-    title: "",
-    content: "",
-  });
-  const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
-  const { limitScore, limitParticipants, title, content } = inputData;
-  const realLimitScore = +limitScore.replace(/ /g, "").replace(/(^0+)/g, "");
-  const realLimitParticipants = +limitParticipants.replace(/ /g, "").replace(/(^0+)/g, "");
+
+  /* ----------------------------- 입력값 할당 및 유효성 검사 ---------------------------- */
+  const onChangeTitle = (e) => {
+    setTitle(e.target.value);
+    if (e.target.value.trim() === "") {
+      setIsTitle("그룹명을 입력해주세요");
+    } else setIsTitle("");
+  };
+
+  const onChangeContent = (e) => {
+    setContent(e.target.value);
+    if (e.target.value.trim() === "") {
+      setIsContent("그룹 소개를 입력해주세요");
+    } else setIsContent("");
+  };
+
+  const onChangelimitScore = (e) => {
+    if (/^[1-9][0-9]?$|^100/.test(e.target.value) || e.target.value === "") {
+      setLimitScore(e.target.value);
+    }
+    if (e.target.value === "" || parseInt(e.target.value) < parseInt(limitParticipants)) {
+      setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
+    } else setIsLimitScore("");
+  };
+
+  const onChangelimitParticipants = (e) => {
+    if (/^([1-9]|10)$/.test(e.target.value) || e.target.value === "") {
+      setLimitParticipants(e.target.value);
+    }
+    if (e.target.value === "") {
+      setIsLimitParticipants("참가인원을 입력해 주세요(10명 이내)");
+    } else setIsLimitParticipants("");
+    if (parseInt(limitScore) < parseInt(e.target.value)) {
+      setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
+    } else setIsLimitScore("");
+  };
 
   const validation = () => {
     if (!/^([0-9]){4}$/.test(password)) {
       setPasswordMessage("비밀번호 숫자 4자리");
     } else setPasswordMessage("");
-    {
-      !/^([1-9]|10)$/.test(realLimitParticipants) ? setLimitParticipants("참가인원을 입력해 주세요(10명 이내)") : setLimitParticipants("");
-    }
-    if (!/^[1-9][0-9]?$|^100/.test(realLimitScore) || realLimitScore < realLimitParticipants) {
+    if (!/^([1-9]|10)$/.test(limitParticipants)) {
+      setIsLimitParticipants("참가인원을 입력해 주세요(10명 이내)");
+    } else setIsLimitParticipants("");
+    if (!/^[1-9][0-9]?$|^100/.test(limitScore) || parseInt(limitScore) < parseInt(limitParticipants)) {
       setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
     } else setIsLimitScore("");
     if (!dates.start?.length && !dates.end?.length) {
@@ -64,16 +100,7 @@ const CommunityForm = () => {
     } else setIsContent("");
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(communityFormCleanUp());
-      imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
-      inputReset();
-      dispatch(addDates({}));
-    };
-  }, []);
-
-  /* ------------------------------ photo upload ------------------------------ */
+  /* --------------------------------- 사진 업로드 --------------------------------- */
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
@@ -90,13 +117,11 @@ const CommunityForm = () => {
           maxWidthOrHeight: 1920,
           useWebWorker: true,
           onProgress: (data) => {
-            console.log(data);
             setUploading(data);
           },
         };
         try {
           const compressedFile = await imageCompression(imageFile, options);
-          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
           let reader = new FileReader();
           reader.readAsDataURL(compressedFile);
           setImageFile(compressedFile);
@@ -120,42 +145,41 @@ const CommunityForm = () => {
   };
 
   /* --------------------------- password validation -------------------------- */
-  const pwOnChangeHandler = (e) => {
-    const passwordRegex = /^([0-9]){4}$/;
-    const passwordCurrent = e.target.value;
-    console.log(passwordCurrent);
-    setPassword(e.target.value);
-    if (!passwordRegex.test(passwordCurrent)) {
-      setPasswordMessage("비밀번호 숫자 4자리");
-      setIsPassword(false);
-    } else {
-      setPasswordMessage("");
-      setIsPassword(true);
-    }
-  };
+  // const pwOnChangeHandler = (e) => {
+  //   const passwordRegex = /^([0-9]){4}$/;
+  //   const passwordCurrent = e.target.value;
+  //   setPassword(e.target.value);
+  //   if (!passwordRegex.test(passwordCurrent)) {
+  //     setPasswordMessage("비밀번호 숫자 4자리");
+  //     setIsPassword(false);
+  //   } else {
+  //     setPasswordMessage("");
+  //     setIsPassword(true);
+  //   }
+  // };
 
   /* -------------------------- secret switch button -------------------------- */
-  const secretSwitchButtonHandler = () => {
-    if (secret === false) {
-      setPassword("");
-      setIsPassword(false);
-      setSecret(true);
-    } else {
-      setSecret(false);
-      setIsPassword(false);
-      setPassword("");
-    }
-  };
+  // const secretSwitchButtonHandler = () => {
+  //   if (secret === false) {
+  //     setPassword("");
+  //     setIsPassword(false);
+  //     setSecret(true);
+  //   } else {
+  //     setSecret(false);
+  //     setIsPassword(false);
+  //     setPassword("");
+  //   }
+  // };
 
-  /* ---------------------------------- submit ---------------------------------- */
 
+/* ----------------------------------- 제출 ----------------------------------- */
   const submitHandler = async () => {
     let formData = new FormData();
     const dataSet = {
       title: title.trim(),
       content: content.trim(),
-      limitParticipants: realLimitParticipants,
-      limitScore: realLimitScore,
+      limitParticipants: limitParticipants,
+      limitScore: limitScore,
       password: password,
       secret: secret,
       startDate: start,
@@ -164,13 +188,23 @@ const CommunityForm = () => {
     formData.append("multipartFile", imageFile);
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     await dispatch(postCommunityDetail(formData)).then((response) => {
-      console.log(response);
       if (!response.error) {
         navigate(`/`);
       }
     });
     await dispatch(clearVal());
   };
+
+
+  useEffect(() => {
+    return () => {
+      imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
+      dispatch(addDates({}));
+    };
+  }, []);
+
+/* ----------------------------------- 로딩 ----------------------------------- */
+
   if (isLoading) {
     return (
       <>
@@ -220,19 +254,19 @@ const CommunityForm = () => {
               <ErrorMessage>{isPhotoMessage}</ErrorMessage>
             </TextWrap>
           </ImageBoxWrap>
-          <RightText>비공개</RightText>
+          {/* <RightText>비공개</RightText> */}
           <TopTextWrap>
             <P>그룹명*</P>
-            <CheckBoxWrapper>
+            {/* <CheckBoxWrapper>
               <CheckBox onClick={secretSwitchButtonHandler} id="checkbox" type="checkbox" />
               <CheckBoxLabel htmlFor="checkbox" />
-            </CheckBoxWrapper>
+            </CheckBoxWrapper> */}
           </TopTextWrap>
           <InputWrap>
-            <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={inputOnChangeHandler}></Input>
+            <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={onChangeTitle}></Input>
             <MessageP>{isTitle}</MessageP>
           </InputWrap>
-          {secret ? (
+          {/* {secret ? (
             <>
               <P>비밀번호</P>
               <InputWrap>
@@ -247,7 +281,7 @@ const CommunityForm = () => {
                 <MessageP>{passwordMessage}</MessageP>
               </InputWrap>
             </>
-          ) : null}
+          ) : null} */}
           <div
             onClick={() => {
               setModal(!modal);
@@ -260,9 +294,11 @@ const CommunityForm = () => {
                   {dates.start}-{dates.end}
                 </SelectDateP>
               ) : (
-                <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
+                <>
+                  <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
+                  <MessageP>{isdate}</MessageP>
+                </>
               )}
-              <MessageP>{isdate}</MessageP>
             </InputWrap>
           </div>
           {modal && <CalendarModal closeModal={() => setModal(!modal)}></CalendarModal>}
@@ -275,7 +311,7 @@ const CommunityForm = () => {
               type="tel"
               name="limitParticipants"
               value={limitParticipants}
-              onChange={inputOnChangeHandler}
+              onChange={onChangelimitParticipants}
             ></Input>
             <MessageP>{isLimitParticipants}</MessageP>
           </InputWrap>
@@ -288,7 +324,7 @@ const CommunityForm = () => {
               name="limitScore"
               placeholder="목표달성 수를 입력해주세요(최대 100)"
               value={limitScore}
-              onChange={inputOnChangeHandler}
+              onChange={onChangelimitScore}
             ></Input>
             <MessageP limitScore={true}>{isLimitScore}</MessageP>
           </InputWrap>
@@ -298,21 +334,21 @@ const CommunityForm = () => {
               placeholder="소개글을 입력해 주세요"
               cols="50"
               rows="8"
-              maxLength="500"
+              maxLength="255"
               name="content"
               textareaType="basic"
               value={content}
-              onChange={inputOnChangeHandler}
+              onChange={onChangeContent}
             ></Textarea>
             <MessageP bottom={true}>{isContent}</MessageP>
           </InputWrap>
         </CommunityFormWrap>
         <BottomWrap>
-          {/^([1-9]|10)$/.test(realLimitParticipants) &&
-          /^[1-9][0-9]?$|^100/.test(realLimitScore) &&
-          realLimitScore >= realLimitParticipants &&
-          title.trim().length &&
-          content.trim().length &&
+          {/^([1-9]|10)$/.test(limitParticipants) &&
+          /^[1-9][0-9]?$|^100/.test(limitScore) &&
+          parseInt(limitScore) >= parseInt(limitParticipants) &&
+          title.trim() !== "" &&
+          content.trim() !== "" &&
           dates.end?.length > 0 &&
           secret === isPassword ? (
             <BottomButton
@@ -342,7 +378,155 @@ const CommunityFormWrap = styled.div`
   margin: 51px 16px 60px 16px;
 `;
 
-/* ------------------------------ switch button ----------------------------- */
+/* ----------------------------------- image ---------------------------------- */
+const ImageBoxWrap = styled.div`
+  ${flexColumn}
+`;
+
+const ImageForm = styled.form`
+  width: 206px;
+  height: 206px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-bottom: 12px;
+`;
+
+const ImageIcon = styled.div`
+  cursor: pointer;
+  width: 206px;
+  height: 206px;
+  border: none;
+  background-color: #f1f1f1;
+  border-radius: 14px;
+  position: relative;
+`;
+
+const Container = styled.div`
+  position: absolute;
+  background-size: contain;
+  background-position: center;
+  width: 206px;
+  height: 206px;
+  border-radius: 14px;
+  z-index: 999;
+  background-color: #cbcbcb;
+  align-items: center;
+`;
+
+const LoadingPosition = styled.div`
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const Thumb = styled.img`
+  background-size: contain;
+  background-position: center;
+  width: 206px;
+  height: 206px;
+  border-radius: 14px;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+`;
+
+const CameraIcon = styled.div`
+  width: 92px;
+  height: 74px;
+  background-image: url("${cameraWh}");
+  background-repeat: no-repeat;
+  background-size: 92px;
+  color: transparent;
+  background-position: center;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const BottonTextWrap = styled.div`
+  position: absolute;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 11px 0;
+  text-align: center;
+  margin: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 39px;
+  border: none;
+  border-radius: 0 0 14px 14px;
+  z-index: 0;
+  background: #cbcbcb;
+  background-size: 100%;
+  display: flex;
+`;
+
+const BottomText = styled.p`
+  width: 100%;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+`;
+
+const ImageInput = styled.input`
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  cursor: pointer;
+`;
+
+const TextWrap = styled.div`
+  position: relative;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const DeleteImage = styled.button`
+  cursor: pointer;
+  border: none;
+  display: flex;
+  background-color: transparent;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: -0.02em;
+  text-decoration-line: underline;
+  color: #9b9b9b;
+  margin-bottom: 28px;
+`;
+
+const ErrorMessage = styled.p`
+  position: absolute;
+  bottom: 0px;
+  font-weight: 200;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #ff0000;
+`;
+
+/* -------------------------------- 비밀번호, 그룹명 ------------------------------- */
+
+const RightText = styled.p`
+  font-size: 18px;
+  text-align: right;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+`;
+
+const TopTextWrap = styled.div`
+  ${flexBetween}
+`;
+
 const CheckBoxWrapper = styled.div`
   position: relative;
 `;
@@ -389,140 +573,6 @@ const CheckBox = styled.input`
   }
 `;
 
-/* ----------------------------------- image ---------------------------------- */
-const ImageBoxWrap = styled.div`
-  ${flexColumn}
-`;
-
-const ErrorMessage = styled.p`
-  position: absolute;
-  bottom: 0px;
-  font-weight: 200;
-  font-size: 14px;
-  line-height: 19px;
-  letter-spacing: -0.02em;
-  color: #ff0000;
-`;
-const TextWrap = styled.div`
-  position: relative;
-  width: 100%;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const ImageForm = styled.form`
-  width: 206px;
-  height: 206px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  margin-bottom: 12px;
-`;
-
-const ImageInput = styled.input`
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  cursor: pointer;
-`;
-
-const ImageIcon = styled.div`
-  cursor: pointer;
-  width: 206px;
-  height: 206px;
-  border: none;
-  background-color: #f1f1f1;
-  border-radius: 14px;
-  position: relative;
-`;
-
-const CameraIcon = styled.div`
-  width: 92px;
-  height: 74px;
-  background-image: url("${cameraWh}");
-  background-repeat: no-repeat;
-  background-size: 92px;
-  color: transparent;
-  background-position: center;
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const Thumb = styled.img`
-  background-size: contain;
-  background-position: center;
-  width: 206px;
-  height: 206px;
-  border-radius: 14px;
-  position: absolute;
-  z-index: 1;
-  background-color: white;
-`;
-
-const BottonTextWrap = styled.div`
-  position: absolute;
-  align-items: center;
-  box-sizing: border-box;
-  padding: 11px 0;
-  text-align: center;
-  margin: 0;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 39px;
-  border: none;
-  border-radius: 0 0 14px 14px;
-  z-index: 0;
-  background: #cbcbcb;
-  background-size: 100%;
-  display: flex;
-`;
-
-const BottomText = styled.p`
-  width: 100%;
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-`;
-
-const DeleteImage = styled.button`
-  cursor: pointer;
-  border: none;
-  display: flex;
-  background-color: transparent;
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 20px;
-  text-align: center;
-  letter-spacing: -0.02em;
-  text-decoration-line: underline;
-  color: #9b9b9b;
-  margin-bottom: 28px;
-`;
-
-const Container = styled.div`
-  position: absolute;
-  background-size: contain;
-  background-position: center;
-  width: 206px;
-  height: 206px;
-  border-radius: 14px;
-  z-index: 999;
-  background-color: #cbcbcb;
-  align-items: center;
-`;
-
-const LoadingPosition = styled.div`
-  display: flex;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-/* ------------------------------ bottom button ----------------------------- */
 const BottomWrap = styled.div`
   position: absolute;
   bottom: 0;
@@ -542,7 +592,7 @@ const BottomButton = styled.button`
   background-color: ${(props) => props.bgColor};
 `;
 
-/* ---------------------------------- form font ---------------------------------- */
+/* ----------------------------------- 입력값 ---------------------------------- */
 
 const P = styled.p`
   font-size: 20px;
@@ -551,47 +601,8 @@ const P = styled.p`
   margin-top: 20px;
 `;
 
-const DateP = styled.p`
-  box-sizing: content-box;
-  height: 35px;
-  margin: 0;
-  font-size: 22px;
-  padding: 5px 0 26px 0;
-  font-weight: 700;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
-  color: ${(props) => props.color};
-
-  @media (min-width: 281px) and (max-width: 389px) {
-    font-size: 16px;
-  }
-  @media (max-width: 280px) {
-    font-size: 14px;
-  }
-`;
-const SelectDateP = styled.p`
-  box-sizing: content-box;
-  height: 32px;
-  margin: 0;
-  font-size: 22px;
-  padding: 10px 0 26px 0;
-  font-weight: 700;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
-  color: ${(props) => props.color};
-
-  @media (max-width: 390px) {
-    font-size: 20px;
-  }
-`;
-
-const RightText = styled.p`
-  font-size: 18px;
-  text-align: right;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-`;
-
-const TopTextWrap = styled.div`
-  ${flexBetween}
+const InputWrap = styled.div`
+  position: relative;
 `;
 
 const MessageP = styled.p`
@@ -614,17 +625,46 @@ const MessageP = styled.p`
         font-size: 12px;
         bottom: 3px;
         line-height: 14px;
-      `}/* font-size: ${(props) => props.limitScore && "12px"};
-    bottom: ${(props) => props.limitScore && "3px"};
-    line-height: ${(props) => props.limitScore && "14px"}; */
+      `}
   }
 `;
 
-const InputWrap = styled.div`
-  position: relative;
-  /* text-align: end;
-  align-items: flex-end; */
+/* ---------------------------------- 진행기간 ---------------------------------- */
+
+const SelectDateP = styled.p`
+  box-sizing: content-box;
+  height: 32px;
+  margin: 0;
+  font-size: 22px;
+  padding: 10px 0 26px 0;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  color: ${(props) => props.color};
+
+  @media (max-width: 390px) {
+    font-size: 20px;
+  }
 `;
+
+const DateP = styled.p`
+  box-sizing: content-box;
+  height: 35px;
+  margin: 0;
+  font-size: 22px;
+  padding: 5px 0 26px 0;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  color: ${(props) => props.color};
+
+  @media (min-width: 281px) and (max-width: 389px) {
+    font-size: 16px;
+  }
+  @media (max-width: 280px) {
+    font-size: 14px;
+  }
+`;
+
+/* ----------------------------------- 로딩 ----------------------------------- */
 
 const ImageLoadingWrap = styled.div`
   position: absolute;
