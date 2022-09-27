@@ -17,7 +17,7 @@ const CommunityProofForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
-  const { isLoading,error } = useSelector((state) => state.proofs);
+  const { isLoading, error } = useSelector((state) => state.proofs);
 
   const [inputData, inputOnChangeHandler, inputReset] = useInputs({
     title: "",
@@ -40,7 +40,7 @@ const CommunityProofForm = () => {
   const [upLoading, setUploading] = useState(100);
 
   const addImageFile = async (e) => {
-    const acceptImageFiles = ["image/png", "image/jpeg","image/jpg"];
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/jpg"];
     let arry = [];
     setIsPhotoMessage("");
     if (e.target.files.length + previewImg.length < 6) {
@@ -113,7 +113,7 @@ const CommunityProofForm = () => {
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       await dispatch(postProof({ communityId: param.communityId, formData: formData })).then((response) => {
         if (!response.error) {
-          navigate(`/community/detail/${param.communityId}`);
+          navigate(`/community/detail/${param.communityId}`, { replace: true });
         }
       });
       dispatch(certifyReset())
@@ -151,7 +151,7 @@ const CommunityProofForm = () => {
   }
   return (
     <>
-    {error && <ErrorModal notGo={true} error={error} />}
+      {error && <ErrorModal notGo={true} error={error} />}
       {isLogin() ? null : <IsLoginModal />}
       <ProofForm ProofFormData={ProofFormData} />
     </>

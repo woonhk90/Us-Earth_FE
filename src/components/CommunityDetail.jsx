@@ -15,6 +15,7 @@ import { colors } from "../styles/color";
 import { getCookie } from "../shared/cookie";
 import LoginModal from "./Modals/LoginModal";
 import { replace } from "lodash";
+import NoMore from '../components/etc/NoMore';
 
 import icons from "../assets";
 
@@ -27,12 +28,13 @@ const CommunityDetail = () => {
   useEffect(() => {
     dispatch(__getCommunityDetail({ communityId: param.id }));
   }, [dispatch, param.id]);
-  const { communityDetail } = useSelector((state) => state.community);
+  const { communityDetail, isLoading, certifyHasMore } = useSelector((state) => state.community);
   console.log(communityDetail);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const { certify } = useSelector((state) => state.community);
   console.log(certify);
+  console.log(certify.length);
   const [page, setPage] = useState(0);
   const { ref, inView, entry } = useInView({
     threshold: 0,
@@ -148,15 +150,18 @@ const CommunityDetail = () => {
               </OnGoingState>
             ) : null}
           </StateBox>
+
+
           <CertifyContentBox>
             <CertifyContent>
               {certify.map((v) => (
                 <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}>
-                  <img src={v.img[0]?.imgUrl} alt="proofImg" />
+                  <img src={v.img[0].imgUrl} alt="proofImg" />
                 </CertifyItem>
               ))}
             </CertifyContent>
           </CertifyContentBox>
+
           {getCookie("mycookie") === undefined ? null : communityDetail.participant ? (
             communityDetail.dateStatus === 'ongoing' ? (
               <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`, { replace: true })}>
@@ -164,7 +169,10 @@ const CommunityDetail = () => {
               </CertifyContentIcon>
             ) : null
           ) : null}
-          <div ref={ref}></div>
+
+          {certify.length === 0 ? <NoMore txt={'아직 작성글이 없어요.'} /> : null}
+          {certifyHasMore ? (isLoading ? null : <div ref={ref} style={{ border: "1px solid white" }}></div>) : null}
+
         </Container>
       </CommunityDetailWrap>
     </>
@@ -199,6 +207,7 @@ const ContentItem = styled.div`
   font: ${(props) => props.font};
   margin-bottom: ${(props) => props.marginBottom};
   word-break: break-all;
+  white-space: pre-line;
   img {
     width: 100%;
   }
@@ -281,6 +290,9 @@ const EndStateItem = styled.div`
   text-align: ${(props) => props.textAlign};
   span:nth-of-type(1) {
     font-size: 30px;
+    @media (max-width: 299px) {
+      font-size: 18px;
+    }
   }
   span:nth-of-type(2) {
     font: 18px/25px "Noto Sans KR", "sans-serif";
@@ -316,6 +328,11 @@ const EndStateBottom = styled.div`
 //   margin: 0;
 // `;
 
+
+
+
+
+
 const CertifyContentBox = styled.div``;
 
 const CertifyContent = styled.div`
@@ -323,22 +340,26 @@ const CertifyContent = styled.div`
   justify-items: center;
   grid-template-columns: repeat(auto-fill, minmax(33%, auto));
   gap: 1px;
+  `;
+const CertifyItem = styled.div`
+  width: 100%;
   img {
     width: 100%;
     height: 100%;
   }
 `;
-const CertifyContentIcon = styled.div`
-  position: absolute;
-  bottom: 80px;
-  right: 17px;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const CertifyItem = styled.div`
-  width: 128px;
-  height: 141px;
-  background-color: #d9d9d9;
-`;
+
+
+
+
+
+const CertifyContentIcon = styled.div`
+    position: absolute;
+    bottom: 80px;
+    right: 17px;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `;
