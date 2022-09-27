@@ -14,7 +14,7 @@ export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, t
     console.log('전체캠페인=>', data);
 
     /* ---------------------------- 해당 페이지에 값이 있는지 확인 --------------------------- */
-    if (data.data.content.length > 0) {
+    if (data.data.length > 0) {
       thunkAPI.dispatch(hasMoreFn(true));
     } else {
       thunkAPI.dispatch(hasMoreFn(false));

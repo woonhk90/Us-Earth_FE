@@ -32,7 +32,6 @@ const Info = () => {
     <>
       <CampaignBox>
         {infoList.map((v) => {
-
           return (
             <CampaignItem key={v.campaignId} onClick={() => window.open(`${v.thumbnailUrl}`, "_blank")}>
               <CampaignItemPoster>

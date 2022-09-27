@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useDispatch, useSelector } from "react-redux";
 import { __postNickNameOverlap, __updateMyInfoStatus, __postNickNameSubmit } from '../../redux/modules/mypageSlice';
-import { returnRemoveCookie, removeCookie } from '../../shared/cookie';
+import { returnRemoveCookie, removeCookie, getCookie } from '../../shared/cookie';
 import { ReactComponent as Pen } from "../../assets/Pen.svg";
 import Input from '../elements/Input';
 import { __getMyInfo } from '../../redux/modules/mypageSlice';
 import { debounce } from "lodash";
 import { useNavigate } from 'react-router-dom';
+import { instance } from '../../api/axios';
+import axios from 'axios';
 
 
 
@@ -59,11 +61,46 @@ const MyPage = () => {
     }
   }
 
+
+
+
+
+
+
+  // const [list, setList] = React.useState([]);
+  // const getPopularGroupItemList = async () => {
+  //   const response = await instance.get("/community/active");
+  //   setList(response.data);
+  // }
+  // React.useEffect(() => {
+  //   const response = getPopularGroupItemList();
+  //   setList(response);
+  // }, [])
+  // // console.log(list);
+  // list.then((value) => {
+  //   console.log(value);
+  //   });
+
+
+
   const onLogoutHandler = async () => {
-    // returnRemoveCookie('mycookie');
-    await removeCookie('mycookie');
-    navigate('/');
+    const response = await axios.get(`${process.env.REACT_APP_API_URL_NOT_AIP}/user/logout`, {
+      headers: {
+        Authorization: getCookie('mycookie'),
+      },
+    });
+    console.log('AAAAAAAAAAAAAAAAAAAAA', response);
+    console.log('AAAAAAAAAAAAAAAAAAAAA', response);
+    console.log('AAAAAAAAAAAAAAAAAAAAA', response.status);
+    if(response.status===200){
+      await removeCookie('mycookie');
+      await removeCookie('refreshToken');
+      await removeCookie('memberid');
+      navigate('/');
+    }
   }
+
+
 
   return (
     <>
@@ -202,13 +239,13 @@ const CheckBoxLabel = styled.label`
     box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
     transition: 0.2s;
     ${(props) =>
-      !props.secret
-        ? css`
+    !props.secret
+      ? css`
             margin: 1px;
             box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
             transition: 0.2s;
           `
-        : css`
+      : css`
             margin: 1px 0 0 20px;
           `}
   }
@@ -223,8 +260,8 @@ const CheckBox = styled.input`
   height: 26px;
   &:checked {
     ${(props) =>
-      props.secret &&
-      css`
+    props.secret &&
+    css`
         background: #35bd47;
         &::after {
           content: "";

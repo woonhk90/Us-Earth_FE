@@ -44,7 +44,7 @@ const CommunityProof = () => {
   };
 
   const onClickEdit = () => {
-    navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`);
+    navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`,{replace:true});
   };
   /* -------------------------------- edit modal ------------------------------- */
   const [modal, setModal] = useState(false);
@@ -63,7 +63,7 @@ const CommunityProof = () => {
     console.log(param.proofId)
     dispatch(deleteProof(param.proofId)).then((response) => {
       if (!response.error) {
-        navigate(`/community/detail/${param.communityId}`);
+        navigate(`/community/detail/${param.communityId}`,{replace:true});
       }
     });
   };

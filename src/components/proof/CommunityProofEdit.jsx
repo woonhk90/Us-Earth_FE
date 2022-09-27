@@ -162,7 +162,7 @@ const CommunityProofEdit = () => {
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       await dispatch(patchProof({ proofId: param.proofId, formData: formData })).then((response) => {
         if (!response.error) {
-          navigate(`/community/${param.communityId}/proof/${param.proofId}`);
+          navigate(`/community/${param.communityId}/proof/${param.proofId}`, { replace: true });
         }
       });
     }
