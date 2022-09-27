@@ -29,7 +29,7 @@ export const postComment = createAsyncThunk("comment/post", async (payload, thun
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -43,7 +43,7 @@ export const getComments = createAsyncThunk("comment/get", async (proofId, thunk
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -66,7 +66,7 @@ export const patchComment = createAsyncThunk("comment/patch", async (payload, th
   } catch (error) {
     console.log(error);
     thunkAPI.dispatch(commentEditChange({}));
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -82,7 +82,7 @@ export const deleteComments = createAsyncThunk("comment/delete", async (payload,
     return thunkAPI.fulfillWithValue(payload.commentId);
   } catch (error) {
     console.log(error);
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -93,11 +93,9 @@ export const commentsSlice = createSlice({
   initialState,
   reducers: {
     commentSelectBox: (state, action) => {
-      console.log("슬라이스에서 바뀜!", action.payload);
       state.commentSelectBoxId = action.payload;
     },
     commentEditChange: (state, action) => {
-      console.log(action.payload);
       state.commentEdit = action.payload;
     },
     commentClearUp: (state) => {
@@ -115,10 +113,10 @@ export const commentsSlice = createSlice({
   extraReducers: {
     /* -------------------------- post comment (Create) ------------------------- */
     [postComment.pending]: (state) => {
+      state.error = null;
       state.isLoading = true;
     },
     [postComment.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.isLoading = false;
       state.comments.commentResponseDtoList.push(action.payload);
     },
@@ -140,6 +138,7 @@ export const commentsSlice = createSlice({
     },
     /* ------------------------- patch comment (Update) ------------------------- */
     [patchComment.pending]: (state) => {
+      state.error = null;
       state.isLoading = true;
     },
     [patchComment.fulfilled]: (state, action) => {
@@ -154,11 +153,11 @@ export const commentsSlice = createSlice({
     },
     /* ------------------------- delete comment (Delete) ------------------------ */
     [deleteComments.pending]: (state) => {
+      state.error = null;
       state.isLoading = true;
     },
     [deleteComments.fulfilled]: (state, action) => {
       state.isLoading = false;
-      console.log(action.payload);
       state.comments.commentResponseDtoList = state.comments.commentResponseDtoList.filter((v) => v.commentId !== action.payload);
     },
     [deleteComments.rejected]: (state, action) => {

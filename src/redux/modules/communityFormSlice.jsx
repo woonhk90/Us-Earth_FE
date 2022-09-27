@@ -65,7 +65,6 @@ export const communityFormSlice = createSlice({
   initialState,
   reducers: {
     addDates: (state, action) => {
-      console.log(action.payload);
       state.dates = action.payload;
     },
     addDateLists: (state, action) => {

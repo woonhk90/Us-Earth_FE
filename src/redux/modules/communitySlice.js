@@ -76,6 +76,14 @@ export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCer
     const data = await instance.get(`/community/${payload.communityId}/proof?page=${payload.page}&size=3`);
     console.log('인증게시글=>', data);
 
+    /* ---------------------------- 해당 페이지에 값이 있는지 확인 --------------------------- */
+    console.log(data.data.length);
+    if (data.data.length > 0) {
+      thunkAPI.dispatch(certifyHasMoreFn(true));
+    } else {
+      thunkAPI.dispatch(certifyHasMoreFn(false));
+    }
+
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("인증 정보를 불러올 수 없습니다.");
@@ -119,6 +127,7 @@ const initialState = {
   error: [],
   statusCode: 0,
   hasMore: true,/* 무한스크롤 값이 더 있는지 확인 */
+  certifyHasMore: true,/* 무한스크롤 값이 더 있는지 확인 */
 }
 
 export const communitySlice = createSlice({
@@ -130,6 +139,7 @@ export const communitySlice = createSlice({
     errorReset: (state) => { state.error = []; },
     statusCodeReset: (state) => { state.statusCode = 0; },
     hasMoreFn: (state, action) => { state.hasMore = action.payload; },
+    certifyHasMoreFn: (state, action) => { state.certifyHasMore = action.payload; },
     ingVal: (state, action) => { console.log(action); console.log(action); console.log(action); console.log(action); console.log(action); /* state.community = []  */ }
   },
   extraReducers: {
@@ -211,5 +221,5 @@ export const communitySlice = createSlice({
   },
 });
 
-export const { clearVal, ingVal, certifyReset, errorReset, hasMoreFn, statusCodeReset } = communitySlice.actions;
+export const { clearVal, ingVal, certifyReset, errorReset, hasMoreFn, statusCodeReset, certifyHasMoreFn } = communitySlice.actions;
 export default communitySlice.reducer;

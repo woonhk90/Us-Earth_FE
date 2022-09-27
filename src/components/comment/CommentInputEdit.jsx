@@ -60,7 +60,7 @@ const CommentInputEdit = ({ userToken }) => {
       }
     } catch (error) {}
   };
-console.log(inputOn)
+  
   /* ----------------------------- useEffect(*) ---------------------------- */
   useEffect(() => {
     window.addEventListener("mousedown", clickInputOutside);
@@ -89,7 +89,7 @@ console.log(inputOn)
 
   const addImageFile = async (e) => {
     setIsPhotoMessage("");
-    const acceptImageFiles = ["image/png", "image/jpeg", "image/gif", "image/jpg"];
+    const acceptImageFiles = ["image/png", "image/jpeg","image/jpg"];
     const imageFile = e.target.files[0];
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
@@ -103,7 +103,6 @@ console.log(inputOn)
         };
         try {
           const compressedFile = await imageCompression(imageFile, options);
-          console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
           let reader = new FileReader();
           reader.readAsDataURL(compressedFile);
           setImageFile(compressedFile);

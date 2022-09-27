@@ -48,7 +48,7 @@ const Community = () => {
           <IconCommunityWriteBtn onClick={() => { navigate('/community/form') }}>
             <CommunityNewGroup />
           </IconCommunityWriteBtn>
-          {modal && (<Modal closeModal={() => setModal(!modal)}></Modal>)}
+          {/* {modal && (<Modal closeModal={() => setModal(!modal)}></Modal>)} */}
         </Container>
       </CommunityWrap>
     </>

@@ -55,7 +55,7 @@ const PopularGroupItemList = () => {
         </CommunityGroupTop>
         <CommunityBox>
 
-          {community?.map((v) => (
+          {community?.filter((v) => v.secret !== true)?.map((v) => (
             <CommunityItem key={v.communityId} onClick={() => { dispatch(certifyReset()); navigate(`/community/detail/${v.communityId}`); }}>
               <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
                 {v.secret ? <Lock /> : null}

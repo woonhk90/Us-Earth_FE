@@ -12,7 +12,6 @@ const initialState = {
 export const getHeartCommentCnt = createAsyncThunk("proof/heartComment", async (proofId, thunkAPI) => {
   try {
     const { data } = await tokenInstance.get(`/proof/count/${proofId}`);
-    console.log("하트댓글갯수", data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.message);
@@ -23,7 +22,6 @@ export const patchHeartCnt = createAsyncThunk("proof/Heart", async (proofId, thu
   try {
     const { data } = await tokenInstance.patch(`/proof/heart/${proofId}`);
     console.log(data);
-    // thunkAPI.dispatch(getHeartCommentCnt(proofId));
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.message);

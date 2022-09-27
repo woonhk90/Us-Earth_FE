@@ -22,7 +22,7 @@ export const postProof = createAsyncThunk("proof/post", async (payload, thunkAPI
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -32,11 +32,10 @@ export const postProof = createAsyncThunk("proof/post", async (payload, thunkAPI
 export const getProofs = createAsyncThunk("proof/get", async (proofId, thunkAPI) => {
   try {
     const { data } = await tokenInstance.get(`/proof/${proofId}`);
-    console.log("갯요청다시~");
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -56,8 +55,7 @@ export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkA
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
-    console.log(error.response.data.msg);
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -66,11 +64,12 @@ export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkA
 /* ------------------------- delete proof (Delete) ------------------------ */
 export const deleteProof = createAsyncThunk("proof/delete", async (proofId, thunkAPI) => {
   try {
+    console.log(proofId);
     const { data } = await tokenInstance.delete(`/proof/${proofId}`);
-
+    console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -137,5 +136,5 @@ export const proofsSlice = createSlice({
   },
 });
 
-export const {proofsCleanUp} = proofsSlice.actions;
+export const { proofsCleanUp } = proofsSlice.actions;
 export default proofsSlice.reducer;
