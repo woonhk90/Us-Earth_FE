@@ -30,9 +30,9 @@ const CommunityProof = () => {
 
   useEffect(() => {
     dispatch(getProofs(param.proofId));
-    return ()=> {
+    return () => {
       dispatch(proofsCleanUp());
-    }
+    };
   }, []);
 
   const openModal = () => {
@@ -56,11 +56,11 @@ const CommunityProof = () => {
     submit: "예",
   };
 
-  console.log(param.proofId)
-  console.log(param)
+  console.log(param.proofId);
+  console.log(param);
   // editMode cancel function
   const clickSubmit = () => {
-    console.log(param.proofId)
+    console.log(param.proofId);
     dispatch(deleteProof(param.proofId)).then((response) => {
       if (!response.error) {
         navigate(`/community/detail/${param.communityId}`);
@@ -71,7 +71,7 @@ const CommunityProof = () => {
   const modalOnOff = () => {
     setModal(!modal);
   };
-console.log(isLoading)
+  console.log(isLoading);
   if (isLoading) {
     return (
       <>
@@ -90,7 +90,7 @@ console.log(isLoading)
       <FirstWrap>
         <Swiper modules={[Navigation, Pagination, Scrollbar]} spaceBetween={50} slidesPerView={1} navigation pagination={{ clickable: true }}>
           {proofs.img?.map((img) => {
-                        return (
+            return (
               <SwiperSlide key={img.id}>
                 <StDiv>
                   <ItemImg imgUrl={img.imgUrl}></ItemImg>

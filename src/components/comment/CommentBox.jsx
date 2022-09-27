@@ -15,14 +15,12 @@ import { ReactComponent as HeartGy } from "../../assets/heartGy.svg";
 import { ReactComponent as CommentIcon } from "../../assets/commentIcon.svg";
 import Cookies from "universal-cookie";
 import LoginModal from "../Modals/LoginModal";
-import ErrorModal from "../Modals/ErrorModal";
-import Loading from "../etc/Loading";
 
 const CommentBox = () => {
   const cookies = new Cookies();
   const param = useParams();
   const dispatch = useDispatch();
-  const { heartCommentCnt, error } = useSelector((state) => state.heartComment);
+  const { heartCommentCnt} = useSelector((state) => state.heartComment);
   const { comments, commentEdit } = useSelector((state) => state.comments);
   const participant = heartCommentCnt.participant;
   const editMode = commentEdit.editMode;
