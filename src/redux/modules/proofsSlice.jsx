@@ -32,7 +32,6 @@ export const postProof = createAsyncThunk("proof/post", async (payload, thunkAPI
 export const getProofs = createAsyncThunk("proof/get", async (proofId, thunkAPI) => {
   try {
     const { data } = await tokenInstance.get(`/proof/${proofId}`);
-    console.log("갯요청다시~");
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
@@ -56,7 +55,6 @@ export const patchProof = createAsyncThunk("proof/patch", async (payload, thunkA
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     console.log(error);
-    console.log(error.response.data.msg);
     if(!error.response.data.msg){
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);

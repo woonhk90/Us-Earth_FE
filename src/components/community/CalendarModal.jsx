@@ -12,20 +12,15 @@ const CalendarModal = (props) => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const { dates } = useSelector((state) => state.communityForm);
-  console.log(dates);
-  console.log(props.beforDate);
 
   useEffect(() => {
     if (Object.values(dates).length) {
-      console.log(dates);
       const list = Object.values(dates).map((val) => new Date(val));
-      console.log(list);
       setDateRange(list);
     }
   }, []);
 
   const onChange = (dates) => {
-    console.log("DATEPICKER ONCHANGE", dates);
     setDateRange(dates); // 배열
   };
 
@@ -41,7 +36,6 @@ const CalendarModal = (props) => {
       const days = ("0" + dateRange[i]?.getDate()).slice(-2);
       const dateString = year + "-" + month + "-" + days;
       if (i === 0 ? (date.start = dateString) : (date.end = dateString));
-      console.log(date);
     } else {
       date.start = "";
       date.end = "";
@@ -57,8 +51,7 @@ const CalendarModal = (props) => {
     props.closeModal();
   };
   
-  console.log(date.start === date.end);
-  return (
+    return (
     <ModalWrap onClick={closeModal}>
       <ModalBody
         onClick={(e) => {

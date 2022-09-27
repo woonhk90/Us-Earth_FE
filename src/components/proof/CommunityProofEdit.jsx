@@ -54,7 +54,6 @@ const CommunityProofEdit = () => {
         content: content,
       });
     } catch (error) {
-      console.log(error);
       setGetError(error.response.data.message);
     }
     setGetIsLoading(false);
@@ -94,7 +93,6 @@ const CommunityProofEdit = () => {
               maxWidthOrHeight: 1920,
               useWebWorker: true,
               onProgress: (data) => {
-                console.log(data);
                 setUploading(data);
               },
             };
@@ -130,7 +128,6 @@ const CommunityProofEdit = () => {
 
   // X버튼 클릭 시 이미지 삭제
   const deleteImageFile = (img, index) => {
-    console.log("삭제!", img, index);
     setIsPhotoMessage("");
     setPreviewImg(previewImg.filter((file, id) => id !== index));
     setFiles(files.filter((file, id) => id !== index));
@@ -153,21 +150,17 @@ const CommunityProofEdit = () => {
         content: content.trim(),
         imgIdList: deleteImgId,
       };
-      console.log(files.length);
       if (files.length > 0) {
         let imgLists = [];
         for (let i = 0; i < files.length; i++) {
-          console.log(files[i].imgId);
           if (files[i].imgId === undefined) {
             imgLists.push(files[i]);
           }
         }
-        console.log(imgLists);
         imgLists.map((file) => formData.append("multipartFile", file));
       }
       formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
       await dispatch(patchProof({ proofId: param.proofId, formData: formData })).then((response) => {
-        console.log(response);
         if (!response.error) {
           navigate(`/community/detail/${param.communityId}`);
         }
