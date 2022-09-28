@@ -30,7 +30,7 @@ const PopularGroupItemList = () => {
   return (
     <>
       <Swiper
-        slidesPerView={3}
+        slidesPerView={1}
         spaceBetween={10}
         breakpoints={{
           0: {
@@ -83,7 +83,8 @@ const PopularGroupItemList = () => {
 }
 export default PopularGroupItemList;
 
-const PopularGroupItem = styled.div``;
+const PopularGroupItem = styled.div`
+`;
 const PopularGroupItemImg = styled.div`
   width:100%;
   max-width: 145px;

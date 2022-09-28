@@ -20,7 +20,7 @@ const NewGroupItemList = () => {
   return (
     <>
       <Swiper
-        slidesPerView={3}
+        slidesPerView={1}
         spaceBetween={10}
         breakpoints={{
           0: {
