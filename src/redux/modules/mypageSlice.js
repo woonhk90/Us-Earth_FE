@@ -68,7 +68,7 @@ export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubm
       const returnData = await axios.get(`${process.env.REACT_APP_API_URL_NOT_AIP}/user/reissue`, {
         headers: {
           refreshToken: getCookie('refreshToken'),
-          memberid: getCookie('memberid'),
+          memberId: getCookie('memberId'),
         },
       });
       removeCookie("mycookie");
