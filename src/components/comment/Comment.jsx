@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import CustomSelect from "./CustomSelect";
@@ -8,20 +8,30 @@ import { commentClearUp, commentEditChange, deleteComments, getComments } from "
 import ConfirmModal from "../Modals/ConfirmModal";
 import icons from "../../assets";
 import OkModal from "../Modals/OkModal";
-import Loading from "../etc/Loading";
 import ErrorModal from "../Modals/ErrorModal";
 import ImageLoading from "../etc/ImageLoading";
-const Comment = ({ userToken, editMode }) => {
-  const { getIsLoading, error, commentEdit } = useSelector((state) => state.comments);
-  const { Delete, Report, Edit } = icons;
+
+const Comment = () => {
   const dispatch = useDispatch();
   const param = useParams();
+  const { getIsLoading, error, commentNew } = useSelector((state) => state.comments);
   const { dateStatus, commentResponseDtoList } = useSelector((state) => state.comments.comments);
-  
+
   useEffect(() => {
     dispatch(getComments(param.proofId));
     return () => dispatch(commentClearUp());
   }, []);
+
+  /* ------------------------------- 댓글창 스크롤 이동 ------------------------------- */
+  const commentRef = useRef(null);
+
+  const scrollToBottom = () => {
+    commentRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [commentNew]);
 
   /* -------------------------- 캠페인 종료 시 댓글 수정 실패 모달 -------------------------- */
   const [okModal, setOkModal] = useState(false);
@@ -41,13 +51,13 @@ const Comment = ({ userToken, editMode }) => {
     if (payload.selectName === "수정하기") {
       if (dateStatus === "ongoing") {
         // if (commentEdit?.editMode !== true) {
-          dispatch(commentEditChange({}));
-          dispatch(
-            commentEditChange({
-              editMode: true,
-              commentId: payload.contentId,
-            })
-          );
+        dispatch(commentEditChange({}));
+        dispatch(
+          commentEditChange({
+            editMode: true,
+            commentId: payload.contentId,
+          })
+        );
         // }
       } else setOkModal(true);
     } else if (payload.selectName === "삭제하기") {
@@ -57,6 +67,7 @@ const Comment = ({ userToken, editMode }) => {
   };
 
   // data
+  const { Delete, Report, Edit } = icons;
   const selectBoxData = [
     {
       id: 1,
@@ -87,7 +98,7 @@ const Comment = ({ userToken, editMode }) => {
     // },
   ];
 
-  /* -------------------------------- delete modal ------------------------------- */
+  /* ---------------------------------- 삭제 모달 --------------------------------- */
   const [modal, setModal] = useState(false);
   const [dispaychPayload, setDispaychPayload] = useState({});
 
@@ -146,6 +157,7 @@ const Comment = ({ userToken, editMode }) => {
             <StSpan>{comment.content}</StSpan>
           </CommentBox>
         ))}
+        <div ref={commentRef} />
       </CommentContainer>
     </>
   );
@@ -168,7 +180,7 @@ const CommentContainer = styled.div`
     max-height: 150px;
   }
 `;
-//700부터는 450으로 하기
+
 /* --------------------------------- Top div -------------------------------- */
 
 const CommentBox = styled.div`

@@ -82,7 +82,7 @@ const CommunityFormEdit = () => {
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
     if (e.target.value.trim() === "") {
-      setIsTitle("그룹명을 입력해주세요");
+      setIsTitle("그룹명을 입력해 주세요");
     } else setIsTitle("");
   };
 

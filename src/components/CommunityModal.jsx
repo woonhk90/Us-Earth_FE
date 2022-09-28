@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-// import { ReactComponent as Cancel } from "../assets/Cancel.svg";
-import { __getCommunity } from "../redux/modules/communitySlice";
 import { useDispatch } from "react-redux";
-import { ingVal } from "../redux/modules/communitySlice";
+import { __getCommunity, ingVal, clearVal, pageReset, searchPlus } from "../redux/modules/communitySlice";
 import icons from "../assets";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const CommunityModal = (props) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { Cancel } = icons;
   /* ---------------------------------- 모달 닫기 --------------------------------- */
   const closeModal = () => {
@@ -15,24 +17,48 @@ const CommunityModal = (props) => {
 
   /* -------------------------------- input 검색 -------------------------------- */
   const [search, setSearch] = React.useState("");
-  const [page, setPage] = React.useState(0);
+  const [searchClick, setSearchClick] = React.useState(false);
+
   const onChangeHandler = (e) => {
     setSearch(e.target.value);
   };
-  const dispatch = useDispatch();
+
+  const onClickHandler = (v) => {
+    setSearchClick(true);
+    setSearch(() => v);
+  };
+
+  useEffect(() => {
+    if (searchClick) {
+      onSearchHandler();
+    }
+    return () => { setSearchClick(false); }
+  }, [searchClick])
+
   const onSearchHandler = async () => {
-    dispatch(__getCommunity({ page, search }));
-    dispatch(ingVal());
+    // await dispatch(clearVal());
+    // navigate(`/search/${search}`);//검색단어를 param으로 보내줌
+    
+    await dispatch(searchPlus(search));//검색하면 전역변수에 값 저장 
+    dispatch(__getCommunity({ page: 0, search: search }));
     closeModal();
   };
+
+  const datas = [
+    { id: 1, title: '분리수거' },
+    { id: 2, title: '재활용' },
+    { id: 3, title: '줍깅' },
+    { id: 4, title: '환경' },
+    { id: 5, title: '지구' },
+    { id: 6, title: '나무' },
+    { id: 7, title: '쓰레기' },
+    { id: 8, title: 'wh' },
+  ];
   return (
     <>
       <ModalWrap onClick={closeModal}>
-        <ModalBody
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
+        <ModalBody onClick={(e) => { e.stopPropagation(); }} >
+
           <SearchBox>
             <SearchIcon onClick={closeModal}>
               <Cancel />
@@ -40,17 +66,14 @@ const CommunityModal = (props) => {
             <SearchInput type="text" onChange={onChangeHandler} placeholder="검색어를 입력해주세요." />
             <SearchBtn onClick={onSearchHandler}>검색</SearchBtn>
           </SearchBox>
+
           <SuggestWrap>
             <SuggestTitle>추천검색어</SuggestTitle>
             <SuggestBox>
-              <SuggestItem>분리수거</SuggestItem>
-              <SuggestItem>재활용</SuggestItem>
-              <SuggestItem>세글자</SuggestItem>
-              <SuggestItem>재활용</SuggestItem>
-              <SuggestItem>두자</SuggestItem>
-              <SuggestItem>분리수러</SuggestItem>
+              {datas.map((v) => <SuggestItem key={v.id} onClick={() => { onClickHandler(v.title) }}>{v.title}</SuggestItem>)}
             </SuggestBox>
           </SuggestWrap>
+
         </ModalBody>
       </ModalWrap>
     </>
@@ -59,11 +82,10 @@ const CommunityModal = (props) => {
 export default CommunityModal;
 
 const ModalWrap = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
   height: calc(100% - 62px);
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
@@ -83,7 +105,14 @@ const ModalBody = styled.div`
   border-bottom-right-radius: 10px;
 `;
 
+
+
+
+
 const SearchBox = styled.div`
+  position:absolute;
+  top:0;
+  left:0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -124,7 +153,7 @@ const SuggestTitle = styled.div`
 const SuggestBox = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   align-items: content;
 `;
 const SuggestItem = styled.span`

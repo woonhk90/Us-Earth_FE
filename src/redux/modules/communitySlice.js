@@ -13,6 +13,8 @@ export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (
     if (payload.page === '0' || payload.page === 0) {
       thunkAPI.dispatch(clearVal());
     }
+
+    // const data = await instance.get(`${API_URL}/community?page=${payload.page}&size=10&title=${payload.search}`);
     const data = await instance.get(`${API_URL}/community?page=${payload.page}&size=10`);
     console.log('전체커뮤니티=>', data);
 
@@ -128,6 +130,8 @@ const initialState = {
   statusCode: 0,
   hasMore: true,/* 무한스크롤 값이 더 있는지 확인 */
   certifyHasMore: true,/* 무한스크롤 값이 더 있는지 확인 */
+  pageReset: 0,
+  searchReset: '',
 }
 
 export const communitySlice = createSlice({
@@ -140,7 +144,10 @@ export const communitySlice = createSlice({
     statusCodeReset: (state) => { state.statusCode = 0; },
     hasMoreFn: (state, action) => { state.hasMore = action.payload; },
     certifyHasMoreFn: (state, action) => { state.certifyHasMore = action.payload; },
-    ingVal: (state, action) => { console.log(action); console.log(action); console.log(action); console.log(action); console.log(action); /* state.community = []  */ }
+    ingVal: (state, action) => { console.log(action); console.log(action); console.log(action); console.log(action); console.log(action); /* state.community = []  */ },
+    searchReset: (state) => { state.pageReset = 0; state.searchReset = ''; },
+    pagePlus: (state) => { state.pageReset = state.pageReset + 1; },
+    searchPlus: (state, action) => { state.searchPlus = action.payload; },
   },
   extraReducers: {
     [__getCommunity.pending]: (state) => {
@@ -221,5 +228,5 @@ export const communitySlice = createSlice({
   },
 });
 
-export const { clearVal, ingVal, certifyReset, errorReset, hasMoreFn, statusCodeReset, certifyHasMoreFn } = communitySlice.actions;
+export const { clearVal, ingVal, certifyReset, errorReset, hasMoreFn, statusCodeReset, certifyHasMoreFn, searchReset, pagePlus, searchPlus } = communitySlice.actions;
 export default communitySlice.reducer;
