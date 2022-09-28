@@ -37,7 +37,7 @@ const Login = () => {
       if(await data.headers.authorization){
         setCookie("mycookie", data.headers.authorization);
         setCookie("refreshToken", data.headers.refreshtoken);
-        setCookie("memberid", data.data.memberId);
+        setCookie("memberId", data.data.memberId);
       }
 
       modalOnOff();
