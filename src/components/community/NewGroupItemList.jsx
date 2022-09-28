@@ -21,7 +21,7 @@ const NewGroupItemList = () => {
     <>
       <Swiper
         slidesPerView={1}
-        spaceBetween={10}
+        spaceBetween={0}
         breakpoints={{
           0: {
             slidesPerView: 1.8,
@@ -56,7 +56,7 @@ const NewGroupItemList = () => {
         }}
       >
         {newGroupList.map((v) => (
-          <SwiperSlide key={v.communityId} style={{ padding: '0 5px', boxSizing:'border-box' }}>
+          <SwiperSlide key={v.communityId} style={{ padding: '0 5px', boxSizing: 'border-box' }}>
             <NewGroupItem onClick={() => { navigate(`/community/detail/${v.communityId}`) }}>
               <NewGroupItemImg bgImg={v.img === null ? 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg' : v.img} >
                 <ItemFlag>
@@ -73,6 +73,8 @@ const NewGroupItemList = () => {
 }
 export default NewGroupItemList;
 
+
+const Box = styled(SwiperSlide)``;
 const NewGroupItem = styled.div``;
 const NewGroupItemImg = styled.div`
   width:100%;
@@ -84,6 +86,7 @@ const NewGroupItemImg = styled.div`
 
   background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg});
   background-repeat: no-repeat;
+  background-position:center;
   background-size: cover;
 `;
 const ItemFlag = styled.div`

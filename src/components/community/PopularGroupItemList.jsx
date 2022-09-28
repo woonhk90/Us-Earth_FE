@@ -31,7 +31,7 @@ const PopularGroupItemList = () => {
     <>
       <Swiper
         slidesPerView={1}
-        spaceBetween={10}
+        spaceBetween={0}
         breakpoints={{
           0: {
             slidesPerView: 1.8,
@@ -66,7 +66,7 @@ const PopularGroupItemList = () => {
         }}
       >
         {popularGroupList.map((v) => (
-          <SwiperSlide key={v.communityId} style={{ padding: '0 5px', boxSizing:'border-box' }}>
+          <SwiperSlide key={v.communityId} style={{ padding: '0 5px', boxSizing: 'border-box' }}>
             <PopularGroupItem onClick={() => { navigate(`/community/detail/${v.communityId}`) }}>
               <PopularGroupItemImg bgImg={v.img === null ? 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg' : v.img} >
                 <ItemFlag>
@@ -83,8 +83,8 @@ const PopularGroupItemList = () => {
 }
 export default PopularGroupItemList;
 
-const PopularGroupItem = styled.div`
-`;
+const Box = styled(SwiperSlide)``;
+const PopularGroupItem = styled.div``;
 const PopularGroupItemImg = styled.div`
   width:100%;
   max-width: 145px;
@@ -95,6 +95,7 @@ const PopularGroupItemImg = styled.div`
 
   background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg});
   background-repeat: no-repeat;
+  background-position:center;
   background-size: cover;
 `;
 const ItemFlag = styled.div`

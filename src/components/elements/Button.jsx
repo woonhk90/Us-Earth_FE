@@ -27,13 +27,14 @@ export default Button;
 
 const StButton = styled.button`
   cursor: pointer;
+        color:black;
   ${(props) => {
     return (
       props.btntype === "onOff" &&
       css`
         background-color: transparent;
         border: transparent;
-        color:${(props) => (props.on === "on" ? "6px solid #222222" : " #CBCBCB")}; ;
+        color:${(props) => (props.on === "on" ? "#222222" : "#CBCBCB")}; ;
         padding: 25px 0;
         width: 100%;
         border-bottom: ${(props) => (props.on === "on" ? "6px solid #8ecf70" : "6px solid #F5F5F5")};
