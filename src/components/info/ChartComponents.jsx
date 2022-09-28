@@ -32,7 +32,6 @@ const ChartWrap = styled.div`
   width:100%;
   padding:25px;
   box-sizing:border-box;
-  background-color:#f6f6f6;
   `;
 const ChartBox = styled.div`
   display:flex;
@@ -42,14 +41,24 @@ const ChartBox = styled.div`
   text-align:center;
   gap:25px;
   font:600 20px/28px 'Noto Sans KR','sans-serif';
+
+  
+background: #FFFFFF;
+border: 1px solid #FAFAFA;
+box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.02);
+border-radius: 6px;
 `;
 const ChartItem = styled.div`
   width:45%;
   box-sizing:border-box;
 `;
 const ChartItemTitle = styled.div`
-  font-size:20px;
-  letter-spacing:-0.1em;
+font-weight: 600;
+font-size: 20px;
+line-height: 27px;
+text-align: center;
+letter-spacing: -0.03em;
+margin-bottom: 10px;
 `;
 const ChartItemContent = styled.div`
   width:80%;

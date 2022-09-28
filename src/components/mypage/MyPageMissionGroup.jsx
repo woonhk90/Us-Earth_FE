@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -20,6 +21,11 @@ const MyPageMissionGroup = () => {
 
   const { saveCagegoryFlag } = useSelector((state) => state.mypage);
   console.log('선택카테고리', saveCagegoryFlag);
+const [writer, setWriter]= useState(false)
+const writerCheck = ()=>{
+setWriter(!writer)
+}
+console.log(writer)
 
   return (
     <>
@@ -32,7 +38,30 @@ const MyPageMissionGroup = () => {
           </CategoryBox>
 
           <CategoryInfoList>
-            {myGroupList.filter((v) => v.dateStatus === saveCagegoryFlag).map((v) =>
+            <button onClick={writerCheck}>내가 쓴 글 보기</button>
+            {writer ?
+            <>  
+            {myGroupList.filter((v) => v.dateStatus === saveCagegoryFlag && v.writer ===true).map((v) => (
+    <ListBox key={v.communityId} onClick={() => navigate(`/community/detail/${v.communityId}`)}>
+      <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
+        {/* <img src={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"} alt='GroupImg' /> */}
+      </ItemImg>
+      <div>
+        <div>
+          <p>{v.title}</p>
+          <p>{v.startDate} - {v.endDate}</p>
+        </div>
+        <div>
+          <progress value={v.dateStatus === "before" ? v.currentPercent : v.successPercent} max='100'></progress>
+          <span>{Math.ceil(v.dateStatus === "before" ? v.currentPercent : v.successPercent)}%</span>
+        </div>
+      </div>
+    </ListBox>
+  )
+  )}
+  </> : 
+            <>
+  {myGroupList.filter((v) => v.dateStatus === saveCagegoryFlag).map((v) => (
               <ListBox key={v.communityId} onClick={() => navigate(`/community/detail/${v.communityId}`)}>
                 <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
                   {/* <img src={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"} alt='GroupImg' /> */}
@@ -48,7 +77,11 @@ const MyPageMissionGroup = () => {
                   </div>
                 </div>
               </ListBox>
+            )
             )}
+            </>
+            }
+          
           </CategoryInfoList>
         </Container>
       </GroupWrap>
