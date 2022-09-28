@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom"
 const Community = () => {
   const { CommunityNewGroup } = icons;
   const navigate = useNavigate();
-  const [modal, setModal] = React.useState(false);
   return (
     <>
       <CommunityWrap>
@@ -48,7 +47,6 @@ const Community = () => {
           <IconCommunityWriteBtn onClick={() => { navigate('/community/form') }}>
             <CommunityNewGroup />
           </IconCommunityWriteBtn>
-          {/* {modal && (<Modal closeModal={() => setModal(!modal)}></Modal>)} */}
         </Container>
       </CommunityWrap>
     </>
@@ -129,7 +127,7 @@ const NewGroupBox = styled.div`
 const IconCommunityWriteBtn = styled.div`
   position:absolute;
   bottom:70px;right:10px;
-  z-index:999;
+  z-index:5;
 
   display:flex;
   justify-content:center;

@@ -8,6 +8,7 @@ const ConfirmModal = (props) => {
   /* ---------------------------------- 2차 모달 ---------------------------------- */
   const submitonClick = async () => {
     await clickSubmit();
+    closeModal();
   };
 
   return (
