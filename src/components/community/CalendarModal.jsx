@@ -114,10 +114,10 @@ const CalendarModal = (props) => {
 export default CalendarModal;
 const ModalWrap = styled.div`
 position: absolute;
-  top: 0px;
+  top: 0;
+  right: 0;
+  bottom: 0;
   left: 0;
-  bottom:0;
-  right:0;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
