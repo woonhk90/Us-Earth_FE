@@ -100,6 +100,7 @@ export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularG
   try {
     const data = await instance.get('/community/active');
 
+    console.log('활발그룹->',data.data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("활발 그룹 정보를 불러올 수 없습니다.");
@@ -112,6 +113,7 @@ export const __getNewGroupItemList = createAsyncThunk("usearth/__getNewGroupItem
   try {
     const data = await instance.get('/community/nearDone');
 
+    console.log('마감임박->',data.data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("마감임박 그룹 정보를 불러올 수 없습니다.");
