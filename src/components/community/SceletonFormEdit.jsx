@@ -18,18 +18,18 @@ const SeceletonFormEdit = () => {
           </TextWrap>
         </ImageBoxWrap>
         <TopTextWrap>
-          <Sceleton margin="60px 0 10px 0" height="30px" width="30%" />
-          <Sceleton margin="25px 0 10px 0" height="30px" width="20%" />
+          <Sceleton margin="35px 0 10px 0" height="30px" width="30%" />
+          {/* <Sceleton margin="25px 0 10px 0" height="30px" width="20%" /> */}
         </TopTextWrap>
-        <Sceleton margin="5px 0 50px 0" height="30px" width="80%" />
+        <Sceleton margin="5px 0 35px 0" height="30px" width="80%" />
         <Sceleton margin="25px 0 10px 0" height="30px" width="30%" />
-        <Sceleton margin="15px 0 50px 0" height="30px" width="100%" />
+        <Sceleton margin="15px 0 35px 0" height="30px" width="100%" />
         <Sceleton margin="25px 0 10px 0" height="30px" width="30%" />
-        <Sceleton margin="15px 0 50px 0" height="30px" width="70%" />
+        <Sceleton margin="15px 0 35px 0" height="30px" width="70%" />
         <Sceleton margin="25px 0 10px 0" height="30px" width="30%" />
-        <Sceleton margin="15px 0 50px 0" height="30px" width="30%" />
+        <Sceleton margin="15px 0 35px 0" height="30px" width="30%" />
         <Sceleton margin="25px 0 10px 0" height="30px" width="30%" />
-        <Sceleton margin="15px 0 30px 0" height="100px" width="100%" />
+        <Sceleton margin="15px 0 120px 0" height="100px" width="100%" />
       </CommunityFormWrap>
       <BottomWrap>
         <BottomButton>그룹 등록</BottomButton>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -20,6 +21,11 @@ const MyPageMissionGroup = () => {
 
   const { saveCagegoryFlag } = useSelector((state) => state.mypage);
   console.log('선택카테고리', saveCagegoryFlag);
+const [writer, setWriter]= useState(false)
+const writerCheck = ()=>{
+setWriter(!writer)
+}
+console.log(writer)
 
   return (
     <>
@@ -32,7 +38,34 @@ const MyPageMissionGroup = () => {
           </CategoryBox>
 
           <CategoryInfoList>
-            {myGroupList.filter((v) => v.dateStatus === saveCagegoryFlag).map((v) =>
+          <WriterButton >
+          <StyledLabel htmlFor="내가 쓴 글 보기">
+      <StyledInput onClick={writerCheck}  type="checkbox" name="내가 쓴 글 보기" />
+      <StyledP> 내가 쓴 글 보기</StyledP>
+    </StyledLabel></WriterButton>
+            {writer ?
+            <>  
+            {myGroupList.filter((v) => v.dateStatus === saveCagegoryFlag && v.writer ===true).map((v) => (
+    <ListBox key={v.communityId} onClick={() => navigate(`/community/detail/${v.communityId}`)}>
+      <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
+        {/* <img src={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"} alt='GroupImg' /> */}
+      </ItemImg>
+      <div>
+        <div>
+          <p>{v.title}</p>
+          <p>{v.startDate} - {v.endDate}</p>
+        </div>
+        <div>
+          <progress value={v.dateStatus === "before" ? v.currentPercent : v.successPercent} max='100'></progress>
+          <span>{Math.ceil(v.dateStatus === "before" ? v.currentPercent : v.successPercent)}%</span>
+        </div>
+      </div>
+    </ListBox>
+  )
+  )}
+  </> : 
+            <>
+  {myGroupList.filter((v) => v.dateStatus === saveCagegoryFlag).map((v) => (
               <ListBox key={v.communityId} onClick={() => navigate(`/community/detail/${v.communityId}`)}>
                 <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
                   {/* <img src={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"} alt='GroupImg' /> */}
@@ -48,7 +81,11 @@ const MyPageMissionGroup = () => {
                   </div>
                 </div>
               </ListBox>
+            )
             )}
+            </>
+            }
+          
           </CategoryInfoList>
         </Container>
       </GroupWrap>
@@ -179,5 +216,43 @@ const ListBox = styled.div`
         background: linear-gradient(to right, #aedc89, #80bc28);
       }
     }
+  }
+`;
+
+
+const WriterButton = styled.div`
+text-align: end;
+box-sizing: border-box;
+padding: 6px 16px 0 16px;
+display: flex;
+align-items: flex-end;
+align-content: flex-end;
+width: 100%;
+`
+
+const StyledLabel = styled.label`
+  display: flex;
+  align-items: center;
+  user-select: none;
+`;
+
+const StyledP = styled.p`
+  margin-left: 0.25rem;
+`;
+const StyledInput = styled.input`
+  appearance: none;
+  border: 1.5px solid gainsboro;
+  border-radius: 0.35rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+
+  &:checked {
+    border-color: transparent;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-color: rgb(148, 218, 118);
   }
 `;

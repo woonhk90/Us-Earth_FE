@@ -47,7 +47,7 @@ const HeaderWrap = styled.div`
 `;
 const HeaderFlex = styled.div`
   width: 100%;
-  padding: 10px;
+  padding: 10px 16px;
   margin: auto;
   text-align: center;
   border-bottom: 1px solid #f5f5f5;
