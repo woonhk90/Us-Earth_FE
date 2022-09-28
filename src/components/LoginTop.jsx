@@ -7,7 +7,7 @@ const CommunityTop = () => {
   return (
     <>
       <HeaderWrap>
-        <span>로그인</span>
+        <LoginText>로그인</LoginText>
       </HeaderWrap>
     </>
   )
@@ -33,3 +33,14 @@ const HeaderWrap = styled.div`
     left:10px;
   }
 `;
+
+const LoginText = styled.span`
+  
+font-weight: 600;
+font-size: 20px;
+line-height: 27px;
+text-align: center;
+letter-spacing: -0.02em;
+
+color: #222222;
+`

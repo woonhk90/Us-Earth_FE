@@ -31,7 +31,7 @@ position: absolute;
   left: 0;
   display: flex;
   justify-content: space-between;
-  padding: 13px;
+  padding: 13px 13px 13px 16px;
   box-sizing: border-box;
   z-index: 1;
 `;

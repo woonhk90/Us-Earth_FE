@@ -223,7 +223,7 @@ const ListBox = styled.div`
 const WriterButton = styled.div`
 text-align: end;
 box-sizing: border-box;
-padding: 0 20px;
+padding: 6px 16px 0 16px;
 display: flex;
 align-items: flex-end;
 align-content: flex-end;
@@ -245,6 +245,7 @@ const StyledInput = styled.input`
   border-radius: 0.35rem;
   width: 1.5rem;
   height: 1.5rem;
+  cursor: pointer;
 
   &:checked {
     border-color: transparent;

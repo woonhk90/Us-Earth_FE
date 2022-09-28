@@ -243,7 +243,7 @@ const CommunityFormEdit = () => {
 
 /* --------------------------------- 로딩 & 에러 -------------------------------- */
 
-  if (isGetLoading) {
+  if (!isGetLoading) {
     return (
       <>
         <SeceletonFormEdit />

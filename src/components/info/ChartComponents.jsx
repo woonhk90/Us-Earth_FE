@@ -30,10 +30,10 @@ export default ChartComponents;
 
 const ChartWrap = styled.div`
   width:100%;
-  padding:25px;
   box-sizing:border-box;
   `;
 const ChartBox = styled.div`
+padding: 37px 23px;
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
