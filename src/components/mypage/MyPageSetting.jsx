@@ -95,7 +95,7 @@ const MyPage = () => {
     if(response.status===200){
       await removeCookie('mycookie');
       await removeCookie('refreshToken');
-      await removeCookie('memberid');
+      await removeCookie('memberId');
       navigate('/');
     }
   }
