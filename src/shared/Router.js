@@ -17,6 +17,7 @@ import EarthInfo from "../pages/EarthInfo";
 import EarthMyPageMissonWeek from "../pages/EarthMyPageMissonWeek";
 import EarthMyPageMissionGroup from '../pages/EarthMyPageMissionGroup';
 import NotFound from "../components/NotFound";
+import EarthGuide from '../pages/EarthGuide';
 
 const Router = () => {
   return (
@@ -42,6 +43,7 @@ const Router = () => {
       {/* <Route path='/view/:id' element={<InstarLogin />} /> */}
       <Route path="/info" element={<EarthInfo />} />
       <Route path="/mypage/mission/group" element={<EarthMyPageMissionGroup />} />
+      <Route path="/guide" element={<EarthGuide />} />
       <Route path="/*" element={<NotFound />} />
     </Routes>
   );

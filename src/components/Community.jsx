@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import banner01 from '../assets/banner.png';
+import banner01 from '../assets/banner_01.jpg';
 
 import PopularGroupItemList from './community/PopularGroupItemList';
 import NewGroupItemList from './community/NewGroupItemList';
@@ -17,7 +17,7 @@ const Community = () => {
     <>
       <CommunityWrap>
         <Container>
-          <Banner><img src={banner01} alt='bannerImg' /></Banner>
+          <Banner onClick={() => { navigate('/guide') }}><img src={banner01} alt='bannerImg' /></Banner>
 
           <PopularGroup>
             <PopularGroupTop>

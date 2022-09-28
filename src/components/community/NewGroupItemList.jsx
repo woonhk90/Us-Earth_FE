@@ -56,18 +56,16 @@ const NewGroupItemList = () => {
         }}
       >
         {newGroupList.map((v) => (
-          <Box>
-            <SwiperSlide key={v.communityId} style={{ padding: '0 5px', boxSizing: 'border-box' }}>
-              <NewGroupItem onClick={() => { navigate(`/community/detail/${v.communityId}`) }}>
-                <NewGroupItemImg bgImg={v.img === null ? 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg' : v.img} >
-                  <ItemFlag>
-                    <span>모집중</span>
-                  </ItemFlag>
-                </NewGroupItemImg>
-                <NewGroupItemTitle>{v.title}</NewGroupItemTitle>
-              </NewGroupItem>
-            </SwiperSlide>
-          </Box>
+          <SwiperSlide key={v.communityId} style={{ padding: '0 5px', boxSizing: 'border-box' }}>
+            <NewGroupItem onClick={() => { navigate(`/community/detail/${v.communityId}`) }}>
+              <NewGroupItemImg bgImg={v.img === null ? 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg' : v.img} >
+                <ItemFlag>
+                  <span>모집중</span>
+                </ItemFlag>
+              </NewGroupItemImg>
+              <NewGroupItemTitle>{v.title}</NewGroupItemTitle>
+            </NewGroupItem>
+          </SwiperSlide>
         ))}
       </Swiper>
     </>
@@ -76,19 +74,7 @@ const NewGroupItemList = () => {
 export default NewGroupItemList;
 
 
-const Box = styled(SwiperSlide)`
-  box-sizing:border-box;
-  &{
-    /* padding:15px; */
-    box-sizing:border-box;
-  }
-  &:first-child{
-    /* margin-left:2.5px; */
-  }
-  &:last-child{
-    /* margin-right:100px; */
-  }
-`;
+const Box = styled(SwiperSlide)``;
 const NewGroupItem = styled.div``;
 const NewGroupItemImg = styled.div`
   width:100%;
@@ -100,6 +86,7 @@ const NewGroupItemImg = styled.div`
 
   background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg});
   background-repeat: no-repeat;
+  background-position:center;
   background-size: cover;
 `;
 const ItemFlag = styled.div`

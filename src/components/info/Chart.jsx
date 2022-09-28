@@ -16,7 +16,7 @@ const Chart = ({ chartInfo }) => {
       // setColorFlag('linear-gradient(90deg, #e8e8e8 0px, #f8f8f8 40px, #e8e8e8 80px)');
       setColorFlag("01d33694");
     } else if (chartInfo.risk === "나쁨") {
-      setColorFlag("ffff006a");
+      setColorFlag("ffe353");
       // setColorFlag('linear-gradient(90deg, #e8e8e8 0px, #f8f8f8 40px, #e8e8e8 80px)');
     } else if (chartInfo.risk === "매우나쁨") {
       // setColorFlag('linear-gradient(90deg, #e8e8e8 0px, #f8f8f8 40px, #e8e8e8 80px)');
@@ -55,24 +55,6 @@ const Chart = ({ chartInfo }) => {
             </>
           )}
         </ChangingProgressProvider>
-
-        {/* <CircularProgressbarWithChildren value={chartInfo.amount / chartInfo.maxAmount * 100} strokeWidth={10} styles={{
-          root: { height: "100%" },
-          path: {
-            stroke: `#${colorFlag}`,
-            strokeLinecap: "butt",
-            transition: "stroke-dashoffset 0.5s ease 0s",
-          },
-          trail: {
-            stroke: "#d7d7d7",
-          },
-          background: {
-            fill: "#3e98c7",
-          }
-        }}>
-          <ChartFlag>{chartInfo.amount}</ChartFlag>
-          <ChartFlag>{chartInfo.risk}</ChartFlag>
-        </CircularProgressbarWithChildren> */}
       </ProgressWrap>
     </>
   );
@@ -84,13 +66,15 @@ const ProgressWrap = styled.div`
   width: 100%;
   margin: 0 auto;
 
+  font-family: 'Noto Sans KR', 'sans-serif';
   .CircularProgressbar-path {
-    /* stroke: #ffff006a !important; */
+    /* stroke: #ffe353 !important; */
   }
   .CircularProgressbar-trail {
     stroke: gray;
   }
   .CircularProgressbar-text {
+  font-family: 'Noto Sans KR', 'sans-serif';
     fill: #000000;
     font-style: normal;
     font-weight: 600;
@@ -106,6 +90,7 @@ const ProgressWrap = styled.div`
 
 const RiskName = styled.div`
   color: ${(props) => `#${props.colorFlag}`};
+  /* color:#ffe353; */
   position: absolute;
   /* top:5px; */
   bottom: 0;

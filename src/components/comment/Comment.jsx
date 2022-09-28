@@ -212,11 +212,11 @@ const CommentText = styled.div`
 `;
 
 const CommentImg = styled.img`
-  background-size: 100px;
   width: 176px;
   height: 176px;
   border: none;
   box-sizing: border-box;
+  object-fit: cover;
   border-radius: 6px;
   display: flex;
   align-items: flex-start;
