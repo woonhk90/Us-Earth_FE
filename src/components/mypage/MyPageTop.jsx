@@ -34,7 +34,7 @@ const HeaderWrap = styled.div`
   height:48px;
   display:flex;
   justify-content:space-between;
-  padding:10px;
+  padding:10px 16px;
   border-bottom:1px solid rgba(0,0,0,0.14);
   box-sizing:border-box;
   z-index:1;

@@ -21,9 +21,9 @@ const Login = () => {
       <LoginWrap>
         <Container>
           <Logo></Logo>
-          <div className='item' onClick={() => onClickHandler('k')}><div><img src={kakao} alt='kakao_img' /></div><span>카카오 로그인</span></div>
-          <div className='item' onClick={() => onClickHandler('n')}><div><img src={naver} alt='naver_img' /></div><span>네이버 로그인</span></div>
-          <div className='item' onClick={() => onClickHandler('g')}><div><img src={google} alt='google_img' /></div><span>구글 로그인</span></div>
+          <div className='item' onClick={() => onClickHandler('k')}><div><img src={kakao} alt='kakao_img' /></div><LoginText>카카오 로그인</LoginText></div>
+          <div className='item' onClick={() => onClickHandler('n')}><div><img src={naver} alt='naver_img' /></div><LoginText>네이버 로그인</LoginText></div>
+          <div className='item' onClick={() => onClickHandler('g')}><div><img src={google} alt='google_img' /></div><LoginText>구글 로그인</LoginText></div>
         </Container>
       </LoginWrap>
     </>
@@ -44,8 +44,9 @@ const Logo = styled.div`
   display:flex;
   justify-content:center;
   align-items:center;
-  height: 150px;
-  width: 50%;
+  
+width: 210px;
+height: 130px;
   margin-bottom:100px;
   
   background:url(${LogoImg}) no-repeat center center;
@@ -66,9 +67,10 @@ const Container = styled.div`
     width:100%;
     height:60px;
     padding:15px 0;
-    border:1px solid black;
     box-sizing:border-box;
     
+background: #FFFFFF;
+border: 1px solid #B5B5B5;
 
     display:flex;
     justify-content:center;
@@ -94,3 +96,16 @@ const Container = styled.div`
     }
   }
 `;
+
+const LoginText = styled.span`
+font-weight: 500;
+font-size: 18px;
+line-height: 26px;
+/* identical to box height */
+
+text-align: center;
+letter-spacing: -0.03em;
+
+color: #424242;
+
+`
