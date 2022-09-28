@@ -9,7 +9,7 @@ const ImageModal = (props) => {
       <Modal onClick={modalOnOff}>
         <ModalWrap>
           <ModalWrap2>
-            <img src={image} />
+            <Img src={image} />
           </ModalWrap2>
         </ModalWrap>
       </Modal>
@@ -35,31 +35,38 @@ const ModalWrap = styled.div`
   height: 100%;
   align-items: center;
   justify-content: center;
-`;
+  `;
 
 const ModalWrap2 = styled.div`
+width: 100%;
   border-radius: 10px;
   box-sizing: border-box;
-  width: 400px;
-  height: 70%;
+  height: auto;
+  max-height: 70%;
   margin: 0 15px;
   overflow: auto;
-
+    background-color: #ffffff;
   ::-webkit-scrollbar {
     display: block !important;
     width: 15px;
     height: 15px;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: #3d3d3d;
+    background-color: #3d3d3dea;
+    box-shadow: inset 0px 0px 5px white;
     border-radius: 10px;
   }
   ::-webkit-scrollbar-corner {
     background-color: transparent;
   }
   ::-webkit-scrollbar-track {
-    background-color: grey;
-    border-radius: 10px;
+    background-color: #808080cf;
     box-shadow: inset 0px 0px 5px white;
+    border-radius: 10px;
   }
 `;
+
+
+const Img = styled.img`
+  /* width: 100%; */
+`
