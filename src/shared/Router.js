@@ -22,6 +22,7 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<EarthCommunity />} />
+      <Route path="/search/:search" element={<EarthCommunity />} />
       <Route path="/login" element={<EarthLogin />} />
       <Route path="/community" element={<EarthCommunity />} />
       <Route path="/community/form" element={<EarthCommunityForm />} />

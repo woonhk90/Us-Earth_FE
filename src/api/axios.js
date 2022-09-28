@@ -65,7 +65,7 @@ tokenInstance.interceptors.response.use(
       //401만료된 코드
       if (response.data.code === "401" || response.data.errorCode === "401") {
         const refreshToken = getCookie("refreshToken");
-        const memberid = getCookie("memberid");
+        const memberId = getCookie("memberid");
         /* GET : NEW ACCESSTOKEN ---------------------------------------------------- */
         try {
           const response = await axios({
@@ -74,7 +74,7 @@ tokenInstance.interceptors.response.use(
             headers: {
               "Content-Type": "application/json",
               refreshToken: refreshToken,
-              memberid: memberid,
+              memberId: memberId,
             },
           });
           /* CHANGE ACCESSTOKEN ------------------------------------------------------- */

@@ -8,13 +8,16 @@ import Loading from '../etc/Loading';
 import HashMore from '../etc/HasMore';
 import icons from '../../assets/index'
 
+import { useParams } from "react-router-dom";
+
 
 const PopularGroupItemList = () => {
   const { Lock } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { community, isLoading, hasMore } = useSelector((state) => state.community);
+  const { community, isLoading, hasMore, pageReset, searchReset } = useSelector((state) => state.community);
   console.log("community=>", community);
+
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const [page, setPage] = useState(0);
@@ -25,6 +28,7 @@ const PopularGroupItemList = () => {
   /* ----------------------------- 커뮤니티 전체목록 가져오기 ----------------------------- */
   useEffect(() => {
     console.log("커뮤니티 호출");
+
     dispatch(__getCommunity({ page }));
   }, [page]);
 
@@ -114,6 +118,9 @@ const ItemImg = styled.div`
   background-size: cover;
   color: #fff;
   margin-bottom: 10px;
+  
+  border-radius:6px;
+  box-sizing:border-box;
   svg {
     display: inline-block;
     position: absolute;
@@ -124,7 +131,8 @@ const ItemImg = styled.div`
     position: absolute;
     width: 100%;
     bottom: 0;
-    padding: 6px;
+    left:0;
+    padding:0 12px 16px;
     box-sizing: border-box;
 
     text-align: center;
