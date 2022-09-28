@@ -12,6 +12,7 @@ const initialState = {
   isLoading: false,
   getIsLoading: false,
   error: null,
+  commentNew:false,
 };
 
 /* -------------------------- post comment (Create) ------------------------- */
@@ -114,10 +115,12 @@ export const commentsSlice = createSlice({
     /* -------------------------- post comment (Create) ------------------------- */
     [postComment.pending]: (state) => {
       state.error = null;
+      state.commentNew = false;
       state.isLoading = true;
     },
     [postComment.fulfilled]: (state, action) => {
       state.isLoading = false;
+      state.commentNew = true;
       state.comments.commentResponseDtoList.push(action.payload);
     },
     [postComment.rejected]: (state, action) => {
