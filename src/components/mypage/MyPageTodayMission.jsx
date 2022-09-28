@@ -98,8 +98,8 @@ const MyPageTodayMission = ({ userInfo }) => {
                 <p onClick={() => onClickTodayMission()}>미션 보기({todayMission.filter((v) => v.complete === true).length}/5)</p>
               </MissionTop>
               <MissionBottom>
-                <p>{5 - userInfo.nextLevelExp}/5</p>
-                <progress value={(5 - userInfo.nextLevelExp).toString()} max='5' />
+                <p>{userInfo.nextLevelExp} / {userInfo.needNextLevelExp}</p>
+                <progress value={userInfo.nextLevelExp} max={userInfo.needNextLevelExp} />
               </MissionBottom></>)
         }
       </MyPageMission>
