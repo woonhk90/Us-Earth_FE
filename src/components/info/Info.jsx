@@ -22,6 +22,8 @@ const Info = () => {
       behavior: "smooth",
     });
   };
+
+  console.log()
   return (
     <>
       <InfoWrap>
