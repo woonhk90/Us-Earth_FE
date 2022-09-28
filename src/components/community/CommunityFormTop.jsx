@@ -37,7 +37,7 @@ const HeaderWrap = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 48px;
   display: flex;
   justify-content: space-between;
@@ -48,6 +48,7 @@ const HeaderWrap = styled.div`
 const HeaderFlex = styled.div`
   width: 100%;
   padding: 10px 16px;
+  box-sizing: border-box;
   margin: auto;
   text-align: center;
   border-bottom: 1px solid #f5f5f5;

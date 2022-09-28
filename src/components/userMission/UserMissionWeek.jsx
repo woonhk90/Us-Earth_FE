@@ -104,6 +104,7 @@ export default UserMissionWeek;
 
 const MissionStatsButtonWrap = styled.div`
   ${flexRow}
+  color:#000000;
 `;
 const StCalender = styled.div`
   /* ${flexRow} */
@@ -203,7 +204,8 @@ const WeekDateP = styled.p`
   font-weight: 700;
   width: 144px;
   margin: 0 auto;
-  
+ 
+  color:#000000; 
   @media (max-width: 390px) {
         font-size: 20px;
   }
