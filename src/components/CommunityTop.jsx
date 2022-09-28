@@ -12,7 +12,8 @@ const CommunityTop = () => {
   return (
     <>
       <HeaderWrap>
-        <div onClick={() => { /* navigate('/'); */ setModal(!modal); }}><Search /></div>
+        {/* <div onClick={() => { setModal(!modal); }}><Search /></div> */}
+        <div></div>
         {modal && (<Modal closeModal={() => setModal(!modal)}></Modal>)}
         <p>커뮤니티</p>
         <div></div>
