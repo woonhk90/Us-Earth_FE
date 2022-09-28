@@ -45,10 +45,12 @@ const MyPageTodayMission = ({ userInfo }) => {
   /* -------------------------------- edit modal ------------------------------- */
   const [modal, setModal] = React.useState(false);
   const [missionId, setMissionId] = React.useState('');
+  const [missionDiff, setMissionDiff] = React.useState('');
 
-  const onMissionClick = (id, flag) => {
+  const onMissionClick = (id, flag, diff) => {
     if (!flag) {
       setMissionId(id);
+      setMissionDiff(diff);
       setModal(!modal);
     }
   }
@@ -65,7 +67,7 @@ const MyPageTodayMission = ({ userInfo }) => {
   };
 
   const clickSubmit = () => {
-    dispatch(__updateMissionFlag({ missionName: missionId }));
+    dispatch(__updateMissionFlag({ missionName: missionId, difficulty: missionDiff }));
   };
 
   return (
@@ -83,7 +85,7 @@ const MyPageTodayMission = ({ userInfo }) => {
                 {
                   todayMission.map(
                     (v) =>
-                      <MissionItem key={v.missionName} onClick={() => { onMissionClick(v.missionName, v.complete) }} background={v.complete}>
+                      <MissionItem key={v.missionName} onClick={() => { onMissionClick(v.missionName, v.complete, v.difficulty) }} background={v.complete}>
                         <ItemTitle background={v.complete}>{v.missionName}</ItemTitle>
                       </MissionItem>
                   )
