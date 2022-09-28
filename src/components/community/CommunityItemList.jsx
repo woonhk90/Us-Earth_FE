@@ -90,10 +90,19 @@ const CommunityGroupTop = styled.div`
 const CommunityGroupTitle = styled.span`
   font: bold 26px/50px "Noto Sans KR", "sans-serif";
 `;
+
+
+
+
+
 const CommunityBox = styled.div`
+  padding:0 16px;
+  box-sizing:border-box;
+
   display: grid;
-  justify-items: center;
-  grid-template-columns: repeat(auto-fill, minmax(50%, auto));
+  justify-content:space-between;
+  grid-template-columns: repeat(auto-fill, minmax(48%, auto));
+  gap:8px;
 `;
 
 
@@ -102,7 +111,6 @@ const CommunityBox = styled.div`
 
 const CommunityItem = styled.div`
   width:100%;
-  padding:2px;
   box-sizing:border-box;
   margin-bottom:25px;
 `;
@@ -110,7 +118,7 @@ const ItemImg = styled.div`
   width: 100%;
   height: 215px;
   @media (max-width: 370px) {
-    height: 175px;
+    /* height: 175px; */
   }
 
   position: relative;
