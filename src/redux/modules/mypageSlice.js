@@ -71,6 +71,7 @@ export const __postNickNameSubmit = createAsyncThunk("usearth/__postNickNameSubm
           memberId: getCookie('memberId'),
         },
       });
+      console.log('returnData->', returnData);
       removeCookie("mycookie");
       setCookie("mycookie", returnData.headers.authorization);
     }
