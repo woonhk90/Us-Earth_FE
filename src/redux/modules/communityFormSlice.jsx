@@ -20,7 +20,7 @@ export const postCommunityDetail = createAsyncThunk("community/postform", async 
     });
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -37,7 +37,7 @@ export const patchCommunityDetail = createAsyncThunk("community/patch", async (p
     });
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -46,10 +46,9 @@ export const patchCommunityDetail = createAsyncThunk("community/patch", async (p
 /* -------------------- delete community detail (Delete) -------------------- */
 export const deleteCommunityDetail = createAsyncThunk("community/delete", async (payload, thunkAPI) => {
   try {
-    await tokenInstance.delete(`/proof/{proofId}`);
-    return thunkAPI.fulfillWithValue(payload);
+    await tokenInstance.delete(`/community/${payload.communityId}`);
   } catch (error) {
-    if(!error.response.data.msg){
+    if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
@@ -66,10 +65,10 @@ export const communityFormSlice = createSlice({
       state.dateLists = action.payload;
     },
     communityFormCleanUp: (state, action) => {
-      state.detail= {}
-      state.dates= {}
-      state.dateLists= []
-      state.error=null
+      state.detail = {}
+      state.dates = {}
+      state.dateLists = []
+      state.error = null
     },
   },
   extraReducers: {
@@ -109,5 +108,5 @@ export const communityFormSlice = createSlice({
   },
 });
 
-export const { addDates, addDateLists,communityFormCleanUp } = communityFormSlice.actions;
+export const { addDates, addDateLists, communityFormCleanUp } = communityFormSlice.actions;
 export default communityFormSlice.reducer;

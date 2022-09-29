@@ -6,24 +6,54 @@ import MyPageTodayMission from './MyPageTodayMission';
 import { useNavigate } from "react-router-dom";
 import icons from '../../assets';
 
+import { __postNickNameOverlap } from '../../redux/modules/mypageSlice';
+import Input from '../elements/Input';
+import { debounce } from "lodash";
+
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   React.useEffect(() => {
     dispatch(__getMyInfo());
   }, [dispatch])
-  const { Chart, Group, RightThinArrow, MoveNext } = icons;
+  const { Chart, Group, RightThinArrow, MoveNext, Check, CheckCancel } = icons;
   const { userInfo } = useSelector((state) => state.mypage);
 
 
+  const [overlapFlag, setOverlapFlag] = React.useState(false);// 중복여부 상태값(true/false)
+  const [userNick, setUserNick] = React.useState(false);
+  const [changeNicName, setChangeNickName] = React.useState('');
+  const onChangeNick = () => {
+    setUserNick(!userNick);
+  }
+
+  /* --------------------------------- 닉네임 변경 --------------------------------- */
+  const debounceSomethingFunc = debounce((val) => {
+    if (val.length > 0) {
+      setOverlapFlag(val);
+    } else {
+      setOverlapFlag(val);
+    }
+    setChangeNickName(val);
+    dispatch(__postNickNameOverlap({ nickname: val }));
+  }, 200);
+
+  const onDebounceChange = event => {
+    debounceSomethingFunc(event.target.value);
+  };
   return (
     <>
       <MyPageWrap>
         <Container>
           <MyPageInfo>
             <MyPageInfoBox>
+              {/* {userNick ?
+                <div><Input inputype="nick" placeholder={userInfo.nickname} onChange={onDebounceChange} maxLength='7' /><span><Check/><CheckCancel/></span></div>
+                :
+                <div>{userInfo?.nickname} <span onClick={onChangeNick}>수정 &gt;</span></div>
+              } */}
               <div>{userInfo?.nickname}</div>
-              <div>LV.{userInfo?.level}</div>
+              <div>LV.{userInfo?.level} 등급</div>
             </MyPageInfoBox>
             <MyPageProFile><img src={userInfo?.profileImage} alt='profileImage' referrerPolicy="no-referrer" /></MyPageProFile>
           </MyPageInfo>
@@ -69,14 +99,24 @@ const MyPageInfo = styled.div`
   align-items: center;
 `;
 const MyPageInfoBox = styled.div`
+  /* border:1px solid red; */
   display: flex;
   flex-direction: column;
+  font-family: 'Noto Sans KR','sans-serif';
+  input{
+    border:1px solid purple;
+  }
   div:nth-child(1) {
-    font: 600 24px/32px "Noto Sans", "sans-serif";
+    font-weight: 600;
+    font-size:24px;
+    line-height:32px;
   }
   div:nth-child(2) {
-    font: 500 20px/28px "Noto Sans", "sans-serif";
+    font-weight: 500;
+    font-size:20px;
+    line-height:28px;
     color: #9b9b9b;
+    letter-spacing:0.05em;
   }
 `;
 const MyPageProFile = styled.div`
