@@ -30,12 +30,9 @@ const CommunityDetail = () => {
     dispatch(__getCommunityDetail({ communityId: param.id }));
   }, [dispatch, param.id]);
   const { communityDetail, isLoading, certifyHasMore } = useSelector((state) => state.community);
-  console.log(communityDetail);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const { certify } = useSelector((state) => state.community);
-  console.log(certify);
-  console.log(certify.length);
   const [page, setPage] = useState(0);
   const { ref, inView, entry } = useInView({
     threshold: 0,
@@ -49,7 +46,6 @@ const CommunityDetail = () => {
       setPage((page) => page + 1);
     }
   }, [inView]);
-  console.log("inView=>", inView);
 
   /* ----------------------------------- 로그인 ---------------------------------- */
   const [loginModal, setLoginModal] = useState(false);
