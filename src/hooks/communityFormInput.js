@@ -12,10 +12,6 @@ const [isContent, setIsContent] = useState("");
     content: "",
   })
 const   { limitScore,limitParticipants,title, content} = text;
-console.log(limitScore)
-console.log(limitParticipants)
-console.log(title)
-console.log(content)
   const textOnChange = (e) =>{
     const { name, value } = e.target;
     setText((form)=>({ ...form, [name]: value }));

@@ -56,11 +56,8 @@ const CommunityProof = () => {
     submit: "예",
   };
 
-  console.log(param.proofId);
-  console.log(param);
   // editMode cancel function
   const clickSubmit = () => {
-    console.log(param.proofId);
     dispatch(deleteProof(param.proofId)).then((response) => {
       if (!response.error) {
         navigate(`/community/detail/${param.communityId}`,{replace:true});
@@ -71,7 +68,7 @@ const CommunityProof = () => {
   const modalOnOff = () => {
     setModal(!modal);
   };
-  console.log(isLoading);
+
   if (isLoading) {
     return (
       <>

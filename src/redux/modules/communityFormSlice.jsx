@@ -18,10 +18,8 @@ export const postCommunityDetail = createAsyncThunk("community/postform", async 
         responseType: "blob",
       },
     });
-    console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    console.log(error);
     if(!error.response.data.msg){
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -37,10 +35,8 @@ export const patchCommunityDetail = createAsyncThunk("community/patch", async (p
         responseType: "blob",
       },
     });
-    console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    console.log(error);
     if(!error.response.data.msg){
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -53,7 +49,6 @@ export const deleteCommunityDetail = createAsyncThunk("community/delete", async 
     await tokenInstance.delete(`/proof/{proofId}`);
     return thunkAPI.fulfillWithValue(payload);
   } catch (error) {
-    console.log(error);
     if(!error.response.data.msg){
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);

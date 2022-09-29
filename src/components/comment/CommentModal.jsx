@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 // import "./Modal.css";
 
 const EditModal = (props) => {
   const { open, close } = props;
   const [isOpen, setIsOpen] = useState(false);
+  const { comments, commentEdit,writeMode } = useSelector((state) => state.comments);
   
   let timeoutId;
   useEffect(() => {
+    
     if (open) {
       setIsOpen(true);
     } else {
@@ -35,6 +38,8 @@ const EditModal = (props) => {
           e.stopPropagation();
         }}
       >
+        
+        <WriteHeight height={writeMode}></WriteHeight>
         <div>{props.children}</div>
       </Stsection>
     </StModal>
@@ -109,9 +114,7 @@ const slideHide = keyframes`
 `;
 
 const Stsection = styled.section`
-  background-color: white;
   position: absolute;
-  border-radius: 30px 30px 0 0;
   width: 100%;
   height: auto;
   bottom: 0px;
@@ -130,3 +133,9 @@ const Stsection = styled.section`
 `;
 
 const StMain = styled.main``;
+
+const WriteHeight = styled.div`
+height: ${(props)=>`${props.height-65}px`};
+/* display:${(props)=> props.height ? null : 'none'}; */
+background-color:transparent;
+`;

@@ -20,11 +20,10 @@ const CommentBox = () => {
   const cookies = new Cookies();
   const param = useParams();
   const dispatch = useDispatch();
-  const { heartCommentCnt} = useSelector((state) => state.heartComment);
-  const { comments, commentEdit } = useSelector((state) => state.comments);
+  const { heartCommentCnt } = useSelector((state) => state.heartComment);
+  const { comments, commentEdit, writeMode } = useSelector((state) => state.comments);
   const participant = heartCommentCnt.participant;
   const editMode = commentEdit.editMode;
-
   const [userToken, setUserToken] = useState(false);
 
   const [commentModal, setCommentModal] = useState(false);
@@ -128,11 +127,14 @@ const CommentBox = () => {
 export default React.memo(CommentBox);
 
 const ButtonInModalWrap = styled.div`
+border-radius: 30px 30px 0 0;
+background-color: white;
   width: 100%;
   ${flexColumn};
 `;
 
-const StHeader = styled.header`
+const StHeader = styled.div`
+
   box-sizing: border-box;
   text-align: left;
   width: 100%;
