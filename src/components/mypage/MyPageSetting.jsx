@@ -10,6 +10,9 @@ import { debounce } from "lodash";
 import { useNavigate } from 'react-router-dom';
 import { instance } from '../../api/axios';
 import axios from 'axios';
+import Logo_K from '../../assets/logo_kakao.png';
+import Logo_N from '../../assets/logo_naver.png';
+import Logo_G from '../../assets/logo_google.png';
 
 
 
@@ -65,7 +68,6 @@ const MyPage = () => {
 
 
 
-
   // const [list, setList] = React.useState([]);
   // const getPopularGroupItemList = async () => {
   //   const response = await instance.get("/community/active");
@@ -86,7 +88,7 @@ const MyPage = () => {
         Authorization: getCookie('mycookie'),
       },
     });
-    if(response.status===200){
+    if (response.status === 200) {
       await removeCookie('mycookie');
       await removeCookie('refreshToken');
       await removeCookie('memberId');
@@ -102,7 +104,12 @@ const MyPage = () => {
         <Container>
           <LoginInfo>
             <LoginInfoTitle>로그인 정보</LoginInfoTitle>
-            <LoginInfoContent>{userInfo.username}</LoginInfoContent>
+            <LoginInfoContent>
+              {userInfo.loginType === 'GOOGLE' ? <img src={Logo_G} alt="logoImg" /> : null}
+              {userInfo.loginType === 'KAKAO' ? <img src={Logo_K} alt="logoImg" /> : null}
+              {userInfo.loginType === 'NAVER' ? <img src={Logo_N} alt="logoImg" /> : null}
+              {userInfo.username}
+            </LoginInfoContent>
           </LoginInfo>
           <NickInfo>
             {!nickFlag ?
@@ -152,11 +159,17 @@ const LoginInfo = styled.div`
 const LoginInfoTitle = styled.h2`
   font: 500 18px/1 "Noto sans", "sans-serif";
 `;
-const LoginInfoContent = styled.p`
+const LoginInfoContent = styled.div`
   font: 16px/1 "Noto sans", "sans-serif";
   color: #7b7b7b;
   padding: 20px 0 28px;
   box-sizing: border-box;
+  display:flex;
+  align-items:center;
+  img{
+    width:20px;
+    margin-right:10px;
+  }
 `;
 
 const NickInfo = styled.div`
