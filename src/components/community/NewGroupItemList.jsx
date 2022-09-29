@@ -99,7 +99,7 @@ const ItemFlag = styled.div`
 const NewGroupItemTitle = styled.div`
   padding:5px 0;
   font-weight:bold;
-  font-size:20px;
+  font-size:17px;
   line-height:25px;
   letter-spacing:-0.1em;
 

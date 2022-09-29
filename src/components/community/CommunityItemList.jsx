@@ -123,7 +123,7 @@ const ItemImg = styled.div`
   background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg}) no-repeat center center;
   background-size: cover;
   color: #fff;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   
   border-radius:6px;
   box-sizing:border-box;
@@ -163,7 +163,11 @@ const ItemImg = styled.div`
   }
 `;
 const ItemTitle = styled.div`
-  font: bold 20px/1 "Noto Sans KR", "sans-serif";
+  font-weight: bold;
+  font-size:17px;
+  line-height:25px;
+  font-family:"Noto Sans KR", "sans-serif";
+
   /* 말줄임 */
   /* white-space:nowrap; */
   overflow: hidden;
