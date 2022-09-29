@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import styled, { css } from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
-import useInputs from "../../hooks/useInputs";
 import Input from "../elements/Input";
 import Textarea from "../elements/Textarea";
 import CalendarModal from "./CalendarModal";
@@ -17,6 +16,7 @@ import ImageLoading from "../etc/ImageLoading";
 import ErrorModal from "../Modals/ErrorModal";
 import SeceletonFormEdit from "./SceletonFormEdit";
 import { tokenInstance } from "../../api/axios";
+import dayjs from "dayjs";
 
 const CommunityFormEdit = () => {
   const navigate = useNavigate();
@@ -33,13 +33,13 @@ const CommunityFormEdit = () => {
       setGetError(null);
       setIsGetLoading(true);
       const { data } = await tokenInstance.get(`/community/${communityId}`);
-            if (!data.writer) navigate("/community");
+      if (!data.writer) navigate("/community");
       setSecret(data.secret);
       setPassword(data.password);
-      setTitle(data.title)
-      setContent(data.content)
-      setLimitScore(data.limitScore)
-      setLimitParticipants(data.limitParticipants)
+      setTitle(data.title);
+      setContent(data.content);
+      setLimitScore(data.limitScore);
+      setLimitParticipants(data.limitParticipants);
 
       dispatch(
         addDates({
@@ -59,6 +59,7 @@ const CommunityFormEdit = () => {
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
+  const toDay = dayjs(new Date()).format("YYYY-MM-DD");
 
   /* ----------------------------------- 입력값 ---------------------------------- */
   const [secret, setSecret] = useState(false);
@@ -67,7 +68,16 @@ const CommunityFormEdit = () => {
   const [limitScore, setLimitScore] = useState("");
   const [limitParticipants, setLimitParticipants] = useState("");
   const [password, setPassword] = useState("");
-  
+
+  const textRef = useRef();
+  const handleResizeHeight =() => {
+    textRef.current.style.height = `64px`;
+    if (textRef.current.scrollHeight < 128) {
+      textRef.current.style.height = `64px`;
+      textRef.current.style.height = textRef.current.scrollHeight + "px";
+    } 
+  }
+
   /* --------------------------------- 입력값 메세지 -------------------------------- */
   const [isLimitScore, setIsLimitScore] = useState("");
   const [isLimitParticipants, setIsLimitParticipants] = useState("");
@@ -133,7 +143,6 @@ const CommunityFormEdit = () => {
       setIsContent("그룹 소개를 입력해주세요");
     } else setIsContent("");
   };
-
 
   /* --------------------------------- 사진 업로드 --------------------------------- */
   const [imageFile, setImageFile] = useState([]);
@@ -208,7 +217,7 @@ const CommunityFormEdit = () => {
   //   }
   // };
 
-/* ----------------------------------- 제출 ----------------------------------- */
+  /* ----------------------------------- 제출 ----------------------------------- */
   const submitHandler = async () => {
     let formData = new FormData();
     const dataSet = {
@@ -233,13 +242,18 @@ const CommunityFormEdit = () => {
 
   useEffect(() => {
     getCommunityDetail(param.id);
+    handleResizeHeight();
     return () => {
       dispatch(communityFormCleanUp());
       imageFile.forEach((file) => URL.revokeObjectURL(file.preview));
     };
   }, []);
 
-/* --------------------------------- 로딩 & 에러 -------------------------------- */
+  useEffect(() => {
+    handleResizeHeight();
+  }, [title]);
+
+  /* --------------------------------- 로딩 & 에러 -------------------------------- */
 
   if (isGetLoading) {
     return (
@@ -309,7 +323,19 @@ const CommunityFormEdit = () => {
           </CheckBoxWrapper> */}
         </TopTextWrap>
         <InputWrap>
-          <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={onChangeTitle}></Input>
+          <Textarea
+            textareaRef={textRef}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") e.preventDefault();
+            }}
+            onInput={handleResizeHeight}
+            maxLength="30"
+            textareaType="communityForm"
+            placeholder="그룹명을 입력해 주세요"
+            name="title"
+            value={title}
+            onChange={onChangeTitle}
+          ></Textarea>
           <MessageP>{isTitle}</MessageP>
         </InputWrap>
         {/* {secret ? (
@@ -334,83 +360,89 @@ const CommunityFormEdit = () => {
           }}
         >
           <P>진행 기간*</P>
-          {dates.start?.length > 0 && dates.end?.length > 0 ? (
-            <SelectDateP color={"#222222"}>
-              {dates.start}-{dates.end}
-            </SelectDateP>
-          ) : (
-            <>
-              <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
-              <MessageP>{isdate}</MessageP>
-            </>
-          )}
+
+          <InputWrap>
+            {dates.start?.length > 0 && dates.end?.length > 0 ? (
+              <>
+                <SelectDateP color={"#222222"}>
+                  {dates.start}-{dates.end}
+                </SelectDateP>
+                <MessageP>{toDay === dates.start ? `진행 이후에는 수정 및 삭제가 불가능합니다.` : null}</MessageP>
+              </>
+            ) : (
+              <>
+                <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
+                <MessageP>{isdate}</MessageP>
+              </>
+            )}
+          </InputWrap>
         </div>
         {modal && <CalendarModal closeModal={() => setModal(!modal)}></CalendarModal>}
         <P>참여인원*</P>
         <InputWrap>
-            <Input
-              inputype="basic"
-              maxLength="2"
-              placeholder="인원을 입력해 주세요(최대 10명)"
-              type="tel"
-              name="limitParticipants"
-              value={limitParticipants}
-              onChange={onChangelimitParticipants}
-            ></Input>
-            <MessageP>{isLimitParticipants}</MessageP>
-          </InputWrap>
-          <P>목표달성 수*</P>
-          <InputWrap>
-            <Input
-              inputype="basic"
-              maxLength="3"
-              type="tel"
-              name="limitScore"
-              placeholder="목표달성 수를 입력해주세요(최대 100)"
-              value={limitScore}
-              onChange={onChangelimitScore}
-            ></Input>
-            <MessageP limitScore={true}>{isLimitScore}</MessageP>
-          </InputWrap>
-          <P>그룹소개*</P>
-          <InputWrap>
-            <Textarea
-              placeholder="소개글을 입력해 주세요"
-              cols="50"
-              rows="8"
-              maxLength="255"
-              name="content"
-              textareaType="basic"
-              value={content}
-              onChange={onChangeContent}
-            ></Textarea>
-            <MessageP bottom={true}>{isContent}</MessageP>
-          </InputWrap>
-        </CommunityFormWrap>
-        <BottomWrap>
-          {/^([1-9]|10)$/.test(limitParticipants) &&
-          /^[1-9][0-9]?$|^100/.test(limitScore) &&
-          parseInt(limitScore) >= parseInt(limitParticipants) &&
-          title.trim() !== "" &&
-          content.trim() !== "" &&
-          dates.end?.length > 0 &&
-          secret === isPassword ? (
-            <BottomButton
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={submitHandler}
-              bgColor={"#315300"}
-              color={"white"}
-            >
-              그룹 등록
-            </BottomButton>
-          ) : (
-            <BottomButton onClick={validation} bgColor={"#EDEDED"} color={"#BEBEBE"}>
-              그룹 등록
-            </BottomButton>
-          )}
-        </BottomWrap>
+          <Input
+            inputype="basic"
+            maxLength="2"
+            placeholder="인원을 입력해 주세요(최대 10명)"
+            type="tel"
+            name="limitParticipants"
+            value={limitParticipants}
+            onChange={onChangelimitParticipants}
+          ></Input>
+          <MessageP>{isLimitParticipants}</MessageP>
+        </InputWrap>
+        <P>목표달성 수*</P>
+        <InputWrap>
+          <Input
+            inputype="basic"
+            maxLength="3"
+            type="tel"
+            name="limitScore"
+            placeholder="목표달성 수를 입력해주세요(최대 100)"
+            value={limitScore}
+            onChange={onChangelimitScore}
+          ></Input>
+          <MessageP limitScore={true}>{isLimitScore}</MessageP>
+        </InputWrap>
+        <P>그룹소개*</P>
+        <InputWrap>
+          <Textarea
+            placeholder="소개글을 입력해 주세요"
+            cols="50"
+            rows="8"
+            maxLength="255"
+            name="content"
+            textareaType="basic"
+            value={content}
+            onChange={onChangeContent}
+          ></Textarea>
+          <MessageP bottom={true}>{isContent}</MessageP>
+        </InputWrap>
+      </CommunityFormWrap>
+      <BottomWrap>
+        {/^([1-9]|10)$/.test(limitParticipants) &&
+        /^[1-9][0-9]?$|^100/.test(limitScore) &&
+        parseInt(limitScore) >= parseInt(limitParticipants) &&
+        title.trim() !== "" &&
+        content.trim() !== "" &&
+        dates.end?.length > 0 &&
+        secret === isPassword ? (
+          <BottomButton
+            style={{
+              cursor: "pointer",
+            }}
+            onClick={submitHandler}
+            bgColor={"#315300"}
+            color={"white"}
+          >
+            그룹 등록
+          </BottomButton>
+        ) : (
+          <BottomButton onClick={validation} bgColor={"#EDEDED"} color={"#BEBEBE"}>
+            그룹 등록
+          </BottomButton>
+        )}
+      </BottomWrap>
     </>
   );
 };
@@ -646,6 +678,7 @@ const P = styled.p`
 
 const InputWrap = styled.div`
   position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
 `;
 
 const MessageP = styled.p`
@@ -681,10 +714,9 @@ const SelectDateP = styled.p`
   font-size: 22px;
   padding: 10px 0 26px 0;
   font-weight: 700;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
   color: ${(props) => props.color};
 
-  @media (max-width: 390px) {
+  @media (max-width: 389px) {
     font-size: 20px;
   }
 `;
@@ -696,7 +728,6 @@ const DateP = styled.p`
   font-size: 22px;
   padding: 5px 0 26px 0;
   font-weight: 700;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
   color: ${(props) => props.color};
 
   @media (min-width: 281px) and (max-width: 389px) {

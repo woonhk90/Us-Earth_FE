@@ -48,7 +48,7 @@ const ChildrenWrap = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 1px 3px 5px 3px #cecece33;
-  width: 390px;
+  width: 389px;
   left: 240px;
 
   @media (min-width: 541px) and (max-width: 900px) {

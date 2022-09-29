@@ -359,7 +359,7 @@ const CommentTextarea = styled.textarea`
     color: #939393;
   }
 
-  @media (max-width: 390px) {
+  @media (max-width: 389px) {
     font-size: 14px;
   }
 `;
