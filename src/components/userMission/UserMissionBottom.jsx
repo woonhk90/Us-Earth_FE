@@ -88,7 +88,7 @@ const SelectDateMissionListWrap = styled.div`
   .dot4 {
     background-color: ${colors.dot5};
   }
-  @media (max-width: 390px) {
+  @media (max-width: 389px) {
     padding: 12px;
   }
 `;
@@ -104,7 +104,7 @@ const SelectDateMissionDot = styled.div`
   border-radius: 50%;
   margin-right: 17px;
 
-  @media (max-width: 390px) {
+  @media (max-width: 389px) {
     width: 18px;
     height: 18px;
   }
