@@ -15,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { addDates, postCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { clearVal } from "../../redux/modules/communitySlice";
 import isLogin from "../../lib/isLogin";
+import dayjs from "dayjs";
 
 const CommunityForm = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const CommunityForm = () => {
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
+  const toDay = dayjs(new Date()).format("YYYY-MM-DD")
 
   /* ----------------------------------- 입력값 ---------------------------------- */
   const [secret, setSecret] = useState(false);
@@ -290,9 +292,13 @@ const CommunityForm = () => {
             <P>진행 기간*</P>
             <InputWrap>
               {dates.start?.length > 0 && dates.end?.length > 0 ? (
+                <>
                 <SelectDateP color={"#222222"}>
                   {dates.start}-{dates.end}
                 </SelectDateP>
+                  {/* <MessageP>{toDay === dates.start ? `시작일자를 '오늘'로 하는 경우 참여인원을 모집할 수 없습니다.` : null}</MessageP> */}
+                  </>
+                
               ) : (
                 <>
                   <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>

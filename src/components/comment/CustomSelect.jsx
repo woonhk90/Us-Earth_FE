@@ -60,7 +60,7 @@ export default CustomSelect;
 const SelectBox = styled.div`
 
   position: relative;
-  width: 40px;
+  width: 30px;
   height: 30px;
   box-sizing: border-box;
   align-self: center;
@@ -119,7 +119,7 @@ const EditIcon = styled.div`
 
   /* padding:2px; */
   top: -10px;
-  right: 10px;
+  right: 0px;
   color: #49c181;
   font-size: 20px;
 `;

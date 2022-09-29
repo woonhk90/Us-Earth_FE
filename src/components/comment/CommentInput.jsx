@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
-import { postComment } from "../../redux/modules/commentsSlice";
+import { commentWriteMode, postComment } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
 import { ReactComponent as Camera } from "../../assets/camera.svg";
 import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
@@ -21,8 +21,9 @@ const CommentInput = ({ userToken }) => {
   const { dateStatus } = useSelector((state) => state.comments.comments);
   const [inputOn, setInputOn] = useState(false);
   const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
-console.log(param.proofId)
   const textRef = useRef();
+  const [height, setHeight] = useState(0);
+
   const handleResizeHeight = useCallback(() => {
     textRef.current.style.height = `40px`;
     if (textRef.current.scrollHeight < 100) {
@@ -64,6 +65,8 @@ console.log(param.proofId)
 
   const clickInputOutside = (event) => {
     setInputOn(inputRef.current.contains(event.target));
+    setHeight(inputRef.current.clientHeight);
+    dispatch(commentWriteMode(inputRef.current.clientHeight));
   };
 
   /* ---------------------------------- 사진 업로드 ---------------------------------- */
@@ -75,7 +78,7 @@ console.log(param.proofId)
 
   const addImageFile = async (e) => {
     setIsPhotoMessage("");
-    const acceptImageFiles = ["image/png", "image/jpeg","image/jpg"];
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/jpg"];
     const imageFile = e.target.files[0];
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
@@ -109,28 +112,27 @@ console.log(param.proofId)
   const deleteImageFile = () => {
     setImageFile([]);
     setPreviewImg([]);
-    setIsPhotoMessage("")
+    setIsPhotoMessage("");
   };
   /* ---------------------------------- submit ---------------------------------- */
   const onClickSubmit = () => {
     if (upLoading === 100) {
-      if(content.trim() === ""){
-       return setIsPhotoMessage("내용을 입력해주세요.")
+      if (content.trim() === "") {
+        return setIsPhotoMessage("내용을 입력해주세요.");
       }
       if (participant && dateStatus === "ongoing") {
         let formData = new FormData();
-          formData.append("multipartFile", imageFile);
-          formData.append("dto", new Blob([JSON.stringify({ content: content.trim() })], { type: "application/json" }));
-          dispatch(postComment({ proofId: param.proofId, formData: formData }));
-          setInputOn(false);
-          commentReset();
-          setImageFile([]);
-          setPreviewImg([]);
-          textRef.current.style.height = `auto`;
+        formData.append("multipartFile", imageFile);
+        formData.append("dto", new Blob([JSON.stringify({ content: content.trim() })], { type: "application/json" }));
+        dispatch(postComment({ proofId: param.proofId, formData: formData }));
+        setInputOn(false);
+        commentReset();
+        setImageFile([]);
+        setPreviewImg([]);
+        textRef.current.style.height = `auto`;
       }
     }
   };
-
 
   return (
     <>
@@ -181,6 +183,8 @@ console.log(param.proofId)
               onChange={(e) => {
                 setIsPhotoMessage("");
                 commentOnChange(e);
+
+                dispatch(commentWriteMode(content.length));
               }}
               placeholder="댓글을 입력해주세요"
               ref={textRef}

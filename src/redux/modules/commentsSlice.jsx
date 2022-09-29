@@ -9,6 +9,7 @@ const initialState = {
     editMode: false,
     commentId: "",
   },
+  writeMode:"",
   isLoading: false,
   getIsLoading: false,
   error: null,
@@ -26,10 +27,8 @@ export const postComment = createAsyncThunk("comment/post", async (payload, thun
     });
     // thunkAPI.dispatch(getComments(payload.proofId));
     thunkAPI.dispatch(getHeartCommentCnt(payload.proofId));
-    console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    console.log(error);
     if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -40,10 +39,8 @@ export const postComment = createAsyncThunk("comment/post", async (payload, thun
 export const getComments = createAsyncThunk("comment/get", async (proofId, thunkAPI) => {
   try {
     const { data } = await tokenInstance.get(`/comments/${proofId}`);
-    console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    console.log(error);
     if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -59,13 +56,11 @@ export const patchComment = createAsyncThunk("comment/patch", async (payload, th
         responseType: "blob",
       },
     });
-    console.log(data);
     // thunkAPI.dispatch(getComments(payload.proofId));
     thunkAPI.dispatch(commentEditChange({}));
 
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    console.log(error);
     thunkAPI.dispatch(commentEditChange({}));
     if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
@@ -79,10 +74,8 @@ export const deleteComments = createAsyncThunk("comment/delete", async (payload,
     const data = await tokenInstance.delete(`/comments/${payload.commentId}`);
     // thunkAPI.dispatch(getComments(payload.proofId));
     thunkAPI.dispatch(getHeartCommentCnt(payload.proofId));
-    console.log(data);
     return thunkAPI.fulfillWithValue(payload.commentId);
   } catch (error) {
-    console.log(error);
     if (!error.response.data.msg) {
       return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
     } else return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -98,6 +91,9 @@ export const commentsSlice = createSlice({
     },
     commentEditChange: (state, action) => {
       state.commentEdit = action.payload;
+    },
+    commentWriteMode:(state, action) => {
+      state.writeMode = action.payload;
     },
     commentClearUp: (state) => {
       state.comments = [];
@@ -170,5 +166,5 @@ export const commentsSlice = createSlice({
   },
 });
 
-export const { commentSelectBox, commentEditChange, commentClearUp } = commentsSlice.actions;
+export const { commentSelectBox, commentEditChange, commentClearUp,commentWriteMode } = commentsSlice.actions;
 export default commentsSlice.reducer;
