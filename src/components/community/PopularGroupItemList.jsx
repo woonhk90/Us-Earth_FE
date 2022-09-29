@@ -107,7 +107,7 @@ const ItemFlag = styled.div`
 const PopularGroupItemTitle = styled.p`
   padding:5px 0;
   font-weight:bold;
-  font-size:20px;
+  font-size:17px;
   line-height:25px;
   letter-spacing:-0.1em;
 
