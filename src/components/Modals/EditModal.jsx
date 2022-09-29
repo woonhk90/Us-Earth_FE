@@ -37,7 +37,7 @@ const EditModal = (props) => {
       >
         <StHeader></StHeader>
         <ButtonInModalWrap>{props.children}</ButtonInModalWrap>
-        <Footer>취소</Footer>
+        <Footer onClick={close}>취소</Footer>
       </Stsection>
     </StModal>
   );

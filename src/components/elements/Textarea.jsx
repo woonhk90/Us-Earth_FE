@@ -90,9 +90,9 @@ const StTextarea = styled.textarea`
         height: 64px;
         font-weight: 600;
 
-        /* @media (max-width: 390px) {
-    font-size: 18px;
-  } */
+        @media (max-width: 389px) {
+    font-size: 20px;
+  }
       `
     );
   }}

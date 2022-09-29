@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { __getPopularGroupItemList } from "../../redux/modules/communitySlice";
-import { getPopularGroupItemList } from "../../api/communityApi";
 import { instance } from "../../api/axios";
 
 import 'swiper/css';
