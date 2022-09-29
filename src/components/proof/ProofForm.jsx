@@ -16,14 +16,19 @@ const ProofForm = ({ ProofFormData }) => {
   const navigate = useNavigate();
   const textRef = useRef();
   const param = useParams();
-  
+
   const handleResizeHeight = useCallback(() => {
-    if (textRef.current.scrollHeight < 250) {
-      textRef.current.style.height = `64px`;
+    textRef.current.style.height = `64px`;
+    if (textRef.current.scrollHeight > 64) {
+      textRef.current.style.height = `auto`;
       textRef.current.style.height = textRef.current.scrollHeight + "px";
     }
   }, []);
 
+  
+  useEffect(() => {
+    handleResizeHeight();
+  }, []);
   const {
     files: files,
     previewImg: previewImg,
@@ -50,67 +55,65 @@ const ProofForm = ({ ProofFormData }) => {
             <IconDiv>
               <Back
                 onClick={() => {
-                  navigate(`/community/detail/${param.communityId}`,{replace:true});
+                  navigate(`/community/detail/${param.communityId}`, { replace: true });
                 }}
               />
             </IconDiv>
-            <HeaderP disabled={!(title.trim() !== "" && content.trim() !== "" && files.length > 0 && upLoading === 100 )} onClick={submitHandler}>
+            <HeaderP disabled={!(title.trim() !== "" && content.trim() !== "" && files.length > 0 && upLoading === 100)} onClick={submitHandler}>
               {submitButton}
             </HeaderP>
           </HeaderWrap>
         </Header>
       </>
       <CommunityFormWrap>
-          <AddPhotoWrap>
-            <Stform encType="multipart/form-data">
-              <Container>
-                <label htmlFor={upLoading < 100 ? null : "file"}>
-                  <StIcon>
-                    <CameraIcon>
-                      <CameraWh />
-                    </CameraIcon>
-                  </StIcon>
-                  <ImageLength>{`(${previewImg.length}/5)`}</ImageLength>
-                </label>
-                <StImageInput multiple type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
+        <AddPhotoWrap>
+          <Stform encType="multipart/form-data">
+            <Container>
+              <label htmlFor={upLoading < 100 ? null : "file"}>
+                <StIcon>
+                  <CameraIcon>
+                    <CameraWh />
+                  </CameraIcon>
+                </StIcon>
+                <ImageLength>{`(${previewImg.length}/5)`}</ImageLength>
+              </label>
+              <StImageInput multiple type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
+            </Container>
+          </Stform>
+          {previewImg?.map((image, index) => {
+            return (
+              <Container key={index}>
+                <StButton onClick={() => deleteImageFile(image, index)}>
+                  <CancelIcon>{/* <Cancel/> */}</CancelIcon>
+                </StButton>
+                <Thumb src={image.imgUrl} alt="img" />
               </Container>
-            </Stform>
-            {previewImg?.map((image, index) => {
-              return (
-                <Container key={index}>
-                  <StButton onClick={() => deleteImageFile(image, index)}>
-                    <CancelIcon>{/* <Cancel/> */}</CancelIcon>
-                  </StButton>
-                  <Thumb src={image.imgUrl} alt="img" />
-                </Container>
-              );
-            })}
-            {upLoading < 100 ? (
-              <Container>
-                <LoadingWrap>
-                  <LoadingPosition>
-                    <ImageLoading />
-                  </LoadingPosition>
-                </LoadingWrap>
-              </Container>
-            ) : null}
+            );
+          })}
+          {upLoading < 100 ? (
+            <Container>
+              <LoadingWrap>
+                <LoadingPosition>
+                  <ImageLoading />
+                </LoadingPosition>
+              </LoadingWrap>
+            </Container>
+          ) : null}
           <ErrorMessage>{isPhotoMessage}</ErrorMessage>
-          </AddPhotoWrap>
+        </AddPhotoWrap>
         <BottomWrap>
           <Textarea
             textareaRef={textRef}
             onInput={handleResizeHeight}
-            onKeyPress={e => {
-              if(e.key === 'Enter')
-                 e.preventDefault()
-              }}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") e.preventDefault();
+            }}
             textareaType="proofTop"
             maxLength="30"
             placeholder="제목"
             name="title"
             value={title}
             onChange={inputOnChangeHandler}
-            
           ></Textarea>
           <Textarea
             cols="50"
@@ -135,13 +138,12 @@ const CommunityFormWrap = styled.div`
   position: relative;
 `;
 
-
 const AddPhotoWrap = styled.div`
-position: relative;
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 
-  @media (max-width: 390px) {
+  @media (max-width: 389px) {
     grid-template-columns: 1fr 1fr;
   }
   flex-wrap: wrap;
@@ -271,8 +273,8 @@ const IconDiv = styled.div`
 `;
 
 const HeaderP = styled.button`
-display: flex;
-align-items: center;
+  display: flex;
+  align-items: center;
   cursor: pointer;
   border: none;
   background-color: transparent;
@@ -287,7 +289,7 @@ align-items: center;
 
 const ErrorMessage = styled.div`
   position: absolute;
-  bottom:-15px;
+  bottom: -15px;
   left: 0;
   font-weight: 200;
   font-size: 14px;

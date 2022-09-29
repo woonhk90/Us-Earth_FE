@@ -64,7 +64,7 @@ const CommunityFormWrap = styled.div`
 const AddPhotoWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  @media (max-width: 390px) {
+  @media (max-width: 389px) {
     grid-template-columns: 1fr 1fr;
   }
   flex-wrap: wrap;

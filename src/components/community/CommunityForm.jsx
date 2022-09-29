@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef,useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
@@ -35,6 +35,16 @@ const CommunityForm = () => {
   const [limitScore, setLimitScore] = useState("");
   const [limitParticipants, setLimitParticipants] = useState("");
   const [password, setPassword] = useState("");
+
+  const textRef = useRef();
+  const handleResizeHeight = useCallback(() => {
+    textRef.current.style.height = `64px`;
+    if (textRef.current.scrollHeight < 128) {
+      textRef.current.style.height = `64px`;
+      textRef.current.style.height = textRef.current.scrollHeight + "px";
+    } 
+  }, []);
+
   
   /* --------------------------------- 입력값 메세지 -------------------------------- */
   const [isLimitScore, setIsLimitScore] = useState("");
@@ -265,7 +275,15 @@ const CommunityForm = () => {
             </CheckBoxWrapper> */}
           </TopTextWrap>
           <InputWrap>
-            <Input maxLength="30" inputype="basic" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={onChangeTitle}></Input>
+            <Textarea 
+            
+            rows="2"
+              textareaRef={textRef}
+              onKeyPress={e => {
+                if(e.key === 'Enter')
+                   e.preventDefault()
+                }}
+              onInput={handleResizeHeight} maxLength="30" textareaType="communityForm" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={onChangeTitle}></Textarea>
             <MessageP>{isTitle}</MessageP>
           </InputWrap>
           {/* {secret ? (
@@ -296,7 +314,7 @@ const CommunityForm = () => {
                 <SelectDateP color={"#222222"}>
                   {dates.start}-{dates.end}
                 </SelectDateP>
-                  {/* <MessageP>{toDay === dates.start ? `시작일자를 '오늘'로 하는 경우 참여인원을 모집할 수 없습니다.` : null}</MessageP> */}
+                  <MessageP date={true}>{toDay === dates.start ? `진행 이후에는 수정 및 삭제가 불가능합니다.` : null}</MessageP>
                   </>
                 
               ) : (
@@ -609,6 +627,8 @@ const P = styled.p`
 
 const InputWrap = styled.div`
   position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+        
 `;
 
 const MessageP = styled.p`
@@ -626,7 +646,7 @@ const MessageP = styled.p`
 
   @media (max-width: 389px) {
     ${(props) =>
-      props.limitScore &&
+      props.limitScore || props.date &&
       css`
         font-size: 12px;
         bottom: 3px;
@@ -644,10 +664,9 @@ const SelectDateP = styled.p`
   font-size: 22px;
   padding: 10px 0 26px 0;
   font-weight: 700;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
   color: ${(props) => props.color};
 
-  @media (max-width: 390px) {
+  @media (max-width: 389px) {
     font-size: 20px;
   }
 `;
@@ -659,7 +678,6 @@ const DateP = styled.p`
   font-size: 22px;
   padding: 5px 0 26px 0;
   font-weight: 700;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
   color: ${(props) => props.color};
 
   @media (min-width: 281px) and (max-width: 389px) {

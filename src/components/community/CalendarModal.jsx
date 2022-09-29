@@ -332,4 +332,7 @@ const FooterMenus = styled.button`
   font-weight: 600;
   color: ${(props) => props.color};
   background-color: ${(props) => props.bgColor};
+  @media (max-width: 389px) {
+    font-size: 17px;
+  }
   `;
