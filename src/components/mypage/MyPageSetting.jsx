@@ -116,13 +116,13 @@ const MyPage = () => {
                 <OverlapFlagBox><OverlapFlagContent color={overlapFlag ? 'black' : 'red'}>사용{overlapFlag ? '가능한' : '불가능한'} 닉네임 입니다.</OverlapFlagContent></OverlapFlagBox>
               </>)}
           </NickInfo>
-          <MyPageFlag>
+          {/* <MyPageFlag>
             <MyPageFlagTitle>내정보 페이지 비공개</MyPageFlagTitle>
             <CheckBoxWrapper>
               <CheckBox secret={userInfo.secret} onClick={() => onSecretHandler(!userInfo.secret)} id="checkbox" type="checkbox" />
               <CheckBoxLabel secret={userInfo.secret} htmlFor="checkbox" />
             </CheckBoxWrapper>
-          </MyPageFlag>
+          </MyPageFlag> */}
           <div>
             <LogoutBtn onClick={onLogoutHandler}>로그아웃</LogoutBtn>
           </div>
