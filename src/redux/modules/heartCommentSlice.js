@@ -21,7 +21,6 @@ export const getHeartCommentCnt = createAsyncThunk("proof/heartComment", async (
 export const patchHeartCnt = createAsyncThunk("proof/Heart", async (proofId, thunkAPI) => {
   try {
     const { data } = await tokenInstance.patch(`/proof/heart/${proofId}`);
-    console.log(data);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.message);

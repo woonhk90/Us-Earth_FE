@@ -15,7 +15,6 @@ export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (
         const { data } = await tokenInstance.get(`/mypage/stats/day?targetDay=${targetDay}`);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    console.log(error);
     return thunkAPI.rejected(error);
   }
 });
@@ -29,7 +28,6 @@ export const getPeriodMissionStats = createAsyncThunk("periodMission/get", async
     });
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    console.log(error);
     return thunkAPI.rejected(error);
   }
 });

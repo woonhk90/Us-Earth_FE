@@ -6,29 +6,19 @@ import ChangingProgressProvider from "./ChangingProgressProvider";
 import { useSelector } from "react-redux";
 
 const Chart = ({ chartInfo }) => {
-  const [chartFlag, setChartFlag] = React.useState("좋음");
   const [colorFlag, setColorFlag] = React.useState("0000ff");
   React.useEffect(() => {
     if (chartInfo.risk === "좋음") {
-      // setColorFlag('linear-gradient(90deg, #e8e8e8 0px, #f8f8f8 40px, #e8e8e8 80px)');
       setColorFlag("00b3ff96");
     } else if (chartInfo.risk === "보통") {
-      // setColorFlag('linear-gradient(90deg, #e8e8e8 0px, #f8f8f8 40px, #e8e8e8 80px)');
       setColorFlag("01d33694");
     } else if (chartInfo.risk === "나쁨") {
       setColorFlag("ffe353");
-      // setColorFlag('linear-gradient(90deg, #e8e8e8 0px, #f8f8f8 40px, #e8e8e8 80px)');
     } else if (chartInfo.risk === "매우나쁨") {
-      // setColorFlag('linear-gradient(90deg, #e8e8e8 0px, #f8f8f8 40px, #e8e8e8 80px)');
       setColorFlag("ff000057");
-
-      // background: linear-gradient(90deg, #e8e8e8 0px, #f8f8f8 40px, #e8e8e8 80px);
     }
   }, []);
-  const { infoEnvironment } = useSelector((state) => state.info);
-  console.log(infoEnvironment);
-  const stats = (chartInfo.amount / chartInfo.maxAmount) * 100;
-  console.log(stats);
+  
   return (
     <>
       <ProgressWrap>

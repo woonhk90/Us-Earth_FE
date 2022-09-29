@@ -21,10 +21,9 @@ const CommentInput = ({ userToken }) => {
   const { dateStatus } = useSelector((state) => state.comments.comments);
   const [inputOn, setInputOn] = useState(false);
   const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
-  console.log(param.proofId);
   const textRef = useRef();
   const [height, setHeight] = useState(0);
-  // console.log(height)
+
   const handleResizeHeight = useCallback(() => {
     textRef.current.style.height = `40px`;
     if (textRef.current.scrollHeight < 100) {
@@ -69,7 +68,6 @@ const CommentInput = ({ userToken }) => {
     setHeight(inputRef.current.clientHeight);
     dispatch(commentWriteMode(inputRef.current.clientHeight));
   };
-  console.log(inputOn);
 
   /* ---------------------------------- 사진 업로드 ---------------------------------- */
 

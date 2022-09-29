@@ -50,7 +50,6 @@ const CommunityFormEdit = () => {
       setPreviewImg([data.img]);
       setIsPassword(data.secret);
     } catch (error) {
-      console.log(error);
       setGetError(error.response.data.message);
     }
     setIsGetLoading(false);
@@ -226,7 +225,6 @@ const CommunityFormEdit = () => {
     formData.append("multipartFile", imageFile);
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     await dispatch(patchCommunityDetail({ communityId: param.id, formData })).then((response) => {
-      console.log(response);
       if (!response.error) {
         navigate(`/community/detail/${param.id}`);
       }

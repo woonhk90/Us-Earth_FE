@@ -8,7 +8,6 @@ const EditModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { comments, commentEdit,writeMode } = useSelector((state) => state.comments);
   
-console.log(writeMode)
   let timeoutId;
   useEffect(() => {
     
