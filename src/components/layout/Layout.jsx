@@ -19,6 +19,10 @@ const LayoutWrap = styled.div`
   width: 100vw;
   height: 100vh;
   background: #eaf7bf;
+  
+  @media (max-width: 540px) {
+  background: #ffffff;
+  }
 `;
 
 const SubWrap = styled.div`

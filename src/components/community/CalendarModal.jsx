@@ -30,6 +30,7 @@ const CalendarModal = (props) => {
     end: "",
   };
 
+
   for (let i = 0; i < 2; i++) {
     if (dateRange[i]) {
       const year = dateRange[i]?.getFullYear();

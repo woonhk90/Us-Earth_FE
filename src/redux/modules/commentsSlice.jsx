@@ -9,6 +9,7 @@ const initialState = {
     editMode: false,
     commentId: "",
   },
+  writeMode:"",
   isLoading: false,
   getIsLoading: false,
   error: null,
@@ -99,6 +100,9 @@ export const commentsSlice = createSlice({
     commentEditChange: (state, action) => {
       state.commentEdit = action.payload;
     },
+    commentWriteMode:(state, action) => {
+      state.writeMode = action.payload;
+    },
     commentClearUp: (state) => {
       state.comments = [];
       state.commentSelectBoxId = {};
@@ -170,5 +174,5 @@ export const commentsSlice = createSlice({
   },
 });
 
-export const { commentSelectBox, commentEditChange, commentClearUp } = commentsSlice.actions;
+export const { commentSelectBox, commentEditChange, commentClearUp,commentWriteMode } = commentsSlice.actions;
 export default commentsSlice.reducer;

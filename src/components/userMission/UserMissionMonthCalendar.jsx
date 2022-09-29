@@ -30,7 +30,7 @@ const UserMissionMonthCalendar = () => {
   const [dates, setDates] = useState("");
 
   const onClickDay = (value, event) => {
-    setDates(dayjs(value).format("YYYY-MM-DD"));
+    // setDates(dayjs(value).format("YYYY-MM-DD"));
     dispatch(getDailyMissionStats(dayjs(value).format("YYYY-MM-DD")));
   };
 
