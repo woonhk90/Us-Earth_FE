@@ -24,7 +24,6 @@ const CommunityModal = (props) => {
   const [viewFlag, setViewFlag] = React.useState(false);
   const { error, isLoading, statusCode } = useSelector((state) => state.community);
   const [msg, setMsg] = React.useState("aa");
-  console.log("ERROR=>", error, isLoading, statusCode);
 
   /* ------------------------------- 참여하기(가입) 버튼 누름 ------------------------------- */
   const onViewFlagHandler = async (id) => {

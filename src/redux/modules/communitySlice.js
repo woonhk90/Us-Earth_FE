@@ -9,14 +9,12 @@ const API_URL = process.env.REACT_APP_API_URL;
 /* ----------------------------- 전체 그룹 모임 정보 출력 ----------------------------- */
 export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (payload, thunkAPI) => {
   try {
-    console.log('__getCommunity=>', payload);
     if (payload.page === '0' || payload.page === 0) {
       thunkAPI.dispatch(clearVal());
     }
 
     // const data = await instance.get(`${API_URL}/community?page=${payload.page}&size=10&title=${payload.search}`);
     const data = await instance.get(`${API_URL}/community?page=${payload.page}&size=10`);
-    console.log('전체커뮤니티=>', data);
 
     /* ---------------------------- 해당 페이지에 값이 있는지 확인 --------------------------- */
     if (data.data.content.length > 0) {
@@ -28,8 +26,6 @@ export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (
     return thunkAPI.fulfillWithValue({ data: data.data });
   } catch (error) {
     window.alert("전체 커뮤니티 정보를 불러올 수 없습니다.");
-    console.log(error);
-    console.log(error.response.data.errorMessage);
     return;
   }
 });
@@ -37,17 +33,13 @@ export const __getCommunity = createAsyncThunk("usearth/__getCommunity", async (
 /* -------------------------------- 커뮤니티 상세보기 ------------------------------- */
 export const __getCommunityDetail = createAsyncThunk("usearth/__getCommunityDetail", async (payload, thunkAPI) => {
   try {
-    console.log('__getCommunityDetail=>', payload);
 
     const data = await tokenInstance.get(`/community/${payload.communityId}`);
 
-    console.log('상세커뮤니티=>', data);
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("커뮤니티 상세 정보를 불러올 수 없습니다.");
-    console.log(error);
-    console.log(error.response.data.errorMessage);
     return;
   }
 });
@@ -55,13 +47,11 @@ export const __getCommunityDetail = createAsyncThunk("usearth/__getCommunityDeta
 /* --------------------------- 커뮤니티 참여하기(가입) 버튼 눌렀을 때 --------------------------- */
 export const __updateCommunityJoin = createAsyncThunk("usearth/__updateCommunityJoin", async (payload, thunkAPI) => {
   try {
-    console.log('__updateCommunityJoin=>', payload);
 
     const data = await tokenInstance.patch(`/join/${payload.communityId}`, payload);
 
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    console.log(error);
     // window.alert(error.response.data.msg);
     // thunkAPI.rejectWithValue(error.response.data.msg);
     return thunkAPI.rejectWithValue(error.response.data);
@@ -71,15 +61,12 @@ export const __updateCommunityJoin = createAsyncThunk("usearth/__updateCommunity
 /* ------------------------------ 인증 게시글 목록 출력 ------------------------------ */
 export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCertify", async (payload, thunkAPI) => {
   try {
-    console.log('__getCommunityCertify=>', payload);
     if (payload.page === '0' || payload.page === 0) {
       thunkAPI.dispatch(certifyReset());
     }
     const data = await instance.get(`/community/${payload.communityId}/proof?page=${payload.page}&size=3`);
-    console.log('인증게시글=>', data);
 
     /* ---------------------------- 해당 페이지에 값이 있는지 확인 --------------------------- */
-    console.log(data.data.length);
     if (data.data.length > 0) {
       thunkAPI.dispatch(certifyHasMoreFn(true));
     } else {
@@ -89,8 +76,6 @@ export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCer
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("인증 정보를 불러올 수 없습니다.");
-    console.log(error);
-    console.log(error.response.data.errorMessage);
     return;
   }
 });
@@ -100,7 +85,6 @@ export const __getPopularGroupItemList = createAsyncThunk("usearth/__getPopularG
   try {
     const data = await instance.get('/community/active');
 
-    console.log('활발그룹->',data.data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("활발 그룹 정보를 불러올 수 없습니다.");
@@ -113,7 +97,6 @@ export const __getNewGroupItemList = createAsyncThunk("usearth/__getNewGroupItem
   try {
     const data = await instance.get('/community/nearDone');
 
-    console.log('마감임박->',data.data);
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("마감임박 그룹 정보를 불러올 수 없습니다.");
@@ -146,7 +129,7 @@ export const communitySlice = createSlice({
     statusCodeReset: (state) => { state.statusCode = 0; },
     hasMoreFn: (state, action) => { state.hasMore = action.payload; },
     certifyHasMoreFn: (state, action) => { state.certifyHasMore = action.payload; },
-    ingVal: (state, action) => { console.log(action); console.log(action); console.log(action); console.log(action); console.log(action); /* state.community = []  */ },
+    ingVal: (state, action) => { /* state.community = []  */ },
     searchReset: (state) => { state.pageReset = 0; state.searchReset = ''; },
     pagePlus: (state) => { state.pageReset = state.pageReset + 1; },
     searchPlus: (state, action) => { state.searchPlus = action.payload; },
@@ -156,8 +139,6 @@ export const communitySlice = createSlice({
       state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
     },
     [__getCommunity.fulfilled]: (state, action) => {
-      console.log('action=>', action);
-      console.log('action=>', action.payload.data.content);
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
       state.community = [...state.community, ...action.payload.data.content];
     },
@@ -169,8 +150,6 @@ export const communitySlice = createSlice({
       state.isLoading = true;
     },
     [__getCommunityDetail.fulfilled]: (state, action) => {
-      console.log('action=>', action);
-      console.log('action=>', action.payload);
       state.isLoading = false;
       state.communityDetail = action.payload;
     },
@@ -182,8 +161,6 @@ export const communitySlice = createSlice({
       state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
     },
     [__getCommunityCertify.fulfilled]: (state, action) => {
-      console.log('action=>', action);
-      console.log('action=>', ...action.payload);
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
       state.certify = [...state.certify, ...action.payload];
     },
@@ -217,12 +194,10 @@ export const communitySlice = createSlice({
       state.isLoading = true;
     },
     [__updateCommunityJoin.fulfilled]: (state, action) => {
-      console.log('action===>', action);
       state.isLoading = false;
       state.statusCode = action.payload.status;
     },
     [__updateCommunityJoin.rejected]: (state, action) => {
-      console.log("ERROR=>", action);
       state.isLoading = false;
       state.error = action.payload;
       state.statusCode = Number(action.payload.errorCode);

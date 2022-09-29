@@ -5,13 +5,11 @@ import { instance } from '../../api/axios';
 /* ------------------------------- 소식시 캠페인 리스트 ------------------------------ */
 export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, thunkAPI) => {
   try {
-    console.log('__getInfo=>', payload);
     if (payload.page === '0' || payload.page === 0) {
       thunkAPI.dispatch(clearVal());
     }
     const data = await instance.get(`/campaigns?page=${payload.page}&size=5`);
 
-    console.log('전체캠페인=>', data);
 
     /* ---------------------------- 해당 페이지에 값이 있는지 확인 --------------------------- */
     if (data.data.length > 0) {
@@ -23,8 +21,6 @@ export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, t
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("전체 캠페인 정보를 불러올 수 없습니다.");
-    console.log(error);
-    console.log(error.response.data.errorMessage);
     return;
   }
 });
@@ -32,17 +28,13 @@ export const __getInfo = createAsyncThunk("usearth/__getInfo", async (payload, t
 /* ---------------------------------- 환경 지수 --------------------------------- */
 export const __getEnvironment = createAsyncThunk("usearth/__getEnvironment", async (payload, thunkAPI) => {
   try {
-    console.log('__getEnvironment=>');
 
     const data = await instance.get('/community/airquality');
 
-    console.log('환경지수=>', data);
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     window.alert("환경지수 정보를 불러올 수 없습니다.");
-    console.log(error);
-    console.log(error.response.data.errorMessage);
     return;
   }
 });
@@ -66,7 +58,6 @@ export const infoSlice = createSlice({
       state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
     },
     [__getInfo.fulfilled]: (state, action) => {
-      console.log('action=>', action);
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
       state.infoList = [...state.infoList, ...action.payload];
     },
@@ -78,7 +69,6 @@ export const infoSlice = createSlice({
       state.isLoading = true;
     },
     [__getEnvironment.fulfilled]: (state, action) => {
-      console.log('action=>', action);
       state.isLoading = false;
       state.infoEnvironment = action.payload;
     },

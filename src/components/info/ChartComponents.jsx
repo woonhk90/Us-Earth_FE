@@ -7,7 +7,6 @@ import { __getEnvironment } from '../../redux/modules/infoSlice';
 const ChartComponents = () => {
   const dispatch = useDispatch();
   const { infoEnvironment } = useSelector((state) => state.info);
-  console.log(infoEnvironment);
   React.useEffect(() => {
     dispatch(__getEnvironment());
   }, [])

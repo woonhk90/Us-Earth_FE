@@ -8,7 +8,6 @@ import HashMore from '../etc/HasMore';
 
 const Info = () => {
   const { infoList, isLoading, hasMore } = useSelector((state) => state.info);
-  console.log(infoList);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const [page, setPage] = useState(0);
@@ -21,7 +20,6 @@ const Info = () => {
       setPage((page) => page + 1);
     }
   }, [inView]);
-  console.log(inView);
 
   const dispatch = useDispatch();
   useEffect(() => {
