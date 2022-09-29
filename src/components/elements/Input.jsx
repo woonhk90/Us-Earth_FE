@@ -63,4 +63,27 @@ const StInput = styled.input`
       `
     );
   }}
+  ${(props) => {
+    return (
+      props.inputype === "nick" &&
+      css`
+        width:60%;
+        box-sizing: border-box;
+        margin: 0;
+        font-size: 16px;
+        padding: 5px 0 15px 0;
+        @media (min-width: 281px) and (max-width: 389px) {
+          ::placeholder {
+            font-size: 16px;
+          }
+        }
+
+        @media (max-width: 280px) {
+          ::placeholder {
+            font-size: 14px;
+          }
+        }
+      `
+    );
+  }}
 `;

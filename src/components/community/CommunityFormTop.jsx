@@ -20,7 +20,7 @@ const CommunityFormTop = ({ title }) => {
         <IconDiv>
           <Cancel
             onClick={() => {
-              navigate("/community", { replace: true });
+              navigate(-1, { replace: true });
             }}
           />
         </IconDiv>
