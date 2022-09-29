@@ -20,12 +20,10 @@ const MyPageMissionGroup = () => {
   }
 
   const { saveCagegoryFlag } = useSelector((state) => state.mypage);
-  console.log('선택카테고리', saveCagegoryFlag);
 const [writer, setWriter]= useState(false)
 const writerCheck = ()=>{
 setWriter(!writer)
 }
-console.log(writer)
 
   return (
     <>

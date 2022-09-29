@@ -16,7 +16,6 @@ const PopularGroupItemList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { community, isLoading, hasMore, pageReset, searchReset } = useSelector((state) => state.community);
-  console.log("community=>", community);
 
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
@@ -27,7 +26,6 @@ const PopularGroupItemList = () => {
 
   /* ----------------------------- 커뮤니티 전체목록 가져오기 ----------------------------- */
   useEffect(() => {
-    console.log("커뮤니티 호출");
 
     dispatch(__getCommunity({ page }));
   }, [page]);

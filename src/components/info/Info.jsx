@@ -6,7 +6,6 @@ import ChartComponents from './ChartComponents';
 const Info = () => {
   /* ------------------------------- goToTop 버튼 ------------------------------- */
   const [scrollPosition, setScrollPosition] = React.useState(0);
-  console.log(scrollPosition);
 
   const updateScroll = () => {
     setScrollPosition(window.scrollY);
@@ -23,7 +22,6 @@ const Info = () => {
     });
   };
 
-  console.log()
   return (
     <>
       <InfoWrap>

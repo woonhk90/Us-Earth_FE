@@ -26,7 +26,6 @@ const MyPageTodayMission = ({ userInfo }) => {
   const dispatch = useDispatch();
 
   const { todayMission } = useSelector((state) => state.mypage);
-  console.log(todayMission);
 
   /* ------------------------------- 오늘의 미션 가져오기 ------------------------------ */
   const onClickTodayMission = () => {

@@ -32,7 +32,6 @@ const Login = () => {
   const getKakaoToken = async () => {
     try {
       const data = await axios.get(`${process.env.REACT_APP_SERVER_API_KAKAO}?code=${code}`);
-      console.log('로그인리턴=>', data);
 
       if(await data.headers.authorization){
         setCookie("mycookie", data.headers.authorization);
@@ -44,7 +43,6 @@ const Login = () => {
 
     } catch (error) {
       setError(error);
-      console.log(error);
     }
   }
 

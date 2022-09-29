@@ -9,7 +9,6 @@ const ConfirmModal = (props) => {
 
   /* ---------------------------------- 2차 모달 ---------------------------------- */
   const [viewFlag, setViewFlag] = React.useState(false);
-  console.log(viewFlag);
   const submitonClick = (id) => {
     clickSubmit();
     setViewFlag(!viewFlag);
