@@ -7,7 +7,7 @@ const InfoTop = () => {
     <>
       <HeaderWrap>
         <div></div>
-        <p>정보제공</p>
+        <p>소식지</p>
         <div></div>
       </HeaderWrap>
     </>
