@@ -17,7 +17,6 @@ const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.mypage);//유저정보가져옴
-  console.log(userInfo);
   const { overlap } = useSelector((state) => state.mypage);//닉네임 입력하면 중복인지 여부 알려줌
   const [nickFlag, setNickFlag] = useState(false);//닉네임 변경 하겠냐(true/false)
   const [overlapFlag, setOverlapFlag] = useState(false);// 중복여부 상태값(true/false)
@@ -76,9 +75,7 @@ const MyPage = () => {
   //   const response = getPopularGroupItemList();
   //   setList(response);
   // }, [])
-  // // console.log(list);
   // list.then((value) => {
-  //   console.log(value);
   //   });
 
 
@@ -89,9 +86,6 @@ const MyPage = () => {
         Authorization: getCookie('mycookie'),
       },
     });
-    console.log('AAAAAAAAAAAAAAAAAAAAA', response);
-    console.log('AAAAAAAAAAAAAAAAAAAAA', response);
-    console.log('AAAAAAAAAAAAAAAAAAAAA', response.status);
     if(response.status===200){
       await removeCookie('mycookie');
       await removeCookie('refreshToken');

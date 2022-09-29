@@ -32,7 +32,6 @@ const Login = () => {
   const getNaverToken = async () => {
     try {
       const data = await axios.get(`${process.env.REACT_APP_SERVER_API_NAVER}?code=${code}&state=${state}`);
-      console.log("로그인리턴=>", data);
 
       if (await data.headers.authorization) {
         setCookie("mycookie", data.headers.authorization);
@@ -43,7 +42,6 @@ const Login = () => {
       modalOnOff();
     } catch (error) {
       setError(error);
-      console.log(error);
     }
   };
 

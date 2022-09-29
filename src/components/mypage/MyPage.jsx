@@ -14,7 +14,6 @@ const MyPage = () => {
   }, [dispatch])
   const { Chart, Group, RightThinArrow, MoveNext } = icons;
   const { userInfo } = useSelector((state) => state.mypage);
-  console.log('userInfo=>', userInfo);
 
 
   return (

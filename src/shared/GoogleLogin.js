@@ -32,7 +32,6 @@ const Login = () => {
   const getGoogleToken = async () => {
     try {
       const data = await axios.get(`${process.env.REACT_APP_SERVER_API_GOOGLE}?code=${code}`);
-      console.log("로그인리턴=>", data);
 
       if (await data.headers.authorization) {
         setCookie("mycookie", data.headers.authorization);

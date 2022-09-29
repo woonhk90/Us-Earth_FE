@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { __getPopularGroupItemList } from "../../redux/modules/communitySlice";
-import { getPopularGroupItemList } from "../../api/communityApi";
 import { instance } from "../../api/axios";
 
 import 'swiper/css';
@@ -108,7 +107,7 @@ const ItemFlag = styled.div`
 const PopularGroupItemTitle = styled.p`
   padding:5px 0;
   font-weight:bold;
-  font-size:20px;
+  font-size:17px;
   line-height:25px;
   letter-spacing:-0.1em;
 

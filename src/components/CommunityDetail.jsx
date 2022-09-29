@@ -30,12 +30,9 @@ const CommunityDetail = () => {
     dispatch(__getCommunityDetail({ communityId: param.id }));
   }, [dispatch, param.id]);
   const { communityDetail, isLoading, certifyHasMore } = useSelector((state) => state.community);
-  console.log(communityDetail);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const { certify } = useSelector((state) => state.community);
-  console.log(certify);
-  console.log(certify.length);
   const [page, setPage] = useState(0);
   const { ref, inView, entry } = useInView({
     threshold: 0,
@@ -49,7 +46,6 @@ const CommunityDetail = () => {
       setPage((page) => page + 1);
     }
   }, [inView]);
-  console.log("inView=>", inView);
 
   /* ----------------------------------- 로그인 ---------------------------------- */
   const [loginModal, setLoginModal] = useState(false);
@@ -89,7 +85,7 @@ const CommunityDetail = () => {
 
   return (
     <>
-    {imageModal && <ImageModal image={communityDetail?.img} modalOnOff={imageModalOnOff} modal={imageModal}></ImageModal>}
+      {imageModal && <ImageModal image={communityDetail?.img} modalOnOff={imageModalOnOff} modal={imageModal}></ImageModal>}
       {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
       <CommunityDetailWrap>
         <Container>
@@ -135,21 +131,25 @@ const CommunityDetail = () => {
               )
             ) : null}
             {communityDetail.dateStatus === "ongoing" ? (
-              <EndState>
-                <EndStateTop>
-                  <EndStateItem position={"absolute"} top={"0"} left={"0"} font={"600 20px/1 'Noto Sans KR', 'sans-serif'"}>
-                    달성률
-                  </EndStateItem>
-                  <EndStateItem font={"600 44px/1 'Noto Sans KR', 'sans-serif'"} textAlign={"right"}>
-                    {communityDetail.successPercent}
-                    <span>% </span>
-                    <span> /100%</span>
-                  </EndStateItem>
-                </EndStateTop>
-                <EndStateBottom>
-                  <progress value={communityDetail.successPercent} max="100"></progress>
-                </EndStateBottom>
-              </EndState>
+              <div>
+                <EndState>
+                  <EndStateTop>
+                    <EndStateItem position={"absolute"} top={"0"} left={"0"} font={"600 20px/1 'Noto Sans KR', 'sans-serif'"}>
+                      달성률
+                    </EndStateItem>
+                    <EndStateItem font={"600 44px/1 'Noto Sans KR', 'sans-serif'"} textAlign={"right"}>
+                      {communityDetail.successPercent}
+                      <span>% </span>
+                      <span> /100%</span>
+                    </EndStateItem>
+                  </EndStateTop>
+                  <EndStateBottom>
+                    <progress value={communityDetail.successPercent} max="100"></progress>
+                  </EndStateBottom>
+                </EndState>
+                {communityDetail.participant ? null : <EndStateJoin onClick={() => { onInJoinBtn(); }}>참여하기</EndStateJoin>}
+                {modal && <Modal closeModal={() => setModal(!modal)} communityId={param.id}></Modal>}
+              </div>
             ) : null}
 
             {communityDetail.dateStatus === "end" ? (
@@ -274,8 +274,9 @@ const EndState = styled.div`
   justify-content: center;
   align-items: center;
   border: 1px solid #ececec;
-  border-radius: 12px;
-  padding: 25px 18px 4px 18px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 25px 18px 20px 18px;
   box-sizing: border-box;
 `;
 const EndStateTop = styled.div`
@@ -325,6 +326,19 @@ const EndStateBottom = styled.div`
     border-radius: 10px;
     background: linear-gradient(to right, ${colors.green89}, ${colors.green28});
   }
+`;
+
+const EndStateJoin = styled.div`
+  width:100%;
+  
+  
+  font: 18px/27px "Noto Sans KR", "sana-serif";
+  text-align: center;
+  padding: 11px 0;
+  background-color: #424242;
+  color: #fff;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 `;
 // const ProgressBar = styled.progress`
 //   accent-color: #1c1c1c;

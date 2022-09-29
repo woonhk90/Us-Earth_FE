@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
-import { patchComment, postComment } from "../../redux/modules/commentsSlice";
+import { patchComment, commentWriteMode } from "../../redux/modules/commentsSlice";
 import { useParams } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { ReactComponent as Camera } from "../../assets/camera.svg";
@@ -40,6 +40,8 @@ const CommentInputEdit = ({ userToken }) => {
 
   const clickInputOutside = (event) => {
     setInputOn(inputRef.current.contains(event.target));
+
+    dispatch(commentWriteMode(inputRef.current.clientHeight));
   };
 
   /* -------------------------------- axios get ------------------------------- */
@@ -47,10 +49,10 @@ const CommentInputEdit = ({ userToken }) => {
   const getComments = async (payload) => {
     try {
       const { data } = await tokenInstance.get(`/comments/${payload.proofId}`);
-      setInputOn(true)
+      setInputOn(true);
       // find data & into input
       const commentList = data.commentResponseDtoList.find((comment) => comment.commentId === payload.commentId);
-      setContent(commentList.content)
+      setContent(commentList.content);
       if (commentList.img === null) {
         setImageFile([]);
         setPreviewImg([]);
@@ -60,7 +62,7 @@ const CommentInputEdit = ({ userToken }) => {
       }
     } catch (error) {}
   };
-  
+
   /* ----------------------------- useEffect(*) ---------------------------- */
   useEffect(() => {
     window.addEventListener("mousedown", clickInputOutside);
@@ -75,10 +77,9 @@ const CommentInputEdit = ({ userToken }) => {
     };
   }, [commentEdit.commentId]);
 
-  useEffect(()=>{
+  useEffect(() => {
     handleResizeHeight();
-
-  },[inputOn])
+  }, [inputOn]);
 
   /* ---------------------------------- photo upload ---------------------------------- */
   const [imageFile, setImageFile] = useState([]);
@@ -89,7 +90,7 @@ const CommentInputEdit = ({ userToken }) => {
 
   const addImageFile = async (e) => {
     setIsPhotoMessage("");
-    const acceptImageFiles = ["image/png", "image/jpeg","image/jpg"];
+    const acceptImageFiles = ["image/png", "image/jpeg", "image/jpg"];
     const imageFile = e.target.files[0];
     if (acceptImageFiles.includes(imageFile.type)) {
       if (imageFile.size < 21000000) {
@@ -124,7 +125,7 @@ const CommentInputEdit = ({ userToken }) => {
     setImageFile([]);
     setPreviewImg([]);
     setDeleteImg(true);
-    setIsPhotoMessage("")
+    setIsPhotoMessage("");
   };
 
   /* ---------------------------------- submit(*) ---------------------------------- */
@@ -132,8 +133,8 @@ const CommentInputEdit = ({ userToken }) => {
     let formData = new FormData();
     // validation
     if (upLoading === 100) {
-      if(content.trim() === ""){
-       return setIsPhotoMessage("내용을 입력해주세요.")
+      if (content.trim() === "") {
+        return setIsPhotoMessage("내용을 입력해주세요.");
       }
       formData.append("multipartFile", imageFile);
       formData.append("dto", new Blob([JSON.stringify({ content: content, delete: deleteImg })], { type: "application/json" }));

@@ -16,7 +16,6 @@ const PopularGroupItemList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { community, isLoading, hasMore, pageReset, searchReset } = useSelector((state) => state.community);
-  console.log("community=>", community);
 
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
@@ -27,7 +26,6 @@ const PopularGroupItemList = () => {
 
   /* ----------------------------- 커뮤니티 전체목록 가져오기 ----------------------------- */
   useEffect(() => {
-    console.log("커뮤니티 호출");
 
     dispatch(__getCommunity({ page }));
   }, [page]);
@@ -125,7 +123,7 @@ const ItemImg = styled.div`
   background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 25%, transparent 50%), url(${(props) => props.bgImg}) no-repeat center center;
   background-size: cover;
   color: #fff;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   
   border-radius:6px;
   box-sizing:border-box;
@@ -165,7 +163,11 @@ const ItemImg = styled.div`
   }
 `;
 const ItemTitle = styled.div`
-  font: bold 20px/1 "Noto Sans KR", "sans-serif";
+  font-weight: bold;
+  font-size:17px;
+  line-height:25px;
+  font-family:"Noto Sans KR", "sans-serif";
+
   /* 말줄임 */
   /* white-space:nowrap; */
   overflow: hidden;
