@@ -86,7 +86,7 @@ const StCalender = styled.div`
     height: 8px;
     width: 8px;
 
-    @media (max-width: 390px) {
+    @media (max-width: 389px) {
       height: 7px;
       width: 7px;
     }
@@ -151,7 +151,7 @@ const StCalender = styled.div`
     span {
       color: #000000;
       font-size: 24px;
-      @media (max-width: 390px) {
+      @media (max-width: 389px) {
         font-size: 20px;
       }
       font-weight: 700;
@@ -182,7 +182,7 @@ const StCalender = styled.div`
     abbr {
       text-decoration: none;
       font-size: 16px;
-      @media (max-width: 390px) {
+      @media (max-width: 389px) {
         font-size: 13px;
       }
       font-weight: 400;
@@ -191,7 +191,7 @@ const StCalender = styled.div`
   }
   .react-calendar__month-view__weekdays__weekday {
     padding: 0.5em;
-    @media (max-width: 390px) {
+    @media (max-width: 389px) {
       padding: 0;
     }
     margin-bottom: 25px;
@@ -380,7 +380,7 @@ const MissionCnt = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 3px;
-  @media (max-width: 390px) {
+  @media (max-width: 389px) {
     gap: 1px;
   }
   justify-items: center;

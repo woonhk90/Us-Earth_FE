@@ -206,7 +206,7 @@ const WeekDateP = styled.p`
   margin: 0 auto;
  
   color:#000000; 
-  @media (max-width: 390px) {
+  @media (max-width: 389px) {
         font-size: 20px;
   }
 `;

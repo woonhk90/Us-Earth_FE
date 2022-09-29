@@ -2,9 +2,26 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 const Textarea = (props) => {
-  const { onKeyPress,textareaRef, onInput, onFocus, textareaType, margin, weight, autoFocus, size, maxLength, title, id, name, value, onChange, placeholder, height } =
-    props;
-    
+  const {
+    onKeyPress,
+    textareaRef,
+    onInput,
+    onFocus,
+    textareaType,
+    margin,
+    weight,
+    autoFocus,
+    size,
+    maxLength,
+    title,
+    id,
+    name,
+    value,
+    onChange,
+    placeholder,
+    height,
+  } = props;
+
   return (
     <TextareaWrap>
       <StTextarea
@@ -55,7 +72,6 @@ const StTextarea = styled.textarea`
     return (
       props.textareaType === "basic" &&
       css`
-        border-bottom: 1px solid rgba(0, 0, 0, 0.14);
         margin: 17px 0 0 0;
         font-weight: 500;
         height: 150px;
@@ -87,12 +103,12 @@ const StTextarea = styled.textarea`
         margin: 0;
         padding: 14px 30px;
         font-size: 24px;
-        height: 64px;
+        height: 62px;
+        max-height: 250px;
         font-weight: 600;
-
         @media (max-width: 389px) {
-    font-size: 20px;
-  }
+          font-size: 20px;
+        }
       `
     );
   }}
@@ -109,6 +125,32 @@ const StTextarea = styled.textarea`
         letter-spacing: -0.03em;
         ::placeholder {
           color: #939393;
+        }
+      `
+    );
+  }}
+  ${(props) => {
+    return (
+      props.textareaType === "communityForm" &&
+      css`
+        box-sizing: border-box;
+        margin: 0;
+        font-size: 22px;
+        padding: 5px 0 26px 0;
+        font-weight: 700;
+        height: 64px;
+        max-height: 250px;
+
+        @media (min-width: 281px) and (max-width: 389px) {
+          ::placeholder {
+            font-size: 16px;
+          }
+        }
+
+        @media (max-width: 280px) {
+          ::placeholder {
+            font-size: 14px;
+          }
         }
       `
     );

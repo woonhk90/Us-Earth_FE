@@ -44,7 +44,6 @@ const StInput = styled.input`
     return (
       props.inputype === "basic" &&
       css`
-        border-bottom: 1px solid rgba(0, 0, 0, 0.14);
         box-sizing: border-box;
         margin: 0;
         font-size: 22px;
