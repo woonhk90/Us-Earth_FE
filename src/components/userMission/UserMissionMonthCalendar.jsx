@@ -5,7 +5,7 @@ import "react-calendar/dist/Calendar.css"; // css import
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDailyMissionStats, getOnClickDate, getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
+import { getDailyMissionStats, getOnClickDate, getPeriodMissionStats } from "../../redux/modules/userMissionSlice";
 import calendarRightDoubleArrow from "../../assets/calendarRightDoubleArrow.svg";
 import calendarLeftDoubleArrow from "../../assets/calendarLeftDoubleArrow.svg";
 import calendarRightArrow from "../../assets/calendarRightArrow.svg";
