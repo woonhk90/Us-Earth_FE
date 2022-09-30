@@ -111,7 +111,9 @@ const MyPage = () => {
               {userInfo.username}
             </LoginInfoContent>
           </LoginInfo>
-          <NickInfo>
+
+          {/* 닉네임변경 */}
+          {/* <NickInfo>
             {!nickFlag ?
               (<>
                 <NickInfoTitle><span>닉네임 변경</span> <span onClick={() => { setNickFlag(!nickFlag) }}><Pen /></span></NickInfoTitle>
@@ -122,7 +124,9 @@ const MyPage = () => {
                 <Input type="text" placeholder={userInfo.nickname} onChange={onDebounceChange} maxLength='7' />
                 <OverlapFlagBox><OverlapFlagContent color={overlapFlag ? 'black' : 'red'}>사용{overlapFlag ? '가능한' : '불가능한'} 닉네임 입니다.</OverlapFlagContent></OverlapFlagBox>
               </>)}
-          </NickInfo>
+          </NickInfo> */}
+
+          {/* 내정보 공개/비공개 */}
           {/* <MyPageFlag>
             <MyPageFlagTitle>내정보 페이지 비공개</MyPageFlagTitle>
             <CheckBoxWrapper>
