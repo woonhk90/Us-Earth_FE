@@ -60,7 +60,7 @@ const NewGroupItemList = () => {
             <NewGroupItem onClick={() => { navigate(`/community/detail/${v.communityId}`) }}>
               <NewGroupItemImg bgImg={v.img === null ? 'https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg' : v.img} >
                 <ItemFlag>
-                  <span>모집중</span>
+                  {v.dateStatus==='ongoing'?<span>진행중</span>:<span>모집중</span>}
                 </ItemFlag>
               </NewGroupItemImg>
               <NewGroupItemTitle>{v.title}</NewGroupItemTitle>

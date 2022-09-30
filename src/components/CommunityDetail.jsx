@@ -465,15 +465,17 @@ const CertifyContentBox = styled.div``;
 const CertifyContent = styled.div`
   display: grid;
   justify-items: center;
-  grid-template-columns: repeat(auto-fill, minmax(33%, auto));
-  gap: 1px;
+  grid-template-columns: repeat(auto-fill, minmax(32%, auto));
+  gap: 2px;
   `;
 const CertifyItem = styled.div`
   cursor:pointer;
   width: 100%;
+  height:150px;
   img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 `;
 

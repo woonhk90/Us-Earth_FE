@@ -22,9 +22,9 @@ const CommunityProofTop = () => {
             }}
           />
         </IconDiv>
-        <WriteIcon>
+        {/* <WriteIcon>
           <Write />
-        </WriteIcon>
+        </WriteIcon> */}
       </HeaderWrap>
     </>
   );
