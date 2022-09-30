@@ -199,6 +199,7 @@ const MyPageMissionListBox = styled.div`
   }
   div:nth-child(2),
   div:nth-child(3) {
+    cursor:pointer;
     width: 100%;
     display: flex;
     justify-content: space-between;

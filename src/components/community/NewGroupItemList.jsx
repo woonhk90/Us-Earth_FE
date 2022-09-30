@@ -75,7 +75,7 @@ export default NewGroupItemList;
 
 
 const Box = styled(SwiperSlide)``;
-const NewGroupItem = styled.div``;
+const NewGroupItem = styled.div`cursor:pointer;`;
 const NewGroupItemImg = styled.div`
   width:100%;
   max-width: 145px;

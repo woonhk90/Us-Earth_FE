@@ -135,6 +135,7 @@ const MissionTop = styled.div`
   p:nth-child(2) {
     font: 500 20px/1 "Noto Sans KR", "sans-serif";
     color: #9b9b9b;
+    cursor:pointer;
   }
   @media (max-width: 374px) {
     p:nth-child(1) {
@@ -193,6 +194,7 @@ const TodayMissionBox = styled.div`
   p:nth-child(2) {
     font: 500 20px/1 "Noto Sans KR","sans-serif";
     color: #9b9b9b;
+    cursor:pointer;
   }
   @media (max-width: 374px) {
     p:nth-child(1) {
@@ -221,6 +223,7 @@ const MissionItem = styled.span`
   box-sizing: border-box;
   color: ${(props) => (props.background ? `${colors.grayCF}` : `${colors.white}`)};
   background-color: ${(props) => (props.background ? `${colors.grayF9}` : `${colors.green77}`)};
+  cursor:pointer;
 `;
 const ItemTitle = styled.span`
   display: block;

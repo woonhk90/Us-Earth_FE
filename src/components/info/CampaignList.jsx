@@ -48,13 +48,13 @@ const Info = () => {
 export default Info;
 
 const CampaignBox = styled.div``;
-const CampaignItem = styled.div``;
+const CampaignItem = styled.div`cursor:pointer;margin-bottom:50px;`;
 const CampaignItemPoster = styled.div`
   width: 100%;
   height: 150px;
   background: gray;
   border-radius: 6px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   img {
     width: 100%;
     height: 100%;
@@ -62,7 +62,6 @@ const CampaignItemPoster = styled.div`
 `;
 const CampaignItemTitle = styled.div`
   font: 600 20px/28px "Noto Sans KR", "sans-serif";
-  margin-bottom: 15px;
 
   /* 말줄임 */
   /* white-space:nowrap; */
