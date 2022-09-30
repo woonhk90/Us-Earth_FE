@@ -83,7 +83,7 @@ const PopularGroupItemList = () => {
 export default PopularGroupItemList;
 
 const Box = styled(SwiperSlide)``;
-const PopularGroupItem = styled.div``;
+const PopularGroupItem = styled.div`cursor:pointer;`;
 const PopularGroupItemImg = styled.div`
   width:100%;
   max-width: 145px;

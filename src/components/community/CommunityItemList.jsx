@@ -108,6 +108,7 @@ const CommunityBox = styled.div`
 
 
 const CommunityItem = styled.div`
+  cursor:pointer;
   width:100%;
   box-sizing:border-box;
   margin-bottom:25px;

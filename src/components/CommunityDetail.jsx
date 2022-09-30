@@ -248,7 +248,7 @@ const CommunityDetail = () => {
             ) : null}
           </StateBox>
 
-
+          {/* 인증글 리스트 */}
           <CertifyContentBox>
             <CertifyContent>
               {certify.map((v) => (
@@ -259,6 +259,7 @@ const CommunityDetail = () => {
             </CertifyContent>
           </CertifyContentBox>
 
+          {/* 글작성아이콘 */}
           {getCookie("mycookie") === undefined ? null : communityDetail.participant ? (
             communityDetail.dateStatus === 'ongoing' ? (
               <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`, { replace: true })}>
@@ -285,7 +286,7 @@ const Container = styled.div`
 `;
 const Forest = styled.div`
   width: 100%;
-  height: 466px;
+  height: 416px;
   border-bottom-left-radius: 26px;
   border-bottom-right-radius: 26px;
   margin-bottom: 41px;
@@ -468,6 +469,7 @@ const CertifyContent = styled.div`
   gap: 1px;
   `;
 const CertifyItem = styled.div`
+  cursor:pointer;
   width: 100%;
   img {
     width: 100%;
@@ -481,6 +483,7 @@ const CertifyItem = styled.div`
 
 
 const CertifyContentIcon = styled.div`
+  cursor:pointer;
     position: absolute;
     bottom: 80px;
     right: 17px;

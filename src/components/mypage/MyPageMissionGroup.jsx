@@ -114,6 +114,7 @@ const CategoryBox = styled.div`
     font-size:20px;
     line-height:28px;
     font-family: 'Noto Sans KR','sans-serif';
+    cursor:pointer;
   }
 `;
 const ItemOnGoing = styled.div`
@@ -149,6 +150,7 @@ const ItemImg = styled.div`
 `;
 
 const ListBox = styled.div`
+  cursor:pointer;
   padding: 23px 16px;
   box-sizing: border-box;
   display: flex;

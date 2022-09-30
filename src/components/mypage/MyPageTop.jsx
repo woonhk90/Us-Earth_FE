@@ -43,4 +43,7 @@ const HeaderWrap = styled.div`
     font-weight: 600;
     font-size: 20px;
   }
+  div:last-child{
+    cursor:pointer;
+  }
 `;

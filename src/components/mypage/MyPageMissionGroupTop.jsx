@@ -40,6 +40,7 @@ const HeaderWrap = styled.div`
   }
 `;
 const IconBox = styled.div`
+  cursor:pointer;
   width: 12px;
   height: 21px;
 `;

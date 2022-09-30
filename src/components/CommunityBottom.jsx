@@ -78,6 +78,7 @@ const FooterMenus = styled.div`
   justify-content: center;
   align-items: center;
   color:${(props) => props.color};
+  cursor:pointer;
   span{
     font-size:10px;
     line-height:20px;
