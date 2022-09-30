@@ -41,7 +41,8 @@ const Info = () => {
         })}
       </CampaignBox>
       {/* <Loading /> */}
-      {hasMore ? (isLoading ? <Loading /> : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'맨 하단 페이지 입니다.'} />}
+      {/* {hasMore ? (isLoading ? <Loading /> : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'맨 하단 페이지 입니다.'} />} */}
+      {hasMore ? (isLoading ? null : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'맨 하단 페이지 입니다.'} />}
     </>
   );
 };
