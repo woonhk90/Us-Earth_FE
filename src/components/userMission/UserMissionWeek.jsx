@@ -9,7 +9,7 @@ import { ReactComponent as CalendarLeftArrow } from "../../assets/calendarLeftAr
 import Button from "../elements/Button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {  getPeriodMissionStats } from "../../redux/modules/userMissonSlice";
+import {  getPeriodMissionStats } from "../../redux/modules/userMissionSlice";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { colors } from "../../styles/color";

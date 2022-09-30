@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "./CommunityDetailModal";
-import { ReactComponent as Edit } from "../assets/Edit.svg";
 import forest1 from "../assets/forest_01.gif";
 import forest2 from "../assets/forest_02.gif";
 import forest3 from "../assets/forest_03.gif";
@@ -9,19 +8,17 @@ import forest4 from "../assets/forest_04.gif";
 import forest5 from "../assets/forest_05.gif";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __getCommunityDetail, __getCommunityCertify, errorReset } from "../redux/modules/communitySlice";
+import { __getCommunityDetail, __getCommunityCertify, errorReset, detailReset } from "../redux/modules/communitySlice";
 import { useInView } from "react-intersection-observer";
 import { colors } from "../styles/color";
 import { getCookie } from "../shared/cookie";
 import LoginModal from "./Modals/LoginModal";
-import { replace } from "lodash";
 import NoMore from '../components/etc/NoMore';
-
+import Loading from "./etc/Loading";
+import ErrorModal from "./Modals/ErrorModal";
 import icons from "../assets";
 import ImageModal from "./Modals/ImageModal";
-
 import CustomSelect from './comment/CustomSelect';
-import ConfirmModal from "./Modals/ConfirmModal";
 import ConfirmSingleModal from "./Modals/ConfirmSingleModal";
 import { deleteCommunityDetail } from "../redux/modules/communityFormSlice";
 
@@ -33,8 +30,9 @@ const CommunityDetail = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(__getCommunityDetail({ communityId: param.id }));
+    return () => dispatch(detailReset()) //detail clean-up
   }, [dispatch, param.id]);
-  const { communityDetail, isLoading, certifyHasMore } = useSelector((state) => state.community);
+  const { communityDetail, isLoading,detailIsLoading, error, certifyHasMore } = useSelector((state) => state.community);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const { certify } = useSelector((state) => state.community);
@@ -148,6 +146,21 @@ const CommunityDetail = () => {
   const closeModal = () => {
     setDelModal(!delModal);
   };
+
+  /* ------------------------------- 로딩&에러 모달 ------------------------------ */
+  
+  if (detailIsLoading) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
+
+  if (error.length) {
+    return <ErrorModal error={error} />;
+  }
+
 
   return (
     <>

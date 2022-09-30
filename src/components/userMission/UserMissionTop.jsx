@@ -1,11 +1,25 @@
 import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
+import { userMissionCleanUp } from "../../redux/modules/userMissionSlice";
+import ErrorModal from "../Modals/ErrorModal";
 
 const UserMissionTop = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+useEffect(()=>{
+return () =>dispatch(userMissionCleanUp());
+},[])
+
+  const {error} = useSelector((state)=> state.userMission)
+  
+  if (error) {
+    return <ErrorModal error={error} />;
+  }
 
   return (
     <>

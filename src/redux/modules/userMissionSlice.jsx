@@ -15,7 +15,9 @@ export const getDailyMissionStats = createAsyncThunk("dailyMission/get", async (
         const { data } = await tokenInstance.get(`/mypage/stats/day?targetDay=${targetDay}`);
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    return thunkAPI.rejected(error);
+    if (!error.response.data.msg) {
+      return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
+    } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 });
 
@@ -28,7 +30,9 @@ export const getPeriodMissionStats = createAsyncThunk("periodMission/get", async
     });
     return thunkAPI.fulfillWithValue(data);
   } catch (error) {
-    return thunkAPI.rejected(error);
+    if (!error.response.data.msg) {
+      return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
+    } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 });
 
@@ -38,6 +42,12 @@ export const userMissionSlice = createSlice({
   reducers: {
     getOnClickDate: (state, action) => {
       state.clickDate = action.payload; 
+    },
+    userMissionCleanUp: (state, action) => {
+      state.dailyMissionData= {}
+      state.periodMissionData= []
+      state.clickDate= ""
+      state.error= null
     },
   },
   extraReducers: {
@@ -67,5 +77,5 @@ export const userMissionSlice = createSlice({
   },
 });
 
-export const { getOnClickDate } = userMissionSlice.actions;
+export const { getOnClickDate,userMissionCleanUp } = userMissionSlice.actions;
 export default userMissionSlice.reducer;
