@@ -5,8 +5,9 @@ import { __getMyInfo } from '../../redux/modules/mypageSlice';
 import MyPageTodayMission from './MyPageTodayMission';
 import { useNavigate } from "react-router-dom";
 import icons from '../../assets';
+import { colors } from '../../styles/color';
 
-import { __postNickNameOverlap } from '../../redux/modules/mypageSlice';
+import { __postNickNameOverlap, __postNickNameSubmit, resetOverlap } from '../../redux/modules/mypageSlice';
 import Input from '../elements/Input';
 import { debounce } from "lodash";
 
@@ -16,43 +17,66 @@ const MyPage = () => {
   React.useEffect(() => {
     dispatch(__getMyInfo());
   }, [dispatch])
-  const { Chart, Group, RightThinArrow, MoveNext, Check, CheckCancel } = icons;
+  const { Chart, Group, RightThinArrow, MoveNext, Check, CheckCancel, NickNameArrow } = icons;
   const { userInfo } = useSelector((state) => state.mypage);
 
 
+
+
+  const { overlap } = useSelector((state) => state.mypage);//닉네임 입력하면 중복인지 여부 알려줌(응답값)
   const [overlapFlag, setOverlapFlag] = React.useState(false);// 중복여부 상태값(true/false)
-  const [userNick, setUserNick] = React.useState(false);
-  const [changeNicName, setChangeNickName] = React.useState('');
+  const [userNick, setUserNick] = React.useState(false);  //true: 닉네임 input, false: 닉네임
   const onChangeNick = () => {
+    setNewNick('');//닉네임 초기화
+    dispatch(resetOverlap());//닉네임 입력하면 중복인지 여부 알려줌(응답값) => 초기화
     setUserNick(!userNick);
   }
+  const [newNick, setNewNick] = React.useState('');//새로 입력하는 닉네임
 
   /* --------------------------------- 닉네임 변경 --------------------------------- */
   const debounceSomethingFunc = debounce((val) => {
-    if (val.length > 0) {
-      setOverlapFlag(val);
-    } else {
-      setOverlapFlag(val);
-    }
-    setChangeNickName(val);
     dispatch(__postNickNameOverlap({ nickname: val }));
   }, 200);
 
   const onDebounceChange = event => {
-    debounceSomethingFunc(event.target.value);
+    const { value } = event.target;
+    if (value.trim().length > 7) return;
+    setNewNick(value);
+    debounceSomethingFunc(value);
   };
+
+  const onNickNameSubmit = async () => {
+    if (newNick.length > 0) {
+      await dispatch(__postNickNameSubmit({ nickname: newNick }));
+      setUserNick(!userNick);
+    } else {
+      window.alert("변경할 닉네임을 입력해주세요.");
+      return false;
+    }
+  }
+
+  React.useEffect(() => {
+    setOverlapFlag(overlap);
+  }, [overlap, dispatch])
+
   return (
     <>
       <MyPageWrap>
         <Container>
           <MyPageInfo>
             <MyPageInfoBox>
-              {/* {userNick ?
-                <div><Input inputype="nick" placeholder={userInfo.nickname} onChange={onDebounceChange} maxLength='7' /><span><Check/><CheckCancel/></span></div>
+
+              {userNick ?
+                <NickChangeTrue>
+                  <Input inputype="nick" placeholder={userInfo.nickname} onChange={onDebounceChange} maxLength='7' value={newNick} />
+                  <span><Check onClick={onNickNameSubmit} /> <CheckCancel onClick={onChangeNick} /></span>
+                  {overlapFlag ? <P>가능한 닉네임입니다.</P> : <P color={'red'}>불가능한 닉네임입니다.</P>}
+                </NickChangeTrue>
                 :
-                <div>{userInfo?.nickname} <span onClick={onChangeNick}>수정 &gt;</span></div>
-              } */}
-              <div>{userInfo?.nickname}</div>
+                <NickChangeFalse>{userInfo?.nickname} <span onClick={onChangeNick}>수정 <NickNameArrow /></span></NickChangeFalse>
+              }
+
+              {/* <div>{userInfo?.nickname}</div> */}
               <div>LV.{userInfo?.level} 등급</div>
             </MyPageInfoBox>
             <MyPageProFile><img src={userInfo?.profileImage} alt='profileImage' referrerPolicy="no-referrer" /></MyPageProFile>
@@ -99,13 +123,10 @@ const MyPageInfo = styled.div`
   align-items: center;
 `;
 const MyPageInfoBox = styled.div`
-  /* border:1px solid red; */
+  max-width:75%;
   display: flex;
   flex-direction: column;
   font-family: 'Noto Sans KR','sans-serif';
-  input{
-    border:1px solid purple;
-  }
   div:nth-child(1) {
     font-weight: 600;
     font-size:24px;
@@ -119,6 +140,40 @@ const MyPageInfoBox = styled.div`
     letter-spacing:0.05em;
   }
 `;
+const NickChangeTrue = styled.div`
+  display:flex;
+  justify-content:start;
+  align-items:center;
+  
+  position:relative;
+  top:0;left:0;
+  input{
+    border-bottom:1px solid #000;
+  }
+  span{cursor:pointer;display:inline-block;display:flex;}
+  
+`;
+const P = styled.p`
+  position:absolute;
+  bottom:0; right:75px;
+  font-size:10px;
+  line-height:2;
+  color:${(props) => props.color};
+`;
+const NickChangeFalse = styled.div`
+  span{
+    cursor:pointer;
+    color:${colors.gray9B};
+    font-weight: 500;
+    display:inline-block;
+    margin-left:10px;
+  }
+`;
+
+
+
+
+
 const MyPageProFile = styled.div`
   width: 74px;
   height: 74px;
