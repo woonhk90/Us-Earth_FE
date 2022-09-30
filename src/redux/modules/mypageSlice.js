@@ -126,6 +126,9 @@ export const mypageSlice = createSlice({
   reducers: {
     saveCagegory: (state, action) => {
       state.saveCagegoryFlag = action.payload; // 선택한 카테고리 save
+    },
+    resetOverlap: (state) => {
+      state.overlap = false;
     }
   },
   extraReducers: {
@@ -205,5 +208,5 @@ export const mypageSlice = createSlice({
   },
 });
 
-export const { saveCagegory } = mypageSlice.actions;
+export const { saveCagegory, resetOverlap } = mypageSlice.actions;
 export default mypageSlice.reducer;

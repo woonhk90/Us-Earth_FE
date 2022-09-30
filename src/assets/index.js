@@ -17,6 +17,7 @@ import { ReactComponent as CommunityNewGroup } from "./community_new_group.svg";
 import { ReactComponent as CommunityNewProof } from "./community_new_proof.svg";
 import { ReactComponent as Check } from "./check.svg";
 import { ReactComponent as CheckCancel } from "./check_cancel.svg";
+import { ReactComponent as NickNameArrow } from "./nickname_arrow.svg";
 
 import { ReactComponent as Community_On } from "./community_on.svg";
 import { ReactComponent as Community_Off } from "./community_off.svg";
@@ -80,6 +81,7 @@ const icons = {
   CommunityNewProof,
   Check,
   CheckCancel,
+  NickNameArrow,
 };
 
 export default icons;
