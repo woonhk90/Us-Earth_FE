@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { getDailyMissionStats} from "../../redux/modules/userMissonSlice";
+import { getDailyMissionStats} from "../../redux/modules/userMissionSlice";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 

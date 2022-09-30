@@ -4,7 +4,7 @@ import mypage from "../modules/mypageSlice";
 import communityForm from "../modules/communityFormSlice";
 import comments from "../modules/commentsSlice";
 import proofs from "../modules/proofsSlice";
-import userMission from "../modules/userMissonSlice";
+import userMission from "../modules/userMissionSlice";
 import info from "../modules/infoSlice";
 import heartComment from "../modules/heartCommentSlice";
 

@@ -14,7 +14,6 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { deleteProof, getProofs, proofsCleanUp } from "../../redux/modules/proofsSlice";
 import icons from "../../assets";
-import ConfirmModal from "../Modals/ConfirmModal";
 import Loading from "../etc/Loading";
 import ErrorModal from "../Modals/ErrorModal";
 import { __getCommunityDetail } from "../../redux/modules/communitySlice";

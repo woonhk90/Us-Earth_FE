@@ -39,8 +39,9 @@ export const __getCommunityDetail = createAsyncThunk("usearth/__getCommunityDeta
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("커뮤니티 상세 정보를 불러올 수 없습니다.");
-    return;
+    if (!error.response.data.msg) {
+      return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
+    } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 });
 
@@ -75,8 +76,9 @@ export const __getCommunityCertify = createAsyncThunk("usearth/__getCommunityCer
 
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
-    window.alert("인증 정보를 불러올 수 없습니다.");
-    return;
+    if (!error.response.data.msg) {
+      return thunkAPI.rejectWithValue("에러가 발생했습니다. 관리자에게 문의하세요");
+    } else return thunkAPI.rejectWithValue(error.response.data.msg);
   }
 });
 
@@ -111,6 +113,7 @@ const initialState = {
   popularGroupList: [],
   newGroupList: [],
   isLoading: false,
+  detailIsLoading:false,/* 그룹 상세조회 isLoading */
   error: [],
   statusCode: 0,
   hasMore: true,/* 무한스크롤 값이 더 있는지 확인 */
@@ -123,6 +126,11 @@ export const communitySlice = createSlice({
   name: "community",
   initialState,
   reducers: {
+    detailReset:(state)=>{
+      state.communityDetail= []
+      state.certify= []
+      state.error= []
+    },
     clearVal: (state) => { state.community = [] },
     certifyReset: (state) => { state.certify = [] },
     errorReset: (state) => { state.error = []; },
@@ -147,14 +155,14 @@ export const communitySlice = createSlice({
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
     },
     [__getCommunityDetail.pending]: (state) => {
-      state.isLoading = true;
+      state.detailIsLoading = true;
     },
     [__getCommunityDetail.fulfilled]: (state, action) => {
-      state.isLoading = false;
+      state.detailIsLoading = false;
       state.communityDetail = action.payload;
     },
     [__getCommunityDetail.rejected]: (state, action) => {
-      state.isLoading = false;
+      state.detailIsLoading = false;
       state.error = action.payload;
     },
     [__getCommunityCertify.pending]: (state) => {
@@ -205,5 +213,5 @@ export const communitySlice = createSlice({
   },
 });
 
-export const { clearVal, ingVal, certifyReset, errorReset, hasMoreFn, statusCodeReset, certifyHasMoreFn, searchReset, pagePlus, searchPlus } = communitySlice.actions;
+export const { clearVal, ingVal, certifyReset, errorReset, hasMoreFn, statusCodeReset, certifyHasMoreFn, searchReset, pagePlus, searchPlus,detailReset } = communitySlice.actions;
 export default communitySlice.reducer;

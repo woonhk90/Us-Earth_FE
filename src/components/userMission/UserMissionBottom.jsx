@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { flexBetween, flexColumn, flexRow } from "../../styles/Flex";
 import Button from "../elements/Button";
 import UserMissionMonthCalendar from "./UserMissionMonthCalendar";
-import { getDailyMissionStats, getOnClickDate } from "../../redux/modules/userMissonSlice";
+import { getDailyMissionStats, getOnClickDate } from "../../redux/modules/userMissionSlice";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../styles/color";
