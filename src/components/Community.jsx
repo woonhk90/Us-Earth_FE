@@ -58,7 +58,7 @@ const Community = () => {
 
           <NewGroup>
             <NewGroupTop>
-              <NewGroupTitle>마감임박 그룹</NewGroupTitle>
+              <NewGroupTitle>종료임박 그룹</NewGroupTitle>
             </NewGroupTop>
             <NewGroupBox>
               <NewGroupItemList />
