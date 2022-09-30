@@ -153,7 +153,7 @@ const UserInfoFirstWrap = styled.div`
 
 const UserInfoWrap = styled.div`
   width: 100%;
-  height: 100px;
+  height: 68px;
   display: flex;
   flex-direction: row;
   align-items: center;

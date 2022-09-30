@@ -187,7 +187,7 @@ const CommentBox = styled.div`
   margin-bottom: 5px;
   width: 100%;
   box-sizing: border-box;
-  padding: 10px 28px 20px 28px;
+  padding: 10px 28px 10px 28px;
   border-bottom: 2px solid rgba(217, 217, 217, 0.3);
 `;
 
@@ -196,7 +196,7 @@ const CommentWrap = styled.div`
 `;
 const StSpan = styled.div`
   align-items: flex-start;
-  margin: 10px 0;
+  margin: 0 0 10px 0;
   word-break: break-all;
   white-space: pre-line;
 `;
@@ -219,6 +219,7 @@ const CommentImg = styled.img`
   object-fit: cover;
   border-radius: 6px;
   display: flex;
+  margin-bottom: 10px;
   align-items: flex-start;
 `;
 

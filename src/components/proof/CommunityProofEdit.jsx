@@ -90,6 +90,7 @@ const CommunityProofEdit = () => {
           if (e.target.files[i].size < 21000000) {
             const options = {
               maxSizeMB: 1,
+              initialQuality:0.8,
               maxWidthOrHeight: 1920,
               useWebWorker: true,
               onProgress: (data) => {
@@ -123,6 +124,7 @@ const CommunityProofEdit = () => {
     if (arry?.length > 0) {
       setIsPhotoMessage(`추가한 ${arry}번째 파일이 너무 큽니다. 20MB미만의 파일만 업로드 됩니다.`);
     }
+    e.target.value = "";
   };
 
   // X버튼 클릭 시 이미지 삭제

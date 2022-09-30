@@ -80,11 +80,11 @@ const CommunityDetail = () => {
     gifUrl = forest5;
   }
   /* ----------------------------------- 이미지 확대 ---------------------------------- */
-  const [imageModal, setImageModal] = useState(false);
+  // const [imageModal, setImageModal] = useState(false);
 
-  const imageModalOnOff = () => {
-    setImageModal(!imageModal);
-  };
+  // const imageModalOnOff = () => {
+  //   setImageModal(!imageModal);
+  // };
 
 
 
@@ -164,7 +164,7 @@ const CommunityDetail = () => {
 
   return (
     <>
-      {imageModal && <ImageModal image={communityDetail?.img} modalOnOff={imageModalOnOff} modal={imageModal}></ImageModal>}
+      {/* {imageModal && <ImageModal image={communityDetail?.img} modalOnOff={imageModalOnOff} modal={imageModal}></ImageModal>} */}
       {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
       {delModal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmSingleModal>}
       <CommunityDetailWrap>
@@ -189,7 +189,7 @@ const CommunityDetail = () => {
             <ContentItem font={"22px/30px 'Noto Sans KR', 'sans-serif'"} marginBottom={"35px"}>
               {communityDetail.content}
             </ContentItem>
-            <ContentItem marginBottom={"35px"}> {communityDetail?.img !== null ? <img onClick={imageModalOnOff} src={communityDetail?.img} alt="img" /> : null} </ContentItem>
+            <ContentItem marginBottom={"35px"}> {communityDetail?.img !== null ? <img src={communityDetail?.img} alt="img" /> : null} </ContentItem>
           </Content>
 
           <StateBox>
