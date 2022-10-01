@@ -77,7 +77,10 @@ const ProofForm = ({ ProofFormData }) => {
                 </StIcon>
                 <ImageLength>{`(${previewImg.length}/5)`}</ImageLength>
               </label>
-              <StImageInput multiple type="file" id="file" accept="image/*" onChange={(e) => addImageFile(e)} />
+              <StImageInput multiple type="file" id="file" 
+            accept="image/jpg, image/jpeg, image/png" onChange={(e) => {
+                  addImageFile(e);
+                }} />
             </Container>
           </Stform>
           {previewImg?.map((image, index) => {

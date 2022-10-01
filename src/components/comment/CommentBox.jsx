@@ -148,8 +148,8 @@ const CommentContainer = styled.div`
 
 const IconContainer = styled.div`
   ${flexRow}
-  padding: 10px;
-  gap: 10px;
+  /* padding: 10px;
+  gap: 10px; */
 `;
 
 const BottomIcon = styled.div`
@@ -160,12 +160,12 @@ const BottomIcon = styled.div`
 
 const IconWrap = styled.div`
   ${flexRow}
-  margin: 10px;
+  margin: 15px 10px 10px 20px;
 `;
 
 const CommentButtonWrap = styled.div`
   ${flexRow}
-  margin: 10px;
+  margin: 15px 10px;
   cursor: pointer;
 `;
 
