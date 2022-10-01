@@ -43,7 +43,7 @@ const CommunityProof = () => {
   };
 
   const onClickEdit = () => {
-    navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`,{replace:true});
+    navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`, { replace: true });
   };
   /* -------------------------------- edit modal ------------------------------- */
   const [modal, setModal] = useState(false);
@@ -59,7 +59,7 @@ const CommunityProof = () => {
   const clickSubmit = () => {
     dispatch(deleteProof(param.proofId)).then((response) => {
       if (!response.error) {
-        navigate(`/community/detail/${param.communityId}`,{replace:true});
+        navigate(`/community/detail/${param.communityId}`, { replace: true });
       }
     });
   };
@@ -153,7 +153,7 @@ const UserInfoFirstWrap = styled.div`
 
 const UserInfoWrap = styled.div`
   width: 100%;
-  height: 100px;
+  height: 68px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -193,6 +193,9 @@ const Username = styled.div`
 
 //내용
 const TextContainer = styled.div`
+  overflow-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
   padding: 20px;
   border-bottom: 1px solid #e9ecef;
 `;

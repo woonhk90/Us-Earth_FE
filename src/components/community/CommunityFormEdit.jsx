@@ -302,7 +302,7 @@ const CommunityFormEdit = () => {
             <ImageInput
               type="file"
               id="file"
-              accept="image/*"
+              accept="image/jpg, image/jpeg, image/png"
               onChange={(e) => {
                 addImageFile(e);
                 e.target.value = "";

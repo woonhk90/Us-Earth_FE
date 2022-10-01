@@ -22,6 +22,7 @@ import CustomSelect from './comment/CustomSelect';
 import ConfirmSingleModal from "./Modals/ConfirmSingleModal";
 import { deleteCommunityDetail } from "../redux/modules/communityFormSlice";
 
+
 const CommunityDetail = () => {
   const { CommunityNewProof } = icons;
   const navigate = useNavigate();
@@ -164,7 +165,7 @@ const CommunityDetail = () => {
 
   return (
     <>
-      {imageModal && <ImageModal image={communityDetail?.img} modalOnOff={imageModalOnOff} modal={imageModal}></ImageModal>}
+      {/* {imageModal && <ImageModal image={communityDetail?.img} modalOnOff={imageModalOnOff} modal={imageModal}></ImageModal>} */}
       {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
       {delModal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmSingleModal>}
       <CommunityDetailWrap>
@@ -189,7 +190,7 @@ const CommunityDetail = () => {
             <ContentItem font={"22px/30px 'Noto Sans KR', 'sans-serif'"} marginBottom={"35px"}>
               {communityDetail.content}
             </ContentItem>
-            <ContentItem marginBottom={"35px"}> {communityDetail?.img !== null ? <img onClick={imageModalOnOff} src={communityDetail?.img} alt="img" /> : null} </ContentItem>
+            <ContentItem marginBottom={"35px"}> {communityDetail?.img !== null ? <img src={communityDetail?.img} alt="img" /> : null} </ContentItem>
           </Content>
 
           <StateBox>
