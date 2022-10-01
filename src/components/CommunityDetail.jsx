@@ -22,6 +22,7 @@ import CustomSelect from './comment/CustomSelect';
 import ConfirmSingleModal from "./Modals/ConfirmSingleModal";
 import { deleteCommunityDetail } from "../redux/modules/communityFormSlice";
 
+
 const CommunityDetail = () => {
   const { CommunityNewProof } = icons;
   const navigate = useNavigate();
@@ -80,11 +81,11 @@ const CommunityDetail = () => {
     gifUrl = forest5;
   }
   /* ----------------------------------- 이미지 확대 ---------------------------------- */
-  // const [imageModal, setImageModal] = useState(false);
+  const [imageModal, setImageModal] = useState(false);
 
-  // const imageModalOnOff = () => {
-  //   setImageModal(!imageModal);
-  // };
+  const imageModalOnOff = () => {
+    setImageModal(!imageModal);
+  };
 
 
 
