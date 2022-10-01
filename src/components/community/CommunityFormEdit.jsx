@@ -17,6 +17,7 @@ import ErrorModal from "../Modals/ErrorModal";
 import SeceletonFormEdit from "./SceletonFormEdit";
 import { tokenInstance } from "../../api/axios";
 import dayjs from "dayjs";
+import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
 const CommunityFormEdit = () => {
   const navigate = useNavigate();
@@ -70,13 +71,13 @@ const CommunityFormEdit = () => {
   const [password, setPassword] = useState("");
 
   const textRef = useRef();
-  const handleResizeHeight =() => {
+  const handleResizeHeight = () => {
     textRef.current.style.height = `64px`;
     if (textRef.current.scrollHeight < 128) {
       textRef.current.style.height = `64px`;
       textRef.current.style.height = textRef.current.scrollHeight + "px";
-    } 
-  }
+    }
+  };
 
   /* --------------------------------- 입력값 메세지 -------------------------------- */
   const [isLimitScore, setIsLimitScore] = useState("");
@@ -218,6 +219,11 @@ const CommunityFormEdit = () => {
   // };
 
   /* ----------------------------------- 제출 ----------------------------------- */
+  const submitcheck = () => {
+    if (toDay === dates.start) {
+      setFormModal(!formmodal);
+    } else submitHandler();
+  };
   const submitHandler = async () => {
     let formData = new FormData();
     const dataSet = {
@@ -238,6 +244,24 @@ const CommunityFormEdit = () => {
         navigate(`/community/detail/${param.id}`);
       }
     });
+  };
+
+  const [formmodal, setFormModal] = useState(false);
+
+  // modal text data
+  const confirmModalData = {
+    title: "그룹 캠페인이 시작되면 수정 및 삭제가 불가능합니다. 등록하시겠습니까?",
+    cancel: "아니오",
+    submit: "예",
+  };
+
+  // editMode cancel function
+  const clickSubmit = () => {
+    submitHandler();
+  };
+
+  const modalOnOff = () => {
+    setFormModal(!formmodal);
   };
 
   useEffect(() => {
@@ -279,6 +303,7 @@ const CommunityFormEdit = () => {
 
   return (
     <>
+      {formmodal && <ConfirmSingleModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
       {error && <ErrorModal notGo={true} error={error} />}
       {isLogin() ? null : <IsLoginModal />}
       <CommunityFormWrap>
@@ -431,7 +456,7 @@ const CommunityFormEdit = () => {
             style={{
               cursor: "pointer",
             }}
-            onClick={submitHandler}
+            onClick={submitcheck}
             bgColor={"#315300"}
             color={"white"}
           >
