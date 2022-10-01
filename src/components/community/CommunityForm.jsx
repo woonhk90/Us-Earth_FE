@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef,useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
@@ -16,6 +16,7 @@ import { addDates, postCommunityDetail } from "../../redux/modules/communityForm
 import { clearVal } from "../../redux/modules/communitySlice";
 import isLogin from "../../lib/isLogin";
 import dayjs from "dayjs";
+import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
 const CommunityForm = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const CommunityForm = () => {
   const { dates } = useSelector((state) => state.communityForm);
   const { start, end } = dates;
   const [modal, setModal] = useState(false);
-  const toDay = dayjs(new Date()).format("YYYY-MM-DD")
+  const toDay = dayjs(new Date()).format("YYYY-MM-DD");
 
   /* ----------------------------------- 입력값 ---------------------------------- */
   const [secret, setSecret] = useState(false);
@@ -42,10 +43,9 @@ const CommunityForm = () => {
     if (textRef.current.scrollHeight < 128) {
       textRef.current.style.height = `64px`;
       textRef.current.style.height = textRef.current.scrollHeight + "px";
-    } 
+    }
   }, []);
 
-  
   /* --------------------------------- 입력값 메세지 -------------------------------- */
   const [isLimitScore, setIsLimitScore] = useState("");
   const [isLimitParticipants, setIsLimitParticipants] = useState("");
@@ -183,8 +183,13 @@ const CommunityForm = () => {
   //   }
   // };
 
+  /* ----------------------------------- 제출 ----------------------------------- */
+  const submitcheck = () => {
+    if (toDay === dates.start) {
+      setFormModal(!formmodal);
+    } else submitHandler();
+  };
 
-/* ----------------------------------- 제출 ----------------------------------- */
   const submitHandler = async () => {
     let formData = new FormData();
     const dataSet = {
@@ -207,6 +212,23 @@ const CommunityForm = () => {
     await dispatch(clearVal());
   };
 
+  const [formmodal, setFormModal] = useState(false);
+
+  // modal text data
+  const confirmModalData = {
+    title: "그룹 캠페인이 시작되면 수정 및 삭제가 불가능합니다. 등록하시겠습니까?",
+    cancel: "아니오",
+    submit: "예",
+  };
+
+  // editMode cancel function
+  const clickSubmit = () => {
+    submitHandler();
+  };
+
+  const modalOnOff = () => {
+    setFormModal(!formmodal);
+  };
 
   useEffect(() => {
     return () => {
@@ -215,7 +237,7 @@ const CommunityForm = () => {
     };
   }, []);
 
-/* ----------------------------------- 로딩 ----------------------------------- */
+  /* ----------------------------------- 로딩 ----------------------------------- */
 
   if (isLoading) {
     return (
@@ -229,6 +251,7 @@ const CommunityForm = () => {
 
   return (
     <>
+      {formmodal && <ConfirmSingleModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
       {isLogin() ? null : <IsLoginModal />}
       {error && <ErrorModal notGo={true} error={error} />}
       <>
@@ -275,15 +298,20 @@ const CommunityForm = () => {
             </CheckBoxWrapper> */}
           </TopTextWrap>
           <InputWrap>
-            <Textarea 
-            
-            rows="2"
+            <Textarea
+              rows="2"
               textareaRef={textRef}
-              onKeyPress={e => {
-                if(e.key === 'Enter')
-                   e.preventDefault()
-                }}
-              onInput={handleResizeHeight} maxLength="30" textareaType="communityForm" placeholder="그룹명을 입력해 주세요" name="title" value={title} onChange={onChangeTitle}></Textarea>
+              onKeyPress={(e) => {
+                if (e.key === "Enter") e.preventDefault();
+              }}
+              onInput={handleResizeHeight}
+              maxLength="30"
+              textareaType="communityForm"
+              placeholder="그룹명을 입력해 주세요"
+              name="title"
+              value={title}
+              onChange={onChangeTitle}
+            ></Textarea>
             <MessageP>{isTitle}</MessageP>
           </InputWrap>
           {/* {secret ? (
@@ -311,12 +339,11 @@ const CommunityForm = () => {
             <InputWrap>
               {dates.start?.length > 0 && dates.end?.length > 0 ? (
                 <>
-                <SelectDateP color={"#222222"}>
-                  {dates.start}-{dates.end}
-                </SelectDateP>
+                  <SelectDateP color={"#222222"}>
+                    {dates.start}-{dates.end}
+                  </SelectDateP>
                   <MessageP date={true}>{toDay === dates.start ? `진행 이후에는 수정 및 삭제가 불가능합니다.` : null}</MessageP>
-                  </>
-                
+                </>
               ) : (
                 <>
                   <DateP color={"#CBCBCB"}>날짜를 선택해 주세요.</DateP>
@@ -379,7 +406,7 @@ const CommunityForm = () => {
               style={{
                 cursor: "pointer",
               }}
-              onClick={submitHandler}
+              onClick={submitcheck}
               bgColor={"#315300"}
               color={"white"}
             >
@@ -628,7 +655,6 @@ const P = styled.p`
 const InputWrap = styled.div`
   position: relative;
   border-bottom: 1px solid rgba(0, 0, 0, 0.14);
-        
 `;
 
 const MessageP = styled.p`
@@ -646,12 +672,13 @@ const MessageP = styled.p`
 
   @media (max-width: 389px) {
     ${(props) =>
-      props.limitScore || props.date &&
-      css`
-        font-size: 12px;
-        bottom: 3px;
-        line-height: 14px;
-      `}
+      props.limitScore ||
+      (props.date &&
+        css`
+          font-size: 12px;
+          bottom: 3px;
+          line-height: 14px;
+        `)}
   }
 `;
 
