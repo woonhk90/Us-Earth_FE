@@ -36,9 +36,8 @@ const CommunityProofForm = () => {
   const [files, setFiles] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
-  const [isPhoto, setIsPhoto] = useState(true);
   const [upLoading, setUploading] = useState(100);
-
+  
   const addImageFile = async (e) => {
     const acceptImageFiles = ["image/png", "image/jpeg", "image/jpg"];
     let arry = [];
@@ -49,6 +48,7 @@ const CommunityProofForm = () => {
           if (e.target.files[i].size < 21000000) {
             const options = {
               maxSizeMB: 1,
+              // initialQuality:0.7,
               maxWidthOrHeight: 1920,
               useWebWorker: true,
               onProgress: (data) => {
@@ -77,11 +77,11 @@ const CommunityProofForm = () => {
       }
     } else {
       setIsPhotoMessage("최대 5장까지 등록 가능합니다.");
-      setIsPhoto(false);
     }
     if (arry?.length > 0) {
       setIsPhotoMessage(`추가한 ${arry}번째 파일이 너무 큽니다. 20MB미만의 파일만 업로드 됩니다.`);
     }
+    e.target.value = "";
   };
 
   // X버튼 클릭 시 이미지 삭제
@@ -116,7 +116,7 @@ const CommunityProofForm = () => {
           navigate(`/community/detail/${param.communityId}`, { replace: true });
         }
       });
-      dispatch(certifyReset())
+      dispatch(certifyReset());
     }
     setBlock(false);
   };
