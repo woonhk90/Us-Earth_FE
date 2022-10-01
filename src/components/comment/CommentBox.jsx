@@ -15,6 +15,8 @@ import { ReactComponent as HeartGy } from "../../assets/heartGy.svg";
 import { ReactComponent as CommentIcon } from "../../assets/commentIcon.svg";
 import Cookies from "universal-cookie";
 import LoginModal from "../Modals/LoginModal";
+import OkModal from "../Modals/OkModal";
+import isLogin from "../../lib/isLogin";
 
 const CommentBox = () => {
   const cookies = new Cookies();
@@ -76,6 +78,25 @@ const CommentBox = () => {
   const onClickHeart = () => {
     if (userToken && participant) {
       dispatch(patchHeartCnt(param.proofId));
+    } else {
+      canWriteCheck();
+      setOkModal(!okModal);
+    }
+  };
+
+  const [okModal, setOkModal] = useState(false);
+  const [okModalTitle, setOkModalTitle] = useState(false);
+
+  // onOff Modal
+  const okModalOnOff = () => {
+    setOkModal(!okModal);
+  };
+
+  // user check
+  const canWriteCheck = () => {
+    if (!participant) {
+      setOkModalTitle("그룹 참가자만 좋아요를 누를 수 있습니다.");
+      setOkModal(true);
     }
   };
 
@@ -91,6 +112,7 @@ const CommentBox = () => {
 
   return (
     <>
+      {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
       {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
       <IconContainer>
         <IconWrap>
@@ -127,14 +149,13 @@ const CommentBox = () => {
 export default React.memo(CommentBox);
 
 const ButtonInModalWrap = styled.div`
-border-radius: 30px 30px 0 0;
-background-color: white;
+  border-radius: 30px 30px 0 0;
+  background-color: white;
   width: 100%;
   ${flexColumn};
 `;
 
 const StHeader = styled.div`
-
   box-sizing: border-box;
   text-align: left;
   width: 100%;
@@ -147,8 +168,7 @@ const CommentContainer = styled.div`
 `;
 
 const IconContainer = styled.div`
-  ${flexRow}
-  /* padding: 10px;
+  ${flexRow}/* padding: 10px;
   gap: 10px; */
 `;
 
