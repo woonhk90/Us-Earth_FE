@@ -17,6 +17,7 @@ import { clearVal } from "../../redux/modules/communitySlice";
 import isLogin from "../../lib/isLogin";
 import dayjs from "dayjs";
 import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
+import { formValid } from "../../utils/formValid";
 
 const CommunityForm = () => {
   const navigate = useNavigate();
@@ -58,34 +59,26 @@ const CommunityForm = () => {
   /* ----------------------------- 입력값 할당 및 유효성 검사 ---------------------------- */
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
-    if (e.target.value.trim() === "") {
-      setIsTitle("그룹명을 입력해 주세요");
-    } else setIsTitle("");
+    setIsTitle(formValid("title", e.target.value));
   };
 
   const onChangeContent = (e) => {
     setContent(e.target.value);
-    if (e.target.value.trim() === "") {
-      setIsContent("그룹 소개를 입력해주세요");
-    } else setIsContent("");
+    setIsContent(formValid("content", e.target.value));
   };
 
   const onChangelimitScore = (e) => {
     if (/^[1-9][0-9]?$|^100/.test(e.target.value) || e.target.value === "") {
       setLimitScore(e.target.value);
     }
-    if (e.target.value === "" || parseInt(e.target.value) < parseInt(limitParticipants)) {
-      setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
-    } else setIsLimitScore("");
+    setIsLimitScore(formValid("limitScore", e.target.value, limitParticipants));
   };
 
   const onChangelimitParticipants = (e) => {
     if (/^([1-9]|10)$/.test(e.target.value) || e.target.value === "") {
       setLimitParticipants(e.target.value);
     }
-    if (e.target.value === "") {
-      setIsLimitParticipants("참가인원을 입력해 주세요(10명 이내)");
-    } else setIsLimitParticipants("");
+    setIsLimitParticipants(formValid("limitParticipants", e.target.value, limitScore));
     if (parseInt(limitScore) < parseInt(e.target.value)) {
       setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
     } else setIsLimitScore("");
@@ -150,10 +143,10 @@ const CommunityForm = () => {
     } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
   };
 
-  const OnClickDeleteImage = (e) => {
-    e.preventDefault();
+  const OnClickDeleteImage = () => {
     setPreviewImg([]);
     setImageFile([]);
+    setIsPhotoMessage("");
   };
 
   /* --------------------------- password validation -------------------------- */
