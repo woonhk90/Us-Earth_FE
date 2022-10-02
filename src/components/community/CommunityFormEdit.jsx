@@ -241,7 +241,7 @@ const CommunityFormEdit = () => {
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     await dispatch(patchCommunityDetail({ communityId: param.id, formData })).then((response) => {
       if (!response.error) {
-        navigate(`/community/detail/${param.id}`);
+        navigate(`/community/detail/${param.id}`,{replace:true});
       }
     });
   };
