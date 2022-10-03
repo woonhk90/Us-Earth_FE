@@ -99,7 +99,6 @@ const CommunityProofForm = () => {
     setOkModal(!okModal);
   };
 
-  const [block, setBlock] = useState(false);
   const submitHandler = async () => {
     let formData = new FormData();
     if (title.trim() !== "" && content.trim() !== "" && files.length !== 0) {
@@ -118,7 +117,6 @@ const CommunityProofForm = () => {
       });
       dispatch(certifyReset());
     }
-    setBlock(false);
   };
 
   const ProofFormData = {
@@ -136,8 +134,6 @@ const CommunityProofForm = () => {
     okModal: okModal,
     okModalTitle: okModalTitle,
     okModalOnOff: okModalOnOff,
-    block,
-    block,
   };
 
   if (isLoading) {

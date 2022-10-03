@@ -4,7 +4,7 @@ import Layout from "../components/layout/Layout";
 import styled from 'styled-components';
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import CommunityTop from "../components/CommunityTop";
+import LogoSingleTop from "../components/LogoSingleTop";
 import CommunityBottom from "../components/CommunityBottom";
 
 const EarthCommunity = () => {
@@ -12,7 +12,7 @@ const EarthCommunity = () => {
     <>
       <Layout>
         <Header>
-          <CommunityTop />
+          <LogoSingleTop />
         </Header>
         <CommunityBox>
           <Community />

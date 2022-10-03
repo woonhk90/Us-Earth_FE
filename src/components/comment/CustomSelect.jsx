@@ -3,10 +3,11 @@ import { useDispatch } from "react-redux";
 import styled, { css, keyframes } from "styled-components";
 import { ReactComponent as WidthDot } from "../../assets/widthDot.svg";
 import { commentSelectBox } from "../../redux/modules/commentsSlice";
+import { ReactComponent as Setting } from "../../assets/Setting.svg";
 import { flexRow } from "../../styles/Flex";
 // import "./Modal.css";
 
-const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
+const CustomSelect = ({ selectBoxData, contentId, clickDispatch,optionIcon }) => {
   const modalRef = useRef();
   const dispatch = useDispatch();
 
@@ -39,10 +40,14 @@ const CustomSelect = ({ selectBoxData, contentId, clickDispatch }) => {
   return (
     <>
       <SelectBox ref={modalRef} onClick={() => setShowOptions(!showOptions)}>
-        <EditIcon>
+        {optionIcon ? 
+          <IconRight
+          >
+            <Setting />
+          </IconRight>: <EditIcon>
           <WidthDot />
-        </EditIcon>
-        <SelectOptions show={showOptions}>
+        </EditIcon>}
+        <SelectOptions optionIcon show={showOptions}>
           {selectBoxData.map((button) => (
             <Option key={button.id} onClick={onClickselectValue}>
               {button.icon}
@@ -85,7 +90,7 @@ const SelectOptions = styled.ul`
   position: absolute;
   z-index: 9999;
   list-style: none;
-  top: 20px;
+  top: ${(props)=> props.optionIcon ? '30px': '20px'};
   right: 0;
   overflow: hidden;
   border: ${(props) => (props.show ? "1px solid rgba(217, 217, 217, 0.5)" : "none")};
@@ -122,4 +127,10 @@ const EditIcon = styled.div`
   right: 0px;
   color: #49c181;
   font-size: 20px;
+`;
+
+const IconRight = styled.div`
+  cursor: pointer;
+  width: 28px;
+  height: 29px;
 `;

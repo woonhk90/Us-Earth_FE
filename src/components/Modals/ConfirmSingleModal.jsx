@@ -78,6 +78,7 @@ const ConfirmBox = styled.div`
   border-top: 1px solid #d9d9d9;
 `;
 const ConfirmItem = styled.div`
+cursor: pointer;
   width: 50%;
   border-right: ${(props) => props.borderRight};
   border-left: ${(props) => props.borderLeft};

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import CommunityBottom from "../components/CommunityBottom";
-import UserMissionTop from "../components/userMission/UserMissionTop";
+import MissionTop from "../components/userMission/MissionTop";
 import UserMissionWeek from "../components/userMission/UserMissionWeek";
 
 const EarthMyPageMissonWeek = () => {
@@ -13,7 +13,7 @@ const EarthMyPageMissonWeek = () => {
     <>
       <Layout>
         <Header>
-          <UserMissionTop />
+          <MissionTop />
         </Header>
         <CommunityBox>
           <UserMissionWeek />
