@@ -5,7 +5,7 @@ import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
 import { useDispatch } from "react-redux";
 import { certifyReset } from "../../redux/modules/communitySlice";
 import { ReactComponent as Back } from "../../assets/back.svg";
-import topLogo from "../../assets/jpg/topLogo.png";
+import topLogo from "../../assets/logo/topLogo.png";
 
 const CommunityProofTop = () => {
   const navigate = useNavigate();

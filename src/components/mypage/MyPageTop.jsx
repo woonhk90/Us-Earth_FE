@@ -5,7 +5,7 @@ import { ReactComponent as Setting } from "../../assets/Setting.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearVal } from "../../redux/modules/communitySlice";
-import topLogo from "../../assets/jpg/topLogo.png";
+import topLogo from "../../assets/logo/topLogo.png";
 import GuideSingleModal from "../Modals/GuideSingleModal";
 
 const CommunityTop = () => {

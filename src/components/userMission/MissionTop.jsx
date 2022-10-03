@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import { userMissionCleanUp } from "../../redux/modules/userMissionSlice";
 import ErrorModal from "../Modals/ErrorModal";
-import topLogo from "../../assets/jpg/topLogo.png";
+import topLogo from "../../assets/logo/topLogo.png";
 
 const MissionTop = () => {
   const navigate = useNavigate();
