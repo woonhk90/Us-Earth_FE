@@ -4,7 +4,7 @@ import { ReactComponent as Question } from "../assets/question.svg";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearVal } from "../redux/modules/communitySlice";
-import topLogo from "../assets/jpg/topLogo.png";
+import topLogo from "../assets/logo/topLogo.png";
 import { colors } from "../styles/color";
 import icons from "../assets";
 import GuideModal from "./Modals/GuideModal";
