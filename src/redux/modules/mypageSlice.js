@@ -10,7 +10,6 @@ export const __getMyInfo = createAsyncThunk("usearth/__getMyInfo", async (payloa
 
     const data = await tokenInstance.get('/mypage');
 
-
     return thunkAPI.fulfillWithValue(data.data);
   } catch (error) {
     // window.alert("내 정보를 불러올 수 없습니다.");
@@ -111,6 +110,20 @@ export const __getMyPageMissionGroup = createAsyncThunk("usearth/__getMyPageMiss
   }
 });
 
+/* -------------------------------- 프로필 사진 변경 ------------------------------- */
+export const __proFileChange = createAsyncThunk("usearth/__proFileChange", async (formData, thunkAPI) => {
+  try {
+    const data = await tokenInstance.patch('/mypage/changeimg', formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    thunkAPI.dispatch(__getMyInfo());
+  } catch (error) {
+    return;
+  }
+});
+
 
 const initialState = {
   userInfo: [],
@@ -202,6 +215,18 @@ export const mypageSlice = createSlice({
       state.myGroupList = action.payload;
     },
     [__getMyPageMissionGroup.rejected]: (state, action) => {
+      state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
+      state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
+    },
+    [__proFileChange.pending]: (state) => {
+      state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
+    },
+    [__proFileChange.fulfilled]: (state, action) => {
+      state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
+      // state.myGroupList = action.payload;
+      // state.userInfo.nickname = action.payload.nickname;
+    },
+    [__proFileChange.rejected]: (state, action) => {
       state.isLoading = false; // 에러가 발생했지만, 네트워크 요청이 끝났으니, false로 변경합니다.
       state.error = action.payload; // catch 된 error 객체를 state.error에 넣습니다.
     }
