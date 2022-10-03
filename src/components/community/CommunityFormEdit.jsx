@@ -17,6 +17,8 @@ import ErrorModal from "../Modals/ErrorModal";
 import SeceletonFormEdit from "./SceletonFormEdit";
 import { tokenInstance } from "../../api/axios";
 import dayjs from "dayjs";
+import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
+import { formValid } from "../../utils/formValid";
 
 const CommunityFormEdit = () => {
   const navigate = useNavigate();
@@ -70,13 +72,13 @@ const CommunityFormEdit = () => {
   const [password, setPassword] = useState("");
 
   const textRef = useRef();
-  const handleResizeHeight =() => {
+  const handleResizeHeight = () => {
     textRef.current.style.height = `64px`;
     if (textRef.current.scrollHeight < 128) {
       textRef.current.style.height = `64px`;
       textRef.current.style.height = textRef.current.scrollHeight + "px";
-    } 
-  }
+    }
+  };
 
   /* --------------------------------- 입력값 메세지 -------------------------------- */
   const [isLimitScore, setIsLimitScore] = useState("");
@@ -90,34 +92,26 @@ const CommunityFormEdit = () => {
   /* ----------------------------- 입력값 할당 및 유효성 검사 ---------------------------- */
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
-    if (e.target.value.trim() === "") {
-      setIsTitle("그룹명을 입력해 주세요");
-    } else setIsTitle("");
+    setIsTitle(formValid("title", e.target.value));
   };
 
   const onChangeContent = (e) => {
     setContent(e.target.value);
-    if (e.target.value.trim() === "") {
-      setIsContent("그룹 소개를 입력해주세요");
-    } else setIsContent("");
+    setIsContent(formValid("content", e.target.value));
   };
 
   const onChangelimitScore = (e) => {
     if (/^[1-9][0-9]?$|^100/.test(e.target.value) || e.target.value === "") {
       setLimitScore(e.target.value);
     }
-    if (e.target.value === "" || parseInt(e.target.value) < parseInt(limitParticipants)) {
-      setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
-    } else setIsLimitScore("");
+    setIsLimitScore(formValid("limitScore", e.target.value, limitParticipants));
   };
 
   const onChangelimitParticipants = (e) => {
     if (/^([1-9]|10)$/.test(e.target.value) || e.target.value === "") {
       setLimitParticipants(e.target.value);
     }
-    if (e.target.value === "") {
-      setIsLimitParticipants("참가인원을 입력해 주세요(10명 이내)");
-    } else setIsLimitParticipants("");
+    setIsLimitParticipants(formValid("limitParticipants", e.target.value, limitScore));
     if (parseInt(limitScore) < parseInt(e.target.value)) {
       setIsLimitScore("목표달성 수를 참가인원 수 이상, 100개 이하로 입력해 주세요.");
     } else setIsLimitScore("");
@@ -188,6 +182,7 @@ const CommunityFormEdit = () => {
     setPreviewImg([]);
     setImageFile([]);
     setDeleteImage(true);
+    setIsPhotoMessage("");
   };
 
   /* --------------------------- password validation -------------------------- */
@@ -218,6 +213,11 @@ const CommunityFormEdit = () => {
   // };
 
   /* ----------------------------------- 제출 ----------------------------------- */
+  const submitcheck = () => {
+    if (toDay === dates.start) {
+      setFormModal(!formmodal);
+    } else submitHandler();
+  };
   const submitHandler = async () => {
     let formData = new FormData();
     const dataSet = {
@@ -238,6 +238,24 @@ const CommunityFormEdit = () => {
         navigate(`/community/detail/${param.id}`,{replace:true});
       }
     });
+  };
+
+  const [formmodal, setFormModal] = useState(false);
+
+  // modal text data
+  const confirmModalData = {
+    title: "그룹 캠페인이 시작되면 수정 및 삭제가 불가능합니다. 등록하시겠습니까?",
+    cancel: "아니오",
+    submit: "예",
+  };
+
+  // editMode cancel function
+  const clickSubmit = () => {
+    submitHandler();
+  };
+
+  const modalOnOff = () => {
+    setFormModal(!formmodal);
   };
 
   useEffect(() => {
@@ -279,6 +297,7 @@ const CommunityFormEdit = () => {
 
   return (
     <>
+      {formmodal && <ConfirmSingleModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
       {error && <ErrorModal notGo={true} error={error} />}
       {isLogin() ? null : <IsLoginModal />}
       <CommunityFormWrap>
@@ -431,7 +450,7 @@ const CommunityFormEdit = () => {
             style={{
               cursor: "pointer",
             }}
-            onClick={submitHandler}
+            onClick={submitcheck}
             bgColor={"#315300"}
             color={"white"}
           >

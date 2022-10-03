@@ -5,14 +5,14 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import CommunityBottom from "../components/CommunityBottom";
 import UserMissionMonth from "../components/userMission/UserMissionMonth";
-import UserMissionTop from "../components/userMission/UserMissionTop";
+import MissionTop from "../components/userMission/MissionTop";
 
 const EarthMyPageMissonMonth = () => {
   return (
     <>
       <Layout>
         <Header>
-          <UserMissionTop />
+          <MissionTop />
         </Header>
         <CommunityBox>
           <UserMissionMonth />

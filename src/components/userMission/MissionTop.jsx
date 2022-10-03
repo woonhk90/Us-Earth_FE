@@ -1,23 +1,33 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
-import { useDispatch } from "react-redux";
-import { certifyReset } from "../../redux/modules/communitySlice";
 import { ReactComponent as Back } from "../../assets/back.svg";
+import { userMissionCleanUp } from "../../redux/modules/userMissionSlice";
+import ErrorModal from "../Modals/ErrorModal";
 import topLogo from "../../assets/jpg/topLogo.png";
 
-const CommunityProofTop = () => {
+const MissionTop = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const param = useParams();
+
+  useEffect(() => {
+    return () => dispatch(userMissionCleanUp());
+  }, []);
+
+  const { error } = useSelector((state) => state.userMission);
+
+  if (error) {
+    return <ErrorModal error={error} />;
+  }
+
   return (
     <>
       <HeaderWrap>
         <HeaderLeft
           onClick={() => {
-            dispatch(certifyReset());
-            navigate(`/community/detail/${param.communityId}`, { replace: true });
+            navigate("/mypage");
           }}
         >
           <IconLeft>
@@ -35,7 +45,7 @@ const CommunityProofTop = () => {
     </>
   );
 };
-export default CommunityProofTop;
+export default MissionTop;
 
 const HeaderWrap = styled.div`
   position: relative;

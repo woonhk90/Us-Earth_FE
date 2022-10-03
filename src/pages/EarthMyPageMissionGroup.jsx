@@ -4,14 +4,14 @@ import Layout from '../components/layout/Layout';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CommunityBottom from '../components/CommunityBottom';
-import MyPageMissionGroupTop from '../components/mypage/MyPageMissionGroupTop';
 import MyPageMissionGroup from '../components/mypage/MyPageMissionGroup';
+import MissionTop from '../components/userMission/MissionTop';
 const EarthMyPageMissionGroup = () => {
   return (
     <>
       <Layout>
         <Header>
-          <MyPageMissionGroupTop />
+          <MissionTop />
         </Header>
         <MypageBox>
           <MyPageMissionGroup />

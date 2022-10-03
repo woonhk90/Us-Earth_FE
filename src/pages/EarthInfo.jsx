@@ -6,12 +6,13 @@ import Footer from '../components/Footer';
 import InfoTop from '../components/info/InfoTop';
 import Info from '../components/info/Info';
 import CommunityBottom from '../components/CommunityBottom';
+import LogoSingleTop from '../components/LogoSingleTop';
 const EarthInfo = () => {
   return (
     <>
       <Layout>
         <Header>
-          <InfoTop />
+          <LogoSingleTop />
         </Header>
         <MypageBox>
           <Info />
