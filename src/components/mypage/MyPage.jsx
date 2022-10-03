@@ -10,6 +10,7 @@ import { colors } from '../../styles/color';
 import { __postNickNameOverlap, __postNickNameSubmit, resetOverlap } from '../../redux/modules/mypageSlice';
 import Input from '../elements/Input';
 import { debounce } from "lodash";
+import MyPageProfileModal from '../Modals/MyPageProfileModal';
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const MyPage = () => {
   React.useEffect(() => {
     dispatch(__getMyInfo());
   }, [dispatch])
-  const { Chart, Group, RightThinArrow, MoveNext, Check, CheckCancel, NickNameArrow } = icons;
+  const { Chart, Group, RightThinArrow, MoveNext, Check, CheckCancel, NickNameArrow, Camera, IconSearch } = icons;
   const { userInfo } = useSelector((state) => state.mypage);
 
 
@@ -32,6 +33,7 @@ const MyPage = () => {
     setUserNick(!userNick);
   }
   const [newNick, setNewNick] = React.useState('');//새로 입력하는 닉네임
+  const [profileModalFlag, setProfileModalFile] = React.useState(false);//프로필 모달 flag
 
   /* --------------------------------- 닉네임 변경 --------------------------------- */
   const debounceSomethingFunc = debounce((val) => {
@@ -59,8 +61,19 @@ const MyPage = () => {
     setOverlapFlag(overlap);
   }, [overlap, dispatch])
 
+  /* --------------------------------- 프로필 변경 --------------------------------- */
+  const onChangeProfile = () => {
+    setProfileModalFile(!profileModalFlag);
+  }
+
+  const closeModal = () => {
+    setProfileModalFile(!profileModalFlag);
+  };
+
+
   return (
     <>
+      {profileModalFlag && <MyPageProfileModal closeModal={closeModal} imgSrc={userInfo?.profileImage}></MyPageProfileModal>}
       <MyPageWrap>
         <Container>
           <MyPageInfo>
@@ -79,7 +92,10 @@ const MyPage = () => {
               {/* <div>{userInfo?.nickname}</div> */}
               <div>LV.{userInfo?.level} 등급</div>
             </MyPageInfoBox>
-            <MyPageProFile><img src={userInfo?.profileImage} alt='profileImage' referrerPolicy="no-referrer" /></MyPageProFile>
+            <MyPageProFile>
+              <img src={userInfo?.profileImage} alt='profileImage' referrerPolicy="no-referrer" />
+              <ProfileSearch onClick={onChangeProfile}><IconSearch /></ProfileSearch>
+            </MyPageProFile>
           </MyPageInfo>
 
 
@@ -116,7 +132,7 @@ const Container = styled.div`
 const MyPageInfo = styled.div`
   background-color: #fff;
   width: 100%;
-  padding: 0 25px;
+  padding: 25px 25px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
@@ -130,7 +146,7 @@ const MyPageInfoBox = styled.div`
   div:nth-child(1) {
     font-weight: 600;
     font-size:24px;
-    line-height:32px;
+    height:45px;
   }
   div:nth-child(2) {
     font-weight: 500;
@@ -138,6 +154,14 @@ const MyPageInfoBox = styled.div`
     line-height:28px;
     color: #9b9b9b;
     letter-spacing:0.05em;
+  }
+  @media (max-width: 350px) {
+    max-width:72%;
+  }
+  @media (max-width: 320px) {
+    max-width:68%;
+    div:nth-child(1){font-size:19px;}
+    div:nth-child(2){font-size:15px;}
   }
 `;
 const NickChangeTrue = styled.div`
@@ -167,6 +191,9 @@ const NickChangeFalse = styled.div`
     font-weight: 500;
     display:inline-block;
     margin-left:10px;
+    @media (max-width: 320px) {
+      margin-left:2px;
+    }
   }
 `;
 
@@ -175,17 +202,48 @@ const NickChangeFalse = styled.div`
 
 
 const MyPageProFile = styled.div`
+  position:relative;
   width: 74px;
   height: 74px;
-  padding: 27px 0;
-  border-radius: 50%;
+  @media (max-width: 320px) {
+    width:65px;
+    height: 65px;
+  }
+  border-radius:50%;
+  top:0;
+  left:0;
   img {
-    border-radius: 50%;
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     object-fit: cover;
   }
 `;
+const ProfileSearch = styled.form`
+  width:25px;
+  height:25px;
+  border-radius: 50%;
+  padding:5px;
+  box-sizing:border-box;
+  background-color:${colors.grayF5};
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+
+  position:absolute;
+  bottom:0;
+  right:0;
+`;
+
+
+
+
+
+
+
+
+
+
 
 const MyPageMissionList = styled.div`
   background-color: #fff;
