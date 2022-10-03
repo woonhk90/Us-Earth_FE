@@ -9,5 +9,4 @@ export default Header;
 
 const HeaderWrap = styled.div`
 width: 100%;
-
 `;

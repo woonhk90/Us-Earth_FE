@@ -91,62 +91,62 @@ const CommunityDetail = () => {
 
 
   /* --------------------------- 수정, 삭제, 신고하기 셀렉트 박스 -------------------------- */
-  const { dateStatus, commentResponseDtoList } = useSelector((state) => state.comments.comments);
+  // const { dateStatus, commentResponseDtoList } = useSelector((state) => state.comments.comments);
 
-  // dispatch function
-  const clickDispatch = (payload) => {
-    if (payload.selectName === "수정하기") {
-      /* ------------------------- detail수정페이지로 navigate시킴 ------------------------ */
-      navigate(`/community/edit/${payload.contentId}`);
-    } else if (payload.selectName === "삭제하기") {
-      /* ------------------------------- Detail를 삭제함 ------------------------------ */
-      setDelModal(!delModal);
-    }
-  };
+  // // dispatch function
+  // const clickDispatch = (payload) => {
+  //   if (payload.selectName === "수정하기") {
+  //     /* ------------------------- detail수정페이지로 navigate시킴 ------------------------ */
+  //     navigate(`/community/edit/${payload.contentId}`);
+  //   } else if (payload.selectName === "삭제하기") {
+  //     /* ------------------------------- Detail를 삭제함 ------------------------------ */
+  //     setDelModal(!delModal);
+  //   }
+  // };
 
-  // data
-  const { Delete, Report, Edit } = icons;
-  const selectBoxData = [
-    {
-      id: 1,
-      selectName: "수정하기",
-      icon: [
-        <ModalIcon key={1}>
-          <Edit />
-        </ModalIcon>,
-      ],
-    },
-    {
-      id: 2,
-      selectName: "삭제하기",
-      icon: [
-        <ModalIcon key={2}>
-          <Delete />
-        </ModalIcon>,
-      ],
-    },
-  ];
+  // // data
+  // const { Delete, Report, Edit } = icons;
+  // const selectBoxData = [
+  //   {
+  //     id: 1,
+  //     selectName: "수정하기",
+  //     icon: [
+  //       <ModalIcon key={1}>
+  //         <Edit />
+  //       </ModalIcon>,
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     selectName: "삭제하기",
+  //     icon: [
+  //       <ModalIcon key={2}>
+  //         <Delete />
+  //       </ModalIcon>,
+  //     ],
+  //   },
+  // ];
 
-  /* ---------------------------------- 삭제 모달 --------------------------------- */
-  const [delModal, setDelModal] = useState(false);
+  // /* ---------------------------------- 삭제 모달 --------------------------------- */
+  // const [delModal, setDelModal] = useState(false);
 
-  // modal text data
-  const confirmModalData = {
-    title: "해당 글을 삭제하시겠습니까?",
-    cancel: "아니오",
-    submit: "예",
-  };
+  // // modal text data
+  // const confirmModalData = {
+  //   title: "해당 글을 삭제하시겠습니까?",
+  //   cancel: "아니오",
+  //   submit: "예",
+  // };
 
-  // editMode cancel function
-  const clickSubmit = async () => {
-    await dispatch(deleteCommunityDetail({ communityId: param.id }));
-    navigate('/', { replace: true });
-  };
+  // // editMode cancel function
+  // const clickSubmit = async () => {
+  //   await dispatch(deleteCommunityDetail({ communityId: param.id }));
+  //   navigate('/', { replace: true });
+  // };
 
-  // close Modal
-  const closeModal = () => {
-    setDelModal(!delModal);
-  };
+  // // close Modal
+  // const closeModal = () => {
+  //   setDelModal(!delModal);
+  // };
 
   /* ------------------------------- 로딩&에러 모달 ------------------------------ */
   
@@ -167,18 +167,18 @@ const CommunityDetail = () => {
     <>
       {/* {imageModal && <ImageModal image={communityDetail?.img} modalOnOff={imageModalOnOff} modal={imageModal}></ImageModal>} */}
       {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
-      {delModal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmSingleModal>}
+      {/* {delModal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmSingleModal>} */}
       <CommunityDetailWrap>
         <Container>
           <Forest imgUrl={gifUrl}></Forest>
 
-          <DetailSetting>
+          {/* <DetailSetting>
             {communityDetail.dateStatus === "before" ?
               (communityDetail.writer ? <CustomSelect clickDispatch={clickDispatch} contentId={param.id} selectBoxData={selectBoxData} /> : null)
               :
               null
             }
-          </DetailSetting>
+          </DetailSetting> */}
 
           <Content>
             <ContentItem font={"16px/22px 'Noto Sans KR', 'sans-serif'"} marginBottom={"10px"}>
