@@ -11,8 +11,9 @@ import GuideModal from "./Modals/GuideModal";
 import CustomSelect from "./comment/CustomSelect";
 import ConfirmSingleModal from "./Modals/ConfirmSingleModal";
 import { deleteCommunityDetail } from "../redux/modules/communityFormSlice";
+import CommunityTop from "./LogoSingleTop";
 
-const CommunityTop = () => {
+const CommunityDetailTop = () => {
   const { Back } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -133,7 +134,7 @@ const CommunityTop = () => {
     </>
   );
 };
-export default CommunityTop;
+export default CommunityDetailTop;
 
 const HeaderWrap = styled.div`
   position: relative;
