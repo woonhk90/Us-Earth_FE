@@ -26,18 +26,18 @@ const ConfirmModal = (props) => {
 export default ConfirmModal;
 
 const ModalWrap = styled.div`
-position: absolute;
-bottom: 0;
-left: 0;
-width: 100%;
-height: 100vh;
-background-color: rgba(0, 0, 0, 0.4);
-display: flex;
-justify-content: center;
-align-items: center;
-z-index: 999;
-padding: 0 15px;
-box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  padding: 0 15px;
+  box-sizing: border-box;
 `;
 
 const ModalBody = styled.div`
@@ -61,6 +61,7 @@ const AttendBox = styled.div`
   border-top: 1px solid #d9d9d9;
 `;
 const AttendItem = styled.div`
+  cursor: pointer;
   width: 50%;
   font: 600 22px/30px "Noto Sans KR", "sans-serif";
   padding: 19px 0;

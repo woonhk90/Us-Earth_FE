@@ -57,6 +57,7 @@ const AttendTitle = styled.p`
 `;
 
 const AttendBox = styled.div`
+cursor: pointer;
   width: 100%;
   display: flex;
   justify-content: center;
