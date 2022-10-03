@@ -67,7 +67,6 @@ const StInput = styled.input`
     return (
       props.inputype === "nick" &&
       css`
-        /* width:60%; */
         box-sizing: border-box;
         margin: 0;
         font-size: 16px;

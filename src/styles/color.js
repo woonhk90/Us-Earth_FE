@@ -11,8 +11,10 @@ export const colors = {
     grayF5:'#F5F5F5',
     grayCB:'#CBCBCB',
     gray9B:'#9B9B9B',
+    gray7B:'#7B7B7B',
 
     black22:'#222222',
+    black21:'#212121',
 
     white:'#FFFFFF',
 
@@ -22,6 +24,6 @@ export const colors = {
     dot4:`#9BBA74`,
     dot5:`#638A55`,
 
-
+    HR:'rgba(0,0,0,0.14)',
   };
   

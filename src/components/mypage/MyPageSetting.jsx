@@ -13,6 +13,9 @@ import axios from 'axios';
 import Logo_K from '../../assets/logo_kakao.png';
 import Logo_N from '../../assets/logo_naver.png';
 import Logo_G from '../../assets/logo_google.png';
+import { colors } from '../../styles/color';
+import { tokenInstance } from '../../api/axios';
+import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
 
 
@@ -24,6 +27,7 @@ const MyPage = () => {
   const [nickFlag, setNickFlag] = useState(false);//닉네임 변경 하겠냐(true/false)
   const [overlapFlag, setOverlapFlag] = useState(false);// 중복여부 상태값(true/false)
   const [changeNicName, setChangeNickName] = useState('');
+  const [secession, setSecession] = useState(false);
 
 
   /* -------------------------- 내정보 페이지 공개 비공개 선택 가능 -------------------------- */
@@ -81,7 +85,7 @@ const MyPage = () => {
   //   });
 
 
-
+  /* ---------------------------------- 로그아웃 ---------------------------------- */
   const onLogoutHandler = async () => {
     const response = await axios.get(`${process.env.REACT_APP_API_URL_NOT_AIP}/user/logout`, {
       headers: {
@@ -95,11 +99,39 @@ const MyPage = () => {
       navigate('/');
     }
   }
+  /* ---------------------------------- 회원탈퇴 ---------------------------------- */
+  const onSecessionHandler = () => {
+    setSecession(!secession);
+  }
 
+  const confirmModalData = {
+    title: '정말 탈퇴 하시겠습니까?',
+    submit: '네',
+    cancel: '아니오'
+  }
+
+  const clickSubmit = async () => {
+    const response = await tokenInstance.delete(`${process.env.REACT_APP_API_URL}/mypage/withdrawal`, {
+      headers: {
+        Authorization: getCookie('mycookie'),
+      },
+    });
+    if (response.status === 200) {
+      await removeCookie('mycookie');
+      await removeCookie('refreshToken');
+      await removeCookie('memberId');
+      navigate('/');
+    }
+  }
+
+  const closeModal = () => {
+    setSecession(!secession);
+  };
 
 
   return (
     <>
+      {secession && <ConfirmSingleModal confirmModalData={confirmModalData} closeModal={closeModal} clickSubmit={clickSubmit}></ConfirmSingleModal>}
       <MyPageWrap>
         <Container>
           <LoginInfo>
@@ -137,6 +169,10 @@ const MyPage = () => {
           <div>
             <LogoutBtn onClick={onLogoutHandler}>로그아웃</LogoutBtn>
           </div>
+          <SecessionBox onClick={onSecessionHandler}>
+            <span>회원탈퇴</span>
+          </SecessionBox>
+
         </Container>
       </MyPageWrap>
     </>
@@ -157,7 +193,7 @@ const Container = styled.div`
 
 const LoginInfo = styled.div`
   width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  border-bottom: 1px solid ${colors.HR};
   margin-bottom: 32px;
 `;
 const LoginInfoTitle = styled.h2`
@@ -178,7 +214,7 @@ const LoginInfoContent = styled.div`
 
 const NickInfo = styled.div`
   width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+  border-bottom: 1px solid ${colors.HR};
   margin-bottom: 32px;
 `;
 const NickInfoTitle = styled.div`
@@ -210,6 +246,11 @@ const MyPageFlag = styled.div`
 const MyPageFlagTitle = styled.h2`
   font: 500 18px/24px "Noto Sans","sans-serif";
 `;
+
+
+
+
+/* ---------------------------------- 로그아웃 ---------------------------------- */
 const LogoutBtn = styled.button`
   width: 100%;
   font: 500 18px/60px "Noto Sans","sans-serif";
@@ -217,6 +258,24 @@ const LogoutBtn = styled.button`
   border: 1px solid #b5b5b5;
   color: #424242;
 `;
+/* ---------------------------------- 회원탈퇴 ---------------------------------- */
+const SecessionBox = styled.p`
+  cursor: pointer;
+  width:100%;
+  text-align:right;
+  font-family:'Noto Sans','sans-serif';
+  line-height:25px;
+  span{
+    font-size:12px;
+    color:${colors.gray7B};
+    border-bottom:1px solid ${colors.gray7B};
+  }
+`;
+
+
+
+
+
 
 /* ------------------------------ switch button ----------------------------- */
 const CheckBoxWrapper = styled.div`
