@@ -43,7 +43,7 @@ const CommunityDetailTop = () => {
   const clickDispatch = (payload) => {
     if (payload.selectName === "수정하기") {
       /* ------------------------- detail수정페이지로 navigate시킴 ------------------------ */
-      navigate(`/community/edit/${payload.contentId}`);
+      navigate(`/community/edit/${payload.contentId}`,{replace:true});
     } else if (payload.selectName === "삭제하기") {
       /* ------------------------------- Detail를 삭제함 ------------------------------ */
       setDelModal(!delModal);
