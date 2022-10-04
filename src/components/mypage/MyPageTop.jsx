@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { ReactComponent as Question } from "../../assets/question.svg";
-import { ReactComponent as Setting } from "../../assets/Setting.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearVal } from "../../redux/modules/communitySlice";
 import topLogo from "../../assets/logo/topLogo.png";
 import GuideSingleModal from "../Modals/GuideSingleModal";
+import Button from "../elements/Button";
 
 const CommunityTop = () => {
   const navigate = useNavigate();
@@ -34,20 +33,22 @@ const CommunityTop = () => {
           <Image src={topLogo} alt="topLogo"></Image>
         </HeaderCenter>
         <HeaderRight>
-          <IconRight
+          <Button
+          btnType="svg"
+          svgType="question"
             onClick={() => {
               setDelModal(!delModal);
             }}
           >
-            <Question />
-          </IconRight>
-          <IconRight
+          </Button>
+          <Button
+          btnType="svg"
+          svgType="setting"
             onClick={() => {
               navigate("/mypage/setting");
             }}
           >
-            <Setting />
-          </IconRight>
+          </Button>
         </HeaderRight>
       </HeaderWrap>
     </>
@@ -82,16 +83,6 @@ cursor: pointer;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-`;
-const P = styled.p`
-  font-weight: 600;
-  font-size: 20px;
-`;
-
-const IconRight = styled.div`
-  cursor: pointer;
-  width: 28px;
-  height: 29px;
 `;
 
 const Image = styled.img`

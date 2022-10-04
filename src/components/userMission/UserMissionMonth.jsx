@@ -1,5 +1,5 @@
 import React from "react";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { flexBetween, flexColumn, flexRow } from "../../styles/Flex";
 import Button from "../elements/Button";
@@ -14,27 +14,26 @@ import IsLoginModal from "../Modals/IsLoginModal";
 const UserMissionMonth = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
-    {isLogin() ? null : <IsLoginModal />}
+      {isLogin() ? null : <IsLoginModal />}
       <MissionStatsButtonWrap>
         <Button
           onClick={() => {
             navigate("/mypage/mission/week");
           }}
-          btntype="onOff"
+          btnType="onOff"
         >
           주간통계
         </Button>
-        <Button btntype="onOff" on="on">
+        <Button btnType="onOff" on="on">
           월간통계
         </Button>
       </MissionStatsButtonWrap>
       <UserMissionMonthCalendar />
-      <UserMissionBottom/>
+      <UserMissionBottom />
     </>
   );
 };
@@ -69,26 +68,25 @@ const SelectDateWrap = styled.div`
 
 const SelectDateMissionListWrap = styled.div`
   /* ${flexColumn} */
-  padding: 12px 33px;  
+  padding: 12px 33px;
   .dot0 {
-      background-color: ${colors.dot1};
-    }
-    .dot1{
-      background-color: ${colors.dot2};
-    }
-    .dot2{
-      background-color: ${colors.dot3};
-    }
-    .dot3{
-      background-color: ${colors.dot4};
-    }
-    .dot4{
-      background-color: ${colors.dot5};
-    }
-    @media (max-width: 389px) {
-      padding: 12px;  
+    background-color: ${colors.dot1};
   }
- 
+  .dot1 {
+    background-color: ${colors.dot2};
+  }
+  .dot2 {
+    background-color: ${colors.dot3};
+  }
+  .dot3 {
+    background-color: ${colors.dot4};
+  }
+  .dot4 {
+    background-color: ${colors.dot5};
+  }
+  @media (max-width: 389px) {
+    padding: 12px;
+  }
 `;
 const SelectMissionSingleWrap = styled.div`
   ${flexRow}
@@ -101,10 +99,9 @@ const SelectDateMissionDot = styled.div`
   background-color: #d9d9d9;
   border-radius: 50%;
   margin-right: 17px;
-  
+
   @media (max-width: 389px) {
     width: 18px;
-  height: 18px;
+    height: 18px;
   }
- 
 `;

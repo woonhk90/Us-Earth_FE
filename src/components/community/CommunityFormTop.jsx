@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { clearVal } from "../../redux/modules/communitySlice";
 import icons from "../../assets";
+import Button from "../elements/Button";
 
 const CommunityFormTop = ({ title }) => {
   const { Cancel } = icons;
@@ -13,17 +14,17 @@ const CommunityFormTop = ({ title }) => {
     return () => {
       dispatch(clearVal());
     };
-  }, [])
+  }, []);
   return (
     <>
       <HeaderWrap>
-        <IconDiv>
-          <Cancel
-            onClick={() => {
-              navigate(-1, { replace: true });
-            }}
-          />
-        </IconDiv>
+        <Button
+          svgType="cancel"
+          btnType="svg"
+          onClick={() => {
+            navigate(-1, { replace: true });
+          }}
+        />
       </HeaderWrap>
       <HeaderFlex>
         <P>{title}</P>

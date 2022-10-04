@@ -33,6 +33,8 @@ import { ReactComponent as Delete } from "./delete.svg";
 import { ReactComponent as Report } from "./report.svg";
 import { ReactComponent as VerticalDot } from "./verticalDot.svg";
 import { ReactComponent as Write } from "./write.svg";
+import { ReactComponent as Question } from "./question.svg";
+import { ReactComponent as Setting } from "./Setting.svg";
 
 import level_01 from "./level_01.gif";
 import level_02 from "./level_02.gif";
@@ -82,6 +84,8 @@ const icons = {
   Check,
   CheckCancel,
   NickNameArrow,
+  Question,
+  Setting,
 };
 
 export default icons;
