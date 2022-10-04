@@ -33,7 +33,8 @@ const CommunityDetail = () => {
     dispatch(__getCommunityDetail({ communityId: param.id }));
     return () => dispatch(detailReset()) //detail clean-up
   }, [dispatch, param.id]);
-  const { communityDetail, isLoading,detailIsLoading, error, certifyHasMore } = useSelector((state) => state.community);
+  const { communityDetail, isLoading, detailIsLoading, error, certifyHasMore } = useSelector((state) => state.community);
+  console.log(communityDetail);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const { certify } = useSelector((state) => state.community);
@@ -149,7 +150,7 @@ const CommunityDetail = () => {
   // };
 
   /* ------------------------------- 로딩&에러 모달 ------------------------------ */
-  
+
   if (detailIsLoading) {
     return (
       <>
@@ -224,20 +225,24 @@ const CommunityDetail = () => {
               <div>
                 <EndState>
                   <EndStateTop>
-                    <EndStateItem position={"absolute"} top={"0"} left={"0"} font={"600 20px/1 'Noto Sans KR', 'sans-serif'"}>
-                      달성률
-                    </EndStateItem>
-                    <EndStateItem font={"600 44px/1 'Noto Sans KR', 'sans-serif'"} textAlign={"right"}>
-                      {communityDetail.successPercent}
-                      <span>% </span>
-                      <span> /100%</span>
-                    </EndStateItem>
+                    <RightTop>
+                      <p>참여인원</p>
+                      <p>({communityDetail.participantsCnt}/{communityDetail.limitParticipants})</p>
+                    </RightTop>
+                    <LeftTop>
+                      <p>달성률</p>
+                      <p>
+                        {communityDetail.successPercent}
+                        <span>% </span>
+                        <span> /100%</span>
+                      </p>
+                    </LeftTop>
                   </EndStateTop>
                   <EndStateBottom>
                     <progress value={communityDetail.successPercent} max="100"></progress>
                   </EndStateBottom>
                 </EndState>
-                {communityDetail.participant ? null : <EndStateJoin onClick={() => { onInJoinBtn(); }}>참여하기</EndStateJoin>}
+                {communityDetail.currentPercent===100?null:(communityDetail.participant ? null : <EndStateJoin onClick={() => { onInJoinBtn(); }}>참여하기</EndStateJoin>)}
                 {modal && <Modal closeModal={() => setModal(!modal)} communityId={param.id}></Modal>}
               </div>
             ) : null}
@@ -388,32 +393,53 @@ const EndState = styled.div`
 const EndStateTop = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
-  align-items: baseline;
-
-  position: relative;
-  top: 0;
-  left: 0;
+  justify-content:space-between;
+  align-items:flex-start;
 `;
-const EndStateItem = styled.div`
-  width: 100%;
-  position: ${(props) => props.position};
-  top: ${(props) => props.top};
-  left: ${(props) => props.left};
-  font: ${(props) => props.font};
-  color: ${(props) => props.color};
-  text-align: ${(props) => props.textAlign};
-  span:nth-of-type(1) {
-    font-size: 30px;
-    @media (max-width: 299px) {
-      font-size: 18px;
+const RightTop = styled.div`
+  width:100%;
+  p{
+    font-weight:600;
+    font-size:20px;
+    line-height:30px;
+    font-family:'Noto sans KR','sans-serif';
+  }
+  p:nth-child(2){
+    color:${colors.gray9E};
+  }
+`;
+const LeftTop = styled.div`
+  width:100%;
+  text-align:right;
+  p:nth-child(1){
+    font-weight:600;
+    font-size:20px;
+    line-height:25px;
+    font-family:'Noto sans KR','sans-serif';
+  }
+  p:nth-child(2){
+    font-weight:600;
+    font-size:40px;
+    line-height:1;
+    font-family:'Noto sans KR','sans-serif';
+
+    span:nth-of-type(1) {
+      font-size: 30px;
+      @media (max-width: 299px) {
+        font-size: 18px;
+      }
+    }
+    span:nth-of-type(2) {
+      font: 18px/25px "Noto Sans KR", "sans-serif";
+      color: #9e9e9e;
     }
   }
-  span:nth-of-type(2) {
-    font: 18px/25px "Noto Sans KR", "sans-serif";
-    color: #9e9e9e;
-  }
 `;
+
+
+
+
+
 const EndStateBottom = styled.div`
   width: 100%;
   margin: 10px 0;
@@ -441,7 +467,7 @@ const EndStateJoin = styled.div`
   font: 18px/27px "Noto Sans KR", "sana-serif";
   text-align: center;
   padding: 11px 0;
-  background-color: #424242;
+  background-color: ${colors.green00};
   color: #fff;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
