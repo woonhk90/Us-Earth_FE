@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Button from "../elements/Button";
 
 const IsLoginModal = () => {
   const [okModal, setOkModal] = useState(false);
@@ -25,9 +26,7 @@ const IsLoginModal = () => {
                 로그인이 필요합니다.
                 <br /> 로그인 창으로 이동합니다.
               </AttendTitle>
-              <AttendBox>
-                <AttendItem onClick={okModalOnOff}>확인</AttendItem>
-              </AttendBox>
+                <Button btnType="modal" onClick={okModalOnOff}>확인</Button>
             </AttendWrap>
           </ModalBody>
         </ModalWrap>

@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as Cancel } from "../assets/Cancel.svg";
-import { ReactComponent as UserPlus } from "../assets/UserPlus.svg";
 
 const CommunityTop = () => {
   return (

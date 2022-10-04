@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import Button from "../elements/Button";
 
-const ConfirmModal = (props) => {
+const AlertModal = (props) => {
   const { closeModal } = props;
   const { title, btn1 } = props.alertModalData;
   return (
@@ -14,16 +15,14 @@ const ConfirmModal = (props) => {
         >
           <AttendWrap>
             <AttendTitle>{title}</AttendTitle>
-            <AttendBox>
-              <AttendItem onClick={props.goAction}>{btn1}</AttendItem>
-            </AttendBox>
+              <Button btnType="modal" onClick={props.goAction}>{btn1}</Button>
           </AttendWrap>
         </ModalBody>
       </ModalWrap>
     </>
   );
 };
-export default ConfirmModal;
+export default AlertModal;
 
 const ModalWrap = styled.div`
   position: absolute;
@@ -42,7 +41,6 @@ const ModalWrap = styled.div`
 
 const ModalBody = styled.div`
   width: 100%;
-
   background-color: #fff;
   border-radius: 12px;
 `;
@@ -52,17 +50,4 @@ const AttendTitle = styled.p`
   font: 22px/30px "Noto Sans KR", "sans-serif";
   text-align: center;
   padding: 50px 0;
-`;
-const AttendBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border-top: 1px solid #d9d9d9;
-`;
-const AttendItem = styled.div`
-  cursor: pointer;
-  width: 50%;
-  font: 600 22px/30px "Noto Sans KR", "sans-serif";
-  padding: 19px 0;
 `;

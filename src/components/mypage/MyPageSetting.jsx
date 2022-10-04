@@ -17,8 +17,6 @@ import { colors } from '../../styles/color';
 import { tokenInstance } from '../../api/axios';
 import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
-
-
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
