@@ -22,10 +22,7 @@ import NoMore from "../components/etc/NoMore";
 import Loading from "./etc/Loading";
 import ErrorModal from "./Modals/ErrorModal";
 import icons from "../assets";
-import ImageModal from "./Modals/ImageModal";
-import CustomSelect from "./comment/CustomSelect";
-import ConfirmSingleModal from "./Modals/ConfirmSingleModal";
-import { deleteCommunityDetail } from "../redux/modules/communityFormSlice";
+import Button from "./elements/Button";
 
 const CommunityDetail = () => {
   const { CommunityNewProof } = icons;
@@ -247,13 +244,15 @@ const CommunityDetail = () => {
                       / {communityDetail.limitParticipants}명
                     </StateItem>
                   </StateTop>
-                  <StateBottom
+                  <Button
+                    btnType="communityJoin"
+                    color={colors.green00}
                     onClick={() => {
                       onInJoinBtn();
                     }}
                   >
                     참여하기
-                  </StateBottom>
+                  </Button>
                   {modal && (
                     <Modal
                       closeModal={() => setModal(!modal)}
@@ -297,13 +296,15 @@ const CommunityDetail = () => {
                 </EndState>
                 {communityDetail.currentPercent ===
                 100 ? null : communityDetail.participant ? null : (
-                  <EndStateJoin
+                  <Button
+                    btnType="communityJoin"
+                    color={colors.green00}
                     onClick={() => {
                       onInJoinBtn();
                     }}
                   >
                     참여하기
-                  </EndStateJoin>
+                  </Button>
                 )}
                 {modal && (
                   <Modal
@@ -341,15 +342,15 @@ const CommunityDetail = () => {
           {getCookie("mycookie") ===
           undefined ? null : communityDetail.participant ? (
             communityDetail.dateStatus === "ongoing" ? (
-              <CertifyContentIcon
+              <Button
+                btnType="communityWrite"
+                svgType="newProof"
                 onClick={() =>
                   navigate(`/community/${param.id}/proof/form`, {
                     replace: true,
                   })
                 }
-              >
-                <CommunityNewProof />
-              </CertifyContentIcon>
+              ></Button>
             ) : null
           ) : null}
 

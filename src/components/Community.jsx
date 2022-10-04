@@ -14,6 +14,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper";
+import Button from "./elements/Button";
 
 const Community = () => {
   const { CommunityNewGroup } = icons;
@@ -87,13 +88,22 @@ const Community = () => {
           <Line />
           {/* 전체그룹 */}
           <CommunityItemList />
-          <IconCommunityWriteBtn
+
+          {/* <IconCommunityWriteBtn
             onClick={() => {
               navigate("/community/form");
             }}
           >
             <CommunityNewGroup />
-          </IconCommunityWriteBtn>
+          </IconCommunityWriteBtn> */}
+
+          <Button
+            btnType="communityWrite"
+            svgType="newGroup"
+            onClick={() => {
+              navigate("/community/form");
+            }}
+          ></Button>
         </Container>
       </CommunityWrap>
     </>
@@ -164,7 +174,7 @@ const NewGroupBox = styled.div`
 `;
 
 const IconCommunityWriteBtn = styled.div`
-  position: absolute;
+  /* position: absolute;
   bottom: 70px;
   right: 10px;
   z-index: 5;
@@ -172,5 +182,5 @@ const IconCommunityWriteBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  cursor: pointer; */
 `;
