@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import Button from "../elements/Button";
 
 const ConfirmModal = (props) => {
   const { clickSubmit, closeModal } = props;
@@ -35,9 +36,7 @@ const ConfirmModal = (props) => {
           </ConfirmWrap>
           <AttendWrap viewFlag={viewFlag}>
             <AttendTitle>{submitReturn}</AttendTitle>
-            <AttendBox>
-              <AttendItem onClick={closeModal}>확인</AttendItem>
-            </AttendBox>
+              <Button btnType="modal"  onClick={closeModal}>확인</Button>
           </AttendWrap>
         </ModalBody>
       </ModalWrap>

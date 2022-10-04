@@ -20,7 +20,8 @@ import { ReactComponent as CheckCancel } from "./check_cancel.svg";
 import { ReactComponent as NickNameArrow } from "./nickname_arrow.svg";
 import { ReactComponent as Camera } from "./icon_camera.svg";
 import { ReactComponent as IconSearch } from "./icon_search.svg";
-
+import { ReactComponent as Question } from "./question.svg";
+import { ReactComponent as Setting } from "./Setting.svg";
 
 import { ReactComponent as Community_On } from "./community_on.svg";
 import { ReactComponent as Community_Off } from "./community_off.svg";
@@ -36,8 +37,6 @@ import { ReactComponent as Delete } from "./delete.svg";
 import { ReactComponent as Report } from "./report.svg";
 import { ReactComponent as VerticalDot } from "./verticalDot.svg";
 import { ReactComponent as Write } from "./write.svg";
-import { ReactComponent as Question } from "./question.svg";
-import { ReactComponent as Setting } from "./Setting.svg";
 
 import level_01 from "./level_01.gif";
 import level_02 from "./level_02.gif";

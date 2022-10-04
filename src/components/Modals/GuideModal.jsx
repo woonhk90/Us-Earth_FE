@@ -1,8 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ReactComponent as Cancel } from "../../assets/Cancel.svg";
 import { useState } from "react";
+import Button from "../elements/Button";
+import { flexBetween } from "../../styles/Flex";
 
 const GuideModal = (props) => {
   const { closeModal,totalPage } = props;
@@ -30,15 +30,15 @@ const GuideModal = (props) => {
           <ConfirmWrap>
             <ConfirmTitle>
               <IconDiv onClick={closeModal}>
-                <Cancel />
+                <Button btnType="svg" svgType="cancel"/>
               </IconDiv>
               <Image src={require(`../../assets/jpg/guide${imgNumber}.jpg`)} alt={`guide${imgNumber}`}></Image>
             </ConfirmTitle>
             <ConfirmBox>
-              <ConfirmItem color={"#B9B9B9"} onClick={preClick}>
+              <Button btnType="modal" on="on" onClick={preClick}>
                 {imgNumber === 1 ? "닫기" : "이전"}
-              </ConfirmItem>
-              <ConfirmItem onClick={nextClick}>{imgNumber === totalPage ? "닫기" : "다음"}</ConfirmItem>
+              </Button>
+              <Button btnType="modal"  onClick={nextClick}>{imgNumber === totalPage ? "닫기" : "다음"}</Button>
             </ConfirmBox>
           </ConfirmWrap>
         </ModalBody>
@@ -77,9 +77,6 @@ const IconDiv = styled.div`
   position: absolute;
   right: 19px;
   top: -4px;
-  cursor: pointer;
-  width: 21px;
-  height: 21px;
 `;
 const ConfirmWrap = styled.div`
   display: ${(props) => (!props.viewFlag ? "block" : "none")};
@@ -91,14 +88,13 @@ const ConfirmTitle = styled.div`
   height: 100%;
 `;
 const ConfirmBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border-top: 2px solid rgba(217, 217, 217, 0.3);
-  div:nth-child(1) {
-    border-right: 2px solid rgba(217, 217, 217, 0.3);
-  }
+${flexBetween}
+button:nth-child(1) {
+  border-right: 1px solid rgba(217, 217, 217, 0.3);
+}
+button:nth-child(2) {
+  border-left: 1px solid rgba(217, 217, 217, 0.3);
+}
 `;
 const ConfirmItem = styled.div`
   cursor: pointer;
