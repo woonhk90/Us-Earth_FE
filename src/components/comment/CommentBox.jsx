@@ -136,7 +136,7 @@ const CommentBox = () => {
           <StHeader>
             <HeaderP>댓글 {comments.commentResponseDtoList?.length}</HeaderP>
           </StHeader>
-          <Comment userToken={userToken} />
+          <Comment commentCnt={heartCommentCnt.commentCnt} userToken={userToken} />
           <CommentContainer>
             <CommentContainer onClick={loginCheck}></CommentContainer>
             {editMode ? <CommentInputEdit userToken={userToken} /> : <CommentInput userToken={userToken} />}
