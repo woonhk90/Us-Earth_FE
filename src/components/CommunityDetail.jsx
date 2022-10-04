@@ -8,20 +8,24 @@ import forest4 from "../assets/forest_04.gif";
 import forest5 from "../assets/forest_05.gif";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __getCommunityDetail, __getCommunityCertify, errorReset, detailReset } from "../redux/modules/communitySlice";
+import {
+  __getCommunityDetail,
+  __getCommunityCertify,
+  errorReset,
+  detailReset,
+} from "../redux/modules/communitySlice";
 import { useInView } from "react-intersection-observer";
 import { colors } from "../styles/color";
 import { getCookie } from "../shared/cookie";
 import LoginModal from "./Modals/LoginModal";
-import NoMore from '../components/etc/NoMore';
+import NoMore from "../components/etc/NoMore";
 import Loading from "./etc/Loading";
 import ErrorModal from "./Modals/ErrorModal";
 import icons from "../assets";
 import ImageModal from "./Modals/ImageModal";
-import CustomSelect from './comment/CustomSelect';
+import CustomSelect from "./comment/CustomSelect";
 import ConfirmSingleModal from "./Modals/ConfirmSingleModal";
 import { deleteCommunityDetail } from "../redux/modules/communityFormSlice";
-
 
 const CommunityDetail = () => {
   const { CommunityNewProof } = icons;
@@ -31,10 +35,10 @@ const CommunityDetail = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(__getCommunityDetail({ communityId: param.id }));
-    return () => dispatch(detailReset()) //detail clean-up
+    return () => dispatch(detailReset()); //detail clean-up
   }, [dispatch, param.id]);
-  const { communityDetail, isLoading, detailIsLoading, error, certifyHasMore } = useSelector((state) => state.community);
-  console.log(communityDetail);
+  const { communityDetail, isLoading, detailIsLoading, error, certifyHasMore } =
+    useSelector((state) => state.community);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const { certify } = useSelector((state) => state.community);
@@ -44,7 +48,9 @@ const CommunityDetail = () => {
   });
 
   useEffect(() => {
-    dispatch(__getCommunityCertify({ page, communityId: param.id })); /*인증글전체조회하려고*/
+    dispatch(
+      __getCommunityCertify({ page, communityId: param.id })
+    ); /*인증글전체조회하려고*/
   }, [page, dispatch, param]);
   useEffect(() => {
     if (inView) {
@@ -72,11 +78,20 @@ const CommunityDetail = () => {
   let gifUrl;
   if (communityDetail.successPercent <= 20) {
     gifUrl = forest1;
-  } else if (Number(communityDetail.successPercent) > 21 && Number(communityDetail.successPercent) <= 40) {
+  } else if (
+    Number(communityDetail.successPercent) > 21 &&
+    Number(communityDetail.successPercent) <= 40
+  ) {
     gifUrl = forest2;
-  } else if (Number(communityDetail.successPercent) > 41 && Number(communityDetail.successPercent) <= 60) {
+  } else if (
+    Number(communityDetail.successPercent) > 41 &&
+    Number(communityDetail.successPercent) <= 60
+  ) {
     gifUrl = forest3;
-  } else if (Number(communityDetail.successPercent) > 61 && Number(communityDetail.successPercent) <= 80) {
+  } else if (
+    Number(communityDetail.successPercent) > 61 &&
+    Number(communityDetail.successPercent) <= 80
+  ) {
     gifUrl = forest4;
   } else if (Number(communityDetail.successPercent) > 81) {
     gifUrl = forest5;
@@ -87,9 +102,6 @@ const CommunityDetail = () => {
   const imageModalOnOff = () => {
     setImageModal(!imageModal);
   };
-
-
-
 
   /* --------------------------- 수정, 삭제, 신고하기 셀렉트 박스 -------------------------- */
   // const { dateStatus, commentResponseDtoList } = useSelector((state) => state.comments.comments);
@@ -163,11 +175,15 @@ const CommunityDetail = () => {
     return <ErrorModal error={error} />;
   }
 
-
   return (
     <>
       {/* {imageModal && <ImageModal image={communityDetail?.img} modalOnOff={imageModalOnOff} modal={imageModal}></ImageModal>} */}
-      {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
+      {loginModal && (
+        <LoginModal
+          modalOnOff={loginModalOnOff}
+          modal={loginModal}
+        ></LoginModal>
+      )}
       {/* {delModal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmSingleModal>} */}
       <CommunityDetailWrap>
         <Container>
@@ -182,16 +198,30 @@ const CommunityDetail = () => {
           </DetailSetting> */}
 
           <Content>
-            <ContentItem font={"16px/22px 'Noto Sans KR', 'sans-serif'"} marginBottom={"10px"}>
+            <ContentItem
+              font={"16px/22px 'Noto Sans KR', 'sans-serif'"}
+              marginBottom={"10px"}
+            >
               {communityDetail.startDate} - {communityDetail.endDate}
             </ContentItem>
-            <ContentItem font={"700 26px/35px 'Noto Sans KR', 'sans-serif'"} marginBottom={"9px"}>
+            <ContentItem
+              font={"700 26px/35px 'Noto Sans KR', 'sans-serif'"}
+              marginBottom={"9px"}
+            >
               {communityDetail.title}
             </ContentItem>
-            <ContentItem font={"22px/30px 'Noto Sans KR', 'sans-serif'"} marginBottom={"35px"}>
+            <ContentItem
+              font={"22px/30px 'Noto Sans KR', 'sans-serif'"}
+              marginBottom={"35px"}
+            >
               {communityDetail.content}
             </ContentItem>
-            <ContentItem marginBottom={"35px"}> {communityDetail?.img !== null ? <img src={communityDetail?.img} alt="img" /> : null} </ContentItem>
+            <ContentItem marginBottom={"35px"}>
+              {" "}
+              {communityDetail?.img !== null ? (
+                <img src={communityDetail?.img} alt="img" />
+              ) : null}{" "}
+            </ContentItem>
           </Content>
 
           <StateBox>
@@ -199,9 +229,21 @@ const CommunityDetail = () => {
               !communityDetail.participant ? (
                 <State>
                   <StateTop>
-                    <StateItem font={"600 30px/40px 'Noto Sans KR', 'sans-serif'"}>모집중</StateItem>
-                    <StateItem font={"600 60px/82px 'Noto Sans KR', 'sans-serif'"}> {communityDetail.participantsCnt} </StateItem>
-                    <StateItem font={"24px/32px 'Noto Sans KR', 'sans-serif'"} color={"#9E9E9E"}>
+                    <StateItem
+                      font={"600 30px/40px 'Noto Sans KR', 'sans-serif'"}
+                    >
+                      모집중
+                    </StateItem>
+                    <StateItem
+                      font={"600 60px/82px 'Noto Sans KR', 'sans-serif'"}
+                    >
+                      {" "}
+                      {communityDetail.participantsCnt}{" "}
+                    </StateItem>
+                    <StateItem
+                      font={"24px/32px 'Noto Sans KR', 'sans-serif'"}
+                      color={"#9E9E9E"}
+                    >
                       / {communityDetail.limitParticipants}명
                     </StateItem>
                   </StateTop>
@@ -212,7 +254,12 @@ const CommunityDetail = () => {
                   >
                     참여하기
                   </StateBottom>
-                  {modal && <Modal closeModal={() => setModal(!modal)} communityId={param.id}></Modal>}
+                  {modal && (
+                    <Modal
+                      closeModal={() => setModal(!modal)}
+                      communityId={param.id}
+                    ></Modal>
+                  )}
                 </State>
               ) : (
                 <OnGoingState>
@@ -227,7 +274,10 @@ const CommunityDetail = () => {
                   <EndStateTop>
                     <RightTop>
                       <p>참여인원</p>
-                      <p>({communityDetail.participantsCnt}/{communityDetail.limitParticipants})</p>
+                      <p>
+                        ({communityDetail.participantsCnt}/
+                        {communityDetail.limitParticipants})
+                      </p>
                     </RightTop>
                     <LeftTop>
                       <p>달성률</p>
@@ -239,11 +289,28 @@ const CommunityDetail = () => {
                     </LeftTop>
                   </EndStateTop>
                   <EndStateBottom>
-                    <progress value={communityDetail.successPercent} max="100"></progress>
+                    <progress
+                      value={communityDetail.successPercent}
+                      max="100"
+                    ></progress>
                   </EndStateBottom>
                 </EndState>
-                {communityDetail.currentPercent===100?null:(communityDetail.participant ? null : <EndStateJoin onClick={() => { onInJoinBtn(); }}>참여하기</EndStateJoin>)}
-                {modal && <Modal closeModal={() => setModal(!modal)} communityId={param.id}></Modal>}
+                {communityDetail.currentPercent ===
+                100 ? null : communityDetail.participant ? null : (
+                  <EndStateJoin
+                    onClick={() => {
+                      onInJoinBtn();
+                    }}
+                  >
+                    참여하기
+                  </EndStateJoin>
+                )}
+                {modal && (
+                  <Modal
+                    closeModal={() => setModal(!modal)}
+                    communityId={param.id}
+                  ></Modal>
+                )}
               </div>
             ) : null}
 
@@ -258,7 +325,12 @@ const CommunityDetail = () => {
           <CertifyContentBox>
             <CertifyContent>
               {certify.map((v) => (
-                <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}>
+                <CertifyItem
+                  key={v.proofId}
+                  onClick={() =>
+                    navigate(`/community/${param.id}/proof/${v.proofId}`)
+                  }
+                >
                   <img src={v.img[0].imgUrl} alt="proofImg" />
                 </CertifyItem>
               ))}
@@ -266,17 +338,29 @@ const CommunityDetail = () => {
           </CertifyContentBox>
 
           {/* 글작성아이콘 */}
-          {getCookie("mycookie") === undefined ? null : communityDetail.participant ? (
-            communityDetail.dateStatus === 'ongoing' ? (
-              <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`, { replace: true })}>
+          {getCookie("mycookie") ===
+          undefined ? null : communityDetail.participant ? (
+            communityDetail.dateStatus === "ongoing" ? (
+              <CertifyContentIcon
+                onClick={() =>
+                  navigate(`/community/${param.id}/proof/form`, {
+                    replace: true,
+                  })
+                }
+              >
                 <CommunityNewProof />
               </CertifyContentIcon>
             ) : null
           ) : null}
 
-          {certify.length === 0 ? <NoMore txt={'아직 작성글이 없어요.'} /> : null}
-          {certifyHasMore ? (isLoading ? null : <div ref={ref} style={{ border: "1px solid white" }}></div>) : null}
-
+          {certify.length === 0 ? (
+            <NoMore txt={"아직 작성글이 없어요."} />
+          ) : null}
+          {certifyHasMore ? (
+            isLoading ? null : (
+              <div ref={ref} style={{ border: "1px solid white" }}></div>
+            )
+          ) : null}
         </Container>
       </CommunityDetailWrap>
     </>
@@ -300,20 +384,11 @@ const Forest = styled.div`
   background-size: cover;
 `;
 
-
-
-
 const DetailSetting = styled.div`
-  display:flex;
+  display: flex;
   justify-content: end;
-  margin-right:25px;
+  margin-right: 25px;
 `;
-
-
-
-
-
-
 
 const Content = styled.div`
   width: 100%;
@@ -393,35 +468,35 @@ const EndState = styled.div`
 const EndStateTop = styled.div`
   width: 100%;
   display: flex;
-  justify-content:space-between;
-  align-items:flex-start;
+  justify-content: space-between;
+  align-items: flex-start;
 `;
 const RightTop = styled.div`
-  width:100%;
-  p{
-    font-weight:600;
-    font-size:20px;
-    line-height:30px;
-    font-family:'Noto sans KR','sans-serif';
+  width: 100%;
+  p {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 30px;
+    font-family: "Noto sans KR", "sans-serif";
   }
-  p:nth-child(2){
-    color:${colors.gray9E};
+  p:nth-child(2) {
+    color: ${colors.gray9E};
   }
 `;
 const LeftTop = styled.div`
-  width:100%;
-  text-align:right;
-  p:nth-child(1){
-    font-weight:600;
-    font-size:20px;
-    line-height:25px;
-    font-family:'Noto sans KR','sans-serif';
+  width: 100%;
+  text-align: right;
+  p:nth-child(1) {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 25px;
+    font-family: "Noto sans KR", "sans-serif";
   }
-  p:nth-child(2){
-    font-weight:600;
-    font-size:40px;
-    line-height:1;
-    font-family:'Noto sans KR','sans-serif';
+  p:nth-child(2) {
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 1;
+    font-family: "Noto sans KR", "sans-serif";
 
     span:nth-of-type(1) {
       font-size: 30px;
@@ -435,10 +510,6 @@ const LeftTop = styled.div`
     }
   }
 `;
-
-
-
-
 
 const EndStateBottom = styled.div`
   width: 100%;
@@ -461,9 +532,8 @@ const EndStateBottom = styled.div`
 `;
 
 const EndStateJoin = styled.div`
-  width:100%;
-  
-  
+  width: 100%;
+
   font: 18px/27px "Noto Sans KR", "sana-serif";
   text-align: center;
   padding: 11px 0;
@@ -482,11 +552,6 @@ const EndStateJoin = styled.div`
 //   margin: 0;
 // `;
 
-
-
-
-
-
 const CertifyContentBox = styled.div``;
 
 const CertifyContent = styled.div`
@@ -494,11 +559,11 @@ const CertifyContent = styled.div`
   justify-items: center;
   grid-template-columns: repeat(auto-fill, minmax(32%, auto));
   gap: 2px;
-  `;
+`;
 const CertifyItem = styled.div`
-  cursor:pointer;
+  cursor: pointer;
   width: 100%;
-  height:150px;
+  height: 150px;
   img {
     width: 100%;
     height: 100%;
@@ -506,29 +571,16 @@ const CertifyItem = styled.div`
   }
 `;
 
-
-
-
-
-
 const CertifyContentIcon = styled.div`
-  cursor:pointer;
-    position: absolute;
-    bottom: 80px;
-    right: 17px;
-  
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `;
+  cursor: pointer;
+  position: absolute;
+  bottom: 80px;
+  right: 17px;
 
-
-
-
-
-
-
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 /* -------------------------------- selectBox ------------------------------- */
 

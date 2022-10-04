@@ -28,7 +28,9 @@ const Community = () => {
 
   return (
     <>
-      {guideModal && <GuideModal totalPage={5} closeModal={closeGuideModal}></GuideModal>}
+      {guideModal && (
+        <GuideModal totalPage={5} closeModal={closeGuideModal}></GuideModal>
+      )}
       <CommunityWrap>
         <Container>
           {/* <Banner onClick={() => { navigate('/guide') }}><img src={banner01} alt='bannerImg' /></Banner> */}
@@ -56,7 +58,10 @@ const Community = () => {
                 />
               </SwiperSlide>
               <SwiperSlide>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfFvCdj94arTxy-8fXyjlzkDptoR-rt0WA7QeeGhQ6w46X55Q/viewform" target="blank">
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfFvCdj94arTxy-8fXyjlzkDptoR-rt0WA7QeeGhQ6w46X55Q/viewform"
+                  target="blank"
+                >
                   <img src={banner02} alt="bannerImg2" />
                 </a>
               </SwiperSlide>
