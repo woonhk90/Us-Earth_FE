@@ -4,6 +4,7 @@ export const colors = {
     green77:'#ADD477',
     green6F:'#99CC6F',
     green76:'#94DA76',
+    green00:'#315300',
 
     grayF9:'#F9F9F9',
     grayCF:'#CFCFCF',
@@ -12,6 +13,7 @@ export const colors = {
     grayCB:'#CBCBCB',
     gray9B:'#9B9B9B',
     gray7B:'#7B7B7B',
+    gray9E:'#9E9E9E',
 
     black22:'#222222',
     black21:'#212121',
