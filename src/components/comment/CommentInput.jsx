@@ -109,13 +109,14 @@ const CommentInput = ({ userToken }) => {
     } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
   };
 
-  // X버튼 클릭 시 이미지 삭제
+  // 이미지 삭제
   const deleteImageFile = () => {
     setImageFile([]);
     setPreviewImg([]);
     setIsPhotoMessage("");
   };
-  /* ---------------------------------- submit ---------------------------------- */
+  
+  /* ---------------------------------- 제출 버튼 --------------------------------- */
   const onClickSubmit = () => {
     if (upLoading === 100) {
       if (content.trim() === "") {
@@ -134,6 +135,7 @@ const CommentInput = ({ userToken }) => {
       }
     }
   };
+
   const formData = {
     inputRef: inputRef,
     canWriteCheck: canWriteCheck,
@@ -148,9 +150,10 @@ const CommentInput = ({ userToken }) => {
     handleResizeHeight: handleResizeHeight,
     onClickSubmit: onClickSubmit,
     onChangeContent: onChangeContent,
-    deleteImageFile:deleteImageFile,
-    addImageFile:addImageFile,
+    deleteImageFile: deleteImageFile,
+    addImageFile: addImageFile,
   };
+
   return (
     <>
       {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}

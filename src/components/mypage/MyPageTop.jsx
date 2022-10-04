@@ -22,6 +22,7 @@ const CommunityTop = () => {
       dispatch(clearVal());
     };
   }, []);
+  
   return (
     <>
       {delModal && <GuideSingleModal page={5} closeModal={closeModal}></GuideSingleModal>}
@@ -70,12 +71,14 @@ const HeaderWrap = styled.div`
   justify-content: right;
   align-items: center;
 `;
+
 const HeaderRight = styled.div`
   gap: 12px;
   display: flex;
   padding: 10px 17px;
   box-sizing: border-box;
 `;
+
 const HeaderCenter = styled.div`
 cursor: pointer;
   display: flex;
@@ -87,7 +90,6 @@ cursor: pointer;
 
 const Image = styled.img`
   width: 132px;
-
   @media (max-width: 325px) {
     width: 100px;
   }

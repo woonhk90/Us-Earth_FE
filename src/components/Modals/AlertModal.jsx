@@ -13,11 +13,9 @@ const AlertModal = (props) => {
             e.stopPropagation();
           }}
         >
-          <AttendWrap>
             <AttendTitle>{title}</AttendTitle>
               <Button btnType="modal" onClick={props.goAction}>{btn1}</Button>
-          </AttendWrap>
-        </ModalBody>
+          </ModalBody>
       </ModalWrap>
     </>
   );
@@ -45,7 +43,6 @@ const ModalBody = styled.div`
   border-radius: 12px;
 `;
 
-const AttendWrap = styled.div``;
 const AttendTitle = styled.p`
   font: 22px/30px "Noto Sans KR", "sans-serif";
   text-align: center;

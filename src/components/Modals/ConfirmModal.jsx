@@ -1,19 +1,19 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { flexBetween } from "../../styles/Flex";
 import Button from "../elements/Button";
 
 const ConfirmModal = (props) => {
   const { clickSubmit, closeModal } = props;
   const { title, cancel, submit, submitReturn } = props.confirmModalData;
 
-  /* ---------------------------------- 2차 모달 ---------------------------------- */
-  const [viewFlag, setViewFlag] = React.useState(false);
-  const submitonClick = (id) => {
+  const submitonClick = () => {
     clickSubmit();
     setViewFlag(!viewFlag);
   };
+  
+  /* ---------------------------------- 2차 모달 ---------------------------------- */
+  const [viewFlag, setViewFlag] = React.useState(false);
   
   return (
     <>
@@ -26,12 +26,12 @@ const ConfirmModal = (props) => {
           <ConfirmWrap >
             <ConfirmTitle>{title}</ConfirmTitle>
             <ConfirmBox>
-              <ConfirmItem borderRight={"1px solid #d9d9d9"} onClick={closeModal}>
+              <Button btnType="modal" onClick={closeModal}>
                 {cancel}
-              </ConfirmItem>
-              <ConfirmItem borderLeft={"1px solid #d9d9d9"} onClick={submitonClick}>
+              </Button>
+              <Button btnType="modal" onClick={submitonClick}>
                 {submit}
-              </ConfirmItem>
+              </Button>
             </ConfirmBox>
           </ConfirmWrap>
           <AttendWrap viewFlag={viewFlag}>
@@ -59,9 +59,9 @@ const ModalWrap = styled.div`
   padding: 0 15px;
   box-sizing: border-box;
 `;
+
 const ModalBody = styled.div`
   width: 100%;
-
   background-color: #fff;
   border-radius: 12px;
 `;
@@ -69,47 +69,29 @@ const ModalBody = styled.div`
 const ConfirmWrap = styled.div`
   display: ${(props) => (!props.viewFlag ? "block" : "none")};
 `;
+
 const ConfirmTitle = styled.p`
   font: 22px/30px "Noto Sans KR", "sans-serif";
   text-align: center;
   padding: 50px 0;
 `;
-const ConfirmTitleSpan = styled.span`
-  font: 700 22px/30px "Noto Sans KR", "sans-serif";
-`;
+
 const ConfirmBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border-top: 1px solid #d9d9d9;
-`;
-const ConfirmItem = styled.div`
-cursor: pointer;
-  width: 50%;
-  border-right: ${(props) => props.borderRight};
-  border-left: ${(props) => props.borderLeft};
-  font: 600 22px/30px "Noto Sans KR", "sans-serif";
-  padding: 19px 0;
+${flexBetween}
+button:nth-child(1) {
+  border-right: 1px solid rgba(217, 217, 217, 0.3);
+}
+button:nth-child(2) {
+  border-left: 1px solid rgba(217, 217, 217, 0.3);
+}
 `;
 
 const AttendWrap = styled.div`
   display: ${(props) => (!props.viewFlag ? "none" : "block")};
 `;
+
 const AttendTitle = styled.p`
   font: 22px/30px "Noto Sans KR", "sans-serif";
   text-align: center;
   padding: 50px 0;
-`;
-const AttendBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border-top: 1px solid #d9d9d9;
-`;
-const AttendItem = styled.div`
-  width: 50%;
-  font: 600 22px/30px "Noto Sans KR", "sans-serif";
-  padding: 19px 0;
 `;

@@ -13,20 +13,29 @@ const CommentInputEdit = () => {
   const dispatch = useDispatch();
   const { dateStatus } = useSelector((state) => state.comments.comments);
   const { participant } = useSelector((state) => state.heartComment.heartCommentCnt);
-  const onChangeContent = (e)=>{
-    setIsPhotoMessage("");
-    commentOnChange(e);
-  }
-  // find commentId of edit(*)
   const { commentEdit } = useSelector((state) => state.comments);
 
+  
+  /* --------------------------------- input -------------------------------- */
   // input onChange
   const [content, commentOnChange, commentReset, setContent] = useInput("");
 
-  /* --------------------------------- on input -------------------------------- */
+  const onChangeContent = (e) => {
+    setIsPhotoMessage("");
+    commentOnChange(e);
+  };
+  
+  // input 내부 클릭 유무
   const [inputOn, setInputOn] = useState(false);
 
+  const clickInputOutside = (event) => {
+    setInputOn(inputRef.current.contains(event.target));
+    dispatch(commentWriteMode(inputRef.current.clientHeight));
+  };
+
+  // input 길이 조절
   const textRef = useRef();
+
   const handleResizeHeight = useCallback(() => {
     textRef.current.style.height = `40px`;
     if (textRef.current.scrollHeight < 100) {
@@ -35,19 +44,15 @@ const CommentInputEdit = () => {
     } else textRef.current.style.height = `100px`;
   }, []);
 
-  const clickInputOutside = (event) => {
-    setInputOn(inputRef.current.contains(event.target));
-
-    dispatch(commentWriteMode(inputRef.current.clientHeight));
-  };
+  useEffect(() => {
+    handleResizeHeight();
+  }, [inputOn]);
 
   /* -------------------------------- axios get ------------------------------- */
-
   const getComments = async (payload) => {
     try {
       const { data } = await tokenInstance.get(`/comments/${payload.proofId}`);
       setInputOn(true);
-      // find data & into input
       const commentList = data.commentResponseDtoList.find((comment) => comment.commentId === payload.commentId);
       setContent(commentList.content);
       if (commentList.img === null) {
@@ -60,7 +65,7 @@ const CommentInputEdit = () => {
     } catch (error) {}
   };
 
-  /* ----------------------------- useEffect(*) ---------------------------- */
+  /* ----------------------------- useEffect ---------------------------- */
   useEffect(() => {
     window.addEventListener("mousedown", clickInputOutside);
     if (commentEdit.editMode) {
@@ -74,11 +79,7 @@ const CommentInputEdit = () => {
     };
   }, [commentEdit.commentId]);
 
-  useEffect(() => {
-    handleResizeHeight();
-  }, [inputOn]);
-
-  /* ---------------------------------- photo upload ---------------------------------- */
+  /* --------------------------------- 사진 업로드 --------------------------------- */
   const [imageFile, setImageFile] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
   const [deleteImg, setDeleteImg] = useState(false);
@@ -117,7 +118,7 @@ const CommentInputEdit = () => {
     } else setIsPhotoMessage("지원하지 않는 파일 형식입니다.");
   };
 
-  // delete image
+  // 이미지 삭제
   const deleteImageFile = () => {
     setImageFile([]);
     setPreviewImg([]);
@@ -125,10 +126,10 @@ const CommentInputEdit = () => {
     setIsPhotoMessage("");
   };
 
-  /* ---------------------------------- submit(*) ---------------------------------- */
+  /* ---------------------------------- 제출 버튼 --------------------------------- */
   const onClickSubmit = () => {
     let formData = new FormData();
-    // validation
+    //유효성 검사
     if (upLoading === 100) {
       if (content.trim() === "") {
         return setIsPhotoMessage("내용을 입력해주세요.");
@@ -159,14 +160,12 @@ const CommentInputEdit = () => {
     handleResizeHeight: handleResizeHeight,
     onClickSubmit: onClickSubmit,
     onChangeContent: onChangeContent,
-    deleteImageFile:deleteImageFile,
-    addImageFile:addImageFile,
+    deleteImageFile: deleteImageFile,
+    addImageFile: addImageFile,
   };
 
   return (
-    <>
-        <CommentForm formData={formData} />
-    </>
+      <CommentForm formData={formData} />
   );
 };
 

@@ -1,11 +1,10 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { ReactComponent as LeftArrow } from "../../assets/LeftArrow.svg";
 import { useDispatch } from "react-redux";
 import { certifyReset } from "../../redux/modules/communitySlice";
-import { ReactComponent as Back } from "../../assets/back.svg";
 import topLogo from "../../assets/logo/topLogo.png";
+import Button from "../elements/Button";
 
 const CommunityProofTop = () => {
   const navigate = useNavigate();
@@ -20,9 +19,10 @@ const CommunityProofTop = () => {
             navigate(`/community/detail/${param.communityId}`, { replace: true });
           }}
         >
-          <IconLeft>
-            <Back />
-          </IconLeft>
+          <Button btnType="svg"
+          svgType="back"
+          >
+          </Button>
         </HeaderLeft>
         <HeaderCenter
           onClick={() => {
@@ -51,6 +51,7 @@ const HeaderWrap = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+
 const HeaderLeft = styled.div`
   cursor: pointer;
   display: flex;
@@ -59,10 +60,7 @@ const HeaderLeft = styled.div`
   box-sizing: border-box;
 `;
 
-const IconLeft = styled.div`
-  width: 12px;
-  height: 21px;
-`;
+
 const HeaderCenter = styled.div`
   cursor: pointer;
   display: flex;
@@ -71,6 +69,7 @@ const HeaderCenter = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
 `;
+
 const Image = styled.img`
   width: 132px;
   @media (max-width: 325px) {

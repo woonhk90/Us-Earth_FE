@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
-import { ReactComponent as Back } from "../../assets/back.svg";
 import { ReactComponent as CameraWh } from "../../assets/cameraWh.svg";
-import cancelWh from "../../assets/cancelWh.svg";
 import Textarea from "../elements/Textarea";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import cancelWh from "../../assets/cancelWh.svg";
 import Header from "../Header";
 import { useRef } from "react";
 import ImageLoading from "../etc/ImageLoading";
 import OkModal from "../Modals/OkModal";
+import Button from "../elements/Button";
 
 const ProofForm = ({ ProofFormData }) => {
   const navigate = useNavigate();
-  const textRef = useRef();
   const param = useParams();
+
+  const textRef = useRef();
 
   const handleResizeHeight = useCallback(() => {
     textRef.current.style.height = `64px`;
@@ -25,10 +25,10 @@ const ProofForm = ({ ProofFormData }) => {
     }
   }, []);
 
-  
   useEffect(() => {
     handleResizeHeight();
   }, []);
+
   const {
     files: files,
     previewImg: previewImg,
@@ -52,13 +52,13 @@ const ProofForm = ({ ProofFormData }) => {
         {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
         <Header>
           <HeaderWrap>
-            <IconDiv>
-              <Back
-                onClick={() => {
-                  navigate(`/community/detail/${param.communityId}`, { replace: true });
-                }}
-              />
-            </IconDiv>
+            <Button
+              btnType="svg"
+              svgType="back"
+              onClick={() => {
+                navigate(`/community/detail/${param.communityId}`, { replace: true });
+              }}
+            />
             <HeaderP disabled={!(title.trim() !== "" && content.trim() !== "" && files.length > 0 && upLoading === 100)} onClick={submitHandler}>
               {submitButton}
             </HeaderP>
@@ -77,18 +77,22 @@ const ProofForm = ({ ProofFormData }) => {
                 </StIcon>
                 <ImageLength>{`(${previewImg.length}/5)`}</ImageLength>
               </label>
-              <StImageInput multiple type="file" id="file" 
-            accept="image/jpg, image/jpeg, image/png" onChange={(e) => {
+              <StImageInput
+                multiple
+                type="file"
+                id="file"
+                accept="image/jpg, image/jpeg, image/png"
+                onChange={(e) => {
                   addImageFile(e);
-                }} />
+                }}
+              />
             </Container>
           </Stform>
           {previewImg?.map((image, index) => {
             return (
               <Container key={index}>
-                <StButton onClick={() => deleteImageFile(image, index)}>
-                  <CancelIcon>{/* <Cancel/> */}</CancelIcon>
-                </StButton>
+                <StButton onClick={() => deleteImageFile(image, index)}> <CancelIcon/></StButton>
+               
                 <Thumb src={image.imgUrl} alt="img" />
               </Container>
             );
@@ -145,7 +149,6 @@ const AddPhotoWrap = styled.div`
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-
   @media (max-width: 389px) {
     grid-template-columns: 1fr 1fr;
   }
@@ -169,6 +172,7 @@ const LoadingWrap = styled.div`
   background-color: #d9d9d9;
   border-radius: 10px;
 `;
+
 const LoadingPosition = styled.div`
   display: flex;
   position: absolute;
@@ -176,6 +180,7 @@ const LoadingPosition = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
 `;
+
 const Stform = styled.form`
   display: flex;
   justify-content: center;
@@ -185,7 +190,6 @@ const Stform = styled.form`
 const BottomWrap = styled.div`
   width: 100%;
   box-sizing: border-box;
-  /* position: relative; */
 `;
 
 const StImageInput = styled.input`
@@ -220,11 +224,9 @@ const StIcon = styled.div`
   width: 100px;
   height: 100px;
   background-color: #d9d9d9;
-  /* border: 1px solid #cccccc; */
   border-radius: 10px;
 `;
 
-//삭제 아이콘 위치
 const CancelIcon = styled.div`
   width: 17px;
   height: 17px;
@@ -235,6 +237,7 @@ const CancelIcon = styled.div`
   z-index: 99;
   background-image: url("${cancelWh}");
 `;
+
 const StButton = styled.button`
   background-color: #525252;
   position: absolute;
@@ -250,13 +253,12 @@ const StButton = styled.button`
 const Thumb = styled.img`
   background-size: contain;
   background-position: center;
-  /* border: 1px solid black; */
   border-radius: 12px;
   width: 100px;
   height: 100px;
 `;
+
 const HeaderWrap = styled.div`
-  /* position: fixed; */
   top: 0;
   left: 0;
   width: 100%;
@@ -267,12 +269,6 @@ const HeaderWrap = styled.div`
   box-sizing: border-box;
   z-index: 1;
   border-bottom: 1px solid #f5f5f5;
-`;
-
-const IconDiv = styled.div`
-  cursor: pointer;
-  width: 12px;
-  height: 21px;
 `;
 
 const HeaderP = styled.button`

@@ -7,6 +7,7 @@ import Button from "../elements/Button"
 import { userMissionCleanUp } from "../../redux/modules/userMissionSlice";
 import ErrorModal from "../Modals/ErrorModal";
 import topLogo from "../../assets/logo/topLogo.png";
+import { colors } from "../../styles/color";
 
 const MissionTop = () => {
   const navigate = useNavigate();
@@ -56,11 +57,12 @@ const HeaderWrap = styled.div`
   box-sizing: border-box;
   margin: auto;
   text-align: center;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid ${colors.grayF5};
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
+
 const HeaderLeft = styled.div`
   cursor: pointer;
   display: flex;
@@ -77,6 +79,7 @@ const HeaderCenter = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
 `;
+
 const Image = styled.img`
   width: 132px;
   @media (max-width: 325px) {

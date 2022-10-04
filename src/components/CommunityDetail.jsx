@@ -8,7 +8,12 @@ import forest4 from "../assets/forest_04.gif";
 import forest5 from "../assets/forest_05.gif";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { __getCommunityDetail, __getCommunityCertify, errorReset, detailReset } from "../redux/modules/communitySlice";
+import {
+  __getCommunityDetail,
+  __getCommunityCertify,
+  errorReset,
+  detailReset,
+} from "../redux/modules/communitySlice";
 import { useInView } from "react-intersection-observer";
 import { colors } from "../styles/color";
 import { getCookie } from "../shared/cookie";
@@ -17,6 +22,7 @@ import NoMore from "../components/etc/NoMore";
 import Loading from "./etc/Loading";
 import ErrorModal from "./Modals/ErrorModal";
 import icons from "../assets";
+import Button from "./elements/Button";
 
 const CommunityDetail = () => {
   const { CommunityNewProof } = icons;
@@ -28,8 +34,8 @@ const CommunityDetail = () => {
     dispatch(__getCommunityDetail({ communityId: param.id }));
     return () => dispatch(detailReset()); //detail clean-up
   }, [dispatch, param.id]);
-  const { communityDetail, isLoading, detailIsLoading, error, certifyHasMore } = useSelector((state) => state.community);
-  console.log(communityDetail);
+  const { communityDetail, isLoading, detailIsLoading, error, certifyHasMore } =
+    useSelector((state) => state.community);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const { certify } = useSelector((state) => state.community);
@@ -39,7 +45,9 @@ const CommunityDetail = () => {
   });
 
   useEffect(() => {
-    dispatch(__getCommunityCertify({ page, communityId: param.id })); /*인증글전체조회하려고*/
+    dispatch(
+      __getCommunityCertify({ page, communityId: param.id })
+    ); /*인증글전체조회하려고*/
   }, [page, dispatch, param]);
   useEffect(() => {
     if (inView) {
@@ -67,11 +75,20 @@ const CommunityDetail = () => {
   let gifUrl;
   if (communityDetail.successPercent <= 20) {
     gifUrl = forest1;
-  } else if (Number(communityDetail.successPercent) > 21 && Number(communityDetail.successPercent) <= 40) {
+  } else if (
+    Number(communityDetail.successPercent) > 21 &&
+    Number(communityDetail.successPercent) <= 40
+  ) {
     gifUrl = forest2;
-  } else if (Number(communityDetail.successPercent) > 41 && Number(communityDetail.successPercent) <= 60) {
+  } else if (
+    Number(communityDetail.successPercent) > 41 &&
+    Number(communityDetail.successPercent) <= 60
+  ) {
     gifUrl = forest3;
-  } else if (Number(communityDetail.successPercent) > 61 && Number(communityDetail.successPercent) <= 80) {
+  } else if (
+    Number(communityDetail.successPercent) > 61 &&
+    Number(communityDetail.successPercent) <= 80
+  ) {
     gifUrl = forest4;
   } else if (Number(communityDetail.successPercent) > 81) {
     gifUrl = forest5;
@@ -158,7 +175,12 @@ const CommunityDetail = () => {
   return (
     <>
       {/* {imageModal && <ImageModal image={communityDetail?.img} modalOnOff={imageModalOnOff} modal={imageModal}></ImageModal>} */}
-      {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
+      {loginModal && (
+        <LoginModal
+          modalOnOff={loginModalOnOff}
+          modal={loginModal}
+        ></LoginModal>
+      )}
       {/* {delModal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmSingleModal>} */}
       <CommunityDetailWrap>
         <Container>
@@ -173,16 +195,30 @@ const CommunityDetail = () => {
           </DetailSetting> */}
 
           <Content>
-            <ContentItem font={"16px/22px 'Noto Sans KR', 'sans-serif'"} marginBottom={"10px"}>
+            <ContentItem
+              font={"16px/22px 'Noto Sans KR', 'sans-serif'"}
+              marginBottom={"10px"}
+            >
               {communityDetail.startDate} - {communityDetail.endDate}
             </ContentItem>
-            <ContentItem font={"700 26px/35px 'Noto Sans KR', 'sans-serif'"} marginBottom={"9px"}>
+            <ContentItem
+              font={"700 26px/35px 'Noto Sans KR', 'sans-serif'"}
+              marginBottom={"9px"}
+            >
               {communityDetail.title}
             </ContentItem>
-            <ContentItem font={"22px/30px 'Noto Sans KR', 'sans-serif'"} marginBottom={"35px"}>
+            <ContentItem
+              font={"22px/30px 'Noto Sans KR', 'sans-serif'"}
+              marginBottom={"35px"}
+            >
               {communityDetail.content}
             </ContentItem>
-            <ContentItem marginBottom={"35px"}> {communityDetail?.img !== null ? <img src={communityDetail?.img} alt="img" /> : null} </ContentItem>
+            <ContentItem marginBottom={"35px"}>
+              {" "}
+              {communityDetail?.img !== null ? (
+                <img src={communityDetail?.img} alt="img" />
+              ) : null}{" "}
+            </ContentItem>
           </Content>
 
           <StateBox>
@@ -190,20 +226,39 @@ const CommunityDetail = () => {
               !communityDetail.participant ? (
                 <State>
                   <StateTop>
-                    <StateItem font={"600 30px/40px 'Noto Sans KR', 'sans-serif'"}>모집중</StateItem>
-                    <StateItem font={"600 60px/82px 'Noto Sans KR', 'sans-serif'"}> {communityDetail.participantsCnt} </StateItem>
-                    <StateItem font={"24px/32px 'Noto Sans KR', 'sans-serif'"} color={"#9E9E9E"}>
+                    <StateItem
+                      font={"600 30px/40px 'Noto Sans KR', 'sans-serif'"}
+                    >
+                      모집중
+                    </StateItem>
+                    <StateItem
+                      font={"600 60px/82px 'Noto Sans KR', 'sans-serif'"}
+                    >
+                      {" "}
+                      {communityDetail.participantsCnt}{" "}
+                    </StateItem>
+                    <StateItem
+                      font={"24px/32px 'Noto Sans KR', 'sans-serif'"}
+                      color={"#9E9E9E"}
+                    >
                       / {communityDetail.limitParticipants}명
                     </StateItem>
                   </StateTop>
-                  <StateBottom
+                  <Button
+                    btnType="communityJoin"
+                    color={colors.green00}
                     onClick={() => {
                       onInJoinBtn();
                     }}
                   >
                     참여하기
-                  </StateBottom>
-                  {modal && <Modal closeModal={() => setModal(!modal)} communityId={param.id}></Modal>}
+                  </Button>
+                  {modal && (
+                    <Modal
+                      closeModal={() => setModal(!modal)}
+                      communityId={param.id}
+                    ></Modal>
+                  )}
                 </State>
               ) : (
                 <OnGoingState>
@@ -219,7 +274,8 @@ const CommunityDetail = () => {
                     <RightTop>
                       <p>참여인원</p>
                       <p>
-                        ({communityDetail.participantsCnt}/{communityDetail.limitParticipants})
+                        ({communityDetail.participantsCnt}/
+                        {communityDetail.limitParticipants})
                       </p>
                     </RightTop>
                     <LeftTop>
@@ -232,19 +288,30 @@ const CommunityDetail = () => {
                     </LeftTop>
                   </EndStateTop>
                   <EndStateBottom>
-                    <progress value={communityDetail.successPercent} max="100"></progress>
+                    <progress
+                      value={communityDetail.successPercent}
+                      max="100"
+                    ></progress>
                   </EndStateBottom>
                 </EndState>
-                {communityDetail.currentPercent === 100 ? null : communityDetail.participant ? null : (
-                  <EndStateJoin
+                {communityDetail.currentPercent ===
+                100 ? null : communityDetail.participant ? null : (
+                  <Button
+                    btnType="communityJoin"
+                    color={colors.green00}
                     onClick={() => {
                       onInJoinBtn();
                     }}
                   >
                     참여하기
-                  </EndStateJoin>
+                  </Button>
                 )}
-                {modal && <Modal closeModal={() => setModal(!modal)} communityId={param.id}></Modal>}
+                {modal && (
+                  <Modal
+                    closeModal={() => setModal(!modal)}
+                    communityId={param.id}
+                  ></Modal>
+                )}
               </div>
             ) : null}
 
@@ -259,7 +326,12 @@ const CommunityDetail = () => {
           <CertifyContentBox>
             <CertifyContent>
               {certify.map((v) => (
-                <CertifyItem key={v.proofId} onClick={() => navigate(`/community/${param.id}/proof/${v.proofId}`)}>
+                <CertifyItem
+                  key={v.proofId}
+                  onClick={() =>
+                    navigate(`/community/${param.id}/proof/${v.proofId}`)
+                  }
+                >
                   <img src={v.img[0].imgUrl} alt="proofImg" />
                 </CertifyItem>
               ))}
@@ -267,16 +339,29 @@ const CommunityDetail = () => {
           </CertifyContentBox>
 
           {/* 글작성아이콘 */}
-          {getCookie("mycookie") === undefined ? null : communityDetail.participant ? (
+          {getCookie("mycookie") ===
+          undefined ? null : communityDetail.participant ? (
             communityDetail.dateStatus === "ongoing" ? (
-              <CertifyContentIcon onClick={() => navigate(`/community/${param.id}/proof/form`, { replace: true })}>
-                <CommunityNewProof />
-              </CertifyContentIcon>
+              <Button
+                btnType="communityWrite"
+                svgType="newProof"
+                onClick={() =>
+                  navigate(`/community/${param.id}/proof/form`, {
+                    replace: true,
+                  })
+                }
+              ></Button>
             ) : null
           ) : null}
 
-          {certify.length === 0 ? <NoMore txt={"아직 작성글이 없어요."} /> : null}
-          {certifyHasMore ? isLoading ? null : <div ref={ref} style={{ border: "1px solid white" }}></div> : null}
+          {certify.length === 0 ? (
+            <NoMore txt={"아직 작성글이 없어요."} />
+          ) : null}
+          {certifyHasMore ? (
+            isLoading ? null : (
+              <div ref={ref} style={{ border: "1px solid white" }}></div>
+            )
+          ) : null}
         </Container>
       </CommunityDetailWrap>
     </>
