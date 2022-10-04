@@ -1,9 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import guide5 from "../../assets/jpg/guide5.jpg";
-import { ReactComponent as Cancel } from "../../assets/Cancel.svg";
 import Button from "../elements/Button";
 
 const GuideSingleModal = (props) => {

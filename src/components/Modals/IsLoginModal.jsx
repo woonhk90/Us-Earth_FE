@@ -63,9 +63,9 @@ const ModalWrap = styled.div`
   padding: 0 15px;
   box-sizing: border-box;
 `;
+
 const ModalBody = styled.div`
   width: 100%;
-
   background-color: #fff;
   border-radius: 12px;
 `;
@@ -78,19 +78,4 @@ const AttendTitle = styled.p`
   font-size: 22px;
   text-align: center;
   padding: 50px 10px;
-`;
-
-const AttendBox = styled.div`
-cursor: pointer;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border-top: 1px solid #d9d9d9;
-`;
-
-const AttendItem = styled.div`
-  width: 50%;
-  font: 600 22px/30px "Noto Sans KR", "sans-serif";
-  padding: 19px 0;
 `;

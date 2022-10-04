@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { colors } from "../../styles/color";
 
 const Input = (props) => {
   const { onInput, inputype, fontWeight, maxLength, pattern, title, size, id, type, value, name, onChange, placeholder, margin } = props;
@@ -35,10 +36,10 @@ const StInput = styled.input`
   box-sizing: border-box;
   display: flex;
   outline: none;
-  color: #222222;
+  color: ${colors.black22};
   letter-spacing: -0.02em;
   ::placeholder {
-    color: #cbcbcb;
+    color: ${colors.grayCB};
   }
   ${(props) => {
     return (

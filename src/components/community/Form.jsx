@@ -323,63 +323,10 @@ const ErrorMessage = styled.p`
   color: #ff0000;
 `;
 
-/* -------------------------------- 비밀번호, 그룹명 ------------------------------- */
-
-const RightText = styled.p`
-  font-size: 18px;
-  text-align: right;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-`;
+/* -------------------------------- 그룹명 ------------------------------- */
 
 const TopTextWrap = styled.div`
   ${flexBetween}
-`;
-
-const CheckBoxWrapper = styled.div`
-  position: relative;
-`;
-
-const CheckBoxLabel = styled.label`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 54px;
-  height: 29px;
-  border-radius: 15px;
-  background: #cbcbcb;
-  cursor: pointer;
-  &::after {
-    content: "";
-    display: block;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    margin: 2px 0px 0px 2px;
-    background: #ffffff;
-    transition: 0.2s;
-  }
-`;
-
-const CheckBox = styled.input`
-  opacity: 0;
-  z-index: 1;
-  border-radius: 15px;
-  width: 54px;
-  height: 29px;
-  &:checked + ${CheckBoxLabel} {
-    background: #80bc28;
-    &::after {
-      background-color: white;
-      display: block;
-      border-radius: 50%;
-      width: 25px;
-      height: 25px;
-      margin: 2px 0px 2px 27px;
-      transition: 0.2s;
-    }
-  }
 `;
 
 const BottomWrap = styled.div`

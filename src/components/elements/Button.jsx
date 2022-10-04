@@ -72,13 +72,12 @@ const StButton = styled.button`
       css`
         background-color: transparent;
         border: transparent;
-        color: ${(props) => (props.on === "on" ? "#222222" : "#CBCBCB")};
+        color: ${(props) => (props.on === "on" ? colors.black22 : colors.grayCB)};
         justify-content: center;
         align-items: center;
         height: 78px;
         width: 100%;
-        border-bottom: ${(props) =>
-          props.on === "on" ? "6px solid #8ecf70" : "6px solid #F5F5F5"};
+        border-bottom: ${(props) => (props.on === "on" ? "6px solid #8ecf70" : `6px solid ${colors.grayF5}`)};
         font-size: 20px;
         font-weight: 600;
         box-sizing: border-box;
@@ -98,8 +97,7 @@ const StButton = styled.button`
         font-weight: 600;
         font-size: 20px;
         color: ${(props) => (props.on === "on" ? "white" : "#BEBEBE")};
-        background-color: ${(props) =>
-          props.on === "on" ? "#315300" : "#EDEDED"};
+        background-color: ${(props) => (props.on === "on" ? colors.green00 : "#EDEDED")};
         cursor: ${(props) => (props.on === "on" ? "pointer" : "default")};
       `
     );
@@ -130,7 +128,7 @@ const StButton = styled.button`
         align-items: center;
         justify-content: center;
         background-color: transparent;
-        color: ${(props) => (props.on === "on" ? "#B9B9B9" : "#212121")};
+        color: ${(props) => (props.on === "on" ? "#B9B9B9" : colors.black21)};
       `
     );
   }}
@@ -237,6 +235,7 @@ const StButton = styled.button`
           props.flag ? `${colors.grayCF}` : `${colors.white}`};
         background-color: ${(props) =>
           props.flag ? `${colors.grayF9}` : `${colors.green77}`};
+        color: ${(props) => (props.on === "on" ? "#B9B9B9" : colors.black21)};
       `
     );
   }}
