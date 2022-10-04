@@ -5,14 +5,13 @@ import CustomSelect from "./CustomSelect";
 import { flexRow, flexBetween, flexColumnLeft } from "../../styles/Flex";
 import { useDispatch, useSelector } from "react-redux";
 import { commentClearUp, commentEditChange, deleteComments, getComments } from "../../redux/modules/commentsSlice";
-import ConfirmModal from "../Modals/ConfirmModal";
 import icons from "../../assets";
 import OkModal from "../Modals/OkModal";
 import ErrorModal from "../Modals/ErrorModal";
 import ImageLoading from "../etc/ImageLoading";
 import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
-const Comment = ({commentCnt}) => {
+const Comment = ({ commentCnt }) => {
   const dispatch = useDispatch();
   const param = useParams();
   const { getIsLoading, error, commentNew } = useSelector((state) => state.comments);
@@ -37,38 +36,46 @@ const Comment = ({commentCnt}) => {
   /* -------------------------- 캠페인 종료 시 댓글 수정 실패 모달 -------------------------- */
   const [okModal, setOkModal] = useState(false);
 
-  // modal text
+  // 모달 텍스트
   const okModalTitle = "종료된 캠페인의 댓글은 수정하실 수 없습니다.";
 
-  // onOff Modal
+  // 모달 닫기
   const okModalOnOff = () => {
     setOkModal(!okModal);
   };
 
   /* --------------------------- 수정, 삭제, 신고하기 셀렉트 박스 -------------------------- */
 
-  // dispatch function
+  // 수정하기
+  const editSubmit = (payload) => {
+    if (dateStatus === "ongoing") {
+      dispatch(commentEditChange({}));
+      dispatch(
+        commentEditChange({
+          editMode: true,
+          commentId: payload.contentId,
+        })
+      );
+    } else setOkModal(true);
+  };
+
+  // 삭제하기
+  const deleteSubmit = (payload) => {
+    setModal(!modal);
+    setDispaychPayload(payload);
+  };
+
+  // 셀렉트박스
   const clickDispatch = (payload) => {
     if (payload.selectName === "수정하기") {
-      if (dateStatus === "ongoing") {
-        // if (commentEdit?.editMode !== true) {
-        dispatch(commentEditChange({}));
-        dispatch(
-          commentEditChange({
-            editMode: true,
-            commentId: payload.contentId,
-          })
-        );
-        // }
-      } else setOkModal(true);
+      editSubmit(payload);
     } else if (payload.selectName === "삭제하기") {
-      setModal(!modal);
-      setDispaychPayload(payload);
+      deleteSubmit(payload);
     }
   };
 
-  // data
-  const { Delete, Report, Edit } = icons;
+  // 셀렉트박스 데이터
+  const { Delete, Edit } = icons;
   const selectBoxData = [
     {
       id: 1,
@@ -94,15 +101,14 @@ const Comment = ({commentCnt}) => {
   const [modal, setModal] = useState(false);
   const [dispaychPayload, setDispaychPayload] = useState({});
 
-  // modal text data
+  // 모달 텍스트
   const confirmModalData = {
     title: "댓글을 삭제하시겠습니까?",
     cancel: "아니오",
     submit: "예",
-    // submitReturn: "취소되었습니다.",
   };
 
-  // editMode cancel function
+  // 댓글 삭제
   const clickSubmit = () => {
     setModal(!modal);
     dispatch(
@@ -114,12 +120,13 @@ const Comment = ({commentCnt}) => {
     dispatch(commentEditChange({}));
   };
 
-  // close Modal
+  // 모달 닫기
   const closeModal = () => {
     setModal(!modal);
   };
 
-  if (getIsLoading && commentCnt >0) {
+  /* ----------------------------------- 로딩중 ---------------------------------- */
+  if (getIsLoading && commentCnt > 0) {
     return (
       <ImageLoadingWrap>
         <ImageLoadingCenter>
@@ -133,7 +140,7 @@ const Comment = ({commentCnt}) => {
     <>
       {error && <ErrorModal notGo={true} error={error} />}
       {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
-      {modal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}/>}
+      {modal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal} />}
       <CommentContainer>
         {commentResponseDtoList?.map((comment) => (
           <CommentBox key={comment.commentId}>
@@ -147,7 +154,7 @@ const Comment = ({commentCnt}) => {
               </CommentTop>
               {comment.img !== null ? <CommentImg src={comment.img} alt="img" /> : null}
             </CommentWrap>
-            <StSpan>{comment.content}</StSpan>
+            <Content>{comment.content}</Content>
           </CommentBox>
         ))}
         <div ref={commentRef} />
@@ -174,8 +181,7 @@ const CommentContainer = styled.div`
   }
 `;
 
-/* --------------------------------- Top div -------------------------------- */
-
+/* -------------------------------- 개별 댓글 상단 -------------------------------- */
 const CommentBox = styled.div`
   margin-bottom: 5px;
   width: 100%;
@@ -187,12 +193,7 @@ const CommentBox = styled.div`
 const CommentWrap = styled.div`
   ${flexColumnLeft}
 `;
-const StSpan = styled.div`
-  align-items: flex-start;
-  margin: 0 0 10px 0;
-  word-break: break-all;
-  white-space: pre-line;
-`;
+
 const CommentTop = styled.div`
   ${flexBetween};
   width: 100%;
@@ -216,22 +217,35 @@ const CommentImg = styled.img`
   align-items: flex-start;
 `;
 
-/* ---------------------------------- font ---------------------------------- */
-const CreatAt = styled.p`
+/* ----------------------------------- 텍스트 ---------------------------------- */
+const CreatAt = styled.span`
   font-weight: 400;
   font-size: 12px;
   letter-spacing: -0.02em;
   color: #9b9b9b;
 `;
 
-const Nickname = styled.p`
+const Nickname = styled.span`
   font-weight: 600;
   font-size: 18px;
   letter-spacing: -0.03em;
   color: #212121;
 `;
 
-/* -------------------------------- selectBox ------------------------------- */
+const Content = styled.span`
+  align-items: flex-start;
+  margin: 0 0 10px 0;
+  word-break: break-all;
+  white-space: pre-line;
+  font-size: 16px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.03em;
+  color: #252525;
+`;
+
+/* --------------------------------- 셀렉트 박스 --------------------------------- */
 
 const ModalIcon = styled.div`
   width: 18px;

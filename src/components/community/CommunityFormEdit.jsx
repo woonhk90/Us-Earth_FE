@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef} from "react";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addDates, communityFormCleanUp, communityFormcleanUp, patchCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { addDates, communityFormCleanUp,patchCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
@@ -201,17 +201,16 @@ const CommunityFormEdit = () => {
       }
     });
   };
-
+  
+  /* ------------------------- 오늘 === 시작날짜 인 경우 확인 모달 ------------------------- */
   const [formmodal, setFormModal] = useState(false);
 
-  // modal text data
   const confirmModalData = {
     title: "그룹 캠페인이 시작되면 수정 및 삭제가 불가능합니다. 등록하시겠습니까?",
     cancel: "아니오",
     submit: "예",
   };
 
-  // editMode cancel function
   const clickSubmit = () => {
     submitHandler();
   };

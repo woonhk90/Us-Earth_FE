@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import LoadingMain from "../../assets/loading-main.gif";
 import background from "../../assets/jpg/background.jpg";
-import { flexRow } from "../../styles/Flex";
 
 const Layout = (props) => {
   return (
@@ -41,6 +39,7 @@ const SubWrap = styled.div`
   justify-content: flex-end;
   }
 `;
+
 const ChildrenWrap = styled.div`
   background-color: white;
   position: relative;
@@ -50,7 +49,6 @@ const ChildrenWrap = styled.div`
   box-shadow: 1px 3px 5px 3px #cecece33;
   width: 390px;
   left: 240px;
-
   @media (min-width: 541px) and (max-width: 900px) {
     left: 0;
   margin-right: 30px;

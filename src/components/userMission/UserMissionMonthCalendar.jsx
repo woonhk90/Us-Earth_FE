@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // css import
+import "react-calendar/dist/Calendar.css";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +15,7 @@ import { colors } from "../../styles/color";
 
 const UserMissionMonthCalendar = () => {
   const dispatch = useDispatch();
-  const { periodMissionData, isLoading } = useSelector((state) => state.userMission);
+  const { periodMissionData} = useSelector((state) => state.userMission);
 
   useEffect(() => {
     dispatch(
@@ -27,13 +27,12 @@ const UserMissionMonthCalendar = () => {
   }, []);
 
   const [value, setValue] = useState(new Date());
-  const [dates, setDates] = useState("");
 
   const onClickDay = (value, event) => {
-    // setDates(dayjs(value).format("YYYY-MM-DD"));
     dispatch(getDailyMissionStats(dayjs(value).format("YYYY-MM-DD")));
   };
 
+  //달의 시작, 끝날짜 조회
   const onActiveStartDateChange = ({ action, activeStartDate, value, view }) => {
     dispatch(
       getPeriodMissionStats({
@@ -109,6 +108,7 @@ const StCalender = styled.div`
       background-color: ${colors.dot5};
     }
   }
+
   .react-calendar {
     width: 100%;
     background: white;
@@ -123,14 +123,17 @@ const StCalender = styled.div`
   .react-calendar--doubleView {
     width: 700px;
   }
+
   .react-calendar--doubleView .react-calendar__viewContainer {
     display: flex;
     margin: -0.5em;
   }
+
   .react-calendar--doubleView .react-calendar__viewContainer > * {
     width: 50%;
     margin: 0.5em;
   }
+
   .react-calendar,
   .react-calendar *,
   .react-calendar *:before,
@@ -139,14 +142,17 @@ const StCalender = styled.div`
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
   }
+
   .react-calendar button {
     margin: 0;
     border: 0;
     outline: none;
   }
+
   .react-calendar button:enabled:hover {
     cursor: pointer;
   }
+
   .react-calendar__navigation {
     span {
       color: #000000;
@@ -161,17 +167,21 @@ const StCalender = styled.div`
     height: 44px;
     margin-bottom: 14.5px;
   }
+
   .react-calendar__navigation button {
     min-width: 44px;
     background: none;
   }
+
   .react-calendar__navigation button:disabled {
     background-color: transparent;
   }
+
   .react-calendar__navigation button:enabled:hover,
   .react-calendar__navigation button:enabled:focus {
     background-color: transparent;
   }
+
   .react-calendar__month-view__weekdays {
     text-align: center;
     text-transform: uppercase;
@@ -189,6 +199,7 @@ const StCalender = styled.div`
       opacity: 0.5;
     }
   }
+
   .react-calendar__month-view__weekdays__weekday {
     padding: 0.5em;
     @media (max-width: 389px) {
@@ -196,6 +207,7 @@ const StCalender = styled.div`
     }
     margin-bottom: 25px;
   }
+
   .react-calendar__month-view__weekNumbers .react-calendar__tile {
     display: flex;
     align-items: center;
@@ -205,6 +217,7 @@ const StCalender = styled.div`
 
     color: #000000;
   }
+
   .react-calendar__month-view__days__day {
     abbr {
       font-size: 18px;
@@ -215,10 +228,12 @@ const StCalender = styled.div`
   .react-calendar__month-view__days__day--weekend {
     color: black;
   }
+
   .react-calendar__month-view__days__day--neighboringMonth {
     color: black;
     opacity: 0.5;
   }
+
   .react-calendar__navigation__next2-button {
     background-image: url("${calendarRightDoubleArrow}") !important;
     background-repeat: no-repeat !important;
@@ -226,6 +241,7 @@ const StCalender = styled.div`
     color: transparent;
     background-position: center !important;
   }
+
   .react-calendar__navigation__next-button {
     background-image: url("${calendarRightArrow}") !important;
     background-repeat: no-repeat !important;
@@ -233,6 +249,7 @@ const StCalender = styled.div`
     color: transparent;
     background-position: center !important;
   }
+
   .react-calendar__navigation__prev2-button {
     background-image: url("${calendarLeftDoubleArrow}") !important;
     background-repeat: no-repeat !important;
@@ -240,6 +257,7 @@ const StCalender = styled.div`
     color: transparent;
     background-position: center !important;
   }
+
   .react-calendar__navigation__prev-button {
     background-image: url("${calendarLeftArrow}") !important;
     background-repeat: no-repeat !important;
@@ -253,6 +271,7 @@ const StCalender = styled.div`
   .react-calendar__century-view .react-calendar__tile {
     padding: 2em 0.5em;
   }
+
   .react-calendar__tile {
     max-width: 100%;
     background: none;
@@ -261,9 +280,11 @@ const StCalender = styled.div`
 
     color: #000000;
   }
+
   .react-calendar__tile:disabled {
     background-color: #f0f0f0;
   }
+
   .react-calendar__month-view__days__day:enabled:hover {
     background-color: transparent;
     position: relative;
@@ -290,6 +311,7 @@ const StCalender = styled.div`
     }
     font-weight: 700;
   }
+
   .react-calendar__decade-view__years__year:hover {
     position: relative;
     background: transparent;
@@ -307,6 +329,7 @@ const StCalender = styled.div`
       background-color: rgba(187, 187, 187, 0.2);
     }
   }
+
   .react-calendar__tile--hasActive {
     background: transparent;
     position: relative;
@@ -322,7 +345,7 @@ const StCalender = styled.div`
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background-color: #add477;
+      background-color: ${colors.green77};
     }
   }
 
@@ -347,6 +370,7 @@ const StCalender = styled.div`
       background-color: rgba(187, 187, 187, 0.2);
     }
   }
+
   .react-calendar__tile--active,
   .react-calendar__month-view__days__day:enabled:focus {
     color: white;
@@ -363,12 +387,14 @@ const StCalender = styled.div`
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background-color: #add477;
+      background-color: ${colors.green77};
     }
   }
+
   .react-calendar__century-view__decades__decade {
     color: black !important;
   }
+
   .react-calendar__tile--active:enabled:hover,
   .react-calendar__tile--active:enabled:focus,
   .react-calendar--selectRange .react-calendar__tile--hover {

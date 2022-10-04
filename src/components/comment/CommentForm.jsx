@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Camera } from "../../assets/camera.svg";
 import { ReactComponent as CancelWh } from "../../assets/cancelWh.svg";
+import { colors } from "../../styles/color";
 import ImageLoading from "../etc/ImageLoading";
 
 const CommentForm = ({ formData }) => {
@@ -95,6 +96,8 @@ const CommentForm = ({ formData }) => {
 export default CommentForm;
 
 
+/* -------------------------------- 컨테이너 div -------------------------------- */
+
 const CommentInputContainer = styled.div`
   width: 100%;
 `;
@@ -104,8 +107,30 @@ const CommentInputWrap = styled.div`
   flex-direction: row;
   align-items: flex-start;
   box-sizing: border-box;
-  background-color: #f9f9f9;
+  background-color: ${colors.grayF9}
 `;
+
+const InputWrap = styled.div`
+  position: relative;
+  margin: 9px 0px 9px 0px;
+  width: 100%;
+  background-color: ${(props) => (props.participant ? colors.grayF9 : "white")};
+  border: 1px solid #ececec;
+  border-radius: 6px;
+`;
+
+const Container = styled.div`
+  position: relative;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin: 11px;
+  margin-bottom: 5px;
+  width: 100px;
+  height: 100px;
+`;
+
+/* --------------------------------- 사진 아이콘 --------------------------------- */
 
 const StLabel = styled.label`
   display: inline-block;
@@ -122,25 +147,7 @@ const CameraIcon = styled.div`
   padding: 20px 12px 0px 12px;
 `;
 
-const InputWrap = styled.div`
-  position: relative;
-  margin: 9px 0px 9px 0px;
-  width: 100%;
-  background-color: ${(props) => (props.participant ? "#f9f9f9" : "white")};
-  border: 1px solid #ececec;
-  border-radius: 6px;
-`;
-
-const Container = styled.div`
-  position: relative;
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  margin: 11px;
-  margin-bottom: 5px;
-  width: 100px;
-  height: 100px;
-`;
+/* --------------------------------- 이미지 업로딩 -------------------------------- */
 
 const LoadingContainer = styled.div`
   position: absolute;
@@ -164,6 +171,7 @@ const LoadingPosition = styled.div`
   transform: translate(-50%, -50%);
 `;
 
+/* ----------------------------------- 사진 ----------------------------------- */
 const DeleteButton = styled.button`
   cursor: pointer;
   width: 26px;
@@ -206,6 +214,14 @@ const Thumb = styled.img`
   border-radius: 6px;
 `;
 
+const StImageInput = styled.input`
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+`;
+
+/* ----------------------------------- 인풋 ----------------------------------- */
 const ErrorMessageP = styled.p`
   padding: 5px 10px 5px 10px;
   font-weight: 200;
@@ -220,7 +236,7 @@ const CommentTextarea = styled.textarea`
   white-space: pre-wrap;
   resize: none;
   box-sizing: border-box;
-  background-color: ${(props) => (props.participant ? "#f9f9f9" : "white")};
+  background-color: ${(props) => (props.participant ? colors.grayF9: "white")};
   width: 100%;
   outline: none;
   color: #222222;
@@ -244,13 +260,8 @@ const CommentTextarea = styled.textarea`
   }
 `;
 
-const StImageInput = styled.input`
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-`;
 
+/* ---------------------------------- 작성 버튼 --------------------------------- */
 const WriteIcon = styled.div`
   cursor: pointer;
   background-color: transparent;
@@ -261,7 +272,7 @@ const WriteIcon = styled.div`
   line-height: 25px;
   text-align: center;
   letter-spacing: -0.03em;
-  color: #9b9b9b;
+  color: ${colors.gray9B};
 `;
 
 
