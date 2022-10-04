@@ -26,7 +26,7 @@ const MyPageProfileModal = (props) => {
 		const acceptImageFiles = ["image/png", "image/jpeg", "image/jpg"];//허용확장자
 		const imageFile = e.target.files[0];//업로드한파일
 		if (acceptImageFiles.includes(imageFile.type)) {//확장자일치여부
-			if (imageFile.size < 2100000) {//파일크기는 20mb까지
+			if (imageFile.size < 21000000) {//파일크기는 20mb까지
 				const options = {
 					maxSizeMB: 1, // 허용하는 최대 사이즈 지정
 					maxWidthOrHeight: 1920, // 허용하는 최대 width, height 값 지정

@@ -7,6 +7,7 @@ import { flexColumn, flexRow, flexBetween, Text } from "../../styles/Flex";
 import { addDates } from "../../redux/modules/communityFormSlice";
 import { ReactComponent as CalendarRightArrowBk } from "../../assets/calendarRightArrowBk.svg";
 import dayjs from "dayjs";
+import Button from "../elements/Button";
 
 const CalendarModal = (props) => {
   const dispatch = useDispatch();
@@ -85,13 +86,13 @@ const CalendarModal = (props) => {
             disabledKeyboardNavigation
           />
           {date.start !== "Invalid Date" && date.end!== "Invalid Date" ? (
-            <FooterMenus color={"#FFFFFF"} onClick={addDateDispatch} bgColor={"#315300"}>
+            <Button  btnType="submit" on="on" onClick={addDateDispatch} >
               {dayjs(date.start).format("YY.MM.DD")} - {dayjs(date.end).format("YY.MM.DD")} / 선택완료
-            </FooterMenus>
+            </Button>
           ) : (
-            <FooterMenus color={"#BEBEBE"} bgColor={"#EDEDED"}>
+            <Button  btnType="submit" >
               기간을 선택해 주세요
-            </FooterMenus>
+            </Button>
           )}
         </StInput>
     </ModalWrap>

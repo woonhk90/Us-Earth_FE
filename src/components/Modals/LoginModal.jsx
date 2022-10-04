@@ -1,8 +1,8 @@
 import React from "react";
-import { useState } from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { useRef } from "react";
+import Button from "../elements/Button";
+import { flexBetween } from "../../styles/Flex";
 
 
 const ConfirmModal = (props) => {
@@ -11,7 +11,6 @@ const ConfirmModal = (props) => {
 
   const { pathname } = useLocation();
   const clickSubmit = () => {
-    /* 현재 위치 주소 */
     localStorage.setItem('pathname', pathname);
     navigate("/login");
   };
@@ -30,12 +29,12 @@ const ConfirmModal = (props) => {
               <br /> 로그인 페이지로 이동하시겠습니까?
             </ConfirmTitle>
             <ConfirmBox>
-              <ConfirmItem borderRight={"1px solid #d9d9d9"} onClick={modalOnOff}>
+            <Button btnType="modal"  onClick={modalOnOff}>
                 취소
-              </ConfirmItem>
-              <ConfirmItem borderLeft={"1px solid #d9d9d9"} onClick={clickSubmit}>
+              </Button>
+              <Button btnType="modal"onClick={clickSubmit}>
                 확인
-              </ConfirmItem>
+              </Button>
             </ConfirmBox>
           </ConfirmWrap>
         </ModalBody>
@@ -76,11 +75,13 @@ const ConfirmTitle = styled.p`
 `;
 
 const ConfirmBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border-top: 1px solid #d9d9d9;
+${flexBetween}
+button:nth-child(1) {
+  border-right: 1px solid rgba(217, 217, 217, 0.3);
+}
+button:nth-child(2) {
+  border-left: 1px solid rgba(217, 217, 217, 0.3);
+}
 `;
 const ConfirmItem = styled.div`
 cursor: pointer;
