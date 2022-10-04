@@ -21,9 +21,9 @@ const Login = () => {
       <LoginWrap>
         <Container>
           <Logo></Logo>
-          <div className='item' onClick={() => onClickHandler('k')}><div><img src={kakao} alt='kakao_img' /></div><LoginText>카카오 로그인</LoginText></div>
-          <div className='item' onClick={() => onClickHandler('n')}><div><img src={naver} alt='naver_img' /></div><LoginText>네이버 로그인</LoginText></div>
-          <div className='item' onClick={() => onClickHandler('g')}><div><img src={google} alt='google_img' /></div><LoginText>구글 로그인</LoginText></div>
+          <LoginButton className='item' onClick={() => onClickHandler('k')}><div><img src={kakao} alt='kakao_img' /></div><LoginText>카카오 로그인</LoginText></LoginButton>
+          <LoginButton className='item' onClick={() => onClickHandler('n')}><div><img src={naver} alt='naver_img' /></div><LoginText>네이버 로그인</LoginText></LoginButton>
+          <LoginButton className='item' onClick={() => onClickHandler('g')}><div><img src={google} alt='google_img' /></div><LoginText>구글 로그인</LoginText></LoginButton>
         </Container>
       </LoginWrap>
     </>
@@ -108,4 +108,7 @@ letter-spacing: -0.03em;
 
 color: #424242;
 
+`
+const LoginButton = styled.div`
+  cursor: pointer;
 `

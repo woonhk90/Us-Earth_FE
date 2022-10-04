@@ -1,7 +1,8 @@
 import styled, { css } from "styled-components";
-import {ReactComponent as Edit} from"../../assets/Edit2.svg"
+import icons from "../../assets";
 
-const Button = ({ imgUrl, on, font, outline, border, margin, height, width, btntype, type, onClick, children, disabled }) => {
+const Button = ({ imgUrl, on, font, outline, border, margin, height, width, btnType, type, onClick, children, disabled, svgType }) => {
+  const { Back,Question,Cancel,Setting} = icons;
   return (
     <StButton
       font={font}
@@ -12,13 +13,17 @@ const Button = ({ imgUrl, on, font, outline, border, margin, height, width, btnt
       width={width}
       type={type}
       onClick={onClick}
-      btntype={btntype}
+      btnType={btnType}
       disabled={disabled}
       on={on}
       imgUrl={imgUrl}
+      svgType={svgType}
     >
-      {btntype === "submit" && <Edit width="25px" height="25px"/>}
-            {children}
+      {children}
+      {svgType === "back" && <Back width="12px" height="21px" />}
+      {svgType === "question" && <Question width="28px" height="29px" />}
+      {svgType === "cancel" && <Cancel width="21px" height="21px" />}
+      {svgType === "setting" && <Setting width="28px" height="29px" />}
     </StButton>
   );
 };
@@ -27,14 +32,14 @@ export default Button;
 
 const StButton = styled.button`
   cursor: pointer;
-        color:black;
+  color: black;
   ${(props) => {
     return (
-      props.btntype === "onOff" &&
+      props.btnType === "onOff" &&
       css`
         background-color: transparent;
         border: transparent;
-        color:${(props) => (props.on === "on" ? "#222222" : "#CBCBCB")};
+        color: ${(props) => (props.on === "on" ? "#222222" : "#CBCBCB")};
         justify-content: center;
         align-items: center;
         height: 78px;
@@ -51,10 +56,27 @@ const StButton = styled.button`
   }}
   ${(props) => {
     return (
-      props.btntype === "submit" &&
+      props.btnType === "submit" &&
       css`
-        background-color:  transparent;
+        width: 100%;
         border: none;
+        line-height: 56px;
+        font-weight: 600;
+        font-size: 20px;
+        color: ${(props) => (props.on === "on" ? "white" : "#BEBEBE")};
+        background-color: ${(props) => (props.on === "on" ? "#315300" : "#EDEDED")};
+        cursor: ${(props) => (props.on === "on" ? "pointer" : "default")};
+      `
+    );
+  }}
+  ${(props) => {
+    return (
+      props.btnType === "svg" &&
+      css`
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        display: flex;
       `
     );
   }}
