@@ -10,6 +10,7 @@ import icons from "../../assets";
 import OkModal from "../Modals/OkModal";
 import ErrorModal from "../Modals/ErrorModal";
 import ImageLoading from "../etc/ImageLoading";
+import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
 const Comment = ({commentCnt}) => {
   const dispatch = useDispatch();
@@ -87,15 +88,6 @@ const Comment = ({commentCnt}) => {
         </ModalIcon>,
       ],
     },
-    // {
-    //   id: 3,
-    //   selectName: "신고하기",
-    //   icon: [
-    //     <ModalIcon key={3}>
-    //       <Report />
-    //     </ModalIcon>,
-    //   ],
-    // },
   ];
 
   /* ---------------------------------- 삭제 모달 --------------------------------- */
@@ -126,7 +118,7 @@ const Comment = ({commentCnt}) => {
   const closeModal = () => {
     setModal(!modal);
   };
-  console.log(commentCnt)
+
   if (getIsLoading && commentCnt >0) {
     return (
       <ImageLoadingWrap>
@@ -141,7 +133,7 @@ const Comment = ({commentCnt}) => {
     <>
       {error && <ErrorModal notGo={true} error={error} />}
       {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
-      {modal && <ConfirmModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmModal>}
+      {modal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}/>}
       <CommentContainer>
         {commentResponseDtoList?.map((comment) => (
           <CommentBox key={comment.commentId}>

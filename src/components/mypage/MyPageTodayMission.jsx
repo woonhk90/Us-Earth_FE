@@ -4,7 +4,7 @@ import icons from "../../assets/index";
 import { useDispatch, useSelector } from "react-redux";
 import { __getTodayMission, __updateMissionFlag } from "../../redux/modules/mypageSlice";
 import { colors } from "../../styles/color";
-import ConfirmTodayMissionModal from '../Modals/ConfirmTodayMissionModal';
+import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
 const MyPageTodayMission = ({ userInfo }) => {
   const { level_01, level_02, level_03, level_04, level_05 } = icons;
@@ -71,7 +71,7 @@ const MyPageTodayMission = ({ userInfo }) => {
 
   return (
     <>
-      {modal && <ConfirmTodayMissionModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
+      {modal && <ConfirmSingleModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
       <MyPageMission imgUrl={imgUrl}>
         {
           missionFlag ?

@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import icons from "../../assets";
 
 const Button = ({ imgUrl, on, font, outline, border, margin, height, width, btnType, type, onClick, children, disabled, svgType }) => {
-  const { Back,Question,Cancel,Setting} = icons;
+  const { Back, Question, Cancel, Setting } = icons;
   return (
     <StButton
       font={font}
@@ -77,6 +77,26 @@ const StButton = styled.button`
         background-color: transparent;
         border: none;
         display: flex;
+      `
+    );
+  }}
+  ${(props) => {
+    return (
+      props.btnType === "modal" &&
+      css`
+        border: none;
+        border-top: 2px solid rgba(217, 217, 217, 0.3);
+        width: 100%;
+        padding: 17px 0;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 27px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        color: ${(props) => (props.on === "on" ? "#B9B9B9" : "#212121")};
+   
       `
     );
   }}

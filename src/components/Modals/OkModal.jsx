@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import Button from "../elements/Button";
 
 const OkModal = (props) => {
   const { title, modalOnOff } = props;
-  
+
   return (
     <>
       <ModalWrap onClick={modalOnOff}>
@@ -12,11 +13,11 @@ const OkModal = (props) => {
             e.stopPropagation();
           }}
         >
-          <AttendWrap >
+          <AttendWrap>
             <AttendTitle>{title}</AttendTitle>
-            <AttendBox>
-              <AttendItem onClick={modalOnOff}>확인</AttendItem>
-            </AttendBox>
+              <Button btnType="modal" onClick={modalOnOff}>
+                확인
+              </Button>
           </AttendWrap>
         </ModalBody>
       </ModalWrap>
@@ -56,17 +57,3 @@ const AttendTitle = styled.p`
   padding: 50px 10px;
 `;
 
-const AttendBox = styled.div`
-cursor: pointer;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border-top: 1px solid #d9d9d9;
-`;
-
-const AttendItem = styled.div`
-  width: 50%;
-  font: 600 22px/30px "Noto Sans KR", "sans-serif";
-  padding: 19px 0;
-`;
