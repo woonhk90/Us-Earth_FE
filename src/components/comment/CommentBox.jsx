@@ -17,6 +17,7 @@ import Cookies from "universal-cookie";
 import LoginModal from "../Modals/LoginModal";
 import OkModal from "../Modals/OkModal";
 import isLogin from "../../lib/isLogin";
+import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
 const CommentBox = () => {
   const cookies = new Cookies();
@@ -100,20 +101,9 @@ const CommentBox = () => {
     }
   };
 
-  /* ----------------------------------- 로그인 ---------------------------------- */
-  const [loginModal, setLoginModal] = useState(false);
-  const loginModalOnOff = () => {
-    setLoginModal(!loginModal);
-  };
-
-  const loginCheck = () => {
-    if (!userToken) setLoginModal(true);
-  };
-
   return (
     <>
       {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
-      {loginModal && <LoginModal modalOnOff={loginModalOnOff} modal={loginModal}></LoginModal>}
       <IconContainer>
         <IconWrap>
           <div onClick={onClickHeart}>
@@ -130,7 +120,7 @@ const CommentBox = () => {
           <IconP>{heartCommentCnt.commentCnt}</IconP>
         </CommentButtonWrap>
       </IconContainer>
-      {deleteModal && <ConfirmModal clickSubmit={deleteModalOnclickSubmit} confirmModalData={deleteModalData} closeModal={deleteModalOnOff}></ConfirmModal>}
+      {deleteModal && <ConfirmSingleModal clickSubmit={deleteModalOnclickSubmit} confirmModalData={deleteModalData} closeModal={deleteModalOnOff}/>}
       <CommentModal open={commentModal} close={commentModalClose}>
         <ButtonInModalWrap>
           <StHeader>
@@ -138,7 +128,6 @@ const CommentBox = () => {
           </StHeader>
           <Comment commentCnt={heartCommentCnt.commentCnt} userToken={userToken} />
           <CommentContainer>
-            <CommentContainer onClick={loginCheck}></CommentContainer>
             {editMode ? <CommentInputEdit userToken={userToken} /> : <CommentInput userToken={userToken} />}
           </CommentContainer>
         </ButtonInModalWrap>

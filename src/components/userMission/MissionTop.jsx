@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ReactComponent as Back } from "../../assets/back.svg";
+import Button from "../elements/Button"
 import { userMissionCleanUp } from "../../redux/modules/userMissionSlice";
 import ErrorModal from "../Modals/ErrorModal";
 import topLogo from "../../assets/logo/topLogo.png";
@@ -30,9 +30,9 @@ const MissionTop = () => {
             navigate("/mypage");
           }}
         >
-          <IconLeft>
-            <Back />
-          </IconLeft>
+          <Button
+        btnType="svg"
+        svgType="back"/>
         </HeaderLeft>
         <HeaderCenter
           onClick={() => {
@@ -69,10 +69,6 @@ const HeaderLeft = styled.div`
   box-sizing: border-box;
 `;
 
-const IconLeft = styled.div`
-  width: 12px;
-  height: 21px;
-`;
 const HeaderCenter = styled.div`
   cursor: pointer;
   display: flex;

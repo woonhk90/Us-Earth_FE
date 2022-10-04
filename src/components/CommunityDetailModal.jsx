@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { getCookie } from "../shared/cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { __updateCommunityJoin, __getCommunityDetail, errorReset, statusCodeReset } from "../redux/modules/communitySlice";
+import Button from "./elements/Button";
+import { flexBetween } from "../styles/Flex";
 
 const CommunityModal = (props) => {
   const navigate = useNavigate();
@@ -64,25 +66,23 @@ const CommunityModal = (props) => {
           <ConfirmWrap viewFlag={viewFlag}>
             <ConfirmTitle>참여 하시겠습니까?</ConfirmTitle>
             <ConfirmBox>
-              <ConfirmItem borderRight={"1px solid #d9d9d9"} onClick={closeModal}>
+              <Button btnType="modal" onClick={closeModal}>
                 취소
-              </ConfirmItem>
-              <ConfirmItem
+              </Button>
+              <Button btnType="modal" 
                 borderLeft={"1px solid #d9d9d9"}
                 onClick={() => {
                   onViewFlagHandler(props.communityId);
                 }}
               >
                 가입
-              </ConfirmItem>
+              </Button>
             </ConfirmBox>
           </ConfirmWrap>
 
           <AttendWrap viewFlag={viewFlag}>
             <AttendTitle>{msg}</AttendTitle>
-            <AttendBox>
-              <AttendItem onClick={closeModal}>확인</AttendItem>
-            </AttendBox>
+              <Button btnType="modal"  onClick={closeModal}>확인</Button>
           </AttendWrap>
         </ModalBody>
       </ModalWrap>
@@ -124,11 +124,13 @@ const ConfirmTitleSpan = styled.span`
   font: 700 22px/30px "Noto Sans KR", "sans-serif";
 `;
 const ConfirmBox = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  border-top: 1px solid #d9d9d9;
+${flexBetween}
+button:nth-child(1) {
+  border-right: 1px solid rgba(217, 217, 217, 0.3);
+}
+button:nth-child(2) {
+  border-left: 1px solid rgba(217, 217, 217, 0.3);
+}
 `;
 const ConfirmItem = styled.div`
 cursor: pointer;

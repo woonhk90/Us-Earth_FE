@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
-// import "./Modal.css";
+import Button from "../elements/Button"
 
 const EditModal = (props) => {
   const { open, close } = props;
@@ -31,13 +31,12 @@ const EditModal = (props) => {
         buttonShow={open}
         buttonHide={!open}
         onClick={(e) => {
-          // do not close modal if anything inside modal content is clicked
           e.stopPropagation();
         }}
       >
         <StHeader></StHeader>
         <ButtonInModalWrap>{props.children}</ButtonInModalWrap>
-        <Footer onClick={close}>취소</Footer>
+        <Button btnType="modal" onClick={close}>취소</Button>
       </Stsection>
     </StModal>
   );
@@ -52,7 +51,7 @@ const StModal = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 99; //해당 모달이 맨 앞에 위치하게 하기
+  z-index: 99; 
   background-color: rgba(89, 89, 89, 0.6);
   &.openModal {
     display: flex;
@@ -128,18 +127,12 @@ const Stsection = styled.section`
     css`
       animation-name: ${slideHide};
     `}
+    button{
+      font-size:18px !important;
+    }
 `;
 
 const StHeader = styled.header``;
-
-const Footer = styled.p`
-cursor: pointer;
-  text-align: center;
-  padding: 17.5px 0;
-  font-size: 18px;
-  font-weight: 600;
-  border-top: 2px solid #d9d9d9;
-`;
 
 const ButtonInModalWrap = styled.div`
   display: flex;
@@ -147,15 +140,4 @@ const ButtonInModalWrap = styled.div`
   align-items: center;
   align-items: flex-start;
   padding: 21px 31px 14px 31px;
-`;
-
-const ButtonInModal = styled.button`
-  border: none;
-  border-radius: 5px;
-  padding: 5px;
-  background-color: transparent;
-  :hover {
-    font-weight: bolder;
-    padding: 1px solid transparent;
-  }
 `;
