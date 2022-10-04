@@ -9,7 +9,7 @@ import { ReactComponent as CalendarLeftArrow } from "../../assets/calendarLeftAr
 import Button from "../elements/Button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {  getPeriodMissionStats } from "../../redux/modules/userMissionSlice";
+import { getPeriodMissionStats } from "../../redux/modules/userMissionSlice";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { colors } from "../../styles/color";
@@ -64,14 +64,14 @@ const UserMissionWeek = () => {
   return (
     <>
       <MissionStatsButtonWrap>
-        <Button btntype="onOff" on="on">
+        <Button btnType="onOff" on="on">
           주간통계
         </Button>
         <Button
           onClick={() => {
             navigate("/mypage/mission/month");
           }}
-          btntype="onOff"
+          btnType="onOff"
         >
           월간통계
         </Button>
@@ -95,7 +95,7 @@ const UserMissionWeek = () => {
         <LineChart startDate={startDate} endDate={endDate} />
         {/* <MyResponsiveLine startDate={startDate} endDate={endDate} /> */}
       </BarWrap>
-      <UserMissionBottom/>
+      <UserMissionBottom />
     </>
   );
 };
@@ -125,8 +125,8 @@ const Stdic = styled.div`
 
 const BarWrap = styled.div`
   height: 300px;
-    width: 100%;
-    box-sizing: border-box;
+  width: 100%;
+  box-sizing: border-box;
   padding-bottom: 55px;
 
   border-bottom: 1px solid #dbdbdb;
@@ -204,9 +204,9 @@ const WeekDateP = styled.p`
   font-weight: 700;
   width: 144px;
   margin: 0 auto;
- 
-  color:#000000; 
+
+  color: #000000;
   @media (max-width: 389px) {
-        font-size: 20px;
+    font-size: 20px;
   }
 `;

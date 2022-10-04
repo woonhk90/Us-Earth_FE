@@ -18,8 +18,7 @@ const CommunityProofForm = () => {
   const dispatch = useDispatch();
   const param = useParams();
   const { isLoading, error } = useSelector((state) => state.proofs);
-
-  const [inputData, inputOnChangeHandler, inputReset] = useInputs({
+  const [inputData, inputOnChangeHandler] = useInputs({
     title: "",
     content: "",
   });

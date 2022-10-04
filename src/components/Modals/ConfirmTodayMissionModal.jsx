@@ -58,6 +58,7 @@ const ConfirmTitle = styled.p`
   padding: 50px 0;
 `;
 const ConfirmBox = styled.div`
+cursor: pointer;
   width: 100%;
   display: flex;
   justify-content: center;
