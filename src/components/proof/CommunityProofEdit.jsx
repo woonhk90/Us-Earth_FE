@@ -58,7 +58,7 @@ const CommunityProofEdit = () => {
     }
     setGetIsLoading(false);
   };
-  const [inputData, inputOnChangeHandler, inputReset, isForm, isSubmit, setUseInputs] = useInputs({
+  const [inputData, inputOnChangeHandler, setUseInputs] = useInputs({
     title: "",
     content: "",
   });

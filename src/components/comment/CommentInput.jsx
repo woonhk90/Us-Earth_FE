@@ -173,6 +173,7 @@ const CommentInput = ({ userToken }) => {
               </>
             )}
             <CommentTextarea
+            participant={!participant}
               disabled={!participant || dateStatus === "end"}
               img={previewImg}
               rows="1"
@@ -331,6 +332,8 @@ const CommentTextarea = styled.textarea`
   white-space: pre-wrap;
   resize: none;
   box-sizing: border-box;
+  
+  background-color: ${(props) => (props.participant ? "#f9f9f9" : "white")};
   width: 100%;
   outline: none;
   color: #222222;

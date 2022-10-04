@@ -24,25 +24,11 @@ const CalendarModal = (props) => {
   const onChange = (dates) => {
     setDateRange(dates); // 배열
   };
-
   const date = {
-    start: "",
-    end: "",
+    start: dayjs(dateRange[0]).format("YYYY-MM-DD"),
+    end: dayjs(dateRange[1]).format("YYYY-MM-DD"),
   };
 
-
-  for (let i = 0; i < 2; i++) {
-    if (dateRange[i]) {
-      const year = dateRange[i]?.getFullYear();
-      const month = ("0" + (dateRange[i]?.getMonth() + 1)).slice(-2);
-      const days = ("0" + dateRange[i]?.getDate()).slice(-2);
-      const dateString = year + "-" + month + "-" + days;
-      if (i === 0 ? (date.start = dateString) : (date.end = dateString));
-    } else {
-      date.start = "";
-      date.end = "";
-    }
-  }
 
   const closeModal = () => {
     props.closeModal();
@@ -98,7 +84,7 @@ const CalendarModal = (props) => {
             inline
             disabledKeyboardNavigation
           />
-          {date.start.length > 0 && date.end.length > 0 ? (
+          {date.start !== "Invalid Date" && date.end!== "Invalid Date" ? (
             <FooterMenus color={"#FFFFFF"} onClick={addDateDispatch} bgColor={"#315300"}>
               {dayjs(date.start).format("YY.MM.DD")} - {dayjs(date.end).format("YY.MM.DD")} / 선택완료
             </FooterMenus>

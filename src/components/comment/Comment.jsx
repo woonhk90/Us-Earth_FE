@@ -11,7 +11,7 @@ import OkModal from "../Modals/OkModal";
 import ErrorModal from "../Modals/ErrorModal";
 import ImageLoading from "../etc/ImageLoading";
 
-const Comment = () => {
+const Comment = ({commentCnt}) => {
   const dispatch = useDispatch();
   const param = useParams();
   const { getIsLoading, error, commentNew } = useSelector((state) => state.comments);
@@ -126,7 +126,8 @@ const Comment = () => {
   const closeModal = () => {
     setModal(!modal);
   };
-  if (getIsLoading) {
+  console.log(commentCnt)
+  if (getIsLoading && commentCnt >0) {
     return (
       <ImageLoadingWrap>
         <ImageLoadingCenter>

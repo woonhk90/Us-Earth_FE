@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { ReactComponent as Question } from "../assets/question.svg";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearVal } from "../redux/modules/communitySlice";
 import topLogo from "../assets/logo/topLogo.png";
-import { colors } from "../styles/color";
 import icons from "../assets";
 import GuideModal from "./Modals/GuideModal";
 import CustomSelect from "./comment/CustomSelect";
 import ConfirmSingleModal from "./Modals/ConfirmSingleModal";
 import { deleteCommunityDetail } from "../redux/modules/communityFormSlice";
-import CommunityTop from "./LogoSingleTop";
+import Button from "./elements/Button";
 
 const CommunityDetailTop = () => {
-  const { Back } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
@@ -105,9 +102,7 @@ const CommunityDetailTop = () => {
       {guideModal && <GuideModal totalPage={4} closeModal={closeGuideModal}></GuideModal>}
       <HeaderWrap>
         <HeaderLeft onClick={onClickHandler}>
-          <IconLeft>
-            <Back />
-          </IconLeft>
+          <Button btnType="svg" svgType="back" />
         </HeaderLeft>
         <HeaderCenter
           onClick={() => {
@@ -117,13 +112,13 @@ const CommunityDetailTop = () => {
           <Image src={topLogo} alt="topLogo"></Image>
         </HeaderCenter>
         <HeaderRight>
-          <IconRight
+          <Button
+            btnType="svg"
+            svgType="question"
             onClick={() => {
               setGuideModal(!guideModal);
             }}
-          >
-            <Question />
-          </IconRight>
+          />
           {communityDetail.dateStatus === "before" ? (
             communityDetail.writer ? (
               <CustomSelect optionIcon={true} clickDispatch={clickDispatch} contentId={param.id} selectBoxData={selectBoxData} />
@@ -158,10 +153,6 @@ const HeaderLeft = styled.div`
   box-sizing: border-box;
 `;
 
-const IconLeft = styled.div`
-  width: 12px;
-  height: 21px;
-`;
 const HeaderRight = styled.div`
   gap: 12px;
   display: flex;
@@ -176,11 +167,6 @@ const HeaderCenter = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-`;
-const IconRight = styled.div`
-  cursor: pointer;
-  width: 28px;
-  height: 29px;
 `;
 
 const Image = styled.img`

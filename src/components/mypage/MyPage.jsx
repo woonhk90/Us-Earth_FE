@@ -70,6 +70,20 @@ const MyPage = () => {
     setProfileModalFile(!profileModalFlag);
   };
 
+  /* ---------------------------------- 등급 명칭 --------------------------------- */
+  let levelName = '';
+    if (userInfo.level >= 1 && userInfo.level <= 2) {
+      levelName='씨앗';
+    } else if (userInfo.level >= 3 && userInfo.level <= 4) {
+      levelName='새싹';
+    } else if (userInfo.level >= 5 && userInfo.level <= 7) {
+      levelName='잎새';
+    } else if (userInfo.level >= 8 && userInfo.level <= 10) {
+      levelName='애기나무';
+    } else if (userInfo.level >= 11) {
+      levelName='어른나무';
+    }
+
 
   return (
     <>
@@ -90,7 +104,7 @@ const MyPage = () => {
               }
 
               {/* <div>{userInfo?.nickname}</div> */}
-              <div>LV.{userInfo?.level} 등급</div>
+              <div>LV.{userInfo?.level} {levelName}</div>
             </MyPageInfoBox>
             <MyPageProFile>
               <img src={userInfo?.profileImage} alt='profileImage' referrerPolicy="no-referrer" />
