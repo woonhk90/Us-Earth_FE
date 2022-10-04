@@ -19,7 +19,6 @@ const SeceletonFormEdit = () => {
         </ImageBoxWrap>
         <TopTextWrap>
           <Sceleton margin="35px 0 10px 0" height="30px" width="30%" />
-          {/* <Sceleton margin="25px 0 10px 0" height="30px" width="20%" /> */}
         </TopTextWrap>
         <Sceleton margin="5px 0 35px 0" height="30px" width="80%" />
         <Sceleton margin="25px 0 10px 0" height="30px" width="30%" />

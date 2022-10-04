@@ -6,6 +6,7 @@ import Header from "../Header";
 import "react-datepicker/dist/react-datepicker.css";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import { ReactComponent as CameraWh } from "../../assets/cameraWh.svg";
+import { colors } from "../../styles/color";
 
 const SceletonProofEdit = () => {
   const navigate = useNavigate();
@@ -130,7 +131,6 @@ const StIcon = styled.div`
 `;
 
 const HeaderWrap = styled.div`
-  /* position: fixed; */
   top: 0;
   left: 0;
   width: 100%;
@@ -140,7 +140,7 @@ const HeaderWrap = styled.div`
   padding: 13px 13px 13px 16px;
   box-sizing: border-box;
   z-index: 1;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid ${colors.grayF5};
 `;
 
 const IconDiv = styled.div`
@@ -158,5 +158,5 @@ const HeaderP = styled.button`
   font-weight: 600;
   font-size: 20px;
   letter-spacing: -0.03em;
-  color: #cdcdcd;
+  color: ${colors.grayCB};
 `;

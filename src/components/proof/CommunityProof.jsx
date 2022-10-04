@@ -1,30 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Navigation, Pagination, Scrollbar } from "swiper";
-import EditModal from "../Modals/EditModal";
 import { useDispatch, useSelector } from "react-redux";
-import { Swiper, SwiperSlide } from "swiper/react";
+import styled from "styled-components";
+import { flexRow } from "../../styles/Flex";
+import icons from "../../assets";
 import rightWh from "../../assets/rightWh.svg";
 import leftWh from "../../assets/leftWh.svg";
-import { flexColumn, flexRow, flexBetween, Text } from "../../styles/Flex";
+import { deleteProof, getProofs, proofsCleanUp } from "../../redux/modules/proofsSlice";
+import { __getCommunityDetail } from "../../redux/modules/communitySlice";
+import Loading from "../etc/Loading";
+import EditModal from "../Modals/EditModal";
+import ErrorModal from "../Modals/ErrorModal";
+import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
+import { Navigation, Pagination, Scrollbar } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { deleteProof, getProofs, proofsCleanUp } from "../../redux/modules/proofsSlice";
-import icons from "../../assets";
-import Loading from "../etc/Loading";
-import ErrorModal from "../Modals/ErrorModal";
-import { __getCommunityDetail } from "../../redux/modules/communitySlice";
-import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
 const CommunityProof = () => {
-  const { VerticalDot, Delete, Report, Edit } = icons;
+  const { VerticalDot, Delete, Edit } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const param = useParams();
-  const [modalOpen, setModalOpen] = useState(false);
   const { proofs, isLoading, error } = useSelector((state) => state.proofs);
 
   useEffect(() => {
@@ -34,6 +33,10 @@ const CommunityProof = () => {
     };
   }, []);
 
+
+  /* ------------------------------- 수정 & 삭제 모달 ------------------------------- */
+  const [modalOpen, setModalOpen] = useState(false);
+  
   const openModal = () => {
     setModalOpen(true);
   };
@@ -45,7 +48,8 @@ const CommunityProof = () => {
   const onClickEdit = () => {
     navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`, { replace: true });
   };
-  /* -------------------------------- edit modal ------------------------------- */
+  
+  /* -------------------------------- 수정 확인 모달 ------------------------------- */
   const [modal, setModal] = useState(false);
 
   // modal text data
@@ -68,6 +72,7 @@ const CommunityProof = () => {
     setModal(!modal);
   };
 
+  /* ---------------------------------- 로딩 & 에러 --------------------------------- */
   if (isLoading) {
     return (
       <>
@@ -124,12 +129,6 @@ const CommunityProof = () => {
                 </ModalIcon>
                 삭제하기
               </ButtonInModal>
-              {/* <ButtonInModal>
-                <ModalIcon>
-                  <Report />
-                </ModalIcon>
-                신고하기
-              </ButtonInModal> */}
             </EditModal>
           </>
         ) : null}
@@ -168,7 +167,6 @@ const UerInpo = styled.div`
 `;
 
 const UserInfoImg = styled.img`
-  /* background-image: url(${(props) => props.imgUrl}); */
   width: 37px;
   height: 37px;
   background-position: center;

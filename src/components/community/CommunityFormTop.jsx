@@ -3,18 +3,20 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { clearVal } from "../../redux/modules/communitySlice";
-import icons from "../../assets";
 import Button from "../elements/Button";
+import { colors } from "../../styles/color";
+import { useEffect } from "react";
 
 const CommunityFormTop = ({ title }) => {
-  const { Cancel } = icons;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  React.useEffect(() => {
+
+  useEffect(() => {
     return () => {
       dispatch(clearVal());
     };
   }, []);
+
   return (
     <>
       <HeaderWrap>
@@ -46,21 +48,17 @@ const HeaderWrap = styled.div`
   box-sizing: border-box;
   z-index: 1;
 `;
+
 const HeaderFlex = styled.div`
   width: 100%;
   padding: 10px 16px;
   box-sizing: border-box;
   margin: auto;
   text-align: center;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid ${colors.grayF5};
 `;
+
 const P = styled.p`
   font-weight: 600;
   font-size: 20px;
-`;
-
-const IconDiv = styled.div`
-  cursor: pointer;
-  width: 21px;
-  height: 21px;
 `;

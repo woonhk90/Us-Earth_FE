@@ -6,25 +6,29 @@ import { useState } from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { getDailyMissionStats} from "../../redux/modules/userMissionSlice";
+import { colors } from "../../styles/color";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const LineChart = ({ startDate, endDate }) => {
   const dispatch = useDispatch();
+  const { periodMissionData } = useSelector((state) => state.userMission);
   const [data, setData] = useState({
     labels: [],
     datasets: [],
   });
-
-  const { periodMissionData } = useSelector((state) => state.userMission);
-  const [weekMissionDate, setWeekMissionDate] = useState([]);
-
+  
   useEffect(() => {
     weekMissionDataCheck();
   }, [ periodMissionData]);
+  
 
+  /* --------------------------------- 일주일 데이터 -------------------------------- */
   let stats = [];
   let week = [];
+
+  const [weekMissionDate, setWeekMissionDate] = useState([]);
+  
   const weekMissionDataCheck = () => {
     for (let i = 0; i < 7; i++) {
       let finding = periodMissionData.find((item) => item.clearTime === dayjs(startDate).add(i, "day").format("YYYY-MM-DD"));
@@ -42,8 +46,8 @@ const LineChart = ({ startDate, endDate }) => {
         {
           label: "완료 수",
           data: stats,
-          borderColor: "#ADD477",
-          backgroundColor: "#ADD477",
+          borderColor: colors.green77,
+          backgroundColor: colors.green77,
           pointStyle: "circle",
           pointRadius: 5,
           pointHoverRadius: 8,
@@ -52,6 +56,7 @@ const LineChart = ({ startDate, endDate }) => {
       ],
     });
   };
+
   const options = {
     responsive: true,
     plugins: {
@@ -128,6 +133,7 @@ const LineChart = ({ startDate, endDate }) => {
       },
     },
   };
+
   return <Line options={options} data={data} />;
 };
 

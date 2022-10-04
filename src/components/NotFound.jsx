@@ -4,31 +4,29 @@ import "react-datepicker/dist/react-datepicker.css";
 import blackLogo from "../assets/logo/blackLogo.png";
 import styled from "styled-components";
 import { flexColumn } from "../styles/Flex";
+import { colors } from "../styles/color";
 
 const NotFound = () => {
   const navigate = useNavigate();
   return (
-    <>
-      <NotFoundContainer>
-        <NotFoundWrap>
-          <Img src={blackLogo} alt="logoBottom" />
-          <TopSpan>죄송합니다. 페이지가 존재하지 않습니다.</TopSpan>
-          <BottomSpan>
-            요청하신 페이지를 잘못 입력하거나,
-            <br />
-            주소가 변경·삭제되어 찾을 수 없습니다.
-          </BottomSpan>
-
-          <Button
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            메인으로 돌아가기
-          </Button>
-        </NotFoundWrap>
-      </NotFoundContainer>
-    </>
+    <NotFoundContainer>
+      <NotFoundWrap>
+        <Img src={blackLogo} alt="logoBottom" />
+        <TopSpan>죄송합니다. 페이지가 존재하지 않습니다.</TopSpan>
+        <BottomSpan>
+          요청하신 페이지를 잘못 입력하거나,
+          <br />
+          주소가 변경·삭제되어 찾을 수 없습니다.
+        </BottomSpan>
+        <Button
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          메인으로 돌아가기
+        </Button>
+      </NotFoundWrap>
+    </NotFoundContainer>
   );
 };
 
@@ -64,9 +62,9 @@ const NotFoundWrap = styled.div`
 const Img = styled.img`
   width: 130px;
   padding-bottom: 50px;
-    @media (max-width: 340px) {
-  width: 100px;
-  padding-bottom: 35px;
+  @media (max-width: 340px) {
+    width: 100px;
+    padding-bottom: 35px;
   }
 `;
 
@@ -81,9 +79,9 @@ const Button = styled.button`
   text-align: center;
   letter-spacing: -0.03em;
   color: #424242;
-    @media (max-width: 340px) {
-  font-size: 14px;
-  padding: 10px 0;
+  @media (max-width: 340px) {
+    font-size: 14px;
+    padding: 10px 0;
   }
 `;
 
@@ -93,10 +91,10 @@ const TopSpan = styled.span`
   line-height: 25px;
   text-align: center;
   letter-spacing: -0.02em;
-  color: #222222;
+  color: ${colors.black22};
   padding-bottom: 13px;
   @media (max-width: 340px) {
-  font-size: 14px;
+    font-size: 14px;
   }
 `;
 const BottomSpan = styled.span`
@@ -105,10 +103,10 @@ const BottomSpan = styled.span`
   line-height: 25px;
   text-align: center;
   letter-spacing: -0.02em;
-  color: #222222;
+  color: ${colors.black22};
   padding-bottom: 50px;
-    @media (max-width: 340px) {
-  font-size: 13px;
-  padding-bottom: 35px;
+  @media (max-width: 340px) {
+    font-size: 13px;
+    padding-bottom: 35px;
   }
 `;

@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-// import "./Modal.css";
+import { useSelector } from "react-redux";
 
 const EditModal = (props) => {
   const { open, close } = props;
   const [isOpen, setIsOpen] = useState(false);
-  const { comments, commentEdit,writeMode } = useSelector((state) => state.comments);
-  
+  const { writeMode } = useSelector((state) => state.comments);
+
   let timeoutId;
   useEffect(() => {
-    
     if (open) {
       setIsOpen(true);
     } else {
@@ -34,11 +32,9 @@ const EditModal = (props) => {
         buttonShow={open}
         buttonHide={!open}
         onClick={(e) => {
-          // do not close modal if anything inside modal content is clicked
           e.stopPropagation();
         }}
       >
-        
         <WriteHeight height={writeMode}></WriteHeight>
         <div>{props.children}</div>
       </Stsection>
@@ -55,12 +51,11 @@ const StModal = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 99; //해당 모달이 맨 앞에 위치하게 하기
+  z-index: 99;
   background-color: rgba(89, 89, 89, 0.6);
   &.openModal {
     display: flex;
     animation: ${(props) => (props.open ? bgShow : bgHide)} 0.3s ease-out;
-
     ${(props) =>
       props.modalShow &&
       css`
@@ -132,10 +127,7 @@ const Stsection = styled.section`
     `}
 `;
 
-const StMain = styled.main``;
-
 const WriteHeight = styled.div`
-height: ${(props)=>`${props.height-65}px`};
-/* display:${(props)=> props.height ? null : 'none'}; */
-background-color:transparent;
+  height: ${(props) => `${props.height - 65}px`};
+  background-color: transparent;
 `;
