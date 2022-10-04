@@ -53,7 +53,6 @@ const ModalWrap = styled.div`
 
 const ModalBody = styled.div`
   width: 100%;
-
   background-color: #fff;
   border-radius: 12px;
 `;

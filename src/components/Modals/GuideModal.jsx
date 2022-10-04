@@ -5,9 +5,9 @@ import Button from "../elements/Button";
 import { flexBetween } from "../../styles/Flex";
 
 const GuideModal = (props) => {
-  const { closeModal,totalPage } = props;
+  const { closeModal, totalPage } = props;
   const [imgNumber, setImgNumber] = useState(1);
-  
+
   const nextClick = () => {
     if (imgNumber < totalPage) {
       setImgNumber(imgNumber + 1);
@@ -30,7 +30,7 @@ const GuideModal = (props) => {
           <ConfirmWrap>
             <ConfirmTitle>
               <IconDiv onClick={closeModal}>
-                <Button btnType="svg" svgType="cancel"/>
+                <Button btnType="svg" svgType="cancel" />
               </IconDiv>
               <Image src={require(`../../assets/jpg/guide${imgNumber}.jpg`)} alt={`guide${imgNumber}`}></Image>
             </ConfirmTitle>
@@ -38,7 +38,9 @@ const GuideModal = (props) => {
               <Button btnType="modal" on="on" onClick={preClick}>
                 {imgNumber === 1 ? "닫기" : "이전"}
               </Button>
-              <Button btnType="modal"  onClick={nextClick}>{imgNumber === totalPage ? "닫기" : "다음"}</Button>
+              <Button btnType="modal" onClick={nextClick}>
+                {imgNumber === totalPage ? "닫기" : "다음"}
+              </Button>
             </ConfirmBox>
           </ConfirmWrap>
         </ModalBody>
@@ -65,49 +67,38 @@ const ModalWrap = styled.div`
     padding: 0 55px;
   }
 `;
+
 const ModalBody = styled.div`
   width: 100%;
-
   background-color: #fff;
   border-radius: 12px;
 `;
 
 const IconDiv = styled.div`
-  /* margin-left: 12px; */
   position: absolute;
   right: 19px;
   top: -4px;
 `;
+
 const ConfirmWrap = styled.div`
   display: ${(props) => (!props.viewFlag ? "block" : "none")};
 `;
+
 const ConfirmTitle = styled.div`
   position: relative;
   margin-top: 20px;
   width: 100%;
   height: 100%;
 `;
-const ConfirmBox = styled.div`
-${flexBetween}
-button:nth-child(1) {
-  border-right: 1px solid rgba(217, 217, 217, 0.3);
-}
-button:nth-child(2) {
-  border-left: 1px solid rgba(217, 217, 217, 0.3);
-}
-`;
-const ConfirmItem = styled.div`
-  cursor: pointer;
-  width: 50%;
-  padding: 17px 0;
-  font-weight: 600;
-  font-size: 20px;
-  line-height: 27px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  color: ${(props) => (props.color ? props.color : "#212121")};
+const ConfirmBox = styled.div`
+  ${flexBetween}
+  button:nth-child(1) {
+    border-right: 1px solid rgba(217, 217, 217, 0.3);
+  }
+  button:nth-child(2) {
+    border-left: 1px solid rgba(217, 217, 217, 0.3);
+  }
 `;
 
 const Image = styled.img`

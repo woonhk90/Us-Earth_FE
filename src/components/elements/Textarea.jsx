@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import { colors } from "../../styles/color";
 
 const Textarea = (props) => {
   const {
@@ -64,9 +65,9 @@ const StTextarea = styled.textarea`
   border: none;
   width: 100%;
   outline: none;
-  color: #222222;
+  color: ${colors.black22};
   ::placeholder {
-    color: #cbcbcb;
+    color: ${colors.grayCB};
   }
   ${(props) => {
     return (
@@ -93,7 +94,6 @@ const StTextarea = styled.textarea`
     );
   }}
   
-
   ${(props) => {
     return (
       props.textareaType === "proofTop" &&
@@ -116,7 +116,6 @@ const StTextarea = styled.textarea`
     return (
       props.textareaType === "comment" &&
       css`
-        /* height: 300px; */
         padding: 10px 10px 0 10px;
         font-weight: 400;
         font-size: 16px;
@@ -140,13 +139,11 @@ const StTextarea = styled.textarea`
         font-weight: 700;
         height: 64px;
         max-height: 250px;
-
         @media (min-width: 281px) and (max-width: 389px) {
           ::placeholder {
             font-size: 16px;
           }
         }
-
         @media (max-width: 280px) {
           ::placeholder {
             font-size: 14px;

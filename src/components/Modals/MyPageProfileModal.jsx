@@ -5,6 +5,8 @@ import imageCompression from "browser-image-compression";
 import { useDispatch } from "react-redux";
 import { __proFileChange } from '../../redux/modules/mypageSlice';
 import ImageLoading from "../etc/ImageLoading";
+import Button from "../elements/Button";
+import { flexBetween } from "../../styles/Flex";
 
 const MyPageProfileModal = (props) => {
 	const dispatch = useDispatch();
@@ -84,8 +86,8 @@ const MyPageProfileModal = (props) => {
 						<ErrorMsg>{isPhotoMessage}</ErrorMsg>
 					</ContentWrap>
 					<ModalButton>
-						<div onClick={closeModal}>취소</div>
-						<div onClick={onSubmitHandler}>등록</div>
+						<Button btnType="modal" onClick={closeModal}>취소</Button>
+						<Button btnType="modal" onClick={onSubmitHandler}>등록</Button>
 					</ModalButton>
 
 				</ModalBody>
@@ -206,24 +208,11 @@ const ErrorMsg = styled.p`
 
 
 const ModalButton = styled.div`
-	display:flex;
-	justify-content: center;
-	align-items: center;
-	border-top:1px solid ${colors.HR};
-	div{
-		width:100%;
-		text-align:center;
-		cursor:pointer;
-		font-size:20px;
-		line-height:28px;
-		font-weight:600;
-		font-family:'Noto sans KR','sans-serif';
-		padding:17px 0%;
-	}
-	div:nth-child(1){
-		border-right:1px solid ${colors.HR};
-	}
-	div:nth-child(2){
-		border-left:1px solid ${colors.HR};
-	}
+${flexBetween}
+button:nth-child(1) {
+	border-right: 1px solid rgba(217, 217, 217, 0.3);
+}
+button:nth-child(2) {
+	border-left: 1px solid rgba(217, 217, 217, 0.3);
+}
 `;

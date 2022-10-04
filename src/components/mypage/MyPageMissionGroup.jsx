@@ -1,89 +1,180 @@
-import React from 'react';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { __getMyPageMissionGroup, saveCagegory } from '../../redux/modules/mypageSlice';
+import React from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import {
+  __getMyPageMissionGroup,
+  saveCagegory,
+} from "../../redux/modules/mypageSlice";
+import Button from "../elements/Button";
 
 const MyPageMissionGroup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [categoryFlag, setCategoryFlag] = React.useState('onGoing');
+  const [categoryFlag, setCategoryFlag] = React.useState("onGoing");
   React.useEffect(() => {
     dispatch(__getMyPageMissionGroup());
     setCategoryFlag(saveCagegoryFlag);
-  }, [])
+  }, []);
   const { myGroupList } = useSelector((state) => state.mypage);
   const onClickCategory = (flag) => {
     setCategoryFlag(flag);
     dispatch(saveCagegory(flag));
-  }
+  };
 
   const { saveCagegoryFlag } = useSelector((state) => state.mypage);
-const [writer, setWriter]= useState(false)
-const writerCheck = ()=>{
-setWriter(!writer)
-}
+  const [writer, setWriter] = useState(false);
+  const writerCheck = () => {
+    setWriter(!writer);
+  };
 
   return (
     <>
       <GroupWrap>
         <Container>
           <CategoryBox>
-            <ItemOnGoing onClick={() => { onClickCategory('ongoing') }} active={categoryFlag} name="ongoing">진행중</ItemOnGoing>
-            <ItemBefore onClick={() => { onClickCategory('before') }} active={categoryFlag} name="before">진행전</ItemBefore>
-            <ItemEnd onClick={() => { onClickCategory('end') }} active={categoryFlag} name='end'>종료</ItemEnd>
+            <Button
+              btnType="missionGroupMenu"
+              onClick={() => {
+                onClickCategory("ongoing");
+              }}
+              active={categoryFlag}
+              name="ongoing"
+            >
+              진행중
+            </Button>
+            <Button
+              btnType="missionGroupMenu"
+              onClick={() => {
+                onClickCategory("before");
+              }}
+              active={categoryFlag}
+              name="before"
+            >
+              진행전
+            </Button>
+            <Button
+              btnType="missionGroupMenu"
+              onClick={() => {
+                onClickCategory("end");
+              }}
+              active={categoryFlag}
+              name="end"
+            >
+              종료
+            </Button>
           </CategoryBox>
 
           <CategoryInfoList>
-          <WriterButton >
-          <StyledLabel htmlFor="내가 쓴 글 보기">
-      <StyledInput onClick={writerCheck}  type="checkbox" name="내가 쓴 글 보기" />
-      <StyledP> 내가 쓴 글 보기</StyledP>
-    </StyledLabel></WriterButton>
-            {writer ?
-            <>  
-            {myGroupList.filter((v) => v.dateStatus === saveCagegoryFlag && v.writer ===true).map((v) => (
-    <ListBox key={v.communityId} onClick={() => navigate(`/community/detail/${v.communityId}`)}>
-      <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
-        {/* <img src={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"} alt='GroupImg' /> */}
-      </ItemImg>
-      <div>
-        <div>
-          <p>{v.title}</p>
-          <p>{v.startDate} - {v.endDate}</p>
-        </div>
-        <div>
-          <progress value={v.dateStatus === "before" ? v.currentPercent : v.successPercent} max='100'></progress>
-          <span>{Math.ceil(v.dateStatus === "before" ? v.currentPercent : v.successPercent)}%</span>
-        </div>
-      </div>
-    </ListBox>
-  )
-  )}
-  </> : 
-            <>
-  {myGroupList.filter((v) => v.dateStatus === saveCagegoryFlag).map((v) => (
-              <ListBox key={v.communityId} onClick={() => navigate(`/community/detail/${v.communityId}`)}>
-                <ItemImg bgImg={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"}>
-                  {/* <img src={v.img !== null ? v.img : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"} alt='GroupImg' /> */}
-                </ItemImg>
-                <div>
-                  <div>
-                    <p>{v.title}</p>
-                    <p>{v.startDate} - {v.endDate}</p>
-                  </div>
-                  <div>
-                    <progress value={v.dateStatus === "before" ? v.currentPercent : v.successPercent} max='100'></progress>
-                    <span>{Math.ceil(v.dateStatus === "before" ? v.currentPercent : v.successPercent)}%</span>
-                  </div>
-                </div>
-              </ListBox>
-            )
+            <WriterButton>
+              <StyledLabel htmlFor="내가 쓴 글 보기">
+                <StyledInput
+                  onClick={writerCheck}
+                  type="checkbox"
+                  name="내가 쓴 글 보기"
+                />
+                <StyledP> 내가 쓴 글 보기</StyledP>
+              </StyledLabel>
+            </WriterButton>
+            {writer ? (
+              <>
+                {myGroupList
+                  .filter(
+                    (v) =>
+                      v.dateStatus === saveCagegoryFlag && v.writer === true
+                  )
+                  .map((v) => (
+                    <ListBox
+                      key={v.communityId}
+                      onClick={() =>
+                        navigate(`/community/detail/${v.communityId}`)
+                      }
+                    >
+                      <ItemImg
+                        bgImg={
+                          v.img !== null
+                            ? v.img
+                            : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"
+                        }
+                      ></ItemImg>
+                      <div>
+                        <div>
+                          <p>{v.title}</p>
+                          <p>
+                            {v.startDate} - {v.endDate}
+                          </p>
+                        </div>
+                        <div>
+                          <progress
+                            value={
+                              v.dateStatus === "before"
+                                ? v.currentPercent
+                                : v.successPercent
+                            }
+                            max="100"
+                          ></progress>
+                          <span>
+                            {Math.ceil(
+                              v.dateStatus === "before"
+                                ? v.currentPercent
+                                : v.successPercent
+                            )}
+                            %
+                          </span>
+                        </div>
+                      </div>
+                    </ListBox>
+                  ))}
+              </>
+            ) : (
+              <>
+                {myGroupList
+                  .filter((v) => v.dateStatus === saveCagegoryFlag)
+                  .map((v) => (
+                    <ListBox
+                      key={v.communityId}
+                      onClick={() =>
+                        navigate(`/community/detail/${v.communityId}`)
+                      }
+                    >
+                      <ItemImg
+                        bgImg={
+                          v.img !== null
+                            ? v.img
+                            : "https://www.urbanbrush.net/web/wp-content/uploads/edd/2020/02/urbanbrush-20200227023608426223.jpg"
+                        }
+                      ></ItemImg>
+                      <div>
+                        <div>
+                          <p>{v.title}</p>
+                          <p>
+                            {v.startDate} - {v.endDate}
+                          </p>
+                        </div>
+                        <div>
+                          <progress
+                            value={
+                              v.dateStatus === "before"
+                                ? v.currentPercent
+                                : v.successPercent
+                            }
+                            max="100"
+                          ></progress>
+                          <span>
+                            {Math.ceil(
+                              v.dateStatus === "before"
+                                ? v.currentPercent
+                                : v.successPercent
+                            )}
+                            %
+                          </span>
+                        </div>
+                      </div>
+                    </ListBox>
+                  ))}
+              </>
             )}
-            </>
-            }
-          
           </CategoryInfoList>
         </Container>
       </GroupWrap>
@@ -105,29 +196,6 @@ const CategoryBox = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
-  div {
-    width: 33.33333%;
-    text-align: center;
-    padding: 26px 0 16px;
-    box-sizing: border-box;
-    font-weight: 600;
-    font-size:20px;
-    line-height:28px;
-    font-family: 'Noto Sans KR','sans-serif';
-    cursor:pointer;
-  }
-`;
-const ItemOnGoing = styled.div`
-  border-bottom: ${({ active, name }) => (active === name ? "6px solid #8ECF70" : "6px solid #f2f2f2")};
-  color: ${({ active, name }) => (active === name ? "#222" : "#cbcbcb")};
-`;
-const ItemBefore = styled.div`
-  border-bottom: ${({ active, name }) => (active === name ? "6px solid #8ECF70" : "6px solid #f2f2f2")};
-  color: ${({ active, name }) => (active === name ? "#222" : "#cbcbcb")};
-`;
-const ItemEnd = styled.div`
-  border-bottom: ${({ active, name }) => (active === name ? "6px solid #8ECF70" : "6px solid #f2f2f2")};
-  color: ${({ active, name }) => (active === name ? "#222" : "#cbcbcb")};
 `;
 
 const CategoryInfoList = styled.div`
@@ -135,8 +203,8 @@ const CategoryInfoList = styled.div`
 `;
 
 const ItemImg = styled.div`
-  background:url(${(props) => props.bgImg}) no-repeat center center;
-  background-size:cover;
+  background: url(${(props) => props.bgImg}) no-repeat center center;
+  background-size: cover;
   width: 150px;
   height: 200px;
   @media (max-width: 375px) {
@@ -150,7 +218,7 @@ const ItemImg = styled.div`
 `;
 
 const ListBox = styled.div`
-  cursor:pointer;
+  cursor: pointer;
   padding: 23px 16px;
   box-sizing: border-box;
   display: flex;
@@ -162,11 +230,11 @@ const ListBox = styled.div`
     width: 60%;
     div:nth-child(1) {
       width: 100%;
-      
+
       p:nth-child(1) {
-        font-weight:600;
-        font-size:20px;
-        line-height:30px;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 30px;
         /* 말줄임 */
         /* white-space:nowrap; */
         overflow: hidden;
@@ -179,20 +247,20 @@ const ListBox = styled.div`
         /* color:black; */
       }
       p:nth-child(2) {
-        font-weight:300;
-        font-size:16px;
-        line-height:22px;
+        font-weight: 300;
+        font-size: 16px;
+        line-height: 22px;
       }
       @media (max-width: 374px) {
         p:nth-child(1) {
-          font-size:16px;
+          font-size: 16px;
         }
         p:nth-child(2) {
-          font-size:12px;
+          font-size: 12px;
         }
       }
-      p{
-        font-family: 'Noto Sans KR','sans-serif';
+      p {
+        font-family: "Noto Sans KR", "sans-serif";
       }
     }
     div:nth-child(2) {
@@ -219,16 +287,15 @@ const ListBox = styled.div`
   }
 `;
 
-
 const WriterButton = styled.div`
-text-align: end;
-box-sizing: border-box;
-padding: 6px 16px 0 16px;
-display: flex;
-align-items: flex-end;
-align-content: flex-end;
-width: 100%;
-`
+  text-align: end;
+  box-sizing: border-box;
+  padding: 6px 16px 0 16px;
+  display: flex;
+  align-items: flex-end;
+  align-content: flex-end;
+  width: 100%;
+`;
 
 const StyledLabel = styled.label`
   display: flex;

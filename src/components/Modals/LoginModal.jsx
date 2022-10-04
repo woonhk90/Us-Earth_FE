@@ -1,9 +1,8 @@
 import React from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../elements/Button";
 import { flexBetween } from "../../styles/Flex";
-
 
 const ConfirmModal = (props) => {
   const { modalOnOff } = props;
@@ -11,7 +10,7 @@ const ConfirmModal = (props) => {
 
   const { pathname } = useLocation();
   const clickSubmit = () => {
-    localStorage.setItem('pathname', pathname);
+    localStorage.setItem("pathname", pathname);
     navigate("/login");
   };
 
@@ -23,20 +22,18 @@ const ConfirmModal = (props) => {
             e.stopPropagation();
           }}
         >
-          <ConfirmWrap>
-            <ConfirmTitle>
-              로그인이 필요합니다.
-              <br /> 로그인 페이지로 이동하시겠습니까?
-            </ConfirmTitle>
-            <ConfirmBox>
-            <Button btnType="modal"  onClick={modalOnOff}>
-                취소
-              </Button>
-              <Button btnType="modal"onClick={clickSubmit}>
-                확인
-              </Button>
-            </ConfirmBox>
-          </ConfirmWrap>
+          <ConfirmTitle>
+            로그인이 필요합니다.
+            <br /> 로그인 페이지로 이동하시겠습니까?
+          </ConfirmTitle>
+          <ConfirmBox>
+            <Button btnType="modal" onClick={modalOnOff}>
+              취소
+            </Button>
+            <Button btnType="modal" onClick={clickSubmit}>
+              확인
+            </Button>
+          </ConfirmBox>
         </ModalBody>
       </ModalWrap>
     </>
@@ -45,7 +42,7 @@ const ConfirmModal = (props) => {
 export default ConfirmModal;
 
 const ModalWrap = styled.div`
-position: absolute;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -58,16 +55,13 @@ position: absolute;
   padding: 0 15px;
   box-sizing: border-box;
 `;
+
 const ModalBody = styled.div`
   width: 100%;
-
   background-color: #fff;
   border-radius: 12px;
 `;
 
-const ConfirmWrap = styled.div`
-  /* display: ${(props) => (!props.viewFlag ? "block" : "none")}; */
-`;
 const ConfirmTitle = styled.p`
   font-size: 22px;
   text-align: center;
@@ -75,19 +69,11 @@ const ConfirmTitle = styled.p`
 `;
 
 const ConfirmBox = styled.div`
-${flexBetween}
-button:nth-child(1) {
-  border-right: 1px solid rgba(217, 217, 217, 0.3);
-}
-button:nth-child(2) {
-  border-left: 1px solid rgba(217, 217, 217, 0.3);
-}
-`;
-const ConfirmItem = styled.div`
-cursor: pointer;
-  width: 50%;
-  border-right: 1px solid #d9d9d9;
-  border-left: 1px solid #d9d9d9;
-  font: 600 22px/30px "Noto Sans KR", "sans-serif";
-  padding: 19px 0;
+  ${flexBetween}
+  button:nth-child(1) {
+    border-right: 1px solid rgba(217, 217, 217, 0.3);
+  }
+  button:nth-child(2) {
+    border-left: 1px solid rgba(217, 217, 217, 0.3);
+  }
 `;

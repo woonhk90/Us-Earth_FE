@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { colors } from '../../styles/color';
 import icons from '../../assets';
+import Button from '../elements/Button';
 
 const CommunityTop = () => {
-  const { Back, LeftArrow } = icons;
   const navigate = useNavigate();
   const onClickHandler = () => {
     navigate(-1);
@@ -13,11 +13,8 @@ const CommunityTop = () => {
   return (
     <>
       <HeaderWrap>
-        <IconDiv>
-          <Back onClick={() => onClickHandler()} />
-        </IconDiv>
+        <Button btnType="svg" svgType="back" onClick={onClickHandler}/>
         <p>설정</p>
-        <div></div>
       </HeaderWrap>
     </>
   )

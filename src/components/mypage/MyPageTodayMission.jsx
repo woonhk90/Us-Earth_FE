@@ -2,9 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import icons from "../../assets/index";
 import { useDispatch, useSelector } from "react-redux";
-import { __getTodayMission, __updateMissionFlag } from "../../redux/modules/mypageSlice";
+import {
+  __getTodayMission,
+  __updateMissionFlag,
+} from "../../redux/modules/mypageSlice";
 import { colors } from "../../styles/color";
 import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
+import Button from "../elements/Button";
 
 const MyPageTodayMission = ({ userInfo }) => {
   const { level_01, level_02, level_03, level_04, level_05 } = icons;
@@ -43,8 +47,8 @@ const MyPageTodayMission = ({ userInfo }) => {
 
   /* -------------------------------- edit modal ------------------------------- */
   const [modal, setModal] = React.useState(false);
-  const [missionId, setMissionId] = React.useState('');
-  const [missionDiff, setMissionDiff] = React.useState('');
+  const [missionId, setMissionId] = React.useState("");
+  const [missionDiff, setMissionDiff] = React.useState("");
 
   const onMissionClick = (id, flag, diff) => {
     if (!flag) {
@@ -52,7 +56,7 @@ const MyPageTodayMission = ({ userInfo }) => {
       setMissionDiff(diff);
       setModal(!modal);
     }
-  }
+  };
 
   // modal text data
   const confirmModalData = {
@@ -66,45 +70,69 @@ const MyPageTodayMission = ({ userInfo }) => {
   };
 
   const clickSubmit = () => {
-    dispatch(__updateMissionFlag({ missionName: missionId, difficulty: missionDiff }));
+    dispatch(
+      __updateMissionFlag({ missionName: missionId, difficulty: missionDiff })
+    );
   };
 
   return (
     <>
-      {modal && <ConfirmSingleModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
+      {modal && (
+        <ConfirmSingleModal
+          confirmModalData={confirmModalData}
+          clickSubmit={clickSubmit}
+          closeModal={modalOnOff}
+        />
+      )}
       <MyPageMission imgUrl={imgUrl}>
-        {
-          missionFlag ?
-            (<TodayMission>
-              <TodayMissionBox>
-                <p>오늘의 미션</p>
-                <p onClick={() => setMissionFlag(!missionFlag)}>미션 닫기({todayMission.filter((v) => v.complete === true).length}/5)</p>
-              </TodayMissionBox>
-              <MissionBox>
-                {
-                  todayMission.map(
-                    (v) =>
-                      <MissionItem key={v.missionName} onClick={() => { onMissionClick(v.missionName, v.complete, v.difficulty) }} background={v.complete}>
-                        <ItemTitle background={v.complete}>{v.missionName}</ItemTitle>
-                      </MissionItem>
-                  )
-                }
-              </MissionBox>
-            </TodayMission>)
-            : (<>
-              <MissionTop>
-                <p>오늘의 미션</p>
-                <p onClick={() => onClickTodayMission()}>미션 보기({todayMission.filter((v) => v.complete === true).length}/5)</p>
-              </MissionTop>
-              <MissionBottom>
-                <p>{userInfo.nextLevelExp} / {userInfo.needNextLevelExp}</p>
-                <progress value={userInfo.nextLevelExp} max={userInfo.needNextLevelExp} />
-              </MissionBottom></>)
-        }
+        {missionFlag ? (
+          <TodayMission>
+            <TodayMissionBox>
+              <p>오늘의 미션</p>
+              <p onClick={() => setMissionFlag(!missionFlag)}>
+                미션 닫기(
+                {todayMission.filter((v) => v.complete === true).length}/5)
+              </p>
+            </TodayMissionBox>
+            <MissionBox>
+              {todayMission.map((v) => (
+                <Button
+                  btnType="todayMission"
+                  key={v.missionName}
+                  onClick={() => {
+                    onMissionClick(v.missionName, v.complete, v.difficulty);
+                  }}
+                  flag={v.complete}
+                >
+                  <ItemTitle background={v.complete}>{v.missionName}</ItemTitle>
+                </Button>
+              ))}
+            </MissionBox>
+          </TodayMission>
+        ) : (
+          <>
+            <MissionTop>
+              <p>오늘의 미션</p>
+              <p onClick={() => onClickTodayMission()}>
+                미션 보기(
+                {todayMission.filter((v) => v.complete === true).length}/5)
+              </p>
+            </MissionTop>
+            <MissionBottom>
+              <p>
+                {userInfo.nextLevelExp} / {userInfo.needNextLevelExp}
+              </p>
+              <progress
+                value={userInfo.nextLevelExp}
+                max={userInfo.needNextLevelExp}
+              />
+            </MissionBottom>
+          </>
+        )}
       </MyPageMission>
     </>
-  )
-}
+  );
+};
 export default MyPageTodayMission;
 
 const MyPageMission = styled.div`
@@ -130,19 +158,19 @@ const MissionTop = styled.div`
   padding: 25px 15px;
   box-sizing: border-box;
   p:nth-child(1) {
-    font: 600 24px/1 "Noto Sans KR","sans-serif";
+    font: 600 24px/1 "Noto Sans KR", "sans-serif";
   }
   p:nth-child(2) {
     font: 500 20px/1 "Noto Sans KR", "sans-serif";
     color: #9b9b9b;
-    cursor:pointer;
+    cursor: pointer;
   }
   @media (max-width: 374px) {
     p:nth-child(1) {
-      font-size:22px;
+      font-size: 22px;
     }
     p:nth-child(2) {
-      font-size:18px;
+      font-size: 18px;
     }
   }
 `;
@@ -192,16 +220,16 @@ const TodayMissionBox = styled.div`
     font: 600 24px/1 "Noto Sans KR", "sans-serif";
   }
   p:nth-child(2) {
-    font: 500 20px/1 "Noto Sans KR","sans-serif";
+    font: 500 20px/1 "Noto Sans KR", "sans-serif";
     color: #9b9b9b;
-    cursor:pointer;
+    cursor: pointer;
   }
   @media (max-width: 374px) {
     p:nth-child(1) {
-      font-size:22px;
+      font-size: 22px;
     }
     p:nth-child(2) {
-      font-size:18px;
+      font-size: 18px;
     }
   }
 `;
@@ -214,25 +242,14 @@ const MissionBox = styled.div`
   text-align: center;
 `;
 
-const MissionItem = styled.span`
-  border-radius: 50px;
-  display: inline-block;
-  width: 100%;
-  color: #2c2c2c;
-  padding: 18px 0;
-  box-sizing: border-box;
-  color: ${(props) => (props.background ? `${colors.grayCF}` : `${colors.white}`)};
-  background-color: ${(props) => (props.background ? `${colors.grayF9}` : `${colors.green77}`)};
-  cursor:pointer;
-`;
 const ItemTitle = styled.span`
   display: block;
   text-decoration: ${(props) => (props.background ? "line-through" : "blue")};
   font-weight: 500;
-  font-size:18px;
-  line-height:1;
-  font-family:'Noto sans KR','sans-serif';
+  font-size: 18px;
+  line-height: 1;
+  font-family: "Noto sans KR", "sans-serif";
   @media (max-width: 374px) {
-    font-size:16px;
+    font-size: 16px;
   }
 `;
