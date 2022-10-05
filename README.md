@@ -43,8 +43,8 @@
 </p>
 
 # 트러블 슈팅
-1. [달력 라이브러리 이슈](https://github.com/Us-Earth/us-earth_fe.wiki.git)
-2. [이미지 업로드 이슈](https://github.com/Us-Earth/us-earth_fe.wiki.git)
+1. [달력 라이브러리 이슈]([[https://github.com/Us-Earth/us-earth_fe.wiki.git](https://github.com/Us-Earth/us-earth_fe.wiki.git)](https://github.com/Us-Earth/us-earth_fe/wiki/%EB%8B%AC%EB%A0%A5-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%9D%B4%EC%8A%88))
+2. [이미지 업로드 이슈]([https://github.com/Us-Earth/us-earth_fe.wiki.git](https://github.com/Us-Earth/us-earth_fe/wiki/%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%9D%B4%EC%8A%88))
 
 
 ### 주요 서비스
