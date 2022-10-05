@@ -36,7 +36,6 @@ const CommunityDetail = () => {
   }, [dispatch, param.id]);
   const { communityDetail, isLoading, detailIsLoading, error, certifyHasMore } =
     useSelector((state) => state.community);
-  console.log(communityDetail);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const { certify } = useSelector((state) => state.community);
