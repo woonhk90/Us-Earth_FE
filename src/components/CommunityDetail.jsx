@@ -36,6 +36,7 @@ const CommunityDetail = () => {
   }, [dispatch, param.id]);
   const { communityDetail, isLoading, detailIsLoading, error, certifyHasMore } =
     useSelector((state) => state.community);
+  console.log(communityDetail);
 
   /* ------------------------------- 무한스크롤 기본셋팅 ------------------------------- */
   const { certify } = useSelector((state) => state.community);
@@ -269,7 +270,16 @@ const CommunityDetail = () => {
             ) : null}
             {communityDetail.dateStatus === "ongoing" ? (
               <div>
-                <EndState>
+                <EndState
+                  style={
+                    communityDetail.currentPercent === 100
+                      ? {
+                          borderBottomLeftRadius: "12px",
+                          borderBottomRightRadius: "12px",
+                        }
+                      : null
+                  }
+                >
                   <EndStateTop>
                     <RightTop>
                       <p>참여인원</p>
