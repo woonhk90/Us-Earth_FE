@@ -16,8 +16,7 @@
 |이름|포지션|깃허브 Or 블로그|담당 역할|
 |:-----:|:---:|:---:|:---|
 |김원호(부팀장)|React / FE|[GitHub](https://github.com/loveyoujgb)|1. 소셜로그인 </br>2. 커뮤니티 리스트/상세보기/참여하기</br> 3. 소식지 페이지</br> 4. 내정보 오늘의미션/설정/그룹미션|
-|김미리|React / FE|[GitHub](https://github.com/woonhk90/us-earth_fe)|1. 커뮤니티, 인증글, 댓글 CRUD </br>2. 마이페이지 주간통계, 월간통계</br> 3. 정보제공 환경지수 차트|
-|조예린|Designer|[포트폴리오](http://kkyy0406.cafe24.com/styling.html)|1. 와이어프레임 제작 </br>2. UI/UX 디자인</br> 3. 그래픽 디자인|
+|김미리|React / FE|[GitHub](https://github.com/woonhk90/us-earth_fe)|1. 커뮤니티, 인증글, 댓글 CRUD </br>2. 마이페이지 주간통계, 월간통계</br> 3. 정보제공 환경지수 차트</br> 4. 레이아웃|
  
 # Architecture
 ![UsEarth아키텍처](https://user-images.githubusercontent.com/108817236/193409607-020133eb-0686-462b-8e87-ee643a1deb13.png)
@@ -27,7 +26,7 @@
 # 트러블 슈팅
 
 
-# 주요 서비스
+### 주요 서비스
 
 <details>
 <summary><b> 주요 서비스 펼쳐 보기 </b></summary>
@@ -65,7 +64,7 @@
 ![기타페이지](https://user-images.githubusercontent.com/107628613/194067985-7e9ad038-da1a-4ebf-8d71-314ecd609c35.png)
  </details>
 
-# 유저평가 및 피드백
+### 유저평가 및 피드백
 <details>
  <summary>피드백 상세보기</summary>
  
@@ -73,7 +72,7 @@
 ![image](https://user-images.githubusercontent.com/108817236/194044803-009e16a8-0514-409e-ab61-09f80e6f5c0a.png)
  </details>
  
-# 개선사항
+### 개선사항
 <details>
  <summary>개선사항 상세보기</summary>
  
