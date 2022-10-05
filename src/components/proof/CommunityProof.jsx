@@ -18,6 +18,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import dayjs from "dayjs";
 
 const CommunityProof = () => {
   const { VerticalDot, Delete, Edit } = icons;
@@ -33,10 +34,9 @@ const CommunityProof = () => {
     };
   }, []);
 
-
   /* ------------------------------- 수정 & 삭제 모달 ------------------------------- */
   const [modalOpen, setModalOpen] = useState(false);
-  
+
   const openModal = () => {
     setModalOpen(true);
   };
@@ -48,7 +48,7 @@ const CommunityProof = () => {
   const onClickEdit = () => {
     navigate(`/community/${param.communityId}/proof/edit/${param.proofId}`, { replace: true });
   };
-  
+
   /* -------------------------------- 수정 확인 모달 ------------------------------- */
   const [modal, setModal] = useState(false);
 
@@ -106,7 +106,7 @@ const CommunityProof = () => {
           <UserInfoImg referrerPolicy="no-referrer" src={proofs.profileImage} />
           <UerInpo>
             <Username>{proofs.nickname}</Username>
-            <CreatAt>{proofs.creatAt}</CreatAt>
+            <CreatAt>{dayjs(proofs.creatAt).format("YYYY. MM. DD HH:mm")}</CreatAt>
           </UerInpo>
         </UserInfoWrap>
         {proofs.writer ? (
@@ -172,13 +172,15 @@ const UserInfoImg = styled.img`
   background-position: center;
   background-size: cover;
   border-radius: 50%;
+  object-fit: cover;
 `;
 
 const CreatAt = styled.div`
-  font-size: 14px;
-  letter-spacing: -0.02em;
   font-weight: 400;
-  color: #212529;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: -0.02em;
+  color: #9b9b9b;
 `;
 
 const Username = styled.div`
