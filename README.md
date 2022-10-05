@@ -26,6 +26,7 @@
 
 <details>
 <summary><b> 주요 서비스 펼쳐 보기 </b></summary>
+ 
 - 간단하게 접근할 수 있는 서비스
     - 회원가입 없이 소셜로그인만을 통해 쉽고 빠르게 서비스 이용 가능합니다
     - 조회 성격의 서비스는 로그인을 하지 않아도 이용할 수 있습니다
@@ -64,12 +65,16 @@
 
 # 유저평가 및 피드백
 <details>
+ <summary>피드백 상세보기</summary>
+ 
 ![image](https://user-images.githubusercontent.com/108817236/194044368-fe1ec4f0-c8f5-4d38-aff2-1e4c7d3368d4.png)
 ![image](https://user-images.githubusercontent.com/108817236/194044803-009e16a8-0514-409e-ab61-09f80e6f5c0a.png)
  </details>
  
 # 개선사항
 <details>
+ <summary>개선사항 상세보기</summary>
+ 
 ![image](https://user-images.githubusercontent.com/108817236/194042261-38bfe0c1-24c2-4d36-99f6-150f5d62d6c8.png)
 ![image](https://user-images.githubusercontent.com/108817236/194042384-6fddfa37-2591-4de1-adb5-f0173270e4ee.png)
  </details>
