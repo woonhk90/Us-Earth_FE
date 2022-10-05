@@ -23,6 +23,7 @@ import Loading from "./etc/Loading";
 import ErrorModal from "./Modals/ErrorModal";
 import icons from "../assets";
 import Button from "./elements/Button";
+import dayjs from "dayjs";
 
 const CommunityDetail = () => {
   const { CommunityNewProof } = icons;
@@ -195,12 +196,9 @@ const CommunityDetail = () => {
           </DetailSetting> */}
 
           <Content>
-            <ContentItem
-              font={"16px/22px 'Noto Sans KR', 'sans-serif'"}
-              marginBottom={"10px"}
-            >
-              {communityDetail.startDate} - {communityDetail.endDate}
-            </ContentItem>
+            <ContentTime>
+            {dayjs(communityDetail.startDate).format("YYYY. MM. DD")} - {dayjs(communityDetail.endDate).format("YYYY. MM. DD")}
+            </ContentTime>
             <ContentItem
               font={"700 26px/35px 'Noto Sans KR', 'sans-serif'"}
               marginBottom={"9px"}
@@ -406,6 +404,14 @@ const ContentItem = styled.div`
   img {
     width: 100%;
   }
+`;
+const ContentTime = styled.div`
+font-weight: 400;
+font-size: 16px;
+line-height: 22px;
+letter-spacing: -0.03em;
+color: #979797;
+margin-bottom: 10px;
 `;
 
 const StateBox = styled.div`
