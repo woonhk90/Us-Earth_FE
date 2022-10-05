@@ -22,6 +22,7 @@ import { ReactComponent as Camera } from "./icon_camera.svg";
 import { ReactComponent as IconSearch } from "./icon_search.svg";
 import { ReactComponent as Question } from "./question.svg";
 import { ReactComponent as Setting } from "./Setting.svg";
+import { ReactComponent as IconUpdate } from "./icon_update.svg";
 
 import { ReactComponent as Community_On } from "./community_on.svg";
 import { ReactComponent as Community_Off } from "./community_off.svg";
@@ -90,6 +91,7 @@ const icons = {
   IconSearch,
   Question,
   Setting,
+  IconUpdate,
 };
 
 export default icons;
