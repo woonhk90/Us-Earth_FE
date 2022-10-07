@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import useInputs from "../../hooks/useInputs";
 import { useDispatch, useSelector } from "react-redux";
-import { patchProof, postProof, proofsCleanUp } from "../../redux/modules/proofsSlice";
+import { patchProof, proofsCleanUp } from "../../redux/modules/proofsSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
 import imageCompression from "browser-image-compression";
@@ -76,7 +76,6 @@ const CommunityProofEdit = () => {
   const [files, setFiles] = useState([]);
   const [previewImg, setPreviewImg] = useState([]);
   const [isPhotoMessage, setIsPhotoMessage] = useState("");
-  const [isPhoto, setIsPhoto] = useState(true);
   const [deleteImgId, setDeleteImgId] = useState([]);
   const [upLoading, setUploading] = useState(100);
 
@@ -119,7 +118,6 @@ const CommunityProofEdit = () => {
       }
     } else {
       setIsPhotoMessage("최대 5장까지 등록 가능합니다.");
-      setIsPhoto(false);
     }
     if (arry?.length > 0) {
       setIsPhotoMessage(`추가한 ${arry}번째 파일이 너무 큽니다. 20MB미만의 파일만 업로드 됩니다.`);
@@ -135,14 +133,7 @@ const CommunityProofEdit = () => {
     if (img.imgId !== undefined) setDeleteImgId((deleteImgId) => [...deleteImgId, img.imgId]);
   };
 
-  /* -------------------------------- 빈값 확인 모달 -------------------------------- */
-  const [okModal, setOkModal] = useState(false);
-  const [okModalTitle, setOkModalTitle] = useState("");
-
-  const okModalOnOff = () => {
-    setOkModal(!okModal);
-  };
-
+  /* ----------------------------------- 제출 ----------------------------------- */
   const submitHandler = async () => {
     let formData = new FormData();
     if (title.trim() !== "" && content.trim() !== "" && files.length !== 0) {
@@ -181,10 +172,9 @@ const CommunityProofEdit = () => {
     addImageFile: addImageFile,
     submitButton: "수정",
     upLoading: upLoading,
-    okModal: okModal,
-    okModalTitle: okModalTitle,
-    okModalOnOff: okModalOnOff,
   };
+
+/* ---------------------------------- 로딩&에러 --------------------------------- */
 
   if (getIsLoading) {
     return <SceletonProofEdit />;

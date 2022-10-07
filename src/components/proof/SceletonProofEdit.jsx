@@ -11,6 +11,7 @@ import { colors } from "../../styles/color";
 const SceletonProofEdit = () => {
   const navigate = useNavigate();
   const param = useParams();
+  
   return (
     <>
       <Header>

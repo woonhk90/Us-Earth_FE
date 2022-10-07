@@ -1,12 +1,7 @@
-import React from 'react';
-import styled from "styled-components";
+import React from "react";
 
 const Header = (props) => {
-  return <HeaderWrap>{props.children}</HeaderWrap>
-}
+  return <div>{props.children}</div>;
+};
+
 export default Header;
-
-
-const HeaderWrap = styled.div`
-/* width: 100%; */
-`;
