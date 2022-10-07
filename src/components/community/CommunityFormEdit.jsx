@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addDates, communityFormCleanUp,patchCommunityDetail } from "../../redux/modules/communityFormSlice";
+import { addDates, communityFormCleanUp, patchCommunityDetail } from "../../redux/modules/communityFormSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
@@ -197,11 +197,11 @@ const CommunityFormEdit = () => {
     formData.append("dto", new Blob([JSON.stringify(dataSet)], { type: "application/json" }));
     await dispatch(patchCommunityDetail({ communityId: param.id, formData })).then((response) => {
       if (!response.error) {
-        navigate(`/community/detail/${param.id}`,{replace:true});
+        navigate(`/community/detail/${param.id}`, { replace: true });
       }
     });
   };
-  
+
   /* ------------------------- 오늘 === 시작날짜 인 경우 확인 모달 ------------------------- */
   const [formmodal, setFormModal] = useState(false);
 
@@ -259,7 +259,6 @@ const CommunityFormEdit = () => {
     validation: validation,
   };
 
-
   /* --------------------------------- 로딩 & 에러 -------------------------------- */
 
   if (isGetLoading) {
@@ -276,11 +275,9 @@ const CommunityFormEdit = () => {
 
   if (isLoading) {
     return (
-      <>
-        <ImageLoadingWrap>
-          <ImageLoading color="rgba(0, 0, 0, 0.13)" />
-        </ImageLoadingWrap>
-      </>
+      <ImageLoadingWrap>
+        <ImageLoading color="rgba(0, 0, 0, 0.13)" />
+      </ImageLoadingWrap>
     );
   }
 

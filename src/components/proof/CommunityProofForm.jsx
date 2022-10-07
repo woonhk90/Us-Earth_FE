@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { postProof, proofsCleanUp } from "../../redux/modules/proofsSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import ProofForm from "./ProofForm";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { certifyReset, __getCommunityDetail } from "../../redux/modules/communitySlice";
 import isLogin from "../../lib/isLogin";
 import IsLoginModal from "../Modals/IsLoginModal";
@@ -24,6 +24,7 @@ const CommunityProofForm = () => {
   });
 
   const { title, content } = inputData;
+
   useEffect(() => {
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.preview));
@@ -90,13 +91,7 @@ const CommunityProofForm = () => {
     setFiles(files.filter((file, id) => id !== index));
   };
 
-  /* -------------------------------- 빈값 확인 모달 -------------------------------- */
-  const [okModal, setOkModal] = useState(false);
-  const [okModalTitle, setOkModalTitle] = useState("");
-
-  const okModalOnOff = () => {
-    setOkModal(!okModal);
-  };
+  /* ----------------------------------- 제출 ----------------------------------- */
 
   const submitHandler = async () => {
     let formData = new FormData();
@@ -130,9 +125,6 @@ const CommunityProofForm = () => {
     addImageFile: addImageFile,
     submitButton: "등록",
     upLoading: upLoading,
-    okModal: okModal,
-    okModalTitle: okModalTitle,
-    okModalOnOff: okModalOnOff,
   };
 
   if (isLoading) {

@@ -24,10 +24,6 @@ const HeaderWrap = styled.div`
   box-sizing: border-box;
   z-index: 1;
   border-bottom: 1px solid ${colors.grayF5};
-  div {
-    position: absolute;
-    left: 10px;
-  }
 `;
 
 const LoginText = styled.span`

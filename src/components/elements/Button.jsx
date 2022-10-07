@@ -22,14 +22,7 @@ const Button = ({
   color,
   flag,
 }) => {
-  const {
-    Back,
-    Question,
-    Cancel,
-    Setting,
-    CommunityNewGroup,
-    CommunityNewProof,
-  } = icons;
+  const { Back, Question, Cancel, Setting, CommunityNewGroup, CommunityNewProof } = icons;
   return (
     <StButton
       font={font}
@@ -72,16 +65,12 @@ const StButton = styled.button`
       css`
         background-color: transparent;
         border: transparent;
-        color: ${(props) =>
-          props.on === "on" ? colors.black22 : colors.grayCB};
+        color: ${(props) => (props.on === "on" ? colors.black22 : colors.grayCB)};
         justify-content: center;
         align-items: center;
         height: 78px;
         width: 100%;
-        border-bottom: ${(props) =>
-          props.on === "on"
-            ? "6px solid #8ecf70"
-            : `6px solid ${colors.grayF5}`};
+        border-bottom: ${(props) => (props.on === "on" ? "6px solid #8ecf70" : `6px solid ${colors.grayF5}`)};
         font-size: 20px;
         font-weight: 600;
         box-sizing: border-box;
@@ -101,8 +90,7 @@ const StButton = styled.button`
         font-weight: 600;
         font-size: 20px;
         color: ${(props) => (props.on === "on" ? "white" : "#BEBEBE")};
-        background-color: ${(props) =>
-          props.on === "on" ? colors.green00 : "#EDEDED"};
+        background-color: ${(props) => (props.on === "on" ? colors.green00 : "#EDEDED")};
         cursor: ${(props) => (props.on === "on" ? "pointer" : "default")};
       `
     );
@@ -203,8 +191,7 @@ const StButton = styled.button`
         box-sizing: border-box;
         border: none;
         background-color: transparent;
-        border-bottom: ${({ active, name }) =>
-          active === name ? "6px solid #8ECF70" : "6px solid #f2f2f2"};
+        border-bottom: ${({ active, name }) => (active === name ? "6px solid #8ECF70" : "6px solid #f2f2f2")};
         color: ${({ active, name }) => (active === name ? "#222" : "#cbcbcb")};
       `
     );
@@ -236,10 +223,8 @@ const StButton = styled.button`
         color: #2c2c2c;
         padding: 18px 0;
         box-sizing: border-box;
-        color: ${(props) =>
-          props.flag ? `${colors.grayCF}` : `${colors.white}`};
-        background-color: ${(props) =>
-          props.flag ? `${colors.grayF9}` : `${colors.green77}`};
+        color: ${(props) => (props.flag ? `${colors.grayCF}` : `${colors.white}`)};
+        background-color: ${(props) => (props.flag ? `${colors.grayF9}` : `${colors.green77}`)};
       `
     );
   }}

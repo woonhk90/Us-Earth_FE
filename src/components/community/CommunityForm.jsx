@@ -249,9 +249,7 @@ const CommunityForm = () => {
       {formmodal && <ConfirmSingleModal confirmModalData={confirmModalData} clickSubmit={clickSubmit} closeModal={modalOnOff} />}
       {isLogin() ? null : <IsLoginModal />}
       {error && <ErrorModal notGo={true} error={error} />}
-      <>
-        <Form formData={formData} />
-      </>
+      <Form formData={formData} />
     </>
   );
 };

@@ -10,6 +10,7 @@ import { colors } from "../../styles/color";
 const UserMissionBottom = () => {
   const dispatch = useDispatch();
 
+  //클릭한 날짜 조회
   const { dailyMissionData } = useSelector((state) => state.userMission);
 
   useEffect(() => {
