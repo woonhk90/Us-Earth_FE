@@ -8,7 +8,6 @@ import cancelWh from "../../assets/cancelWh.svg";
 import Header from "../Header";
 import { useRef } from "react";
 import ImageLoading from "../etc/ImageLoading";
-import OkModal from "../Modals/OkModal";
 import Button from "../elements/Button";
 
 const ProofForm = ({ ProofFormData }) => {
@@ -41,30 +40,24 @@ const ProofForm = ({ ProofFormData }) => {
     addImageFile: addImageFile,
     submitButton: submitButton,
     upLoading: upLoading,
-    okModal: okModal,
-    okModalTitle: okModalTitle,
-    okModalOnOff: okModalOnOff,
   } = ProofFormData;
 
   return (
     <>
-      <>
-        {okModal && <OkModal title={okModalTitle} modalOnOff={okModalOnOff}></OkModal>}
-        <Header>
-          <HeaderWrap>
-            <Button
-              btnType="svg"
-              svgType="back"
-              onClick={() => {
-                navigate(`/community/detail/${param.communityId}`, { replace: true });
-              }}
-            />
-            <HeaderP disabled={!(title.trim() !== "" && content.trim() !== "" && files.length > 0 && upLoading === 100)} onClick={submitHandler}>
-              {submitButton}
-            </HeaderP>
-          </HeaderWrap>
-        </Header>
-      </>
+      <Header>
+        <HeaderWrap>
+          <Button
+            btnType="svg"
+            svgType="back"
+            onClick={() => {
+              navigate(`/community/detail/${param.communityId}`, { replace: true });
+            }}
+          />
+          <HeaderP disabled={!(title.trim() !== "" && content.trim() !== "" && files.length > 0 && upLoading === 100)} onClick={submitHandler}>
+            {submitButton}
+          </HeaderP>
+        </HeaderWrap>
+      </Header>
       <CommunityFormWrap>
         <AddPhotoWrap>
           <Stform encType="multipart/form-data">
@@ -91,8 +84,11 @@ const ProofForm = ({ ProofFormData }) => {
           {previewImg?.map((image, index) => {
             return (
               <Container key={index}>
-                <StButton onClick={() => deleteImageFile(image, index)}> <CancelIcon/></StButton>
-               
+                <StButton onClick={() => deleteImageFile(image, index)}>
+                  {" "}
+                  <CancelIcon />
+                </StButton>
+
                 <Thumb src={image.imgUrl} alt="img" />
               </Container>
             );

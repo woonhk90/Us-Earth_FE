@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const ImageLoading = ({ color }) => {
   return (
@@ -18,14 +18,13 @@ const ImageLoading = ({ color }) => {
 export default ImageLoading;
 
 const animationDot = keyframes`
-  
   80%,
     100% {
       transform: rotate(360deg);
     }
 `;
+
 const animationDotBefore = keyframes`
-  
   50% {
       transform: scale(0.4);
     }
@@ -34,18 +33,20 @@ const animationDotBefore = keyframes`
       transform: scale(1);
     }
 `;
+
 const SpinnerAnimation = keyframes`
-  
   100% {
       transform: rotate(360deg);
     }
 `;
+
 const Spinner = styled.div`
   width: 40px;
   height: 40px;
   position: relative;
   animation: ${SpinnerAnimation} 2.5s infinite linear both;
 `;
+
 const SpinnerDot = styled.div`
   width: 100%;
   height: 100%;

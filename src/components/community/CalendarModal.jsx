@@ -107,6 +107,7 @@ const CalendarModal = (props) => {
 };
 
 export default CalendarModal;
+
 const ModalWrap = styled.div`
   position: absolute;
   top: 0;
@@ -310,22 +311,5 @@ const StInput = styled.div`
     :hover {
       border-radius: 50%;
     }
-  }
-`;
-
-//bottom
-const FooterMenus = styled.button`
-  width: 100%;
-  height: 56px;
-  line-height: 48px;
-  border: none;
-  display: flex;
-  justify-content: center;
-  font-size: 20px;
-  font-weight: 600;
-  color: ${(props) => props.color};
-  background-color: ${(props) => props.bgColor};
-  @media (max-width: 389px) {
-    font-size: 17px;
   }
 `;
