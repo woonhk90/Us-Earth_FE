@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Modal from "./CommunityModal";
 import { useNavigate } from "react-router-dom";
 import topLogo from "../assets/logo/topLogo.png";
 import { colors } from "../styles/color";

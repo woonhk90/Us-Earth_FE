@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import LoadingBackground from '../../assets/loading-background.jpg';
 import LoadingMain from '../../assets/loading-main.gif';
-import Layout from "../layout/Layout";
 
 const Loading = () => {
   return (
