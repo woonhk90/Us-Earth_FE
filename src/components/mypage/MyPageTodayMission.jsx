@@ -40,6 +40,11 @@ const MyPageTodayMission = ({ userInfo }) => {
     dispatch(__getTodayMission());
   }, []);
 
+  /* -------------------------------- 일일 미션 누르면 ------------------------------- */
+  // const missionFlagChange = (key) => {
+  //   dispatch(__updateMissionFlag({ missionName: key }));
+  // };
+
   /* -------------------------------- edit modal ------------------------------- */
   const [modal, setModal] = React.useState(false);
   const [missionId, setMissionId] = React.useState("");

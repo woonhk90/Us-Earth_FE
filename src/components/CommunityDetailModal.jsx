@@ -3,12 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie } from "../shared/cookie";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  __updateCommunityJoin,
-  __getCommunityDetail,
-  errorReset,
-  statusCodeReset,
-} from "../redux/modules/communitySlice";
+import { __updateCommunityJoin, __getCommunityDetail, errorReset, statusCodeReset } from "../redux/modules/communitySlice";
 import Button from "./elements/Button";
 import { flexBetween } from "../styles/Flex";
 
@@ -21,7 +16,7 @@ const CommunityModal = (props) => {
     if (statusCode === 200) {
       onClickResetInfo(props.communityId);
     }
-
+    
     dispatch(errorReset());
     dispatch(statusCodeReset());
 
@@ -29,9 +24,7 @@ const CommunityModal = (props) => {
   };
 
   const [viewFlag, setViewFlag] = React.useState(false);
-  const { error, isLoading, statusCode } = useSelector(
-    (state) => state.community
-  );
+  const { error, isLoading, statusCode } = useSelector((state) => state.community);
   const [msg, setMsg] = React.useState("aa");
 
   /* ------------------------------- 참여하기(가입) 버튼 누름 ------------------------------- */
@@ -76,8 +69,7 @@ const CommunityModal = (props) => {
               <Button btnType="modal" onClick={closeModal}>
                 취소
               </Button>
-              <Button
-                btnType="modal"
+              <Button btnType="modal" 
                 borderLeft={"1px solid #d9d9d9"}
                 onClick={() => {
                   onViewFlagHandler(props.communityId);
@@ -90,9 +82,7 @@ const CommunityModal = (props) => {
 
           <AttendWrap viewFlag={viewFlag}>
             <AttendTitle>{msg}</AttendTitle>
-            <Button btnType="modal" onClick={closeModal}>
-              확인
-            </Button>
+              <Button btnType="modal"  onClick={closeModal}>확인</Button>
           </AttendWrap>
         </ModalBody>
       </ModalWrap>
@@ -130,14 +120,25 @@ const ConfirmTitle = styled.p`
   text-align: center;
   padding: 50px 0;
 `;
+const ConfirmTitleSpan = styled.span`
+  font: 700 22px/30px "Noto Sans KR", "sans-serif";
+`;
 const ConfirmBox = styled.div`
-  ${flexBetween}
-  button:nth-child(1) {
-    border-right: 1px solid rgba(217, 217, 217, 0.3);
-  }
-  button:nth-child(2) {
-    border-left: 1px solid rgba(217, 217, 217, 0.3);
-  }
+${flexBetween}
+button:nth-child(1) {
+  border-right: 1px solid rgba(217, 217, 217, 0.3);
+}
+button:nth-child(2) {
+  border-left: 1px solid rgba(217, 217, 217, 0.3);
+}
+`;
+const ConfirmItem = styled.div`
+cursor: pointer;
+  width: 50%;
+  border-right: ${(props) => props.borderRight};
+  border-left: ${(props) => props.borderLeft};
+  font: 600 22px/30px "Noto Sans KR", "sans-serif";
+  padding: 19px 0;
 `;
 
 const AttendWrap = styled.div`
@@ -147,4 +148,19 @@ const AttendTitle = styled.p`
   font: 22px/30px "Noto Sans KR", "sans-serif";
   text-align: center;
   padding: 50px 0;
+`;
+const AttendTitleSpan = styled.span`
+  font: 700 22px/30px "Noto Sans KR", "sans-serif";
+`;
+const AttendBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  border-top: 1px solid #d9d9d9;
+`;
+const AttendItem = styled.div`
+  width: 50%;
+  font: 600 22px/30px "Noto Sans KR", "sans-serif";
+  padding: 19px 0;
 `;

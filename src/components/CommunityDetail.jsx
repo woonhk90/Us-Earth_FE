@@ -21,10 +21,12 @@ import LoginModal from "./Modals/LoginModal";
 import NoMore from "../components/etc/NoMore";
 import Loading from "./etc/Loading";
 import ErrorModal from "./Modals/ErrorModal";
+import icons from "../assets";
 import Button from "./elements/Button";
 import dayjs from "dayjs";
 
 const CommunityDetail = () => {
+  const { CommunityNewProof } = icons;
   const navigate = useNavigate();
   const [modal, setModal] = React.useState(false);
   const param = useParams();
@@ -99,6 +101,64 @@ const CommunityDetail = () => {
     setImageModal(!imageModal);
   };
 
+  /* --------------------------- 수정, 삭제, 신고하기 셀렉트 박스 -------------------------- */
+  // const { dateStatus, commentResponseDtoList } = useSelector((state) => state.comments.comments);
+
+  // // dispatch function
+  // const clickDispatch = (payload) => {
+  //   if (payload.selectName === "수정하기") {
+  //     /* ------------------------- detail수정페이지로 navigate시킴 ------------------------ */
+  //     navigate(`/community/edit/${payload.contentId}`);
+  //   } else if (payload.selectName === "삭제하기") {
+  //     /* ------------------------------- Detail를 삭제함 ------------------------------ */
+  //     setDelModal(!delModal);
+  //   }
+  // };
+
+  // // data
+  // const { Delete, Report, Edit } = icons;
+  // const selectBoxData = [
+  //   {
+  //     id: 1,
+  //     selectName: "수정하기",
+  //     icon: [
+  //       <ModalIcon key={1}>
+  //         <Edit />
+  //       </ModalIcon>,
+  //     ],
+  //   },
+  //   {
+  //     id: 2,
+  //     selectName: "삭제하기",
+  //     icon: [
+  //       <ModalIcon key={2}>
+  //         <Delete />
+  //       </ModalIcon>,
+  //     ],
+  //   },
+  // ];
+
+  // /* ---------------------------------- 삭제 모달 --------------------------------- */
+  // const [delModal, setDelModal] = useState(false);
+
+  // // modal text data
+  // const confirmModalData = {
+  //   title: "해당 글을 삭제하시겠습니까?",
+  //   cancel: "아니오",
+  //   submit: "예",
+  // };
+
+  // // editMode cancel function
+  // const clickSubmit = async () => {
+  //   await dispatch(deleteCommunityDetail({ communityId: param.id }));
+  //   navigate('/', { replace: true });
+  // };
+
+  // // close Modal
+  // const closeModal = () => {
+  //   setDelModal(!delModal);
+  // };
+
   /* ------------------------------- 로딩&에러 모달 ------------------------------ */
 
   if (detailIsLoading) {
@@ -122,15 +182,22 @@ const CommunityDetail = () => {
           modal={loginModal}
         ></LoginModal>
       )}
-
+      {/* {delModal && <ConfirmSingleModal clickSubmit={clickSubmit} confirmModalData={confirmModalData} closeModal={closeModal}></ConfirmSingleModal>} */}
       <CommunityDetailWrap>
         <Container>
           <Forest imgUrl={gifUrl}></Forest>
 
+          {/* <DetailSetting>
+            {communityDetail.dateStatus === "before" ?
+              (communityDetail.writer ? <CustomSelect clickDispatch={clickDispatch} contentId={param.id} selectBoxData={selectBoxData} /> : null)
+              :
+              null
+            }
+          </DetailSetting> */}
+
           <Content>
             <ContentTime>
-              {dayjs(communityDetail.startDate).format("YYYY. MM. DD")} -
-              {dayjs(communityDetail.endDate).format("YYYY. MM. DD")}
+            {dayjs(communityDetail.startDate).format("YYYY. MM. DD")} - {dayjs(communityDetail.endDate).format("YYYY. MM. DD")}
             </ContentTime>
             <ContentItem
               font={"700 26px/35px 'Noto Sans KR', 'sans-serif'"}
@@ -325,6 +392,12 @@ const Forest = styled.div`
   background-size: cover;
 `;
 
+const DetailSetting = styled.div`
+  display: flex;
+  justify-content: end;
+  margin-right: 25px;
+`;
+
 const Content = styled.div`
   width: 100%;
   padding: 0 17px;
@@ -342,12 +415,12 @@ const ContentItem = styled.div`
   }
 `;
 const ContentTime = styled.div`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 22px;
-  letter-spacing: -0.03em;
-  color: #979797;
-  margin-bottom: 10px;
+font-weight: 400;
+font-size: 16px;
+line-height: 22px;
+letter-spacing: -0.03em;
+color: #979797;
+margin-bottom: 10px;
 `;
 
 const StateBox = styled.div`
@@ -368,6 +441,16 @@ const StateTop = styled.div`
 const StateItem = styled.span`
   font: ${(props) => props.font};
   color: ${(props) => props.color};
+`;
+const StateBottom = styled.div`
+  width: 100%;
+  font: 18px/27px "Noto Sans KR", "sana-serif";
+  text-align: center;
+  padding: 11px 0;
+  background-color: #424242;
+  color: #fff;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 `;
 
 const OnGoingState = styled.div`
@@ -464,6 +547,27 @@ const EndStateBottom = styled.div`
   }
 `;
 
+const EndStateJoin = styled.div`
+  width: 100%;
+
+  font: 18px/27px "Noto Sans KR", "sana-serif";
+  text-align: center;
+  padding: 11px 0;
+  background-color: ${colors.green00};
+  color: #fff;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+`;
+// const ProgressBar = styled.progress`
+//   accent-color: #1c1c1c;
+//   display: inline-block;
+//   width: 100%;
+//   height: 50px;
+//   opacity: 0.4;
+//   padding: 0;
+//   margin: 0;
+// `;
+
 const CertifyContentBox = styled.div``;
 
 const CertifyContent = styled.div`
@@ -481,4 +585,37 @@ const CertifyItem = styled.div`
     height: 100%;
     object-fit: cover;
   }
+`;
+
+const CertifyContentIcon = styled.div`
+  cursor: pointer;
+  position: absolute;
+  bottom: 80px;
+  right: 17px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+/* -------------------------------- selectBox ------------------------------- */
+
+const ModalIcon = styled.div`
+  width: 18px;
+  margin-right: 18px;
+`;
+
+const ImageLoadingWrap = styled.div`
+  width: 100%;
+  height: 100px;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  display: flex;
+`;
+const ImageLoadingCenter = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;

@@ -239,6 +239,12 @@ const ListBox = styled.div`
         /* white-space:nowrap; */
         overflow: hidden;
         text-overflow: ellipsis;
+
+        /* 두줄 */
+        /* display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical; */
+        /* color:black; */
       }
       p:nth-child(2) {
         font-weight: 300;
