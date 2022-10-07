@@ -11,8 +11,6 @@ const CommunityBottom = () => {
     Community_Off,
     Info_On,
     Info_Off,
-    Chat_On,
-    Chat_Off,
     Mypage_On,
     Mypage_Off,
   } = icons;
@@ -81,7 +79,6 @@ const CommunityBottom = () => {
           {pathFlag === "info" ? <Info_On /> : <Info_Off />}
           <span>소식지</span>
         </FooterMenus>
-        {/* <FooterMenus  style={{color: pathFlag === 'chat' ? '#94DA76' : '#DDDDDD'}}>{pathFlag === 'chat' ? <Chat_On /> : <Chat_Off />}<span>채팅</span></FooterMenus> */}
         <FooterMenus
           onClick={() => {
             onActionPage("btn4");

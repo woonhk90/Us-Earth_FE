@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import banner01 from "../assets/banner_01.jpg";
-import banner02 from "../assets/banner_02.png";
 import PopularGroupItemList from "./community/PopularGroupItemList";
 import NewGroupItemList from "./community/NewGroupItemList";
 import CommunityItemList from "./community/CommunityItemList";
@@ -17,9 +16,7 @@ import { Pagination, Autoplay } from "swiper";
 import Button from "./elements/Button";
 
 const Community = () => {
-  const { CommunityNewGroup } = icons;
   const navigate = useNavigate();
-
   const [guideModal, setGuideModal] = useState(false);
 
   // close Modal
@@ -34,7 +31,6 @@ const Community = () => {
       )}
       <CommunityWrap>
         <Container>
-          {/* <Banner onClick={() => { navigate('/guide') }}><img src={banner01} alt='bannerImg' /></Banner> */}
           <Banner>
             <Swiper
               autoplay={{
@@ -58,16 +54,9 @@ const Community = () => {
                   style={{ cursor: "pointer" }}
                 />
               </SwiperSlide>
-              <SwiperSlide>
-                <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSfFvCdj94arTxy-8fXyjlzkDptoR-rt0WA7QeeGhQ6w46X55Q/viewform"
-                  target="blank"
-                >
-                  <img src={banner02} alt="bannerImg2" />
-                </a>
-              </SwiperSlide>
             </Swiper>
           </Banner>
+
           <PopularGroup>
             <PopularGroupTop>
               <PopularGroupTitle>인기 그룹</PopularGroupTitle>
@@ -76,7 +65,9 @@ const Community = () => {
               <PopularGroupItemList />
             </PopularGroupBox>
           </PopularGroup>
+
           <Line />
+
           <NewGroup>
             <NewGroupTop>
               <NewGroupTitle>종료임박 그룹</NewGroupTitle>
@@ -86,16 +77,9 @@ const Community = () => {
             </NewGroupBox>
           </NewGroup>
           <Line />
+
           {/* 전체그룹 */}
           <CommunityItemList />
-
-          {/* <IconCommunityWriteBtn
-            onClick={() => {
-              navigate("/community/form");
-            }}
-          >
-            <CommunityNewGroup />
-          </IconCommunityWriteBtn> */}
 
           <Button
             btnType="communityWrite"
@@ -144,7 +128,6 @@ const PopularGroupTitle = styled.span`
   font: bold 26px/50px "Noto Sans KR", "sans-serif";
 `;
 const PopularGroupBox = styled.div`
-  /* padding: 0 4.5px; */
   display: flex;
   overflow-x: scroll;
   &::-webkit-scrollbar {
@@ -161,8 +144,6 @@ const NewGroupTop = styled.div`
 `;
 const NewGroupTitle = styled.span`
   font: bold 26px/50px "Noto Sans KR", "sans-serif";
-
-  /* font-family: 'Noto Sans KR', sans-serif; */
 `;
 const NewGroupBox = styled.div`
   /* padding: 0 4.5px; */
@@ -171,16 +152,4 @@ const NewGroupBox = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-`;
-
-const IconCommunityWriteBtn = styled.div`
-  /* position: absolute;
-  bottom: 70px;
-  right: 10px;
-  z-index: 5;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer; */
 `;

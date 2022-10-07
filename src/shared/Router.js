@@ -15,9 +15,8 @@ import EarthCommunityProofEdit from "../pages/EarthCommunityProofEdit";
 import EarthMyPageMissonMonth from "../pages/EarthMyPageMissonMonth";
 import EarthInfo from "../pages/EarthInfo";
 import EarthMyPageMissonWeek from "../pages/EarthMyPageMissonWeek";
-import EarthMyPageMissionGroup from '../pages/EarthMyPageMissionGroup';
+import EarthMyPageMissionGroup from "../pages/EarthMyPageMissionGroup";
 import NotFound from "../components/NotFound";
-import EarthGuide from '../pages/EarthGuide';
 import EarthNotFound from "../pages/EarthNotFound";
 
 const Router = () => {
@@ -29,22 +28,35 @@ const Router = () => {
       <Route path="/community" element={<EarthCommunity />} />
       <Route path="/community/form" element={<EarthCommunityForm />} />
       <Route path="/community/edit/:id" element={<EarthCommunityFormEdit />} />
-      {/* <Route path="/community" element={<EarthCommunity />} /> */}
       <Route path="/community/detail/:id" element={<EarthCommunityDetail />} />
-      <Route path="/community/:communityId/proof/:proofId" element={<EarthCommunityProof />} />
-      <Route path="/community/:communityId/proof/form" element={<EarthCommunityProofForm />} />
-      <Route path="/community/:communityId/proof/edit/:proofId" element={<EarthCommunityProofEdit />} />
+      <Route
+        path="/community/:communityId/proof/:proofId"
+        element={<EarthCommunityProof />}
+      />
+      <Route
+        path="/community/:communityId/proof/form"
+        element={<EarthCommunityProofForm />}
+      />
+      <Route
+        path="/community/:communityId/proof/edit/:proofId"
+        element={<EarthCommunityProofEdit />}
+      />
       <Route path="/mypage" element={<EarthMyPage />} />
       <Route path="/mypage/setting" element={<EarthMyPageSetting />} />
-      <Route path="/mypage/mission/month" element={<EarthMyPageMissonMonth />} />
+      <Route
+        path="/mypage/mission/month"
+        element={<EarthMyPageMissonMonth />}
+      />
       <Route path="/mypage/mission/week" element={<EarthMyPageMissonWeek />} />
       <Route path="/user/kakao/callback" element={<KakaoLogin />} />
       <Route path="/user/google/callback" element={<GoogleLogin />} />
       <Route path="/user/naver/callback" element={<NaverLogin />} />
       {/* <Route path='/view/:id' element={<InstarLogin />} /> */}
       <Route path="/info" element={<EarthInfo />} />
-      <Route path="/mypage/mission/group" element={<EarthMyPageMissionGroup />} />
-      <Route path="/guide" element={<EarthGuide />} />
+      <Route
+        path="/mypage/mission/group"
+        element={<EarthMyPageMissionGroup />}
+      />
       <Route path="/*" element={<EarthNotFound />} />
     </Routes>
   );

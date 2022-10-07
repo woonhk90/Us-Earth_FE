@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { useInView } from "react-intersection-observer";
 import { useDispatch, useSelector } from "react-redux";
 import { __getInfo } from "../../redux/modules/infoSlice";
-import Loading from "../etc/Loading";
-import HashMore from '../etc/HasMore';
+import HashMore from "../etc/HasMore";
 
 const Info = () => {
   const { infoList, isLoading, hasMore } = useSelector((state) => state.info);
@@ -31,7 +30,10 @@ const Info = () => {
       <CampaignBox>
         {infoList.map((v) => {
           return (
-            <CampaignItem key={v.campaignId} onClick={() => window.open(`${v.thumbnailUrl}`, "_blank")}>
+            <CampaignItem
+              key={v.campaignId}
+              onClick={() => window.open(`${v.thumbnailUrl}`, "_blank")}
+            >
               <CampaignItemPoster>
                 <img src={v.thumbnail} alt="thumbnailImg" />
               </CampaignItemPoster>
@@ -40,16 +42,23 @@ const Info = () => {
           );
         })}
       </CampaignBox>
-      {/* <Loading /> */}
-      {/* {hasMore ? (isLoading ? <Loading /> : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'맨 하단 페이지 입니다.'} />} */}
-      {hasMore ? (isLoading ? null : <div ref={ref} style={{ border: "1px solid white" }}></div>) : <HashMore txt={'맨 하단 페이지 입니다.'} />}
+      {hasMore ? (
+        isLoading ? null : (
+          <div ref={ref} style={{ border: "1px solid white" }}></div>
+        )
+      ) : (
+        <HashMore txt={"맨 하단 페이지 입니다."} />
+      )}
     </>
   );
 };
 export default Info;
 
 const CampaignBox = styled.div``;
-const CampaignItem = styled.div`cursor:pointer;margin-bottom:50px;`;
+const CampaignItem = styled.div`
+  cursor: pointer;
+  margin-bottom: 50px;
+`;
 const CampaignItemPoster = styled.div`
   width: 100%;
   height: 150px;

@@ -1,160 +1,104 @@
-import React, { useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import React, { useState } from "react";
+import styled, { css } from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { __postNickNameOverlap, __updateMyInfoStatus, __postNickNameSubmit } from '../../redux/modules/mypageSlice';
-import { returnRemoveCookie, removeCookie, getCookie } from '../../shared/cookie';
-import { ReactComponent as Pen } from "../../assets/Pen.svg";
-import Input from '../elements/Input';
-import { __getMyInfo } from '../../redux/modules/mypageSlice';
-import { debounce } from "lodash";
-import { useNavigate } from 'react-router-dom';
-import { instance } from '../../api/axios';
-import axios from 'axios';
-import Logo_K from '../../assets/logo_kakao.png';
-import Logo_N from '../../assets/logo_naver.png';
-import Logo_G from '../../assets/logo_google.png';
-import { colors } from '../../styles/color';
-import { tokenInstance } from '../../api/axios';
+import { __updateMyInfoStatus } from "../../redux/modules/mypageSlice";
+import { removeCookie, getCookie } from "../../shared/cookie";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Logo_K from "../../assets/logo_kakao.png";
+import Logo_N from "../../assets/logo_naver.png";
+import Logo_G from "../../assets/logo_google.png";
+import { colors } from "../../styles/color";
+import { tokenInstance } from "../../api/axios";
 import ConfirmSingleModal from "../Modals/ConfirmSingleModal";
 
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.mypage);//유저정보가져옴
-  const { overlap } = useSelector((state) => state.mypage);//닉네임 입력하면 중복인지 여부 알려줌
-  const [nickFlag, setNickFlag] = useState(false);//닉네임 변경 하겠냐(true/false)
-  const [overlapFlag, setOverlapFlag] = useState(false);// 중복여부 상태값(true/false)
-  const [changeNicName, setChangeNickName] = useState('');
+  const { userInfo } = useSelector((state) => state.mypage); //유저정보가져옴
   const [secession, setSecession] = useState(false);
-
 
   /* -------------------------- 내정보 페이지 공개 비공개 선택 가능 -------------------------- */
   const onSecretHandler = (flag) => {
     dispatch(__updateMyInfoStatus(flag));
-  }
-
-  /* -------------------------- 닉네임 실시간으로 상태값 받을 수 있음 ------------------------- */
-  const debounceSomethingFunc = debounce((val) => {
-    if (val.length > 0) {
-      setOverlapFlag(val);
-    } else {
-      setOverlapFlag(val);
-    }
-    setChangeNickName(val);
-    dispatch(__postNickNameOverlap({ nickname: val }));
-  }, 200);
-
-
-  const onDebounceChange = event => {
-    debounceSomethingFunc(event.target.value);
   };
-
-
-  useEffect(() => {
-    dispatch(__getMyInfo());
-    setOverlapFlag(overlap);
-  }, [overlap, dispatch])
-
-  const onNickNameSubmit = async () => {
-    if (changeNicName.length > 0) {
-      await dispatch(__postNickNameSubmit({ nickname: changeNicName }));
-      setNickFlag(!nickFlag);
-    } else {
-      window.alert("변경할 닉네임을 입력해주세요.");
-      return false;
-    }
-  }
-
-
-
-
-
-
-  // const [list, setList] = React.useState([]);
-  // const getPopularGroupItemList = async () => {
-  //   const response = await instance.get("/community/active");
-  //   setList(response.data);
-  // }
-  // React.useEffect(() => {
-  //   const response = getPopularGroupItemList();
-  //   setList(response);
-  // }, [])
-  // list.then((value) => {
-  //   });
-
 
   /* ---------------------------------- 로그아웃 ---------------------------------- */
   const onLogoutHandler = async () => {
-    const response = await axios.get(`${process.env.REACT_APP_API_URL_NOT_AIP}/user/logout`, {
-      headers: {
-        Authorization: getCookie('mycookie'),
-      },
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL_NOT_AIP}/user/logout`,
+      {
+        headers: {
+          Authorization: getCookie("mycookie"),
+        },
+      }
+    );
     if (response.status === 200) {
-      await removeCookie('mycookie');
-      await removeCookie('refreshToken');
-      await removeCookie('memberId');
-      navigate('/');
+      await removeCookie("mycookie");
+      await removeCookie("refreshToken");
+      await removeCookie("memberId");
+      navigate("/");
     }
-  }
+  };
+
   /* ---------------------------------- 회원탈퇴 ---------------------------------- */
   const onSecessionHandler = () => {
     setSecession(!secession);
-  }
+  };
 
   const confirmModalData = {
-    title: '정말 탈퇴 하시겠습니까?',
-    submit: '네',
-    cancel: '아니오'
-  }
+    title: "정말 탈퇴 하시겠습니까?",
+    submit: "네",
+    cancel: "아니오",
+  };
 
   const clickSubmit = async () => {
-    const response = await tokenInstance.delete(`${process.env.REACT_APP_API_URL}/mypage/withdrawal`, {
-      headers: {
-        Authorization: getCookie('mycookie'),
-      },
-    });
+    const response = await tokenInstance.delete(
+      `${process.env.REACT_APP_API_URL}/mypage/withdrawal`,
+      {
+        headers: {
+          Authorization: getCookie("mycookie"),
+        },
+      }
+    );
     if (response.status === 200) {
-      await removeCookie('mycookie');
-      await removeCookie('refreshToken');
-      await removeCookie('memberId');
-      navigate('/');
+      await removeCookie("mycookie");
+      await removeCookie("refreshToken");
+      await removeCookie("memberId");
+      navigate("/");
     }
-  }
+  };
 
   const closeModal = () => {
     setSecession(!secession);
   };
 
-
   return (
     <>
-      {secession && <ConfirmSingleModal confirmModalData={confirmModalData} closeModal={closeModal} clickSubmit={clickSubmit}></ConfirmSingleModal>}
+      {secession && (
+        <ConfirmSingleModal
+          confirmModalData={confirmModalData}
+          closeModal={closeModal}
+          clickSubmit={clickSubmit}
+        ></ConfirmSingleModal>
+      )}
       <MyPageWrap>
         <Container>
           <LoginInfo>
             <LoginInfoTitle>로그인 정보</LoginInfoTitle>
             <LoginInfoContent>
-              {userInfo.loginType === 'GOOGLE' ? <img src={Logo_G} alt="logoImg" /> : null}
-              {userInfo.loginType === 'KAKAO' ? <img src={Logo_K} alt="logoImg" /> : null}
-              {userInfo.loginType === 'NAVER' ? <img src={Logo_N} alt="logoImg" /> : null}
+              {userInfo.loginType === "GOOGLE" ? (
+                <img src={Logo_G} alt="logoImg" />
+              ) : null}
+              {userInfo.loginType === "KAKAO" ? (
+                <img src={Logo_K} alt="logoImg" />
+              ) : null}
+              {userInfo.loginType === "NAVER" ? (
+                <img src={Logo_N} alt="logoImg" />
+              ) : null}
               {userInfo.username}
             </LoginInfoContent>
           </LoginInfo>
-
-          {/* 닉네임변경 */}
-          {/* <NickInfo>
-            {!nickFlag ?
-              (<>
-                <NickInfoTitle><span>닉네임 변경</span> <span onClick={() => { setNickFlag(!nickFlag) }}><Pen /></span></NickInfoTitle>
-                <NickInfoContent>{userInfo.nickname}</NickInfoContent>
-              </>) :
-              (<>
-                <NickInfoTitle><span>닉네임 변경</span> <span onClick={() => { onNickNameSubmit() }}><Pen /></span></NickInfoTitle>
-                <Input type="text" placeholder={userInfo.nickname} onChange={onDebounceChange} maxLength='7' />
-                <OverlapFlagBox><OverlapFlagContent color={overlapFlag ? 'black' : 'red'}>사용{overlapFlag ? '가능한' : '불가능한'} 닉네임 입니다.</OverlapFlagContent></OverlapFlagBox>
-              </>)}
-          </NickInfo> */}
 
           {/* 내정보 공개/비공개 */}
           {/* <MyPageFlag>
@@ -164,29 +108,30 @@ const MyPage = () => {
               <CheckBoxLabel secret={userInfo.secret} htmlFor="checkbox" />
             </CheckBoxWrapper>
           </MyPageFlag> */}
+
           <div>
             <LogoutBtn onClick={onLogoutHandler}>로그아웃</LogoutBtn>
           </div>
+
           <SecessionBox onClick={onSecessionHandler}>
             <span>회원탈퇴</span>
           </SecessionBox>
-
         </Container>
       </MyPageWrap>
     </>
-  )
-}
+  );
+};
 export default MyPage;
 
 const MyPageWrap = styled.div`
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 `;
 const Container = styled.div`
-  width:100%;
+  width: 100%;
   background: #fff;
-  padding:50px 26px 0;
-  box-sizing:border-box;
+  padding: 50px 26px 0;
+  box-sizing: border-box;
 `;
 
 const LoginInfo = styled.div`
@@ -202,78 +147,36 @@ const LoginInfoContent = styled.div`
   color: #7b7b7b;
   padding: 20px 0 28px;
   box-sizing: border-box;
-  display:flex;
-  align-items:center;
-  img{
-    width:20px;
-    margin-right:10px;
+  display: flex;
+  align-items: center;
+  img {
+    width: 20px;
+    margin-right: 10px;
   }
 `;
-
-const NickInfo = styled.div`
-  width: 100%;
-  border-bottom: 1px solid ${colors.HR};
-  margin-bottom: 32px;
-`;
-const NickInfoTitle = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font: 500 18px/1 "Noto sans", "sans-serif";
-`;
-const NickInfoContent = styled.p`
-  font: 700 22px/1 "Noto sans", "sans-serif";
-  padding: 20px 0 28px;
-  box-sizing: border-box;
-`;
-const OverlapFlagBox = styled.div`
-  text-align: right;
-`;
-const OverlapFlagContent = styled.span`
-  font-size: 10px;
-  color: ${(props) => props.color};
-`;
-
-const MyPageFlag = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 60px;
-`;
-const MyPageFlagTitle = styled.h2`
-  font: 500 18px/24px "Noto Sans","sans-serif";
-`;
-
-
-
 
 /* ---------------------------------- 로그아웃 ---------------------------------- */
 const LogoutBtn = styled.button`
   width: 100%;
-  font: 500 18px/60px "Noto Sans","sans-serif";
+  font: 500 18px/60px "Noto Sans", "sans-serif";
   background: transparent;
   border: 1px solid #b5b5b5;
   color: #424242;
 `;
+
 /* ---------------------------------- 회원탈퇴 ---------------------------------- */
 const SecessionBox = styled.p`
   cursor: pointer;
-  width:100%;
-  text-align:right;
-  font-family:'Noto Sans','sans-serif';
-  line-height:25px;
-  span{
-    font-size:12px;
-    color:${colors.gray7B};
-    border-bottom:1px solid ${colors.gray7B};
+  width: 100%;
+  text-align: right;
+  font-family: "Noto Sans", "sans-serif";
+  line-height: 25px;
+  span {
+    font-size: 12px;
+    color: ${colors.gray7B};
+    border-bottom: 1px solid ${colors.gray7B};
   }
 `;
-
-
-
-
-
 
 /* ------------------------------ switch button ----------------------------- */
 const CheckBoxWrapper = styled.div`
@@ -307,13 +210,13 @@ const CheckBoxLabel = styled.label`
     box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
     transition: 0.2s;
     ${(props) =>
-    !props.secret
-      ? css`
+      !props.secret
+        ? css`
             margin: 1px;
             box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
             transition: 0.2s;
           `
-      : css`
+        : css`
             margin: 1px 0 0 20px;
           `}
   }
@@ -328,8 +231,8 @@ const CheckBox = styled.input`
   height: 26px;
   &:checked {
     ${(props) =>
-    props.secret &&
-    css`
+      props.secret &&
+      css`
         background: #35bd47;
         &::after {
           content: "";
